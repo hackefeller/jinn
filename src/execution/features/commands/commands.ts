@@ -87,12 +87,12 @@ import {
 // Project command templates
 import { PROJECT_CONSTITUTION_TEMPLATE } from "./templates/project/constitution";
 
-export const BUILTIN_COMMAND_DEFINITIONS: Record<
+export const COMMAND_DEFINITIONS: Record<
   CommandName,
   Omit<CommandDefinition, "name">
 > = {
   "ghostwire:init-deep": {
-    description: "(builtin) Initialize hierarchical AGENTS.md knowledge base",
+    description: "Initialize hierarchical AGENTS.md knowledge base",
     template: `<command-instruction>
 ${INIT_DEEP_TEMPLATE}
 </command-instruction>
@@ -104,7 +104,7 @@ $ARGUMENTS
   },
   "ghostwire:ultrawork-loop": {
     description:
-      "(builtin) Start self-referential development loop until completion",
+      "Start self-referential development loop until completion",
     template: `<command-instruction>
 ${ULTRAWORK_LOOP_TEMPLATE}
 </command-instruction>
@@ -117,7 +117,7 @@ $ARGUMENTS
   },
   "ghostwire:ulw-ultrawork": {
     description:
-      "(builtin) Start ultrawork loop - continues until completion with ultrawork mode",
+      "Start ultrawork loop - continues until completion with ultrawork mode",
     template: `<command-instruction>
 ${ULTRAWORK_LOOP_TEMPLATE}
 </command-instruction>
@@ -129,14 +129,14 @@ $ARGUMENTS
       '"task description" [--completion-promise=TEXT] [--max-iterations=N]',
   },
   "ghostwire:cancel-ultrawork": {
-    description: "(builtin) Cancel active Ultrawork Loop",
+    description: "Cancel active Ultrawork Loop",
     template: `<command-instruction>
 ${CANCEL_ULTRAWORK_TEMPLATE}
 </command-instruction>`,
   },
   "ghostwire:refactor": {
     description:
-      "(builtin) Intelligent refactoring command with LSP, AST-grep, architecture analysis, codemap, and TDD verification.",
+      "Intelligent refactoring command with LSP, AST-grep, architecture analysis, codemap, and TDD verification.",
     template: `<command-instruction>
 ${REFACTOR_TEMPLATE}
 </command-instruction>`,
@@ -144,7 +144,7 @@ ${REFACTOR_TEMPLATE}
       "<refactoring-target> [--scope=<file|module|project>] [--strategy=<safe|aggressive>]",
   },
   "ghostwire:jack-in-work": {
-    description: "(builtin) Start operator work session from planner plan",
+    description: "Start operator work session from planner plan",
     agent: "orchestrator",
     template: `<command-instruction>
 ${START_WORK_TEMPLATE}
@@ -162,7 +162,7 @@ $ARGUMENTS
   },
   "ghostwire:stop-continuation": {
     description:
-      "(builtin) Stop all continuation mechanisms (ultrawork loop, todo continuation, ultrawork state) for this session",
+      "Stop all continuation mechanisms (ultrawork loop, todo continuation, ultrawork state) for this session",
     template: `<command-instruction>
 ${STOP_CONTINUATION_TEMPLATE}
 </command-instruction>`,
@@ -830,14 +830,14 @@ $ARGUMENTS
   },
 };
 
-export function loadBuiltinCommands(
+export function loadCommands(
   disabledCommands?: CommandName[],
 ): Commands {
   const disabled = new Set(disabledCommands ?? []);
   const commands: Commands = {};
 
   for (const [name, definition] of Object.entries(
-    BUILTIN_COMMAND_DEFINITIONS,
+    COMMAND_DEFINITIONS,
   )) {
     if (!disabled.has(name as CommandName)) {
       const { argumentHint: _argumentHint, ...openCodeCompatible } = definition;

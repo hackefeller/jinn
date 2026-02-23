@@ -5,7 +5,7 @@ import type { GhostwireConfig } from "../../platform/config";
 
 import * as agents from "../../orchestration/agents";
 import * as commandLoader from "../../execution/features/claude-code-command-loader";
-import * as builtinCommands from "../../execution/features/commands";
+import * as commands from "../../execution/features/commands";
 import * as skillLoader from "../../execution/features/opencode-skill-loader";
 import * as agentLoader from "../../execution/features/claude-code-agent-loader";
 import * as mcpLoader from "../../execution/features/claude-code-mcp-loader";
@@ -45,7 +45,7 @@ beforeEach(() => {
   spyOn(commandLoader, "loadOpencodeGlobalCommands" as any).mockResolvedValue({});
   spyOn(commandLoader, "loadOpencodeProjectCommands" as any).mockResolvedValue({});
 
-  spyOn(builtinCommands, "loadBuiltinCommands" as any).mockReturnValue({});
+  spyOn(commands, "loadCommands" as any).mockReturnValue({});
 
   spyOn(skillLoader, "loadUserSkills" as any).mockResolvedValue({});
   spyOn(skillLoader, "loadProjectSkills" as any).mockResolvedValue({});
@@ -104,7 +104,7 @@ afterEach(() => {
   (commandLoader.loadProjectCommands as any)?.mockRestore?.();
   (commandLoader.loadOpencodeGlobalCommands as any)?.mockRestore?.();
   (commandLoader.loadOpencodeProjectCommands as any)?.mockRestore?.();
-  (builtinCommands.loadBuiltinCommands as any)?.mockRestore?.();
+  (commands.loadCommands as any)?.mockRestore?.();
   (skillLoader.loadUserSkills as any)?.mockRestore?.();
   (skillLoader.loadProjectSkills as any)?.mockRestore?.();
   (skillLoader.loadOpencodeGlobalSkills as any)?.mockRestore?.();

@@ -6,7 +6,7 @@ import {
   loadOpencodeGlobalCommands,
   loadOpencodeProjectCommands,
 } from "../../execution/features/claude-code-command-loader";
-import { loadBuiltinCommands } from "../../execution/features/commands";
+import { loadCommands } from "../../execution/features/commands";
 import {
   loadUserSkills,
   loadProjectSkills,
@@ -413,7 +413,7 @@ export function createConfigHandler(deps: ConfigHandlerDeps) {
       ...pluginComponents.mcpServers,
     };
 
-    const builtinCommands = loadBuiltinCommands(pluginConfig.disabled_commands);
+    const builtinCommands = loadCommands(pluginConfig.disabled_commands);
     const systemCommands = (config.command as Record<string, unknown>) ?? {};
 
     // Parallel loading of all commands and skills for faster startup
