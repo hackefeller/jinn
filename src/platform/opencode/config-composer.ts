@@ -241,7 +241,7 @@ export function createConfigHandler(deps: ConfigHandlerDeps) {
         // - Plugin init waits for server response
         // - Server waits for plugin init to complete before handling requests
         // Use cache-only mode instead. If cache is unavailable, fallback chain uses first model.
-        // See: https://github.com/pontistudios/ghostwire/issues/1301
+        // See: https://github.com/hackefeller/ghostwire/issues/1301
         const availableModels = await fetchAvailableModels(undefined, {
           connectedProviders: connectedProviders ?? undefined,
         });
@@ -297,7 +297,7 @@ export function createConfigHandler(deps: ConfigHandlerDeps) {
                 if (key === "plan" && replacePlan) return false;
                 // Filter out agents that ghostwire provides to prevent
                 // OpenCode defaults from overwriting user config in ghostwire.json
-                // See: https://github.com/pontistudios/ghostwire/issues/472
+                // See: https://github.com/hackefeller/ghostwire/issues/472
                 if (key in builtinAgents) return false;
                 return true;
               })

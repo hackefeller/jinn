@@ -125,7 +125,7 @@ Here's a real-world config for a user with **Claude, OpenAI, Gemini, and Z.ai** 
 
 ```jsonc
 {
-  "$schema": "https://raw.githubusercontent.com/pontistudios/ghostwire/master/assets/ghostwire.schema.json",
+  "$schema": "https://raw.githubusercontent.com/hackefeller/ghostwire/master/assets/ghostwire.schema.json",
   "agents": {
     // Override specific agents only - rest use fallback chain
     "orchestrator": { "model": "anthropic/claude-sonnet-4-5", "variant": "max" },

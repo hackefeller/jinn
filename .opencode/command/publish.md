@@ -276,7 +276,7 @@ If any platform package version doesn't match, warn the user and suggest checkin
 
 Report success to user with:
 - New version number
-- GitHub release URL: https://github.com/pontistudios/ghostwire/releases/tag/v{version}
+- GitHub release URL: https://github.com/hackefeller/ghostwire/releases/tag/v{version}
 - npm package URL: https://www.npmjs.com/package/ghostwire
 - Platform packages status: List all 7 platform packages with their versions
 

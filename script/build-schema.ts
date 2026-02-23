@@ -14,7 +14,7 @@ async function main() {
 
   const finalSchema = {
     $schema: "http://json-schema.org/draft-07/schema#",
-    $id: "https://raw.githubusercontent.com/pontistudios/ghostwire/master/assets/ghostwire.schema.json",
+    $id: "https://raw.githubusercontent.com/hackefeller/ghostwire/master/assets/ghostwire.schema.json",
     title: "Ghostwire Configuration",
     description: "Configuration schema for ghostwire plugin",
     ...jsonSchema,

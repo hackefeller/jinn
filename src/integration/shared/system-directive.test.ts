@@ -126,7 +126,7 @@ const x = 1;
   });
 
   describe("isSystemDirective", () => {
-    test("should return true for RUACH system directives", () => {
+    test("should return true for system directives", () => {
       const directive = createSystemDirective("TEST");
       expect(isSystemDirective(directive)).toBe(true);
     });

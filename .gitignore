@@ -8,7 +8,7 @@ dist/
 # Platform binaries (built, not committed)
 packages/*/bin/ghostwire
 packages/*/bin/ghostwire.exe
-# Block ALL binaries in packages bin directories (including ruach, etc.)
+# Block ALL binaries in packages bin directories
 packages/*/bin/*
 !packages/*/bin/.gitkeep
 

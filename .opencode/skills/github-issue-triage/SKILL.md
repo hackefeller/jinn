@@ -148,7 +148,7 @@ You MUST execute this EXACT pagination loop. DO NOT simplify. DO NOT skip iterat
 #!/bin/bash
 # MANDATORY PAGINATION - Execute this EXACTLY as written
 
-REPO="pontistudios/ghostwire"  # or use: gh repo view --json nameWithOwner -q .nameWithOwner
+REPO="hackefeller/ghostwire"  # or use: gh repo view --json nameWithOwner -q .nameWithOwner
 TIME_RANGE=48  # hours
 CUTOFF_DATE=$(date -v-${TIME_RANGE}H +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -d "${TIME_RANGE} hours ago" -Iseconds)
 
