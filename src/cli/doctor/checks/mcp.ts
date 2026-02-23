@@ -68,7 +68,7 @@ export async function checkMcpServers(): Promise<CheckResult> {
   const servers = getMcpInfo();
 
   return {
-    name: CHECK_NAMES[CHECK_IDS.MCP_BUILTIN],
+    name: CHECK_NAMES[CHECK_IDS.MCP_PLUGIN],
     status: "pass",
     message: `${servers.length} built-in servers enabled`,
     details: servers.map((s) => `Enabled: ${s.id}`),
@@ -111,8 +111,8 @@ export async function checkUserMcpServers(): Promise<CheckResult> {
 export function getMcpCheckDefinitions(): CheckDefinition[] {
   return [
     {
-      id: CHECK_IDS.MCP_BUILTIN,
-      name: CHECK_NAMES[CHECK_IDS.MCP_BUILTIN],
+      id: CHECK_IDS.MCP_PLUGIN,
+      name: CHECK_NAMES[CHECK_IDS.MCP_PLUGIN],
       category: "tools",
       check: checkMcpServers,
       critical: false,

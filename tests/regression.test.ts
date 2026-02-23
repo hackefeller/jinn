@@ -2,23 +2,23 @@ import { describe, test, expect } from "bun:test"
 
 describe("Regression Tests", () => {
   describe("No Breaking Changes to Existing Agents", () => {
-    test("builtin agents are unaffected", () => {
+    test("plugin agents are unaffected", () => {
       //#given
-      const builtinAgents = ["operator", "seer-advisor", "archive-researcher", "scout-recon", "build", "orchestrator", "planner", "tactician-strategist", "glitch-auditor"]
+      const pluginAgents = ["operator", "seer-advisor", "archive-researcher", "scout-recon", "build", "orchestrator", "planner", "tactician-strategist", "glitch-auditor"]
 
       //#when & #then
-      builtinAgents.forEach((agent) => {
+      pluginAgents.forEach((agent) => {
         expect(agent).toBeTruthy()
         expect(agent).not.toContain("grid:")
       })
     })
 
-    test("builtin agent names are lowercase", () => {
+    test("plugin agent names are lowercase", () => {
       //#given
-      const builtinAgents = ["operator", "seer-advisor", "archive-researcher", "scout-recon", "build", "orchestrator"]
+      const pluginAgents = ["operator", "seer-advisor", "archive-researcher", "scout-recon", "build", "orchestrator"]
 
       //#when
-      const invalidAgents = builtinAgents.filter((agent) => agent !== agent.toLowerCase())
+      const invalidAgents = pluginAgents.filter((agent) => agent !== agent.toLowerCase())
 
       //#then
       expect(invalidAgents.length).toBe(0)
@@ -26,23 +26,23 @@ describe("Regression Tests", () => {
   })
 
   describe("No Breaking Changes to Existing Commands", () => {
-    test("builtin commands remain unchanged", () => {
+    test("plugin commands remain unchanged", () => {
       //#given
-      const builtinCommands = ["init-deep", "ultrawork-loop", "ulw-ultrawork", "cancel-ultrawork", "refactor", "jack-in-work", "stop-continuation"]
+      const pluginCommands = ["init-deep", "ultrawork-loop", "ulw-ultrawork", "cancel-ultrawork", "refactor", "jack-in-work", "stop-continuation"]
 
       //#when & #then
-      builtinCommands.forEach((cmd) => {
+      pluginCommands.forEach((cmd) => {
         expect(cmd).toBeTruthy()
         expect(cmd).not.toContain("grid:")
       })
     })
 
-    test("builtin command names use consistent pattern", () => {
+    test("plugin command names use consistent pattern", () => {
       //#given
-      const builtinCommands = ["init-deep", "ultrawork-loop", "ulw-ultrawork", "cancel-ultrawork", "refactor", "jack-in-work", "stop-continuation"]
+      const pluginCommands = ["init-deep", "ultrawork-loop", "ulw-ultrawork", "cancel-ultrawork", "refactor", "jack-in-work", "stop-continuation"]
 
       //#when
-      const invalidCommands = builtinCommands.filter((cmd) => !cmd.match(/^[a-z]+(-[a-z]+)*$/))
+      const invalidCommands = pluginCommands.filter((cmd) => !cmd.match(/^[a-z]+(-[a-z]+)*$/))
 
       //#then
       expect(invalidCommands.length).toBe(0)
@@ -75,10 +75,10 @@ describe("Regression Tests", () => {
   describe("Learnings System", () => {
     test("learnings command exists", () => {
       //#given & #when
-      const { BuiltinCommandNameSchema } = require('../src/platform/config/schema');
+      const { CommandNameSchema } = require('../src/platform/config/schema');
       
       //#then
-      expect(BuiltinCommandNameSchema.safeParse("ghostwire:workflows:learnings").success).toBe(true)
+      expect(CommandNameSchema.safeParse("ghostwire:workflows:learnings").success).toBe(true)
     })
     
     test("learnings skill exists", () => {

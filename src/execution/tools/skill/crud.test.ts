@@ -75,11 +75,11 @@ describe("skill CRUD operations", () => {
       expect(result).toContain("10-200");
     });
 
-    test("validates reserved builtin names", async () => {
+    test("validates reserved plugin names", async () => {
       //#given reserved skill name
       const result = await skill_create.execute!(
         {
-          name: "builtin-new",
+          name: "plugin-new",
           description: "This is a reserved skill name for testing",
         },
         mockContext,
@@ -124,8 +124,8 @@ describe("skill CRUD operations", () => {
   });
 
   describe("skill_delete", () => {
-    test("returns error for builtin skills", async () => {
-      //#given builtin skill
+    test("returns error for plugin skills", async () => {
+      //#given plugin skill
       const result = await skill_delete.execute!(
         {
           skill_name: "playwright",
@@ -133,9 +133,9 @@ describe("skill CRUD operations", () => {
         mockContext,
       );
 
-      //#then should return error about builtin
+      //#then should return error about plugin
       expect(result).toContain("Error");
-      expect(result).toContain("builtin");
+      expect(result).toContain("plugin");
     });
 
     test("returns error for non-existent skill", async () => {

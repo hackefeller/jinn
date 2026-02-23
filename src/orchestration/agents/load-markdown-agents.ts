@@ -36,7 +36,7 @@ export async function loadAgentsFromManifest(): Promise<LoadedAgent[]> {
  *
  * Scans the directory for .md files, parses YAML frontmatter,
  * validates metadata, and returns agents in format compatible
- * with createBuiltinAgents()
+ * with createAgents()
  *
  * @param agentsDir - Path to directory containing agent .md files
  * @returns Array of loaded agents

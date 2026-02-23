@@ -3,9 +3,9 @@ import * as mcp from "./mcp";
 
 describe("mcp check", () => {
   describe("getMcpInfo", () => {
-    it("returns builtin servers", () => {
+    it("returns plugin servers", () => {
       // #given
-      // #when getting builtin info
+      // #when getting plugin info
       const servers = mcp.getMcpInfo();
 
       // #then should include expected servers
@@ -31,7 +31,7 @@ describe("mcp check", () => {
   describe("checkMcpServers", () => {
     it("returns pass with server count", async () => {
       // #given
-      // #when checking builtin servers
+      // #when checking plugin servers
       const result = await mcp.checkMcpServers();
 
       // #then should pass
@@ -42,7 +42,7 @@ describe("mcp check", () => {
 
     it("lists enabled servers in details", async () => {
       // #given
-      // #when checking builtin servers
+      // #when checking plugin servers
       const result = await mcp.checkMcpServers();
 
       // #then should list servers
@@ -100,7 +100,7 @@ describe("mcp check", () => {
   });
 
   describe("getMcpCheckDefinitions", () => {
-    it("returns definitions for builtin and user", () => {
+    it("returns definitions for plugin and user", () => {
       // #given
       // #when getting definitions
       const defs = mcp.getMcpCheckDefinitions();
@@ -108,7 +108,7 @@ describe("mcp check", () => {
       // #then should have 2 definitions
       expect(defs.length).toBe(2);
       expect(defs.every((d) => d.category === "tools")).toBe(true);
-      expect(defs.map((d) => d.id)).toContain("mcp-builtin");
+      expect(defs.map((d) => d.id)).toContain("mcp-plugin");
       expect(defs.map((d) => d.id)).toContain("mcp-user");
     });
   });

@@ -53,7 +53,7 @@ import {
   mergeSkills,
 } from "./execution/features/opencode-skill-loader";
 import { createSkills } from "./execution/features/skills";
-import { createBuiltinAgents } from "./orchestration/agents";
+import { createAgents } from "./orchestration/agents";
 import { getSystemMcpServerNames } from "./execution/features/claude-code-mcp-loader";
 import {
   setMainSession,
@@ -409,7 +409,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
   // Create builtin agents with configuration
   // Don't pass ctx.directory - let it use PLUGIN_ROOT to load from embedded manifest
   // This ensures agents are always available regardless of what directory is being worked on
-  const builtinAgents = await createBuiltinAgents({
+  const builtinAgents = await createAgents({
     disabledAgents: pluginConfig.disabled_agents ?? [],
     agentOverrides: pluginConfig.agents,
     // Use PLUGIN_ROOT + embedded manifest, not ctx.directory

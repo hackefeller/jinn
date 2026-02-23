@@ -156,7 +156,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     expect(primary.providers[0]).toBe("kimi-for-coding");
   });
 
-  test("all 10 builtin agents have valid fallbackChain arrays", () => {
+  test("all 10 plugin agents have valid fallbackChain arrays", () => {
     // #given - list of 10 agent names
     const expectedAgents = [
       "operator",

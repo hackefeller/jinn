@@ -256,8 +256,8 @@ Content`
     }
   });
 
-  // T015: Returns compatible format with createBuiltinAgents()
-  test("returns agents in format compatible with createBuiltinAgents() result", async () => {
+  // T015: Returns compatible format with createAgents()
+  test("returns agents in format compatible with createAgents() result", async () => {
     // #given
     createFixtureAgent(
       "valid-agent.md",
@@ -388,7 +388,7 @@ describe("Config Composer Integration", () => {
   test("agent merging still works with markdown-loaded agents in config-composer", () => {
     // #given
     // This test verifies config-composer.ts lines 317-334 still work
-    // when agents come from markdown loading instead of createBuiltinAgents()
+    // when agents come from markdown loading instead of createAgents()
 
     // #when & #then
     // Agent loading and merging should complete without errors

@@ -310,7 +310,7 @@ export interface CreateBuiltinAgentsOptions {
   uiSelectedModel?: string;
 }
 
-export async function createBuiltinAgents(
+export async function createAgents(
   options: CreateBuiltinAgentsOptions,
 ): Promise<Record<string, AgentConfig>> {
   const {

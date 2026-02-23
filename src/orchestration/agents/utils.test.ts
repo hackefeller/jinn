@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, spyOn, afterEach } from "bun:test";
-import { createBuiltinAgents, createAgentToolRestrictions } from "./utils";
+import { createAgents, createAgentToolRestrictions } from "./utils";
 import type { AgentConfig } from "@opencode-ai/sdk";
 import { clearSkillCache } from "../../execution/features/opencode-skill-loader/skill-content";
 import * as connectedProvidersCache from "../../platform/opencode/connected-providers-cache";
@@ -7,12 +7,12 @@ import * as modelAvailability from "../../platform/opencode/model-availability";
 
 const TEST_DEFAULT_MODEL = "anthropic/claude-opus-4-5";
 
-describe("createBuiltinAgents with model overrides", () => {
+describe("createAgents with model overrides", () => {
   test("operator with default model has thinking config", async () => {
     // #given - no overrides, using systemDefaultModel
 
     // #when
-    const agents = await createBuiltinAgents({ systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then
     expect(agents["operator"].model).toBe("anthropic/claude-opus-4-5");
@@ -27,7 +27,7 @@ describe("createBuiltinAgents with model overrides", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then
     expect(agents["operator"].model).toBe("github-copilot/gpt-5.2");
@@ -40,7 +40,7 @@ describe("createBuiltinAgents with model overrides", () => {
     const systemDefaultModel = "anthropic/claude-opus-4-5";
 
     // #when
-    const agents = await createBuiltinAgents({ systemDefaultModel });
+    const agents = await createAgents({ systemDefaultModel });
 
     // #then - falls back to system default when no availability match
     expect(agents["operator"].model).toBe("anthropic/claude-opus-4-5");
@@ -55,7 +55,7 @@ describe("createBuiltinAgents with model overrides", () => {
     ]);
 
     // #when
-    const agents = await createBuiltinAgents({ systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then - seerAdvisor resolves via connected cache fallback to openai/gpt-5.2 (not system default)
     expect(agents["advisor-plan"].model).toBe("openai/gpt-5.2");
@@ -71,7 +71,7 @@ describe("createBuiltinAgents with model overrides", () => {
     );
 
     // #when
-    const agents = await createBuiltinAgents({ systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then - seerAdvisor should be created with system default model (fallback to systemDefaultModel)
     expect(agents["advisor-plan"]).toBeDefined();
@@ -86,7 +86,7 @@ describe("createBuiltinAgents with model overrides", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then
     expect(agents["advisor-plan"].model).toBe("openai/gpt-5.2");
@@ -102,7 +102,7 @@ describe("createBuiltinAgents with model overrides", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then
     expect(agents["advisor-plan"].model).toBe("anthropic/claude-sonnet-4");
@@ -118,7 +118,7 @@ describe("createBuiltinAgents with model overrides", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then
     expect(agents["operator"].model).toBe("github-copilot/gpt-5.2");
@@ -126,7 +126,7 @@ describe("createBuiltinAgents with model overrides", () => {
   });
 });
 
-describe("createBuiltinAgents without systemDefaultModel", () => {
+describe("createAgents without systemDefaultModel", () => {
   test("agents created via connected cache fallback even without systemDefaultModel", async () => {
     // #given - connected cache has "openai", which matches advisor-plan's fallback chain
     const cacheSpy = spyOn(connectedProvidersCache, "readConnectedProvidersCache").mockReturnValue([
@@ -134,7 +134,7 @@ describe("createBuiltinAgents without systemDefaultModel", () => {
     ]);
 
     // #when
-    const agents = await createBuiltinAgents({});
+    const agents = await createAgents({});
 
     // #then - connected cache enables model resolution despite no systemDefaultModel
     expect(agents["advisor-plan"]).toBeDefined();
@@ -149,7 +149,7 @@ describe("createBuiltinAgents without systemDefaultModel", () => {
     );
 
     // #when
-    const agents = await createBuiltinAgents({});
+    const agents = await createAgents({});
 
     // #then
     expect(agents["advisor-plan"]).toBeUndefined();
@@ -163,7 +163,7 @@ describe("createBuiltinAgents without systemDefaultModel", () => {
     ]);
 
     // #when
-    const agents = await createBuiltinAgents({});
+    const agents = await createAgents({});
 
     // #then - connected cache enables model resolution despite no systemDefaultModel
     expect(agents["operator"]).toBeDefined();
@@ -438,7 +438,7 @@ describe("createAgentToolRestrictions", () => {
   });
 });
 
-describe("override.category expansion in createBuiltinAgents", () => {
+describe("override.category expansion in createAgents", () => {
   test("standard agent override with category expands category properties", async () => {
     // #given
     const overrides = {
@@ -446,7 +446,7 @@ describe("override.category expansion in createBuiltinAgents", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then - ultrabrain category: model=openai/gpt-5.2-codex, variant=xhigh
     expect(agents["advisor-plan"]).toBeDefined();
@@ -461,7 +461,7 @@ describe("override.category expansion in createBuiltinAgents", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then - direct variant overrides category variant
     expect(agents["advisor-plan"]).toBeDefined();
@@ -481,7 +481,7 @@ describe("override.category expansion in createBuiltinAgents", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({
+    const agents = await createAgents({
       agentOverrides: overrides,
       systemDefaultModel: TEST_DEFAULT_MODEL,
       categories,
@@ -505,7 +505,7 @@ describe("override.category expansion in createBuiltinAgents", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({
+    const agents = await createAgents({
       agentOverrides: overrides,
       systemDefaultModel: TEST_DEFAULT_MODEL,
       categories,
@@ -523,7 +523,7 @@ describe("override.category expansion in createBuiltinAgents", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then - ultrabrain category: model=openai/gpt-5.2-codex, variant=xhigh
     expect(agents["operator"]).toBeDefined();
@@ -538,7 +538,7 @@ describe("override.category expansion in createBuiltinAgents", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then - ultrabrain category: model=openai/gpt-5.2-codex, variant=xhigh
     expect(agents["orchestrator"]).toBeDefined();
@@ -553,19 +553,19 @@ describe("override.category expansion in createBuiltinAgents", () => {
     };
 
     // #when
-    const agents = await createBuiltinAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
 
     // #then - no category-specific variant/reasoningEffort applied from non-existent category
     expect(agents["advisor-plan"]).toBeDefined();
-    const agentsWithoutOverride = await createBuiltinAgents({ systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agentsWithoutOverride = await createAgents({ systemDefaultModel: TEST_DEFAULT_MODEL });
     expect(agents["advisor-plan"].model).toBe(agentsWithoutOverride["advisor-plan"].model);
   });
 });
 
 describe("Deadlock prevention - fetchAvailableModels must not receive client", () => {
-  test("createBuiltinAgents should call fetchAvailableModels with undefined client to prevent deadlock", async () => {
+  test("createAgents should call fetchAvailableModels with undefined client to prevent deadlock", async () => {
     // #given - This test ensures we don't regress on issue #1301
-    // Passing client to fetchAvailableModels during createBuiltinAgents (called from config handler)
+    // Passing client to fetchAvailableModels during createAgents (called from config handler)
     // causes deadlock:
     // - Plugin init waits for server response (client.provider.list())
     // - Server waits for plugin init to complete before handling requests
@@ -582,7 +582,7 @@ describe("Deadlock prevention - fetchAvailableModels must not receive client", (
     };
 
     // #when - Even when client is provided, fetchAvailableModels must be called with undefined
-    await createBuiltinAgents({
+    await createAgents({
       systemDefaultModel: TEST_DEFAULT_MODEL,
       client: mockClient, // client is passed but should NOT be forwarded to fetchAvailableModels
     });

@@ -30,7 +30,7 @@ beforeEach(() => {
     return false;
   });
 
-  spyOn(agents, "createBuiltinAgents" as any).mockResolvedValue({
+  spyOn(agents, "createAgents" as any).mockResolvedValue({
     "operator": {
       name: "operator",
       prompt: "test",
@@ -99,7 +99,7 @@ afterEach(() => {
   existsSyncSpy?.mockRestore?.();
   existsSyncSpy = null;
 
-  (agents.createBuiltinAgents as any)?.mockRestore?.();
+  (agents.createAgents as any)?.mockRestore?.();
   (commandLoader.loadUserCommands as any)?.mockRestore?.();
   (commandLoader.loadProjectCommands as any)?.mockRestore?.();
   (commandLoader.loadOpencodeGlobalCommands as any)?.mockRestore?.();
@@ -127,8 +127,8 @@ afterEach(() => {
   (modelResolver.resolveModelWithFallback as any)?.mockRestore?.();
 });
 
-describe("Ghostwire builtin agent injection scope", () => {
-  test("injects builtin agents by default (inject_agents_globally not set)", async () => {
+describe("Ghostwire agent injection scope", () => {
+  test("injects agents by default (inject_agents_globally not set)", async () => {
     // #given
     const pluginConfig: GhostwireConfig = {
       operator: {
@@ -160,10 +160,10 @@ describe("Ghostwire builtin agent injection scope", () => {
     const permission = config.permission as Record<string, unknown>;
     expect(permission.delegate_task).toBe("deny");
 
-    expect(agents.createBuiltinAgents).toHaveBeenCalled();
+    expect(agents.createAgents).toHaveBeenCalled();
   });
 
-  test("does not inject builtin agents when inject_agents_globally is false", async () => {
+  test("does not inject agents when inject_agents_globally is false", async () => {
     // #given
     const pluginConfig: GhostwireConfig = {
       operator: {
@@ -196,7 +196,7 @@ describe("Ghostwire builtin agent injection scope", () => {
     const permission = config.permission as Record<string, unknown>;
     expect(permission.delegate_task).toBeUndefined();
 
-    expect(agents.createBuiltinAgents).not.toHaveBeenCalled();
+    expect(agents.createAgents).not.toHaveBeenCalled();
   });
 });
 

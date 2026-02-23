@@ -272,7 +272,7 @@ describe("LSP config source precedence", () => {
     expect(result.status).toBe("not_configured");
   });
 
-  test("builtin_servers_still_loaded_when_not_overridden", () => {
+  test("plugin_servers_still_loaded_when_not_overridden", () => {
     const servers = getAllServers();
     expect(servers.length).toBeGreaterThan(0);
     expect(servers.some((server) => server.id === "typescript")).toBe(true);

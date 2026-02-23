@@ -379,7 +379,7 @@ describe("CategoryConfigSchema", () => {
 });
 
 describe("CategoryNameSchema", () => {
-  test("accepts all builtin category names", () => {
+  test("accepts all plugin category names", () => {
     // #given
     const categories = [
       "visual-engineering",

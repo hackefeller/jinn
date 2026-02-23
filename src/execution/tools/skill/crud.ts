@@ -15,11 +15,13 @@ import type {
   SkillInfo,
 } from "./types";
 
-const BUILTIN_PREFIX = "builtin";
+const PLUGIN_PREFIX = "plugin";
+const LEGACY_BUILTIN_PREFIX = "builtin";
 
 function isBuiltinSkill(name: string): boolean {
   return (
-    name.startsWith(BUILTIN_PREFIX) ||
+    name.startsWith(PLUGIN_PREFIX) ||
+    name.startsWith(LEGACY_BUILTIN_PREFIX) ||
     name === "playwright" ||
     name === "agent-browser" ||
     name === "git-master"
@@ -430,7 +432,7 @@ skill_update(skill_name="security-audit", description="Enhanced security analysi
 export const skill_delete: ToolDefinition = tool({
   description: `Delete a custom skill.
 
-Permanently removes a skill file. Cannot delete builtin skills.
+Permanently removes a skill file. Cannot delete plugin skills.
 
 Arguments:
 - skill_name (required): Skill name to delete
@@ -444,9 +446,9 @@ skill_delete(skill_name="security-audit")`,
   },
   execute: async (args: SkillDeleteArgs) => {
     try {
-      // Check builtin
+      // Check plugin
       if (isBuiltinSkill(args.skill_name)) {
-        return `Error: Cannot delete builtin skill "${args.skill_name}"`;
+        return `Error: Cannot delete plugin skill "${args.skill_name}"`;
       }
 
       // Find skill

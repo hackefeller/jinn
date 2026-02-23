@@ -8,7 +8,7 @@ describe("auth check", () => {
       // #when getting info
       const info = auth.getAuthProviderInfo("anthropic");
 
-      // #then should show plugin installed (builtin)
+      // #then should show plugin installed
       expect(info.id).toBe("anthropic");
       expect(info.pluginInstalled).toBe(true);
     });

@@ -1,11 +1,11 @@
 import { describe, test, expect } from "bun:test";
-import { BuiltinCommandNameSchema } from "../src/platform/config/schema";
+import { CommandNameSchema } from "../src/platform/config/schema";
 
-describe("Builtin Commands", () => {
+describe("Plugin Commands", () => {
   describe("Command Schema Validation", () => {
-    test("all builtin command names are valid", () => {
+    test("all plugin command names are valid", () => {
       //#given
-      const builtinCommands = [
+      const pluginCommands = [
         "ghostwire:workflows:plan",
         "ghostwire:workflows:create",
         "ghostwire:workflows:status",
@@ -34,8 +34,8 @@ describe("Builtin Commands", () => {
       ];
 
       //#when
-      const results = builtinCommands.map((cmd) =>
-        BuiltinCommandNameSchema.safeParse(cmd),
+      const results = pluginCommands.map((cmd) =>
+        CommandNameSchema.safeParse(cmd),
       );
 
       //#then
@@ -77,7 +77,7 @@ describe("Builtin Commands", () => {
 
       //#when
       const results = workflowCommands.map((cmd) =>
-        BuiltinCommandNameSchema.safeParse(cmd),
+        CommandNameSchema.safeParse(cmd),
       );
 
       //#then
@@ -95,7 +95,7 @@ describe("Builtin Commands", () => {
 
       //#when
       const results = codeCommands.map((cmd) =>
-        BuiltinCommandNameSchema.safeParse(cmd),
+        CommandNameSchema.safeParse(cmd),
       );
 
       //#then
@@ -113,7 +113,7 @@ describe("Builtin Commands", () => {
 
       //#when
       const results = gitCommands.map((cmd) =>
-        BuiltinCommandNameSchema.safeParse(cmd),
+        CommandNameSchema.safeParse(cmd),
       );
 
       //#then
@@ -131,7 +131,7 @@ describe("Builtin Commands", () => {
 
       //#when
       const results = projectCommands.map((cmd) =>
-        BuiltinCommandNameSchema.safeParse(cmd),
+        CommandNameSchema.safeParse(cmd),
       );
 
       //#then
@@ -149,7 +149,133 @@ describe("Builtin Commands", () => {
 
       //#when
       const results = utilCommands.map((cmd) =>
-        BuiltinCommandNameSchema.safeParse(cmd),
+        CommandNameSchema.safeParse(cmd),
+      );
+
+      //#then
+      expect(results.every((r) => r.success)).toBe(true);
+    });
+
+    test("docs commands exist (4)", () => {
+      //#given
+      const docsCommands = [
+        "ghostwire:docs:deploy-docs",
+        "ghostwire:docs:release-docs",
+        "ghostwire:docs:feature-video",
+        "ghostwire:docs:test-browser",
+      ];
+
+      //#when
+      const results = docsCommands.map((cmd) =>
+        CommandNameSchema.safeParse(cmd),
+      );
+
+      //#then
+      expect(results.every((r) => r.success)).toBe(true);
+    });
+
+    test("git commands exist (4)", () => {
+      //#given
+      const gitCommands = [
+        "ghostwire:git:smart-commit",
+        "ghostwire:git:branch",
+        "ghostwire:git:merge",
+        "ghostwire:git:cleanup",
+      ];
+
+      //#when
+      const results = gitCommands.map((cmd) =>
+        CommandNameSchema.safeParse(cmd),
+      );
+
+      //#then
+      expect(results.every((r) => r.success)).toBe(true);
+    });
+
+    test("project commands exist (4)", () => {
+      //#given
+      const projectCommands = [
+        "ghostwire:project:init",
+        "ghostwire:project:build",
+        "ghostwire:project:deploy",
+        "ghostwire:project:test",
+      ];
+
+      //#when
+      const results = projectCommands.map((cmd) =>
+        CommandNameSchema.safeParse(cmd),
+      );
+
+      //#then
+      expect(results.every((r) => r.success)).toBe(true);
+    });
+
+    test("util commands exist (4)", () => {
+      //#given
+      const utilCommands = [
+        "ghostwire:util:clean",
+        "ghostwire:util:backup",
+        "ghostwire:util:restore",
+        "ghostwire:util:doctor",
+      ];
+
+      //#when
+      const results = utilCommands.map((cmd) =>
+        CommandNameSchema.safeParse(cmd),
+      );
+
+      //#then
+      expect(results.every((r) => r.success)).toBe(true);
+    });
+
+    test("docs commands exist (4)", () => {
+      //#given
+      const docsCommands = [
+        "ghostwire:docs:deploy-docs",
+        "ghostwire:docs:release-docs",
+        "ghostwire:docs:feature-video",
+        "ghostwire:docs:test-browser",
+      ];
+
+      //#when
+      const results = docsCommands.map((cmd) =>
+        CommandNameSchema.safeParse(cmd),
+      );
+
+      //#then
+      expect(results.every((r) => r.success)).toBe(true);
+    });
+
+    test("project commands exist (4)", () => {
+      //#given
+      const projectCommands = [
+        "ghostwire:project:init",
+        "ghostwire:project:build",
+        "ghostwire:project:deploy",
+        "ghostwire:project:test",
+      ];
+
+      //#when
+      const results = projectCommands.map((cmd) =>
+        CommandNameSchema.safeParse(cmd),
+      );
+
+      //#then
+      expect(results.every((r) => r.success)).toBe(true);
+    });
+
+    test("util commands exist (4)", () => {
+      //#given
+      const utilCommands = [
+        "ghostwire:util:clean",
+        "ghostwire:util:backup",
+        "ghostwire:util:restore",
+        "ghostwire:util:doctor",
+      ];
+
+      //#when
+      const results = utilCommands.map((cmd) =>
+        CommandNameSchema.safeParse(cmd),
       );
 
       //#then
@@ -167,7 +293,7 @@ describe("Builtin Commands", () => {
 
       //#when
       const results = docCommands.map((cmd) =>
-        BuiltinCommandNameSchema.safeParse(cmd),
+        CommandNameSchema.safeParse(cmd),
       );
 
       //#then
@@ -178,7 +304,7 @@ describe("Builtin Commands", () => {
   describe("Learnings Command", () => {
     test("ghostwire:workflows:learnings command is valid", () => {
       //#given & #when
-      const result = BuiltinCommandNameSchema.safeParse("ghostwire:workflows:learnings");
+      const result = CommandNameSchema.safeParse("ghostwire:workflows:learnings");
 
       //#then
       expect(result.success).toBe(true);

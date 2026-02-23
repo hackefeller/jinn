@@ -1,4 +1,4 @@
-import { createBuiltinAgents } from "../../orchestration/agents";
+import { createAgents } from "../../orchestration/agents";
 import type { AgentConfig as SDKAgentConfig } from "@opencode-ai/sdk";
 import {
   loadUserCommands,
@@ -132,7 +132,7 @@ export function createConfigHandler(deps: ConfigHandlerDeps) {
     const shouldInjectAgents = pluginConfig.inject_agents_globally !== false;
 
     const builtinAgents = shouldInjectAgents
-      ? await createBuiltinAgents({
+      ? await createAgents({
           disabledAgents,
           agentOverrides: pluginConfig.agents,
           directory: ctx.directory,

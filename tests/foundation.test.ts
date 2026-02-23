@@ -4,9 +4,9 @@ describe('Learnings System - Foundation Tests', () => {
   describe('Learnings Command', () => {
     test('learnings command is registered', () => {
       // Verify the learnings command exists in schema
-      const { BuiltinCommandNameSchema } = require('../src/platform/config/schema');
+      const { CommandNameSchema } = require('../src/platform/config/schema');
       
-      const result = BuiltinCommandNameSchema.safeParse("ghostwire:workflows:learnings");
+      const result = CommandNameSchema.safeParse("ghostwire:workflows:learnings");
       expect(result.success).toBe(true);
     });
   });
@@ -16,7 +16,7 @@ describe('Learnings System - Foundation Tests', () => {
       // Verify the learnings skill directory exists
       const fs = require('fs');
       
-      const skillPath = 'src/execution/features/builtin-skills/learnings/SKILL.md';
+      const skillPath = 'src/execution/features/skills/learnings/SKILL.md';
       expect(fs.existsSync(skillPath)).toBe(true);
       expect(fs.statSync(skillPath).isFile()).toBe(true);
     });

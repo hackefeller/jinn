@@ -1,5 +1,5 @@
 export * from "./types";
-export { createBuiltinAgents } from "./utils";
+export { createAgents } from "./utils";
 export type {
   AvailableAgent,
   AvailableCategory,

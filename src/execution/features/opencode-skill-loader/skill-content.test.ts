@@ -8,7 +8,7 @@ import {
 
 describe("resolveSkillContent", () => {
   it("should return template for existing skill", () => {
-    // #given: builtin skills with 'frontend-ui-ux' skill
+    // #given: skills with 'frontend-ui-ux' skill
     // #when: resolving content for 'frontend-ui-ux'
     const result = resolveSkillContent("frontend-ui-ux");
 
@@ -19,7 +19,7 @@ describe("resolveSkillContent", () => {
   });
 
   it("should return template for 'playwright' skill", () => {
-    // #given: builtin skills with 'playwright' skill
+    // #given: skills with 'playwright' skill
     // #when: resolving content for 'playwright'
     const result = resolveSkillContent("playwright");
 
@@ -30,7 +30,7 @@ describe("resolveSkillContent", () => {
   });
 
   it("should return null for non-existent skill", () => {
-    // #given: builtin skills without 'nonexistent' skill
+    // #given: skills without 'nonexistent' skill
     // #when: resolving content for 'nonexistent'
     const result = resolveSkillContent("nonexistent");
 
@@ -39,7 +39,7 @@ describe("resolveSkillContent", () => {
   });
 
   it("should return null for empty string", () => {
-    // #given: builtin skills
+    // #given: skills
     // #when: resolving content for empty string
     const result = resolveSkillContent("");
 
@@ -116,8 +116,8 @@ describe("resolveMultipleSkills", () => {
 });
 
 describe("resolveSkillContentAsync", () => {
-  it("should return template for builtin skill", async () => {
-    // #given: builtin skill 'frontend-ui-ux'
+  it("should return template for plugin skill", async () => {
+    // #given: plugin skill 'frontend-ui-ux'
     // #when: resolving content async
     const result = await resolveSkillContentAsync("frontend-ui-ux");
 
@@ -138,14 +138,14 @@ describe("resolveSkillContentAsync", () => {
 });
 
 describe("resolveMultipleSkillsAsync", () => {
-  it("should resolve builtin skills", async () => {
-    // #given: builtin skill names
+  it("should resolve plugin skills", async () => {
+    // #given: plugin skill names
     const skillNames = ["playwright", "frontend-ui-ux"];
 
     // #when: resolving multiple skills async
     const result = await resolveMultipleSkillsAsync(skillNames);
 
-    // #then: all builtin skills resolved
+    // #then: all plugin skills resolved
     expect(result.resolved.size).toBe(2);
     expect(result.notFound).toEqual([]);
     expect(result.resolved.get("playwright")).toContain("Playwright Browser Automation");
@@ -290,7 +290,7 @@ describe("resolveSkillContent with browserProvider", () => {
     // #when: resolving content for 'agent-browser'
     const result = resolveSkillContent("agent-browser");
 
-    // #then: returns null because agent-browser is not in default builtin skills
+    // #then: returns null because agent-browser is not in default skills
     expect(result).toBeNull();
   });
 

@@ -2,7 +2,7 @@ import { describe, test, expect } from "bun:test";
 import { createSkills } from "../src/execution/features/skills/skills";
 
 describe("Learnings Skill", () => {
-  test("learnings skill is defined in builtin skills", () => {
+  test("learnings skill is defined in plugin skills", () => {
     //#given
     const skills = createSkills();
 

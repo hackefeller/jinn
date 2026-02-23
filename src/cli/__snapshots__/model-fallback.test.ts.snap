@@ -304,7 +304,7 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models when on
       "variant": "max",
     },
     "orchestrator": {
-      "model": "opencode/kimi-k2.5-free",
+      "model": "opencode/kimi-k2.5",
     },
     "planner": {
       "model": "opencode/claude-opus-4-5",
@@ -660,7 +660,7 @@ exports[`generateModelConfig mixed provider scenarios uses all fallback provider
       "variant": "max",
     },
     "orchestrator": {
-      "model": "opencode/kimi-k2.5-free",
+      "model": "opencode/kimi-k2.5",
     },
     "planner": {
       "model": "github-copilot/claude-opus-4.5",
@@ -733,7 +733,7 @@ exports[`generateModelConfig mixed provider scenarios uses all providers togethe
       "variant": "max",
     },
     "orchestrator": {
-      "model": "opencode/kimi-k2.5-free",
+      "model": "opencode/kimi-k2.5",
     },
     "planner": {
       "model": "github-copilot/claude-opus-4.5",
