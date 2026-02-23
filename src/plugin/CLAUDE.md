@@ -49,7 +49,7 @@ skills/
 - `/workflows:plan` - Create implementation plans
 - `/workflows:review` - Run comprehensive code reviews
 - `/workflows:work` - Execute work items systematically
-- `/workflows:compound` - Document solved problems
+- `/workflows:learnings` - Document solved problems
 
 **Why `workflows:`?** Claude Code has built-in `/plan` and `/review` commands. Using `name: workflows:plan` in frontmatter creates a unique `/workflows:plan` command with no collision.
 

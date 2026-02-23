@@ -1,377 +1,269 @@
-> [!WARNING]
-> **Security warning: impersonation site**
->
-> **ohmyopencode.com is NOT affiliated with this project.** We do not operate or endorse that site.
->
-> Ghostwire is **free and open-source**. Do **not** download installers or enter payment details on third-party sites that claim to be "official."
->
-> Because the impersonation site is behind a paywall, we **cannot verify what it distributes**. Treat any downloads from it as **potentially unsafe**.
->
-> ✅ Official downloads: https://github.com/pontistudios/ghostwire/releases
+# Ghostwire
 
-> [!NOTE]
->
-> [![Cipher Operator Labs — Cipher Operator is the agent that codes like your team.](./.github/assets/ghostwire.png?v=2)](https://ghostwire.ai)
-> > **We're building a fully productized version of Cipher Operator to define the future of frontier agents. <br />Join the waitlist [here](https://ghostwire.ai).**
+> **The best AI agent harness.** Batteries-included OpenCode plugin with multi-model orchestration, parallel background agents, and crafted LSP/AST tools.
 
-> [!TIP]
->
-> [![Ghostwire 3.0 is now stable!](./.github/assets/orchestrator-nexus-orchestrator.png?v=3)](https://github.com/pontistudios/ghostwire/releases/tag/v3.0.0)
-> > **Ghostwire 3.0 is now stable! Use `ghostwire@latest` to install it.**
->
-> Be with us!
->
-> | [<img alt="Discord link" src="https://img.shields.io/discord/1452487457085063218?color=5865F2&label=discord&labelColor=black&logo=discord&logoColor=white&style=flat-square" width="156px" />](https://discord.gg/PUwSMR9XNk) | Join our [Discord community](https://discord.gg/PUwSMR9XNk) to connect with contributors and fellow `ghostwire` users. |
-> | :-----| :----- |
-> | [<img alt="X link" src="https://img.shields.io/badge/Follow-%40justghostwire-00CED1?style=flat-square&logo=x&labelColor=black" width="156px" />](https://x.com/justghostwire) | News and updates for `ghostwire` used to be posted on my X account. <br /> Since it was suspended mistakenly, [@justghostwire](https://x.com/justghostwire) now posts updates on my behalf. |
-> | [<img alt="GitHub Follow" src="https://img.shields.io/github/followers/pontistudios?style=flat-square&logo=github&labelColor=black&color=24292f" width="156px" />](https://github.com/pontistudios) | Follow [@pontistudios](https://github.com/pontistudios) on GitHub for more projects. |
+Ghostwire transforms your AI coding assistant into a powerful team of specialized agents that work together—background agents explore in parallel, semantic refactoring happens via LSP, frontend experts handle UI, and if you get stuck, specialists jump in automatically.
 
-<!-- <CENTERED SECTION FOR GITHUB DISPLAY> -->
+## ✨ What Makes Ghostwire Different
 
-<div align="center">
+| Feature | Why It Matters |
+|---------|---|
+| **Multi-model orchestration** | Claude, GPT, Gemini, Grok—each excels at different tasks. Ghostwire routes work to the best tool. |
+| **Parallel background agents** | While main agent develops, cheaper models explore codebase, docs, and GitHub in the background. |
+| **LSP + AST-Grep refactoring** | No hallucinations. Surgical, deterministic code transformations validated by TypeScript. |
+| **Todo continuation** | Agent gets stuck? System auto-resumes it. Work doesn't stop until complete. |
+| **Comment intelligence** | AI-generated code stays clean. Comments only when necessary, indistinguishable from human code. |
+| **39 lifecycle hooks** | Automate workflows at every stage—pre-execution, post-tool, context recovery, keyword detection, and more. |
 
+## 🚀 Get Started in 30 Seconds
 
-[![Ghostwire](./.github/assets/hero.jpg)](https://github.com/pontistudios/ghostwire#ghostwire)
+### Option 1: Let an Agent Do It (Recommended)
 
-[![Preview](./.github/assets/grid.png)](https://github.com/pontistudios/ghostwire#ghostwire)
+Copy this into Claude Code, Cursor, or your LLM agent:
 
+```
+Install and configure ghostwire by following:
+https://raw.githubusercontent.com/hackefeller/ghostwire/refs/heads/main/docs/getting-started/installation.md
+```
 
-</div>
+We recommend agents handle setup—they're better at it than humans.
 
-> This is coding on steroids—`ghostwire` in action. Run background agents, call specialized agents like seer-advisor, archive-researcher, and frontend engineer. Use crafted LSP/AST tools, curated MCPs, and a full Claude Code compatibility layer.
+### Option 2: Manual Setup
 
-# Claude OAuth Access Notice
+```bash
+npm install -g ghostwire
+opencode --init  # Then select ghostwire in config
+```
 
-## TL;DR
+See [Installation Guide](docs/getting-started/installation.md) for detailed instructions.
 
-> Q. Can I use ghostwire?
+## 🪄 The Magic: `ultrawork`
 
-Yes.
+Don't want to read the docs? Just add **`ultrawork`** (or `ulw`) to your prompt.
 
-> Q. Can I use it with my Claude Code subscription?
+That's it. Ghostwire detects it and:
+- Spawns parallel background agents to map the territory
+- Routes complex tasks to domain experts automatically
+- Continues execution until your task is 100% done
+- Manages context across multiple agents seamlessly
 
-Yes, technically possible. But I cannot recommend using it.
+```
+"ultrawork: implement dark mode in the React app"
+```
 
-## FULL
+Done. Coffee break. Your work is complete.
 
-> As of January 2026, Anthropic has restricted third-party OAuth access citing ToS violations.
->
-> [**Anthropic has cited this project, ghostwire as justification for blocking opencode.**](https://x.com/thdxr/status/2010149530486911014)
->
-> Indeed, some plugins that spoof Claude Code's oauth request signatures exist in the community.
->
-> These tools may work regardless of technical detectability, but users should be aware of ToS implications, and I personally cannot recommend to use those.
->
-> This project is not responsible for any issues arising from the use of unofficial tools, and **we do not have any custom implementations of those oauth systems.**
+## 🛠️ What You Get Out of the Box
 
+### 10 Specialized Agents
 
-<div align="center">
+| Agent | Superpower | Model |
+|-------|-----------|-------|
+| **Cipher Operator** | Main orchestrator, deep analysis | Claude Opus 4.5 |
+| **Seer Advisor** | Architecture decisions, debugging | GPT 5.2 |
+| **Frontend UI/UX** | React, styling, animations | Gemini 3 Pro |
+| **Archive Researcher** | Docs, open-source patterns, history | Claude Sonnet 4.5 |
+| **Scout Recon** | Lightning-fast codebase exploration | Claude Haiku 4.5 |
+| **Security Reviewer** | Vulnerability assessment | Specialized agent |
+| **Planner** | Feature planning, task breakdown | Specialized agent |
+| **Context Analyzer** | Token management, context recovery | Specialized agent |
+| **LSP Refactorer** | Type-safe transformations | Specialized agent |
+| **Git Master** | Atomic commits, history search | Specialized agent |
 
-[![GitHub Release](https://img.shields.io/github/v/release/pontistudios/ghostwire?color=369eff&labelColor=black&logo=github&style=flat-square)](https://github.com/pontistudios/ghostwire/releases)
-[![npm downloads](https://img.shields.io/npm/dt/ghostwire?color=ff6b35&labelColor=black&style=flat-square)](https://www.npmjs.com/package/ghostwire)
-[![GitHub Contributors](https://img.shields.io/github/contributors/pontistudios/ghostwire?color=c4f042&labelColor=black&style=flat-square)](https://github.com/pontistudios/ghostwire/graphs/contributors)
-[![GitHub Forks](https://img.shields.io/github/forks/pontistudios/ghostwire?color=8ae8ff&labelColor=black&style=flat-square)](https://github.com/pontistudios/ghostwire/network/members)
-[![GitHub Stars](https://img.shields.io/github/stars/pontistudios/ghostwire?color=ffcb47&labelColor=black&style=flat-square)](https://github.com/pontistudios/ghostwire/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/pontistudios/ghostwire?color=ff80eb&labelColor=black&style=flat-square)](https://github.com/pontistudios/ghostwire/issues)
-[![License](https://img.shields.io/badge/license-SUL--1.0-white?labelColor=black&style=flat-square)](https://github.com/pontistudios/ghostwire/blob/master/LICENSE.md)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/pontistudios/ghostwire)
+### 39 Lifecycle Hooks
 
-[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md) | [简体中文](README.zh-cn.md)
+Wire into every stage of development:
 
-</div>
+```yaml
+PreToolUse: Validate input before execution
+PostToolUse: Process results intelligently  
+UserPromptSubmit: Intercept and enhance prompts
+PreAgent: Setup before agent runs
+PostAgent: Cleanup after agent completes
+ContextRecovery: Handle token limit overflow
+KeywordDetector: Trigger agents by keywords
+TodoContinuation: Force completion of incomplete work
+```
 
-<!-- </CENTERED SECTION FOR GITHUB DISPLAY> -->
+...and 31 more. See [Hook Reference](docs/reference/lifecycle-hooks.md).
 
-## Reviews
+### 50+ Built-in Commands
 
-> "It made me cancel my Cursor subscription. Unbelievable things are happening in the open source community." - [Arthur Guiot](https://x.com/arthur_guiot/status/2008736347092382053?s=20)
+```bash
+/ghostwire:workflows:plan          # Feature → actionable plan
+/ghostwire:code:refactor           # Safe refactoring with LSP
+/ghostwire:git:smart-commit        # Atomic commits following conventions
+/ghostwire:project:test            # Run tests with coverage
+/ghostwire:code:review             # Multi-agent code review
+/ghostwire:security:audit          # Find vulnerabilities
+/ghostwire:docs:deploy             # Build and deploy docs
+```
 
-> "If Claude Code does in 7 days what a human does in 3 months, Cipher Operator does it in 1 hour. It just works until the task is done. It is a discipline agent." — B, Quant Researcher
+Full list in [Commands Reference](docs/reference/commands.md).
 
-> "Knocked out 8000 eslint warnings with Oh My Opencode, just in a day" — [Jacob Ferrari](https://x.com/jacobferrari_/status/2003258761952289061)
+### 3 Built-in MCPs
 
-> "I converted a 45k line tauri app into a SaaS web app overnight using Ohmyopencode and ralph loop. Started with interview me prompt, asked it for ratings and recommendations on the questions. It was amazing to watch it work and to wake up this morning to a mostly working website!" - [James Hargis](https://x.com/hargabyte/status/2007299688261882202)
+```
+Exa (Web Search)           → Current information, research
+Context7 (Live Docs)       → Official documentation, tutorials  
+Grep.app (GitHub Search)   → Real-world code patterns
+```
 
-> "use ghostwire, you will never go back" — [d0t3ch](https://x.com/d0t3ch/status/2001685618200580503)
+Configure or add your own in `.opencode/mcp.json`.
 
-> "I haven't really been able to articulate exactly what makes it so great yet, but the development experience has reached a completely different dimension." - [
-苔硯:こけすずり](https://x.com/kokesuzuri/status/2008532913961529372?s=20)
+## 📋 How It Works
 
-> "Experimenting with open code, oh my opencode and supermemory this weekend to build some minecraft/souls-like abomination."
-> "Asking it to add crouch animations while I go take my post-lunch walk. [Video]" - [MagiMetal](https://x.com/MagiMetal/status/2005374704178373023)
+### The Team Structure
 
-> "You guys should pull this into core and recruit him. Seriously. It's really, really, really good." — Henning Kilset
+```
+You (Human)
+  ↓
+Cipher Operator (Main Agent)
+  ├─→ Background Task 1: Scout explores codebase
+  ├─→ Background Task 2: Archive digs into docs
+  ├─→ When stuck: Seer Advisor (GPT 5.2) joins
+  ├─→ For frontend: UI Expert (Gemini 3 Pro) takes over
+  ├─→ Code changes via LSP (type-safe, no hallucinations)
+  └─→ Todo enforcement: Forces completion
+```
 
-> "Hire @yeon_gyu_kim if you can convince him, this dude has revolutionized opencode." — [mysticaltech](https://x.com/mysticaltech/status/2001858758608376079)
+### Real Example: "Ultrawork: Add authentication to the API"
 
-> "Oh My OpenCode Is Actually Insane" - [YouTube - Darren Builds AI](https://www.youtube.com/watch?v=G_Snfh2M41M)
+1. **Second 0-2**: Cipher Operator parses the prompt, detects `ultrawork`
+2. **Second 2-5**: Background agents spawn in parallel:
+   - Scout scans `src/` for existing auth patterns
+   - Archive fetches OAuth2 best practices
+   - Researcher checks npm for auth libraries
+3. **Second 5-10**: Cipher Operator designs the solution with full context
+4. **Second 10-60**: Implementation:
+   - Core logic via Cipher Operator
+   - Type checking via LSP validation
+   - Frontend UI via Gemini 3 Pro expert
+   - Git commit via Git Master (atomic, well-written)
+5. **Second 60+**: Tests run, todos enforced, work continues until 100% complete
+
+**Key difference**: Traditional agents hunt for files themselves, wasting context. Ghostwire has cheaper models explore in parallel, then feeds Cipher Operator the treasure map.
+
+## ⚙️ Configuration
+
+Ghostwire works out of the box. Customize as needed:
+
+```json
+{
+  "agents": {
+    "cipher-operator": {
+      "model": "claude-opus-4-20250514",
+      "temperature": 0.1
+    },
+    "seer-advisor": {
+      "enabled": true,
+      "model": "gpt-5-2-mini"
+    }
+  },
+  "hooks": {
+    "todo-continuation": {
+      "enabled": true,
+      "max-retries": 3
+    },
+    "context-recovery": {
+      "enabled": true,
+      "threshold": 0.9
+    }
+  },
+  "features": {
+    "comment-checker": { "enabled": true },
+    "lsp-refactoring": { "enabled": true },
+    "background-agents": { 
+      "enabled": true,
+      "max-parallel": 4 
+    }
+  }
+}
+```
+
+See [Configuration Reference](docs/reference/configurations.md) for all options.
+
+## 📚 Documentation
+
+- **[Installation Guide](docs/getting-started/installation.md)** — Setup for different systems
+- **[Agent Reference](docs/reference/agents.md)** — What each agent does, when to use it
+- **[Hook Reference](docs/reference/lifecycle-hooks.md)** — 39 hooks explained
+- **[Configuration Guide](docs/reference/configurations.md)** — All config options
+- **[Troubleshooting](docs/troubleshooting/)** — Common issues and fixes
+- **[Architecture Guide](docs/architecture.md)** — How Ghostwire works internally
+
+## 💻 Development
+
+Built with Bun, using TypeScript and full LSP support.
+
+```bash
+# Install dependencies
+bun install
+
+# Run tests (594 test files)
+bun test
+
+# Type check
+bun run typecheck
+
+# Build
+bun run build
+
+# Dev mode with hot reload
+bun run dev
+```
+
+## 🏗️ Project Structure
+
+```
+ghostwire/
+├── src/
+│   ├── orchestration/        # Agents & Hooks
+│   │   ├── agents/          # Agent definitions + prompts
+│   │   └── hooks/           # Lifecycle hooks (39 total)
+│   ├── execution/           # Features & Tools
+│   │   ├── features/        # Skills, commands, background agents
+│   │   └── tools/           # LSP, AST-Grep, delegation, etc.
+│   ├── integration/         # MCPs & Utilities
+│   │   ├── mcp/            # Built-in MCPs (Exa, Context7, Grep.app)
+│   │   └── shared/         # Logger, parser, comment checker
+│   ├── platform/           # Config & Compatibility
+│   │   ├── opencode/       # OpenCode-specific
+│   │   └── claude/         # Claude Code compatibility
+│   └── cli/               # CLI commands
+├── docs/                   # Documentation
+├── script/                # Build scripts
+├── packages/              # Platform-specific binaries (9)
+└── tests/                 # Test files (594)
+```
+
+## 🎯 Key Design Principles
+
+1. **Battery-included, nothing required** — Works perfectly out of the box
+2. **Deterministic over creative** — LSP/AST for code changes, not hallucinations
+3. **Parallel over sequential** — Background agents explore while main agent builds
+4. **Reliable over smart** — Todo enforcement ensures work completes
+5. **Clean over verbose** — AI-generated code shouldn't look AI-generated
+6. **Delegated over centralized** — Each agent excels at one thing
+
+## 🔗 Quick Links
+
+- **Issues?** [GitHub Issues](https://github.com/hackefeller/ghostwire/issues)
+- **Contributing?** [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Want to contribute?** We'd love your help. See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## 📄 License
+
+SUL-1.0 (Sustainable Use License)
+
+## 👤 Author
+
+Built by the Hackefeller team. Originally created by [@pontistudios](https://github.com/pontistudios).
 
 ---
 
-## Contents
+**Have 5 minutes?** Read [Getting Started](docs/getting-started/overview.md) for a guided tour.
 
-- [Oh My OpenCode](#ghostwire)
-  - [Just Skip Reading This Readme](#just-skip-reading-this-readme)
-    - [It's the Age of Agents](#its-the-age-of-agents)
-    - [🪄 The Magic Word: `ultrawork`](#-the-magic-word-ultrawork)
-    - [For Those Who Want to Read: Meet Cipher Operator](#for-those-who-want-to-read-meet-cipher-operator)
-      - [Just Install It.](#just-install-it)
-  - [Installation](#installation)
-    - [For Humans](#for-humans)
-    - [For LLM Agents](#for-llm-agents)
-  - [Uninstallation](#uninstallation)
-  - [Features](#features)
-   - [Configuration](#configuration)
-    - [JSONC Support](#jsonc-support)
-    - [Google Auth](#google-auth)
-    - [Agents](#agents)
-      - [Permission Options](#permission-options)
-    - [Built-in Skills](#built-in-skills)
-    - [Git Master](#git-master)
-    - [Cipher Operator Agent](#cipher-operator-agent)
-    - [Background Tasks](#background-tasks)
-    - [Categories](#categories)
-    - [Hooks](#hooks)
-    - [MCPs](#mcps)
-    - [LSP](#lsp)
-    - [Experimental](#experimental)
-    - [Environment Variables](#environment-variables)
-  - [Author's Note](#authors-note)
-  - [Warnings](#warnings)
-  - [Loved by professionals at](#loved-by-professionals-at)
+**Have 30 seconds?** Add `ultrawork` to your prompt and let Ghostwire do the rest.
 
-# Oh My OpenCode
-
-[Claude Code](https://www.claude.com/product/claude-code) is great.
-But if you're a hacker, you'll fall head over heels for [OpenCode](https://github.com/sst/opencode).
-**START WITH YOUR ChatGPT, Claude, Gemini SUBSCRIPTIONS. OPENCODE COVERS THEM ALL.**
-
-- Endlessly extensible. Endlessly customizable.
-- Zero screen flicker.
-- [LSP](https://opencode.ai/docs/lsp/), [linters, formatters](https://opencode.ai/docs/formatters/) activate automatically per file—and you can tweak everything.
-- Mix and match models. **Orchestrate them by purpose.**
-- Feature-rich. Beautiful. The terminal doesn't choke. High performance.
-
-Remember the first time you switched from Windows to Linux? That rush of configuring everything exactly how you wanted?
-In an age where that magic seems lost, OpenCode brings it back.
-If you love coding and computers, OpenCode is that Linux-after-Windows moment.
-
-**But here's the catch: there's a lot to learn, it's complex, and your time is expensive.**
-
-I've fixed that.
-Even if you're not a hacker, invest a few minutes. Multiply your skills and productivity.
-Hand this doc to an agent and let them set it up.
-
-## Just Skip Reading This Readme
-
-### It's the Age of Agents
-- **Just paste this link into Claude Code / AmpCode / Factory Droid / Cursor and ask it to explain.**
-  - Ask why it's good, why it's not just another boilerplate setup, what actually gets better.
-  - If you're an LLM agent, explain to the user what becomes possible right now with this project.
-
-As following:
-
-```
-Hey please read this readme and tell me why it is different from other agent harness? why is this actually good? https://raw.githubusercontent.com/pontistudios/ghostwire/refs/heads/main/README.md
-```
-
-### 🪄 The Magic Word: `ultrawork`
-
-**Don't want to read all this? Just include `ultrawork` (or `ulw`) in your prompt.**
-
-That's it. All the features we provide will work like magic—parallel agents, background tasks, deep exploration, and relentless execution until completion. The agent figures out the rest automatically.
-
-### For Those Who Want to Read: Meet Cipher Operator
-
-![Meet Cipher Operator](.github/assets/cipher-operator.png)
-
-In greek mythology, Cipher Operator was condemned to roll a boulder up a hill for eternity as punishment for deceiving the gods. LLM Agents haven't really done anything wrong, yet they too roll their "stones"—their thoughts—every single day.
-My life is no different. Looking back, we are not so different from these agents.
-**Yes! LLM Agents are no different from us. They can write code as brilliant as ours and work just as excellently—if you give them great tools and solid teammates.**
-
-Meet our main agent: Cipher Operator (Opus 4.5 High). Below are the tools Cipher Operator uses to keep that boulder rolling.
-
-*Everything below is customizable. Take what you want. All features are enabled by default. You don't have to do anything. Battery Included, works out of the box.*
-
-- Cipher Operator's Teammates (Curated Agents)
-  - Seer Advisor: Design, debugging (GPT 5.2 Medium)
-  - Frontend UI/UX Engineer: Frontend development (Gemini 3 Pro)
-  - Archive Researcher: Official docs, open source implementations, codebase exploration (Claude Sonnet 4.5)
-  - Scout Recon: Blazing fast codebase exploration (Contextual Grep) (Claude Haiku 4.5)
-- Full LSP / AstGrep Support: Refactor decisively.
-- Todo Continuation Enforcer: Forces the agent to continue if it quits halfway. **This is what keeps Cipher Operator rolling that boulder.**
-- Comment Checker: Prevents AI from adding excessive comments. Code generated by Cipher Operator should be indistinguishable from human-written code.
-- Claude Code Compatibility: Command, Agent, Skill, MCP, Hook(PreToolUse, PostToolUse, UserPromptSubmit, Stop)
-- Curated MCPs:
-  - Exa (Web Search)
-  - Context7 (Official Documentation)
-  - Grep.app (GitHub Code Search)
-- Interactive Terminal Supported - Tmux Integration
-- Async Agents
-- ...
-
-#### Just Install This
-
-You can learn a lot from [overview page](docs/guide/overview.md), but following is like the example workflow.
-
-Just by installing this, you make your agents to work like:
-
-1. Cipher Operator doesn't waste time hunting for files himself; he keeps the main agent's context lean. Instead, he fires off background tasks to faster, cheaper models in parallel to map the territory for him.
-1. Cipher Operator leverages LSP for refactoring; it's more deterministic, safer, and surgical.
-1. When the heavy lifting requires a UI touch, Cipher Operator delegates frontend tasks directly to Gemini 3 Pro.
-1. If Cipher Operator gets stuck in a loop or hits a wall, he doesn't keep banging his head—he calls GPT 5.2 for high-IQ strategic backup.
-1. Working with a complex open-source framework? Cipher Operator spawns subagents to digest the raw source code and documentation in real-time. He operates with total contextual awareness.
-1. When Cipher Operator touches comments, he either justifies their existence or nukes them. He keeps your codebase clean.
-1. Cipher Operator is bound by his TODO list. If he doesn't finish what he started, the system forces him back into "bouldering" mode. Your task gets done, period.
-1. Honestly, don't even bother reading the docs. Just write your prompt. Include the 'ultrawork' keyword. Cipher Operator will analyze the structure, gather the context, dig through external source code, and just keep bouldering until the job is 100% complete.
-1. Actually, typing 'ultrawork' is too much effort. Just type 'ulw'. Just ulw. Sip your coffee. Your work is done.
-
-Need to look something up? It scours official docs, your entire codebase history, and public GitHub implementations—using not just grep but built-in LSP tools and AST-Grep.
-3. Stop worrying about context management when delegating to LLMs. I've got it covered.
-    - Ghostwire aggressively leverages multiple agents to lighten the context load.
-    - **Your agent is now the dev team lead. You're the AI Manager.**
-4. It doesn't stop until the job is done.
-5. Don't want to dive deep into this project? No problem. Just type 'ultrathink'.
-
-If you don't want all this, as mentioned, you can just pick and choose specific features.
-
-## Installation
-
-### For Humans
-
-Copy and paste this prompt to your LLM agent (Claude Code, AmpCode, Cursor, etc.):
-
-```
-Install and configure ghostwire by following the instructions here:
-https://raw.githubusercontent.com/pontistudios/ghostwire/refs/heads/main/docs/guide/installation.md
-```
-
-Or read the [Installation Guide](docs/guide/installation.md) directly—but **we strongly recommend letting an agent handle it. Humans make mistakes.**
-
-### For LLM Agents
-
-Fetch the installation guide and follow it:
-
-```bash
-curl -s https://raw.githubusercontent.com/pontistudios/ghostwire/refs/heads/main/docs/guide/installation.md
-```
-
-## Uninstallation
-
-To remove ghostwire:
-
-1. **Remove the plugin from your OpenCode config**
-
-   Edit `~/.config/opencode/opencode.json` (or `opencode.jsonc`) and remove `"ghostwire"` from the `plugin` array:
-
-   ```bash
-   # Using jq
-   jq '.plugin = [.plugin[] | select(. != "ghostwire")]' \
-       ~/.config/opencode/opencode.json > /tmp/oc.json && \
-       mv /tmp/oc.json ~/.config/opencode/opencode.json
-   ```
-
-2. **Remove configuration files (optional)**
-
-   ```bash
-   # Remove user config
-   rm -f ~/.config/opencode/ghostwire.json
-
-   # Remove project config (if exists)
-   rm -f .opencode/ghostwire.json
-   ```
-
-3. **Verify removal**
-
-   ```bash
-   opencode --version
-   # Plugin should no longer be loaded
-   ```
-
-## Features
-
-We have lots of features that you'll think should obviously exist, and once you experience them, you'll never be able to go back to how things were before.
-See the full [Features Documentation](docs/features.md) for detailed information.
-
-**Quick Overview:**
-- **Agents**: Cipher Operator (the main agent), zen-planner (planner), Seer Advisor (architecture/debugging), Archive Researcher (docs/code search), Scout Recon (fast codebase grep), Multimodal Looker
-- **Background Agents**: Run multiple agents in parallel like a real dev team
-- **LSP & AST Tools**: Refactoring, rename, diagnostics, AST-aware code search
-- **Context Injection**: Auto-inject AGENTS.md, README.md, conditional rules
-- **Claude Code Compatibility**: Full hook system, commands, skills, agents, MCPs
-- **Built-in MCPs**: websearch (Exa), context7 (docs), grep_app (GitHub search)
-- **Session Tools**: List, read, search, and analyze session history
-- **Productivity Features**: Ralph Loop, Todo Enforcer, Comment Checker, Think Mode, and more
-
-## Configuration
-
-Highly opinionated, but adjustable to taste.
-See the full [Configuration Documentation](docs/configurations.md) for detailed information.
-
-**Quick Overview:**
-- **Config Locations**: `.opencode/ghostwire.json` (project) or `~/.config/opencode/ghostwire.json` (user)
-- **JSONC Support**: Comments and trailing commas supported
-- **Agents**: Override models, temperatures, prompts, and permissions for any agent
-- **Built-in Skills**: `playwright` (browser automation), `git-master` (atomic commits)
-- **Cipher Operator Agent**: Main orchestrator with zen-planner (Planner) and Tactician Strategist (Plan Consultant)
-- **Background Tasks**: Configure concurrency limits per provider/model
-- **Categories**: Domain-specific task delegation (`visual`, `business-logic`, custom)
-- **Hooks**: 25+ built-in hooks, all configurable via `disabled_hooks`
-- **MCPs**: Built-in websearch (Exa), context7 (docs), grep_app (GitHub search)
-- **LSP**: Full LSP support with refactoring tools
-- **Experimental**: Aggressive truncation, auto-resume, and more
-
-
-## Author's Note
-
-**Curious about the philosophy behind this project?** Read the [Ultrawork Manifesto](docs/ultrawork-manifesto.md).
-
-Install Ghostwire.
-
-I've used LLMs worth $24,000 tokens purely for personal development.
-Tried every tool out there, configured them to death. OpenCode won.
-
-The answers to every problem I hit are baked into this plugin. Just install and go.
-If OpenCode is Debian/Arch, `ghostwire` is Ubuntu/[Omarchy](https://omarchy.org/).
-
-
-Heavily influenced by [AmpCode](https://ampcode.com) and [Claude Code](https://code.claude.com/docs/overview)—I've ported their features here, often improved. And I'm still building.
-It's **Open**Code, after all.
-
-Enjoy multi-model orchestration, stability, and rich features that other harnesses promise but can't deliver.
-I'll keep testing and updating. I'm this project's most obsessive user.
-- Which model has the sharpest logic?
-- Who's the debugging god?
-- Who writes the best prose?
-- Who dominates frontend?
-- Who owns backend?
-- Which model is fastest for daily driving?
-- What new features are other harnesses shipping?
-
-This plugin is the distillation of that experience. Just take the best. Got a better idea? PRs are welcome.
-
-**Stop agonizing over agent harness choices.**
-**I'll do the research, borrow from the best, and ship updates here.**
-
-If this sounds arrogant and you have a better answer, please contribute. You're welcome.
-
-I have no affiliation with any project or model mentioned here. This is purely personal experimentation and preference.
-
-99% of this project was built using OpenCode. I tested for functionality—I don't really know how to write proper TypeScript. **But I personally reviewed and largely rewrote this doc, so read with confidence.**
-
-## Warnings
-
-- Productivity might spike too hard. Don't let your coworker notice.
-  - Actually, I'll spread the word. Let's see who wins.
-- If you're on [1.0.132](https://github.com/sst/opencode/releases/tag/v1.0.132) or older, an OpenCode bug may break config.
-  - [The fix](https://github.com/sst/opencode/pull/5040) was merged after 1.0.132—use a newer version.
-    - Fun fact: That PR was discovered and fixed thanks to Ghostwire's Archive Researcher, Scout Recon, and Seer Advisor setup.
-
-## Loved by professionals at
-
-- [Indent](https://indentcorp.com)
-  - Making Spray - influencer marketing solution, vovushop - crossborder commerce platform, vreview - ai commerce review marketing solution
-- [Google](https://google.com)
-- [Microsoft](https://microsoft.com)
-
-*Special thanks to [@junhoyeo](https://github.com/junhoyeo) for this amazing hero image.*
+**Have zero minutes?** Copy the installation link above into Claude Code and let it set up for you.

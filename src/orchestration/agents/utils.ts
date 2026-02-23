@@ -214,7 +214,7 @@ export function buildAgent(
  * Creates OmO-specific environment context (time, timezone, locale).
  * Note: Working directory, platform, and date are already provided by OpenCode's system.ts,
  * so we only include fields that OpenCode doesn't provide to avoid duplication.
- * See: https://github.com/pontistudios/ghostwire/issues/379
+ * See: https://github.com/hackefeller/ghostwire/issues/379
  */
 export function createEnvContext(): string {
   const now = new Date();
@@ -345,7 +345,7 @@ export async function createBuiltinAgents(
   }
   // IMPORTANT: Do NOT pass client to fetchAvailableModels during plugin initialization.
   // This function is called from config handler, and calling client API causes deadlock.
-  // See: https://github.com/pontistudios/ghostwire/issues/1301
+  // See: https://github.com/hackefeller/ghostwire/issues/1301
   const availableModels = await fetchAvailableModels(undefined, {
     connectedProviders: connectedProviders ?? undefined,
   });

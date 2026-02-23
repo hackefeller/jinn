@@ -455,7 +455,7 @@ async function runNonTuiInstall(args: InstallArgs): Promise<number> {
     `${SYMBOLS.star} ${color.yellow("If you found this helpful, consider starring the repo!")}`,
   );
   console.log(
-    `  ${color.dim("gh api --silent --method PUT /user/starred/pontistudios/ghostwire >/dev/null 2>&1 || true")}`,
+    `  ${color.dim("gh api --silent --method PUT /user/starred/hackefeller/ghostwire >/dev/null 2>&1 || true")}`,
   );
   console.log();
   console.log(color.dim("oMoMoMoMo... Enjoy!"));
@@ -566,7 +566,7 @@ export async function install(args: InstallArgs): Promise<number> {
 
   p.log.message(`${color.yellow("★")} If you found this helpful, consider starring the repo!`);
   p.log.message(
-    `  ${color.dim("gh api --silent --method PUT /user/starred/pontistudios/ghostwire >/dev/null 2>&1 || true")}`,
+    `  ${color.dim("gh api --silent --method PUT /user/starred/hackefeller/ghostwire >/dev/null 2>&1 || true")}`,
   );
 
   p.outro(color.green("oMoMoMoMo... Enjoy!"));

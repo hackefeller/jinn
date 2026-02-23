@@ -1,15 +1,16 @@
 import { describe, test, expect } from "bun:test";
 import { BuiltinCommandNameSchema } from "../src/platform/config/schema";
 
-describe("Compound Engineering Commands", () => {
+describe("Builtin Commands", () => {
   describe("Command Schema Validation", () => {
-    test("all compound command names are valid", () => {
+    test("all builtin command names are valid", () => {
       //#given
-      const compoundCommands = [
+      const builtinCommands = [
         "ghostwire:workflows:plan",
         "ghostwire:workflows:create",
         "ghostwire:workflows:status",
         "ghostwire:workflows:complete",
+        "ghostwire:workflows:learnings",
         "ghostwire:code:refactor",
         "ghostwire:code:review",
         "ghostwire:code:optimize",
@@ -33,7 +34,7 @@ describe("Compound Engineering Commands", () => {
       ];
 
       //#when
-      const results = compoundCommands.map((cmd) =>
+      const results = builtinCommands.map((cmd) =>
         BuiltinCommandNameSchema.safeParse(cmd),
       );
 
@@ -44,8 +45,9 @@ describe("Compound Engineering Commands", () => {
 
     test("all command names follow ghostwire:category:action pattern", () => {
       //#given
-      const compoundCommands = [
+      const sampleCommands = [
         "ghostwire:workflows:plan",
+        "ghostwire:workflows:learnings",
         "ghostwire:code:refactor",
         "ghostwire:git:smart-commit",
         "ghostwire:project:init",
@@ -55,21 +57,22 @@ describe("Compound Engineering Commands", () => {
 
       //#when
       const pattern = /^ghostwire:[a-z]+:[a-z-]+$/;
-      const validCommands = compoundCommands.filter((cmd) => pattern.test(cmd));
+      const validCommands = sampleCommands.filter((cmd) => pattern.test(cmd));
 
       //#then
-      expect(validCommands.length).toBe(compoundCommands.length);
+      expect(validCommands.length).toBe(sampleCommands.length);
     });
   });
 
   describe("Command Organization", () => {
-    test("workflows commands exist (4)", () => {
+    test("workflows commands exist (5)", () => {
       //#given
       const workflowCommands = [
         "ghostwire:workflows:plan",
         "ghostwire:workflows:create",
         "ghostwire:workflows:status",
         "ghostwire:workflows:complete",
+        "ghostwire:workflows:learnings",
       ];
 
       //#when
@@ -172,52 +175,25 @@ describe("Compound Engineering Commands", () => {
     });
   });
 
-  describe("Command Categories", () => {
-    test("24 total compound commands", () => {
-      //#given
-      const allCommands = [
-        "ghostwire:workflows:plan",
-        "ghostwire:workflows:create",
-        "ghostwire:workflows:status",
-        "ghostwire:workflows:complete",
-        "ghostwire:code:refactor",
-        "ghostwire:code:review",
-        "ghostwire:code:optimize",
-        "ghostwire:code:format",
-        "ghostwire:git:smart-commit",
-        "ghostwire:git:branch",
-        "ghostwire:git:merge",
-        "ghostwire:git:cleanup",
-        "ghostwire:project:init",
-        "ghostwire:project:build",
-        "ghostwire:project:deploy",
-        "ghostwire:project:test",
-        "ghostwire:util:clean",
-        "ghostwire:util:backup",
-        "ghostwire:util:restore",
-        "ghostwire:util:doctor",
-        "ghostwire:docs:deploy-docs",
-        "ghostwire:docs:release-docs",
-        "ghostwire:docs:feature-video",
-        "ghostwire:docs:test-browser",
-      ];
-
-      //#when
-      const validCount = allCommands.filter(
-        (cmd) => BuiltinCommandNameSchema.safeParse(cmd).success,
-      ).length;
+  describe("Learnings Command", () => {
+    test("ghostwire:workflows:learnings command is valid", () => {
+      //#given & #when
+      const result = BuiltinCommandNameSchema.safeParse("ghostwire:workflows:learnings");
 
       //#then
-      expect(validCount).toBe(24);
+      expect(result.success).toBe(true);
     });
+  });
 
-    test("no duplicate commands", () => {
+  describe("No Duplicate Commands", () => {
+    test("no duplicate commands in schema", () => {
       //#given
       const allCommands = [
         "ghostwire:workflows:plan",
         "ghostwire:workflows:create",
         "ghostwire:workflows:status",
         "ghostwire:workflows:complete",
+        "ghostwire:workflows:learnings",
         "ghostwire:code:refactor",
         "ghostwire:code:review",
         "ghostwire:code:optimize",

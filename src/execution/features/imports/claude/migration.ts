@@ -47,12 +47,12 @@ export function checkMigrationNeeded(configPath?: string): {
     const config = JSON.parse(content);
 
     // Check if already migrated
-    if (config.imports?.claude?.enabled || config.features?.compound_engineering?.enabled) {
+    if (config.imports?.claude?.enabled) {
       return { needed: false, reason: "Already using unified plugin architecture" };
     }
 
     // Check if using old separate config
-    if (config.compound_engineering?.enabled || config.claude_import?.enabled) {
+    if (config.claude_import?.enabled) {
       return {
         needed: true,
         reason: "Using legacy configuration format",
@@ -113,15 +113,9 @@ export function migrateConfig(config: MigrationConfig): MigrationResult {
 
     result.changes.push("Migrated from legacy configuration format");
     result.changes.push("Added imports.claude section");
-    result.changes.push("Added features.compound_engineering section");
     result.success = true;
 
     // Add warnings for deprecated fields
-    if (oldConfig.compound_engineering) {
-      result.warnings.push(
-        "Legacy 'compound_engineering' field migrated to 'features.compound_engineering'",
-      );
-    }
     if (oldConfig.claude_import) {
       result.warnings.push("Legacy 'claude_import' field migrated to 'imports.claude'");
     }
@@ -139,15 +133,6 @@ export function migrateConfig(config: MigrationConfig): MigrationResult {
  */
 function transformConfig(oldConfig: Record<string, unknown>): Record<string, unknown> {
   const newConfig: Record<string, unknown> = { ...oldConfig };
-
-  // Move compound_engineering to features.compound_engineering
-  if (oldConfig.compound_engineering) {
-    newConfig.features = {
-      ...(newConfig.features as Record<string, unknown>),
-      compound_engineering: oldConfig.compound_engineering,
-    };
-    delete newConfig.compound_engineering;
-  }
 
   // Move claude_import to imports.claude
   if (oldConfig.claude_import) {
@@ -243,10 +228,6 @@ export function validateMigratedConfig(configPath: string): {
     // Check required sections
     if (!config.imports?.claude) {
       errors.push("Missing 'imports.claude' section");
-    }
-
-    if (!config.features?.compound_engineering) {
-      errors.push("Missing 'features.compound_engineering' section");
     }
 
     // Validate imports.claude structure

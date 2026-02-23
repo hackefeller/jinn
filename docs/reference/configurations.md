@@ -16,7 +16,7 @@ It asks about your providers (Claude, OpenAI, Gemini, etc.) and generates optima
 
 ```jsonc
 {
-  "$schema": "https://raw.githubusercontent.com/pontistudios/ghostwire/master/assets/ghostwire.schema.json",
+  "$schema": "https://raw.githubusercontent.com/hackefeller/ghostwire/master/assets/ghostwire.schema.json",
   
   // Override specific agent models
   "agents": {
@@ -52,7 +52,7 @@ Schema autocomplete supported:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/pontistudios/ghostwire/master/assets/ghostwire.schema.json"
+  "$schema": "https://raw.githubusercontent.com/hackefeller/ghostwire/master/assets/ghostwire.schema.json"
 }
 ```
 
@@ -69,7 +69,7 @@ When both `ghostwire.jsonc` and `ghostwire.json` files exist, `.jsonc` takes pri
 
 ```jsonc
 {
-  "$schema": "https://raw.githubusercontent.com/pontistudios/ghostwire/master/assets/ghostwire.schema.json",
+  "$schema": "https://raw.githubusercontent.com/hackefeller/ghostwire/master/assets/ghostwire.schema.json",
   /* Agent overrides - customize models for specific tasks */
   "agents": {
     "advisor-plan": {
@@ -144,7 +144,7 @@ If you encounter `JSON Parse error: Unexpected EOF`:
 
 The proper long-term fix requires Claude Code SDK to parse NDJSON responses correctly. Until then, use `stream: false` as a workaround.
 
-**Tracking**: https://github.com/pontistudios/ghostwire/issues/1124
+**Tracking**: https://github.com/hackefeller/ghostwire/issues/1124
 
 ## Agents
 

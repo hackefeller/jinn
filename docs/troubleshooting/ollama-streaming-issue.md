@@ -66,7 +66,7 @@ The proper fix requires Claude Code SDK to:
 3. Merge `tool_calls` from multiple lines
 4. Return a single merged response
 
-**Tracking**: https://github.com/pontistudios/ghostwire/issues/1124
+**Tracking**: https://github.com/hackefeller/ghostwire/issues/1124
 
 ## Workaround Implementation
 
@@ -113,7 +113,7 @@ curl -s http://localhost:11434/api/chat \
 
 ## Related Issues
 
-- **ghostwire**: https://github.com/pontistudios/ghostwire/issues/1124
+- **ghostwire**: https://github.com/hackefeller/ghostwire/issues/1124
 - **Ollama API Docs**: https://github.com/ollama/ollama/blob/main/docs/api.md
 
 ## Getting Help

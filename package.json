@@ -49,12 +49,12 @@
   "license": "SUL-1.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pontistudios/ghostwire.git"
+    "url": "git+https://github.com/hackefeller/ghostwire.git"
   },
   "bugs": {
-    "url": "https://github.com/pontistudios/ghostwire/issues"
+    "url": "https://github.com/hackefeller/ghostwire/issues"
   },
-  "homepage": "https://github.com/pontistudios/ghostwire#readme",
+  "homepage": "https://github.com/hackefeller/ghostwire#readme",
   "dependencies": {
     "@ast-grep/cli": "^0.40.0",
     "@ast-grep/napi": "^0.40.0",

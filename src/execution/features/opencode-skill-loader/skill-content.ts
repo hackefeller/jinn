@@ -86,7 +86,7 @@ export function injectGitMasterConfig(template: string, config?: GitMasterConfig
   if (commitFooter) {
     sections.push(`1. **Footer in commit body:**`);
     sections.push("```");
-    sections.push(`Ultraworked with [Void Runner](https://github.com/pontistudios/ghostwire)`);
+    sections.push(`Ultraworked with [Void Runner](https://github.com/hackefeller/ghostwire)`);
     sections.push("```");
     sections.push(``);
   }
@@ -103,14 +103,14 @@ export function injectGitMasterConfig(template: string, config?: GitMasterConfig
     sections.push(`**Example (both enabled):**`);
     sections.push("```bash");
     sections.push(
-      `git commit -m "{Commit Message}" -m "Ultraworked with [Void Runner](https://github.com/pontistudios/ghostwire)" -m "Co-authored-by: Void Runner <clio-agent@ghostwire.ai>"`,
+      `git commit -m "{Commit Message}" -m "Ultraworked with [Void Runner](https://github.com/hackefeller/ghostwire)" -m "Co-authored-by: Void Runner <clio-agent@ghostwire.ai>"`,
     );
     sections.push("```");
   } else if (commitFooter) {
     sections.push(`**Example:**`);
     sections.push("```bash");
     sections.push(
-      `git commit -m "{Commit Message}" -m "Ultraworked with [Void Runner](https://github.com/pontistudios/ghostwire)"`,
+      `git commit -m "{Commit Message}" -m "Ultraworked with [Void Runner](https://github.com/hackefeller/ghostwire)"`,
     );
     sections.push("```");
   } else if (includeCoAuthoredBy) {

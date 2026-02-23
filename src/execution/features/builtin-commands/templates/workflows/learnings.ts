@@ -1,18 +1,18 @@
-export const WORKFLOWS_COMPOUND_TEMPLATE = `# /compound
+export const WORKFLOWS_LEARNINGS_TEMPLATE = `# /learnings
 
 Coordinate multiple subagents working in parallel to document a recently solved problem.
 
 ## Purpose
 
-Captures problem solutions while context is fresh, creating structured documentation in \`docs/solutions/\` with YAML frontmatter for searchability and future reference. Uses parallel subagents for maximum efficiency.
+Captures problem solutions while context is fresh, creating structured documentation in \`docs/learnings/\` with YAML frontmatter for searchability and future reference. Uses parallel subagents for maximum efficiency.
 
-**Why "compound"?** Each documented solution compounds your team's knowledge. The first time you solve a problem takes research. Document it, and the next occurrence takes minutes. Knowledge compounds.
+**Why "learnings"?** Each documented solution builds your team's knowledge. The first time you solve a problem takes research. Document it, and the next occurrence takes minutes. Knowledge accumulates.
 
 ## Usage
 
 \`\`\`bash
-/workflows:compound                    # Document the most recent fix
-/workflows:compound [brief context]    # Provide additional context hint
+/workflows:learnings                    # Document the most recent fix
+/workflows:learnings [brief context]    # Provide additional context hint
 \`\`\`
 
 ## Execution Strategy: Parallel Subagents
@@ -35,7 +35,7 @@ This command launches multiple specialized subagents IN PARALLEL to maximize eff
 
 ### 3. **Related Docs Finder** (Parallel)
 
-- Searches \`docs/solutions/\` for related documentation
+- Searches \`docs/learnings/\` for related documentation
 - Identifies cross-references and links
 - Finds related GitHub issues
 - Returns: Links and relationships
@@ -49,7 +49,7 @@ This command launches multiple specialized subagents IN PARALLEL to maximize eff
 
 ### 5. **Category Classifier** (Parallel)
 
-- Determines optimal \`docs/solutions/\` category
+- Determines optimal \`docs/learnings/\` category
 - Validates category against schema
 - Suggests filename based on slug
 - Returns: Final path and filename
@@ -98,7 +98,7 @@ Based on problem type detected, automatically invoke applicable agents:
 
 **Organized documentation:**
 
-- File: \`docs/solutions/[category]/[filename].md\`
+- File: \`docs/learnings/[category]/[filename].md\`
 
 **Categories auto-detected from problem:**
 
@@ -122,7 +122,7 @@ Primary Subagent Results:
   ✓ Solution Extractor: Extracted 3 code fixes
   ✓ Related Docs Finder: Found 2 related issues
   ✓ Prevention Strategist: Generated test cases
-  ✓ Category Classifier: docs/solutions/performance-issues/
+  ✓ Category Classifier: docs/learnings/performance-issues/
   ✓ Documentation Writer: Created complete markdown
 
 Specialized Agent Reviews (Auto-Triggered):
@@ -132,7 +132,7 @@ Specialized Agent Reviews (Auto-Triggered):
   ✓ every-style-editor: Documentation style verified
 
 File created:
-- docs/solutions/performance-issues/n-plus-one-brief-generation.md
+- docs/learnings/performance-issues/n-plus-one-brief-generation.md
 
 This documentation will be searchable for future reference when similar
 issues occur in the Email Processing or Brief System modules.
@@ -147,12 +147,12 @@ What's next?
 
 ## The Compounding Philosophy
 
-This creates a compounding knowledge system:
+This creates a learnings knowledge system:
 
 1. First time you solve "N+1 query in brief generation" → Research (30 min)
-2. Document the solution → docs/solutions/performance-issues/n-plus-one-briefs.md (5 min)
+2. Document the solution → docs/learnings/performance-issues/n-plus-one-briefs.md (5 min)
 3. Next time similar issue occurs → Quick lookup (2 min)
-4. Knowledge compounds → Team gets smarter
+4. Knowledge builds → Team gets smarter
 
 The feedback loop:
 
@@ -168,11 +168,11 @@ Build → Test → Find Issue → Research → Improve → Document → Validate
 
 <auto_invoke> <trigger_phrases> - "that worked" - "it's fixed" - "working now" - "problem solved" </trigger_phrases>
 
-<manual_override> Use /workflows:compound [context] to document immediately without waiting for auto-detection. </manual_override> </auto_invoke>
+<manual_override> Use /workflows:learnings [context] to document immediately without waiting for auto-detection. </manual_override> </auto_invoke>
 
 ## Routes To
 
-\`compound-docs\` skill
+\`learnings\` skill
 
 ## Applicable Specialized Agents
 
@@ -200,9 +200,9 @@ Based on problem type, these agents can enhance documentation:
 ### When to Invoke
 
 - **Auto-triggered** (optional): Agents can run post-documentation for enhancement
-- **Manual trigger**: User can invoke agents after /workflows:compound completes for deeper review
+- **Manual trigger**: User can invoke agents after /workflows:learnings completes for deeper review
 
 ## Related Commands
 
-- \`/research [topic]\` - Deep investigation (searches docs/solutions/ for patterns)
+- \`/research [topic]\` - Deep investigation (searches docs/learnings/ for patterns)
 - \`/workflows:plan\` - Planning workflow (references documented solutions)`;

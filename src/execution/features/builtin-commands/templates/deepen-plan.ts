@@ -148,13 +148,13 @@ Task general-purpose: "Use the security-patterns skill at ~/.claude/skills/secur
 ### 3. Discover and Apply Learnings/Solutions
 
 <thinking>
-Check for documented learnings from /workflows:compound. These are solved problems stored as markdown files. Spawn a sub-agent for each learning to check if it's relevant.
+Check for documented learnings from /workflows:learnings. These are solved problems stored as markdown files. Spawn a sub-agent for each learning to check if it's relevant.
 </thinking>
 
 **LEARNINGS LOCATION - Check these exact folders:**
 
 \`\`\`
-docs/solutions/           <-- PRIMARY: Project-level learnings (created by /workflows:compound)
+docs/learnings/           <-- PRIMARY: Project-level learnings (created by /workflows:learnings)
 ├── performance-issues/
 │   └── *.md
 ├── debugging-patterns/
@@ -175,9 +175,9 @@ Run these commands to get every learning file:
 
 \`\`\`bash
 # PRIMARY LOCATION - Project learnings
-find docs/solutions -name "*.md" -type f 2>/dev/null
+find docs/learnings -name "*.md" -type f 2>/dev/null
 
-# If docs/solutions doesn't exist, check alternate locations:
+# If docs/learnings doesn't exist, check alternate locations:
 find .claude/docs -name "*.md" -type f 2>/dev/null
 find ~/.claude/docs -name "*.md" -type f 2>/dev/null
 \`\`\`
@@ -201,7 +201,7 @@ root_cause: "Missing includes on association"
 
 \`\`\`bash
 # Read first 20 lines of each learning (frontmatter + summary)
-head -20 docs/solutions/**/*.md
+head -20 docs/learnings/**/*.md
 \`\`\`
 
 **Step 3: Filter - only spawn sub-agents for LIKELY relevant learnings**
@@ -258,14 +258,14 @@ If NOT relevant after deeper analysis:
 # Found 15 learning files, plan is about "Rails API caching"
 
 # SPAWN (likely relevant):
-docs/solutions/performance-issues/n-plus-one-queries.md      # tags: [activerecord] ✓
-docs/solutions/performance-issues/redis-cache-stampede.md    # tags: [caching, redis] ✓
-docs/solutions/configuration-fixes/redis-connection-pool.md  # tags: [redis] ✓
+docs/learnings/performance-issues/n-plus-one-queries.md      # tags: [activerecord] ✓
+docs/learnings/performance-issues/redis-cache-stampede.md    # tags: [caching, redis] ✓
+docs/learnings/configuration-fixes/redis-connection-pool.md  # tags: [redis] ✓
 
 # SKIP (clearly not applicable):
-docs/solutions/deployment-issues/heroku-memory-quota.md      # not about caching
-docs/solutions/frontend-issues/stimulus-race-condition.md    # plan is API, not frontend
-docs/solutions/authentication-issues/jwt-expiry.md           # plan has no auth
+docs/learnings/deployment-issues/heroku-memory-quota.md      # not about caching
+docs/learnings/frontend-issues/stimulus-race-condition.md    # plan is API, not frontend
+docs/learnings/authentication-issues/jwt-expiry.md           # plan has no auth
 \`\`\`
 
 **Spawn sub-agents in PARALLEL for all filtered learnings.**
@@ -344,7 +344,7 @@ Wait for ALL parallel agents to complete - skills, research agents, review agent
 **Collect outputs from ALL sources:**
 
 1. **Skill-based sub-agents** - Each skill's full output (code examples, patterns, recommendations)
-2. **Learnings/Solutions sub-agents** - Relevant documented learnings from /workflows:compound
+2. **Learnings/Solutions sub-agents** - Relevant documented learnings from /workflows:learnings
 3. **Research agents** - Best practices, documentation, real-world examples
 4. **Review agents** - All feedback from every reviewer (architecture, security, performance, simplicity, etc.)
 5. **Context7 queries** - Framework documentation and patterns

@@ -37,7 +37,7 @@ const ZAI_MODEL = "zai-coding-plan/glm-4.7";
 
 const ULTIMATE_FALLBACK = "opencode/glm-4.7-free";
 const SCHEMA_URL =
-  "https://raw.githubusercontent.com/pontistudios/ghostwire/master/assets/ghostwire.schema.json";
+  "https://raw.githubusercontent.com/hackefeller/ghostwire/master/assets/ghostwire.schema.json";
 
 function toProviderAvailability(config: InstallConfig): ProviderAvailability {
   return {

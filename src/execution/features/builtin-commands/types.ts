@@ -57,7 +57,7 @@ export type BuiltinCommandName =
   | "ghostwire:xcode-test"
   // Plugin workflow commands
   | "ghostwire:workflows:brainstorm"
-  | "ghostwire:workflows:compound"
+  | "ghostwire:workflows:learnings"
   | "ghostwire:workflows:review"
   | "ghostwire:workflows:work";
 

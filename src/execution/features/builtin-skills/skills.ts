@@ -44,7 +44,7 @@ function loadSkillDirectories(): BuiltinSkill[] {
     "andrew-kane-gem-writer",
     "brainstorming",
     "coding-tutor",
-    "compound-docs",
+    "learnings",
     "create-agent-skills",
     "dhh-rails-style",
     "dspy-ruby",

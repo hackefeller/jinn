@@ -11,8 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Block PRs targeting master branch
-  block-master-pr:
+  check-pr-target:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:

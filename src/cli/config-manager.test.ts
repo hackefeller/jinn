@@ -275,7 +275,7 @@ describe("generateOmoConfig - model fallback system", () => {
 
     // #then should use OpenCode Zen models
     expect(result.$schema).toBe(
-      "https://raw.githubusercontent.com/pontistudios/ghostwire/master/assets/ghostwire.schema.json",
+      "https://raw.githubusercontent.com/hackefeller/ghostwire/master/assets/ghostwire.schema.json",
     );
     expect(result.agents).toBeDefined();
     expect((result.agents as Record<string, { model: string }>)["operator"].model).toBe(
@@ -339,7 +339,7 @@ describe("generateOmoConfig - model fallback system", () => {
 
     // #then should use ultimate fallback for all agents
     expect(result.$schema).toBe(
-      "https://raw.githubusercontent.com/pontistudios/ghostwire/master/assets/ghostwire.schema.json",
+      "https://raw.githubusercontent.com/hackefeller/ghostwire/master/assets/ghostwire.schema.json",
     );
     expect((result.agents as Record<string, { model: string }>)["operator"].model).toBe(
       "opencode/glm-4.7-free",

@@ -4,7 +4,7 @@
  * Parses newline-delimited JSON (NDJSON) responses from Ollama API.
  *
  * @module ollama-ndjson-parser
- * @see https://github.com/pontistudios/ghostwire/issues/1124
+ * @see https://github.com/hackefeller/ghostwire/issues/1124
  * @see https://github.com/ollama/ollama/blob/main/docs/api.md
  */
 

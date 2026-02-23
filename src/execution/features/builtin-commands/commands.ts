@@ -69,7 +69,7 @@ import { TRIAGE_TEMPLATE } from "./templates/triage";
 import { XCODE_TEST_TEMPLATE } from "./templates/xcode-test";
 // Plugin workflow templates
 import { WORKFLOWS_BRAINSTORM_TEMPLATE } from "./templates/workflows/brainstorm";
-import { WORKFLOWS_COMPOUND_TEMPLATE } from "./templates/workflows/compound";
+import { WORKFLOWS_LEARNINGS_TEMPLATE } from "./templates/workflows/learnings";
 import { WORKFLOWS_PLAN_TEMPLATE as WORKFLOWS_PLAN_V2_TEMPLATE } from "./templates/workflows/plan";
 import { WORKFLOWS_REVIEW_TEMPLATE } from "./templates/workflows/review";
 import { WORKFLOWS_WORK_TEMPLATE } from "./templates/workflows/work";
@@ -681,15 +681,15 @@ $ARGUMENTS
 </brainstorm-context>`,
     argumentHint: "[feature idea or problem to scout-recon]",
   },
-  "ghostwire:workflows:compound": {
-    description: "Document a recently solved problem to compound knowledge",
+  "ghostwire:workflows:learnings": {
+    description: "Document a recently solved problem to build team learnings",
     template: `<command-instruction>
-${WORKFLOWS_COMPOUND_TEMPLATE}
+${WORKFLOWS_LEARNINGS_TEMPLATE}
 </command-instruction>
 
-<compound-context>
+<learnings-context>
 $ARGUMENTS
-</compound-context>`,
+</learnings-context>`,
     argumentHint: "[optional: brief context about the fix]",
   },
   "ghostwire:workflows:review": {

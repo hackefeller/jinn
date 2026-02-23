@@ -238,7 +238,7 @@ describe("generateModelConfig", () => {
 
       // #then should include correct schema URL
       expect(result.$schema).toBe(
-        "https://raw.githubusercontent.com/pontistudios/ghostwire/master/assets/ghostwire.schema.json",
+        "https://raw.githubusercontent.com/hackefeller/ghostwire/master/assets/ghostwire.schema.json",
       );
     });
   });

@@ -50,7 +50,6 @@ export const BuiltinAgentNameSchema = z.enum([
   "docs.write-gem",
   "grid:brainstorm",
   "grid:skill-make",
-  "grid:doc-compound",
   "grid:todo-file",
   "grid:agent-browser",
   "grid:rclone-sync",
@@ -263,7 +262,7 @@ export const BuiltinCommandNameSchema = z.enum([
   "ghostwire:xcode-test",
   // Plugin workflow commands
   "ghostwire:workflows:brainstorm",
-  "ghostwire:workflows:compound",
+  "ghostwire:workflows:learnings",
   "ghostwire:workflows:review",
   "ghostwire:workflows:work",
 ]);
@@ -345,20 +344,11 @@ export const ClaudeImportConfigSchema = z.object({
   exclude: z.array(z.string()).optional(),
 });
 
-export const CompoundEngineeringConfigSchema = z.object({
-  enabled: z.boolean().optional(),
-  source: z.enum(["local"]).optional(),
-  path: z.string().optional(),
-  plugin_name: z.string().optional(),
-});
-
 export const ImportsConfigSchema = z.object({
   claude: ClaudeImportConfigSchema.optional(),
 });
 
-export const FeaturesConfigSchema = z.object({
-  compound_engineering: CompoundEngineeringConfigSchema.optional(),
-});
+export const FeaturesConfigSchema = z.object({});
 
 export const OperatorConfigSchema = z.object({
   disabled: z.boolean().optional(),

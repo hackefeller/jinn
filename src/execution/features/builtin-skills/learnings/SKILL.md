@@ -1,5 +1,5 @@
 ---
-name: compound-docs
+name: learnings
 description: Capture solved problems as categorized documentation with YAML frontmatter for fast lookup
 allowed-tools:
   - Read # Parse conversation context
@@ -11,7 +11,7 @@ preconditions:
   - Solution has been verified working
 ---
 
-# compound-docs Skill
+# learnings Skill
 
 **Purpose:** Automatically document solved problems to build searchable institutional knowledge with category-based organization (enum-validated problem types).
 
@@ -358,7 +358,7 @@ Action:
 
 **Invoked by:**
 
-- /compound command (primary interface)
+- /learnings command (primary interface)
 - Manual invocation in conversation after solution confirmed
 - Can be triggered by detecting confirmation phrases like "that worked", "it's fixed", etc.
 
