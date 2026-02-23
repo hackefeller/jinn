@@ -9,9 +9,34 @@ import {
 } from "../platform/opencode/config-dir";
 import type { ConfigMergeResult, DetectedConfig, InstallConfig } from "./types";
 import { generateModelConfig } from "./model-fallback";
-import { DEFAULT_MODELS_CONFIG } from "../platform/config/model-config";
 
 const OPENCODE_BINARIES = ["opencode", "opencode-desktop"] as const;
+
+/** Default agent model configuration for installation */
+const DEFAULT_AGENT_MODEL_OVERRIDES: Record<string, { model: string }> = {
+  operator: { model: "opencode/kimi-k2.5" },
+  executor: { model: "opencode/kimi-k2.5" },
+  planner: { model: "opencode/kimi-k2.5" },
+  orchestrator: { model: "opencode/kimi-k2.5" },
+  "advisor-plan": { model: "opencode/kimi-k2.5" },
+  "advisor-strategy": { model: "opencode/kimi-k2.5" },
+  "validator-audit": { model: "opencode/kimi-k2.5" },
+  "researcher-codebase": { model: "opencode/kimi-k2.5" },
+  "researcher-data": { model: "opencode/kimi-k2.5" },
+  "analyzer-media": { model: "google/gemini-3-flash" },
+};
+
+/** Default category model configuration for installation */
+const DEFAULT_CATEGORY_MODEL_OVERRIDES: Record<string, { model: string; variant?: string }> = {
+  ultrabrain: { model: "opencode/kimi-k2.5", variant: "max" },
+  deep: { model: "opencode/kimi-k2.5", variant: "medium" },
+  artistry: { model: "opencode/kimi-k2.5" },
+  quick: { model: "opencode/kimi-k2.5" },
+  "unspecified-low": { model: "opencode/kimi-k2.5" },
+  "unspecified-high": { model: "opencode/kimi-k2.5", variant: "max" },
+  writing: { model: "opencode/kimi-k2.5" },
+  "visual-engineering": { model: "opencode/kimi-k2.5" },
+};
 
 interface ConfigContext {
   binary: OpenCodeBinaryType;
@@ -763,13 +788,13 @@ export function writeModelConfig(): ConfigMergeResult {
       }
     }
 
-    const newConfig = { ...existingConfig };
-
-    // Only write models config if it doesn't already exist
-    // This preserves user customizations on updates
-    if (!newConfig.models) {
-      newConfig.models = DEFAULT_MODELS_CONFIG;
-    }
+    // For fresh installs, use our defaults. 
+    // For existing configs, users can manually update if they want different models.
+    const newConfig: Record<string, unknown> = {
+      ...existingConfig,
+      agents: DEFAULT_AGENT_MODEL_OVERRIDES,
+      categories: DEFAULT_CATEGORY_MODEL_OVERRIDES,
+    };
 
     writeFileSync(omoConfigPath, JSON.stringify(newConfig, null, 2) + "\n");
     return { success: true, configPath: omoConfigPath };
