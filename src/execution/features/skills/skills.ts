@@ -1799,13 +1799,13 @@ export function createSkills(
 
   const browserSkill =
     browserProvider === "agent-browser" ? agentBrowserSkill : playwrightSkill;
-  const builtinSkills = loadSkillDirectories();
+  const skills = loadSkillDirectories();
 
   return [
     browserSkill,
     frontendUiUxSkill,
     gitMasterSkill,
     devBrowserSkill,
-    ...builtinSkills,
+    ...skills,
   ];
 }

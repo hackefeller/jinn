@@ -83,8 +83,8 @@ describe("Regression Tests", () => {
     
     test("learnings skill exists", () => {
       //#given & #when
-      const { createBuiltinSkills } = require('../src/execution/features/skills/skills');
-      const skills = createBuiltinSkills();
+      const { createSkills } = require('../src/execution/features/skills/skills');
+      const skills = createSkills();
       
       //#then
       expect(skills.find(s => s.name === 'learnings')).toBeDefined()

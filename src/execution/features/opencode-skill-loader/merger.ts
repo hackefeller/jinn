@@ -28,7 +28,7 @@ const SCOPE_PRIORITY: Record<SkillScope, number> = {
   "opencode-project": 6,
 };
 
-function builtinToLoaded(builtin: Skill): LoadedSkill {
+function skillToLoaded(builtin: Skill): LoadedSkill {
   const definition: CommandDefinition = {
     name: builtin.name,
     description: `(opencode - Skill) ${builtin.description}`,
@@ -213,7 +213,7 @@ export function mergeSkills(
   const skillMap = new Map<string, LoadedSkill>();
 
   for (const builtin of builtinSkills) {
-    const loaded = builtinToLoaded(builtin);
+    const loaded = skillToLoaded(builtin);
     skillMap.set(loaded.name, loaded);
   }
 

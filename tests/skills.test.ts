@@ -1,10 +1,10 @@
 import { describe, test, expect } from "bun:test";
-import { createBuiltinSkills } from "../src/execution/features/skills/skills";
+import { createSkills } from "../src/execution/features/skills/skills";
 
 describe("Learnings Skill", () => {
   test("learnings skill is defined in builtin skills", () => {
     //#given
-    const skills = createBuiltinSkills();
+    const skills = createSkills();
 
     //#when
     const learningsSkill = skills.find((s) => s.name === "learnings");
@@ -16,7 +16,7 @@ describe("Learnings Skill", () => {
 
   test("learnings skill has description", () => {
     //#given
-    const skills = createBuiltinSkills();
+    const skills = createSkills();
     const learningsSkill = skills.find((s) => s.name === "learnings");
 
     //#when & #then
@@ -26,7 +26,7 @@ describe("Learnings Skill", () => {
 
   test("learnings skill has template", () => {
     //#given
-    const skills = createBuiltinSkills();
+    const skills = createSkills();
     const learningsSkill = skills.find((s) => s.name === "learnings");
 
     //#when & #then

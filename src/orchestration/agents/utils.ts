@@ -383,17 +383,17 @@ export async function createBuiltinAgents(
       "General tasks",
   }));
 
-  const builtinSkills = createSkills({ browserProvider });
-  const builtinSkillNames = new Set(builtinSkills.map((s) => s.name));
+  const skills = createSkills({ browserProvider });
+  const skillNames = new Set(skills.map((s) => s.name));
 
-  const builtinAvailable: AvailableSkill[] = builtinSkills.map((skill) => ({
+  const skillsAvailable: AvailableSkill[] = skills.map((skill) => ({
     name: skill.name,
     description: skill.description,
     location: "plugin" as const,
   }));
 
   const discoveredAvailable: AvailableSkill[] = discoveredSkills
-    .filter((s) => !builtinSkillNames.has(s.name))
+    .filter((s) => !skillNames.has(s.name))
     .map((skill) => ({
       name: skill.name,
       description: skill.definition.description ?? "",
@@ -401,7 +401,7 @@ export async function createBuiltinAgents(
     }));
 
   const availableSkills: AvailableSkill[] = [
-    ...builtinAvailable,
+    ...skillsAvailable,
     ...discoveredAvailable,
   ];
 

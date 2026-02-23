@@ -366,7 +366,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
   });
   const disabledSkills = new Set(pluginConfig.disabled_skills ?? []);
   const systemMcpNames = getSystemMcpServerNames();
-  const builtinSkills = createSkills({ browserProvider }).filter((skill) => {
+  const skills = createSkills({ browserProvider }).filter((skill) => {
     if (disabledSkills.has(skill.name as never)) return false;
     if (skill.mcpConfig) {
       for (const mcpName of Object.keys(skill.mcpConfig)) {
@@ -383,7 +383,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
     discoverOpencodeProjectSkills(),
   ]);
   const mergedSkills = mergeSkills(
-    builtinSkills,
+    skills,
     pluginConfig.skills,
     userSkills,
     globalSkills,

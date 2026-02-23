@@ -21,7 +21,7 @@ async function getAllSkills(options?: SkillResolutionOptions): Promise<LoadedSki
   const cached = cachedSkillsByProvider.get(cacheKey);
   if (cached) return cached;
 
-  const [discoveredSkills, builtinSkillDefs] = await Promise.all([
+  const [discoveredSkills, skillDefs] = await Promise.all([
     discoverSkills({ includeClaudeCodePaths: true }),
     Promise.resolve(createSkills({ browserProvider: options?.browserProvider })),
   ]);
@@ -31,7 +31,7 @@ async function getAllSkills(options?: SkillResolutionOptions): Promise<LoadedSki
     (skill) => skill.name !== "playwright" && skill.name !== "agent-browser",
   );
 
-  const builtinSkillsAsLoaded: LoadedSkill[] = builtinSkillDefs.map((skill) => ({
+  const skillsAsLoaded: LoadedSkill[] = skillDefs.map((skill) => ({
     name: skill.name,
     definition: {
       name: skill.name,
@@ -50,9 +50,9 @@ async function getAllSkills(options?: SkillResolutionOptions): Promise<LoadedSki
   }));
 
   const discoveredNames = new Set(filteredDiscoveredSkills.map((s) => s.name));
-  const uniqueBuiltins = builtinSkillsAsLoaded.filter((s) => !discoveredNames.has(s.name));
+  const uniqueSkills = skillsAsLoaded.filter((s) => !discoveredNames.has(s.name));
 
-  const allSkills = [...filteredDiscoveredSkills, ...uniqueBuiltins];
+  const allSkills = [...filteredDiscoveredSkills, ...uniqueSkills];
   cachedSkillsByProvider.set(cacheKey, allSkills);
   return allSkills;
 }
@@ -215,7 +215,7 @@ export async function resolveMultipleSkillsAsync(
   for (const skill of allSkills) {
     skillMap.set(skill.name, skill);
   }
-  const builtinFallbackMap = new Map(
+  const skillFallbackMap = new Map(
     createSkills({ browserProvider: options?.browserProvider }).map((skill) => [
       skill.name,
       skill.template,
@@ -235,12 +235,12 @@ export async function resolveMultipleSkillsAsync(
         resolved.set(name, template);
       }
     } else {
-      const builtinTemplate = builtinFallbackMap.get(name);
-      if (builtinTemplate) {
+      const skillTemplate = skillFallbackMap.get(name);
+      if (skillTemplate) {
         if (name === "git-master") {
-          resolved.set(name, injectGitMasterConfig(builtinTemplate, options?.gitMasterConfig));
+          resolved.set(name, injectGitMasterConfig(skillTemplate, options?.gitMasterConfig));
         } else {
-          resolved.set(name, builtinTemplate);
+          resolved.set(name, skillTemplate);
         }
       } else {
         notFound.push(name);

@@ -22,9 +22,9 @@ describe('Learnings System - Foundation Tests', () => {
     });
     
     test('learnings skill has valid frontmatter', () => {
-      const { createBuiltinSkills } = require('../src/execution/features/skills/skills');
+      const { createSkills } = require('../src/execution/features/skills/skills');
       
-      const skills = createBuiltinSkills();
+      const skills = createSkills();
       const learningsSkill = skills.find(s => s.name === 'learnings');
       
       expect(learningsSkill).toBeDefined();
