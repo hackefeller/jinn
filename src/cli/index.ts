@@ -122,6 +122,15 @@ program
     console.log(`ghostwire v${VERSION}`);
   });
 
+program
+  .command("sync-models")
+  .description("Sync model configuration to global OpenCode settings")
+  .action(async () => {
+    const { runSyncModels } = await import("./commands/sync-models");
+    const exitCode = await runSyncModels();
+    process.exit(exitCode);
+  });
+
 program.addCommand(createMcpOAuthCommand());
 
 program.parse();

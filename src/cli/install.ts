@@ -10,6 +10,7 @@ import {
   addAuthPlugins,
   addProviderConfig,
   detectCurrentConfig,
+  writeModelConfig,
 } from "./config-manager";
 import { shouldShowChatGPTOnlyWarning } from "./model-fallback";
 import packageJson from "../../package.json" with { type: "json" };
@@ -354,7 +355,7 @@ async function runNonTuiInstall(args: InstallArgs): Promise<number> {
 
   printHeader(isUpdate);
 
-  const totalSteps = 7;
+  const totalSteps = 8;
   let step = 1;
 
   printStep(step++, totalSteps, "Checking OpenCode installation...");
@@ -428,6 +429,14 @@ async function runNonTuiInstall(args: InstallArgs): Promise<number> {
     return 1;
   }
   printSuccess(`Config written ${SYMBOLS.arrow} ${color.dim(omoResult.configPath)}`);
+
+  printStep(step++, totalSteps, "Writing model configuration...");
+  const modelResult = writeModelConfig();
+  if (!modelResult.success) {
+    printError(`Failed: ${modelResult.error}`);
+    return 1;
+  }
+  printSuccess(`Model config written ${SYMBOLS.arrow} ${color.dim(modelResult.configPath)}`);
 
   printBox(
     formatConfigSummary(config),
@@ -547,6 +556,15 @@ export async function install(args: InstallArgs): Promise<number> {
     return 1;
   }
   s.stop(`Config written to ${color.cyan(omoResult.configPath)}`);
+
+  s.start("Writing model configuration");
+  const modelResult = writeModelConfig();
+  if (!modelResult.success) {
+    s.stop(`Failed to write model config: ${modelResult.error}`);
+    p.outro(color.red("Installation failed."));
+    return 1;
+  }
+  s.stop(`Model config written to ${color.cyan(modelResult.configPath)}`);
 
   if (!config.hasOpenAI && !config.hasGemini && !config.hasCopilot && !config.hasOpencodeZen) {
     p.log.warn("No model providers configured. Using opencode/glm-4.7-free as fallback.");

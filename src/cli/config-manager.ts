@@ -9,6 +9,7 @@ import {
 } from "../platform/opencode/config-dir";
 import type { ConfigMergeResult, DetectedConfig, InstallConfig } from "./types";
 import { generateModelConfig } from "./model-fallback";
+import { DEFAULT_MODELS_CONFIG } from "../platform/config/model-config";
 
 const OPENCODE_BINARIES = ["opencode", "opencode-desktop"] as const;
 
@@ -727,6 +728,53 @@ export function addProviderConfig(config: InstallConfig): ConfigMergeResult {
       success: false,
       configPath: path,
       error: formatErrorWithSuggestion(err, "add provider config"),
+    };
+  }
+}
+
+/**
+ * Write default model configuration to global OpenCode settings.
+ * This allows users to customize agent and category models.
+ */
+export function writeModelConfig(): ConfigMergeResult {
+  try {
+    ensureConfigDir();
+  } catch (err) {
+    return {
+      success: false,
+      configPath: getConfigDir(),
+      error: formatErrorWithSuggestion(err, "create config directory"),
+    };
+  }
+
+  const { format, path } = detectConfigFormat();
+
+  try {
+    let existingConfig: OpenCodeConfig | null = null;
+    if (format !== "none") {
+      const parseResult = parseConfigWithError(path);
+      if (parseResult.error && !parseResult.config) {
+        existingConfig = {};
+      } else {
+        existingConfig = parseResult.config;
+      }
+    }
+
+    const newConfig = { ...(existingConfig ?? {}) };
+
+    // Only write models config if it doesn't already exist
+    // This preserves user customizations on updates
+    if (!newConfig.models) {
+      newConfig.models = DEFAULT_MODELS_CONFIG;
+    }
+
+    writeFileSync(path, JSON.stringify(newConfig, null, 2) + "\n");
+    return { success: true, configPath: path };
+  } catch (err) {
+    return {
+      success: false,
+      configPath: path,
+      error: formatErrorWithSuggestion(err, "write model config"),
     };
   }
 }
