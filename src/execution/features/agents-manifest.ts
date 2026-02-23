@@ -1480,6 +1480,6 @@ export const AGENTS_MANIFEST: ReadonlyArray<LoadedAgent> = [
   }
 ] as const;
 
-export function loadBuiltinAgents(): Promise<LoadedAgent[]> {
+export function loadAgents(): Promise<LoadedAgent[]> {
   return Promise.resolve(AGENTS_MANIFEST as LoadedAgent[]);
 }

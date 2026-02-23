@@ -115,9 +115,9 @@ build: clean agents schema ## Full production build (default)
 		--format esm \
 		--external @ast-grep/napi
 	
-	# Step 4: Copy builtin skills
-	@echo "$(BLUE)  → Copying builtin skills...$(RESET)"
-	bun run script/copy-builtin-skills.ts
+	# Step 4: Copy skills
+	@echo "$(BLUE)  → Copying skills...$(RESET)"
+	bun run script/copy-skills.ts
 	
 	@echo "$(GREEN)✓ Build complete$(RESET)"
 
@@ -127,7 +127,7 @@ build-fast: agents ## Build without cleaning (faster for incremental builds)
 	bun build src/index.ts --outdir dist --target bun --format esm --external @ast-grep/napi
 	tsc --emitDeclarationOnly
 	bun build src/cli/index.ts --outdir dist/cli --target bun --format esm --external @ast-grep/napi
-	bun run script/copy-builtin-skills.ts
+	bun run script/copy-skills.ts
 	bun run script/build-schema.ts
 
 .PHONY: build-all
@@ -220,8 +220,8 @@ deps: ## Install dependencies (internal)
 	bun install
 
 # Legacy compatibility - these map to the new simple commands
-.PHONY: build-schema build-agents-manifest copy-builtin-skills ensure-plugin-wrapper
+.PHONY: build-schema build-agents-manifest copy-skills ensure-plugin-wrapper
 build-schema: schema
 build-agents-manifest: agents
-copy-builtin-skills: build
+copy-skills: build
 ensure-plugin-wrapper: dev-setup

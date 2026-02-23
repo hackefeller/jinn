@@ -3,7 +3,7 @@ import { join, dirname } from "path";
 import { writeFileSync } from "fs";
 
 const AGENTS_DIR = join(dirname(import.meta.url.replace("file://", "")), "../src/orchestration/agents");
-const OUTPUT_FILE = join(dirname(import.meta.url.replace("file://", "")), "../src/execution/features/builtin-agents-manifest.ts");
+const OUTPUT_FILE = join(dirname(import.meta.url.replace("file://", "")), "../src/execution/features/agents-manifest.ts");
 
 async function generateAgentsManifest() {
   const agents = await loadMarkdownAgents(AGENTS_DIR);
@@ -23,10 +23,10 @@ async function main() {
 
 import type { LoadedAgent } from "../../orchestration/agents/load-markdown-agents";
 
-export const BUILTIN_AGENTS_MANIFEST: ReadonlyArray<LoadedAgent> = ${manifestJson} as const;
+export const AGENTS_MANIFEST: ReadonlyArray<LoadedAgent> = ${manifestJson} as const;
 
-export function loadBuiltinAgents(): Promise<LoadedAgent[]> {
-  return Promise.resolve(BUILTIN_AGENTS_MANIFEST as LoadedAgent[]);
+export function loadAgents(): Promise<LoadedAgent[]> {
+  return Promise.resolve(AGENTS_MANIFEST as LoadedAgent[]);
 }
 `;
 

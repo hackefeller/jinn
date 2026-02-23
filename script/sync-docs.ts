@@ -3,7 +3,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseFrontmatter } from "../src/integration/shared/frontmatter";
 import { AGENT_MODEL_REQUIREMENTS, CATEGORY_MODEL_REQUIREMENTS } from "../src/orchestration/agents/model-requirements";
-import { BUILTIN_COMMAND_DEFINITIONS } from "../src/execution/features/commands/commands";
+import { COMMAND_DEFINITIONS } from "../src/execution/features/commands/commands";
 import YAML from "js-yaml";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -88,12 +88,12 @@ async function syncAgents() {
 }
 
 /**
- * Sync commands.yml with BUILTIN_COMMAND_DEFINITIONS
+ * Sync commands.yml with COMMAND_DEFINITIONS
  */
 async function syncCommands() {
   console.log("Syncing commands.yml...");
 
-  const commandsList = Object.entries(BUILTIN_COMMAND_DEFINITIONS).map(([name, def]: [string, any]) => ({
+  const commandsList = Object.entries(COMMAND_DEFINITIONS).map(([name, def]: [string, any]) => ({
     name,
     description: def.description,
     category: name.includes(":") ? name.split(":")[1] : "core", // Heuristic for category
@@ -101,7 +101,7 @@ async function syncCommands() {
 
   const yamlContent = {
     version: 1,
-    source: "src/execution/features/builtin-commands/commands.ts",
+    source: "src/execution/features/commands/commands.ts",
     description: "Canonical command metadata for Ghostwire, synchronized from source code.",
     metadata: {
       generated: new Date().toISOString().split("T")[0],

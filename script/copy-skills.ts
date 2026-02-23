@@ -3,9 +3,9 @@ import { join } from "node:path";
 
 /**
  * After `bun build` runs, the `dist` tree contains the compiled JS/JSON/etc.
- * The builtin skill markdown files live under `src/execution/features/builtin-skills/<skill>/SKILL.md`.
+ * The skill markdown files live under `src/execution/features/skills/<skill>/SKILL.md`.
  * This script copies each skill directory that contains a SKILL.md file into the same relative path
- * under `dist/src/execution/features/builtin-skills`, ensuring the published package can load them.
+ * under `dist/src/execution/features/skills`, ensuring the published package can load them.
  */
 async function main(): Promise<void> {
   const projectRoot = process.cwd();
@@ -14,7 +14,7 @@ async function main(): Promise<void> {
     "src",
     "execution",
     "features",
-    "builtin-skills",
+    "skills",
   );
   const destinationSkillsDir = join(
     projectRoot,
@@ -22,7 +22,7 @@ async function main(): Promise<void> {
     "src",
     "execution",
     "features",
-    "builtin-skills",
+    "skills",
   );
 
   await mkdir(destinationSkillsDir, { recursive: true });
@@ -50,11 +50,11 @@ async function main(): Promise<void> {
   }
 
   console.log(
-    `Copied ${copiedCount} builtin skill director${copiedCount === 1 ? "y" : "ies"} to dist.`,
+    `Copied ${copiedCount} skill director${copiedCount === 1 ? "y" : "ies"} to dist.`,
   );
 }
 
 main().catch((error) => {
-  console.error("Failed to copy builtin skills:", error);
+  console.error("Failed to copy skills:", error);
   process.exitCode = 1;
 });
