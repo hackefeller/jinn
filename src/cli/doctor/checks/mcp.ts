@@ -40,7 +40,7 @@ function loadUserMcpConfig(): Record<string, unknown> {
 export function getBuiltinMcpInfo(): McpServerInfo[] {
   return BUILTIN_MCP_SERVERS.map((id) => ({
     id,
-    type: "builtin" as const,
+    type: "plugin" as const,
     enabled: true,
     valid: true,
   }));

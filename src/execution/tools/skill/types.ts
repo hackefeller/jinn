@@ -32,7 +32,7 @@ export interface SkillLoadOptions {
 
 // CRUD Types
 export interface SkillListArgs {
-  scope?: "builtin" | "project" | "user" | "all";
+  scope?: "plugin" | "project" | "user" | "all";
 }
 
 export interface SkillCreateArgs {

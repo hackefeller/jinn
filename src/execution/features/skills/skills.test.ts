@@ -1,12 +1,12 @@
 import { describe, test, expect } from "bun:test";
-import { createBuiltinSkills } from "./skills";
+import { createSkills } from "./skills";
 
-describe("createBuiltinSkills", () => {
+describe("createSkills", () => {
   test("returns playwright skill by default", () => {
     // #given - no options (default)
 
     // #when
-    const skills = createBuiltinSkills();
+    const skills = createSkills();
 
     // #then
     const browserSkill = skills.find((s) => s.name === "playwright");
@@ -20,7 +20,7 @@ describe("createBuiltinSkills", () => {
     const options = { browserProvider: "playwright" as const };
 
     // #when
-    const skills = createBuiltinSkills(options);
+    const skills = createSkills(options);
 
     // #then
     const playwrightSkill = skills.find((s) => s.name === "playwright");
@@ -34,7 +34,7 @@ describe("createBuiltinSkills", () => {
     const options = { browserProvider: "agent-browser" as const };
 
     // #when
-    const skills = createBuiltinSkills(options);
+    const skills = createSkills(options);
 
     // #then
     const agentBrowserSkill = skills.find((s) => s.name === "agent-browser");
@@ -51,7 +51,7 @@ describe("createBuiltinSkills", () => {
     const options = { browserProvider: "agent-browser" as const };
 
     // #when
-    const skills = createBuiltinSkills(options);
+    const skills = createSkills(options);
     const agentBrowserSkill = skills.find((s) => s.name === "agent-browser");
 
     // #then - template should contain substantial content (inlined, not fallback)
@@ -65,8 +65,8 @@ describe("createBuiltinSkills", () => {
     // #given - both provider options
 
     // #when
-    const defaultSkills = createBuiltinSkills();
-    const agentBrowserSkills = createBuiltinSkills({ browserProvider: "agent-browser" });
+    const defaultSkills = createSkills();
+    const agentBrowserSkills = createSkills({ browserProvider: "agent-browser" });
 
     // #then
     for (const skills of [defaultSkills, agentBrowserSkills]) {
@@ -79,8 +79,8 @@ describe("createBuiltinSkills", () => {
     // #given
 
     // #when
-    const defaultSkills = createBuiltinSkills();
-    const agentBrowserSkills = createBuiltinSkills({ browserProvider: "agent-browser" });
+    const defaultSkills = createSkills();
+    const agentBrowserSkills = createSkills({ browserProvider: "agent-browser" });
 
     // #then
     // 4 core skills + 15 plugin skills = 19 total

@@ -1,4 +1,4 @@
-import type { BuiltinSkill } from "./types";
+import type { Skill } from "./types";
 import type { BrowserAutomationProvider } from "../../../platform/config/schema";
 import { parseFrontmatter } from "../../../integration/shared/frontmatter";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
@@ -12,7 +12,7 @@ interface SkillFrontmatter {
   description: string;
 }
 
-function loadSkillFromDir(dirName: string): BuiltinSkill | null {
+function loadSkillFromDir(dirName: string): Skill | null {
   const skillDir = join(__dirname, dirName);
   const skillMdPath = join(skillDir, "SKILL.md");
 
@@ -39,7 +39,7 @@ function loadSkillFromDir(dirName: string): BuiltinSkill | null {
   }
 }
 
-function loadSkillDirectories(): BuiltinSkill[] {
+function loadSkillDirectories(): Skill[] {
   const skillDirs = [
     "andrew-kane-gem-writer",
     "brainstorming",
@@ -58,7 +58,7 @@ function loadSkillDirectories(): BuiltinSkill[] {
     "skill-creator",
   ];
 
-  const skills: BuiltinSkill[] = [];
+  const skills: Skill[] = [];
 
   for (const dir of skillDirs) {
     const skill = loadSkillFromDir(dir);
@@ -70,7 +70,7 @@ function loadSkillDirectories(): BuiltinSkill[] {
   return skills;
 }
 
-const playwrightSkill: BuiltinSkill = {
+const playwrightSkill: Skill = {
   name: "playwright",
   description:
     "MUST USE for any browser-related tasks. Browser automation via Playwright MCP - verification, browsing, information gathering, web scraping, testing, screenshots, and all browser interactions.",
@@ -85,7 +85,7 @@ This skill provides browser automation capabilities via the Playwright MCP serve
   },
 };
 
-const agentBrowserSkill: BuiltinSkill = {
+const agentBrowserSkill: Skill = {
   name: "agent-browser",
   description:
     "MUST USE for any browser-related tasks. Browser automation via agent-browser CLI - verification, browsing, information gathering, web scraping, testing, screenshots, and all browser interactions.",
@@ -383,7 +383,7 @@ Install: \`bun add -g agent-browser && agent-browser install\`. Run \`agent-brow
   allowedTools: ["Bash(agent-browser:*)"],
 };
 
-const frontendUiUxSkill: BuiltinSkill = {
+const frontendUiUxSkill: Skill = {
   name: "frontend-ui-ux",
   description:
     "Designer-turned-developer who crafts stunning UI/UX even without design mockups",
@@ -462,7 +462,7 @@ Match implementation complexity to aesthetic vision:
 Interpret creatively and make unexpected choices that feel genuinely designed for the context. No design should be the same. Vary between light and dark themes, different fonts, different aesthetics. You are capable of extraordinary creative work—don't hold back.`,
 };
 
-const gitMasterSkill: BuiltinSkill = {
+const gitMasterSkill: Skill = {
   name: "git-master",
   description:
     "MUST USE for ANY git operations. Atomic commits, rebase/squash, history search (blame, bisect, log -S). STRONGLY RECOMMENDED: Use with delegate_task(category='quick', load_skills=['git-master'], ...) to save context. Triggers: 'commit', 'rebase', 'squash', 'who wrote', 'when was X added', 'find the commit that'.",
@@ -1568,7 +1568,7 @@ POTENTIAL ACTIONS:
 - Bisect without proper good/bad boundaries -> Wasted time`,
 };
 
-const devBrowserSkill: BuiltinSkill = {
+const devBrowserSkill: Skill = {
   name: "dev-browser",
   description:
     "Browser automation with persistent page state. Use when users ask to navigate websites, fill forms, take screenshots, extract web data, test web apps, or automate browser workflows. Trigger phrases include 'go to [url]', 'click on', 'fill out the form', 'take a screenshot', 'scrape', 'automate', 'test the website', 'log into', or any browser interaction request.",
@@ -1788,13 +1788,13 @@ EOF
 \`\`\``,
 };
 
-export interface CreateBuiltinSkillsOptions {
+export interface CreateSkillsOptions {
   browserProvider?: BrowserAutomationProvider;
 }
 
-export function createBuiltinSkills(
-  options: CreateBuiltinSkillsOptions = {},
-): BuiltinSkill[] {
+export function createSkills(
+  options: CreateSkillsOptions = {},
+): Skill[] {
   const { browserProvider = "playwright" } = options;
 
   const browserSkill =

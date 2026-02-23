@@ -1,4 +1,4 @@
-import { createBuiltinSkills } from "../skills/skills";
+import { createSkills } from "../skills/skills";
 import { discoverSkills } from "./loader";
 import type { LoadedSkill } from "./types";
 import { parseFrontmatter } from "../../../integration/shared/frontmatter";
@@ -23,7 +23,7 @@ async function getAllSkills(options?: SkillResolutionOptions): Promise<LoadedSki
 
   const [discoveredSkills, builtinSkillDefs] = await Promise.all([
     discoverSkills({ includeClaudeCodePaths: true }),
-    Promise.resolve(createBuiltinSkills({ browserProvider: options?.browserProvider })),
+    Promise.resolve(createSkills({ browserProvider: options?.browserProvider })),
   ]);
 
   // Always source browser skills from built-ins so provider selection stays deterministic.
@@ -41,7 +41,7 @@ async function getAllSkills(options?: SkillResolutionOptions): Promise<LoadedSki
       agent: skill.agent,
       subtask: skill.subtask,
     },
-    scope: "builtin" as const,
+    scope: "plugin" as const,
     license: skill.license,
     compatibility: skill.compatibility,
     metadata: skill.metadata as Record<string, string> | undefined,
@@ -142,7 +142,7 @@ export function resolveSkillContent(
   skillName: string,
   options?: SkillResolutionOptions,
 ): string | null {
-  const skills = createBuiltinSkills({
+  const skills = createSkills({
     browserProvider: options?.browserProvider,
   });
   const skill = skills.find((s) => s.name === skillName);
@@ -162,7 +162,7 @@ export function resolveMultipleSkills(
   resolved: Map<string, string>;
   notFound: string[];
 } {
-  const skills = createBuiltinSkills({
+  const skills = createSkills({
     browserProvider: options?.browserProvider,
   });
   const skillMap = new Map(skills.map((s) => [s.name, s.template]));
@@ -216,7 +216,7 @@ export async function resolveMultipleSkillsAsync(
     skillMap.set(skill.name, skill);
   }
   const builtinFallbackMap = new Map(
-    createBuiltinSkills({ browserProvider: options?.browserProvider }).map((skill) => [
+    createSkills({ browserProvider: options?.browserProvider }).map((skill) => [
       skill.name,
       skill.template,
     ]),

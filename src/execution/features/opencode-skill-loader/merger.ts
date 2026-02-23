@@ -1,6 +1,6 @@
 import type { LoadedSkill, SkillScope, SkillMetadata } from "./types";
 import type { SkillsConfig, SkillDefinition } from "../../../platform/config/schema";
-import type { BuiltinSkill } from "../skills/types";
+import type { Skill } from "../skills/types";
 import type { CommandDefinition } from "../claude-code-command-loader/types";
 import { readFileSync, existsSync } from "fs";
 import { dirname, resolve, isAbsolute } from "path";
@@ -20,7 +20,7 @@ function parseAllowedToolsFromMetadata(
 }
 
 const SCOPE_PRIORITY: Record<SkillScope, number> = {
-  builtin: 1,
+  plugin: 1,
   config: 2,
   user: 3,
   opencode: 4,
@@ -28,7 +28,7 @@ const SCOPE_PRIORITY: Record<SkillScope, number> = {
   "opencode-project": 6,
 };
 
-function builtinToLoaded(builtin: BuiltinSkill): LoadedSkill {
+function builtinToLoaded(builtin: Skill): LoadedSkill {
   const definition: CommandDefinition = {
     name: builtin.name,
     description: `(opencode - Skill) ${builtin.description}`,
@@ -42,7 +42,7 @@ function builtinToLoaded(builtin: BuiltinSkill): LoadedSkill {
   return {
     name: builtin.name,
     definition,
-    scope: "builtin",
+    scope: "plugin",
     license: builtin.license,
     compatibility: builtin.compatibility,
     metadata: builtin.metadata as Record<string, string> | undefined,
@@ -202,7 +202,7 @@ export interface MergeSkillsOptions {
 }
 
 export function mergeSkills(
-  builtinSkills: BuiltinSkill[],
+  builtinSkills: Skill[],
   config: SkillsConfig | undefined,
   userClaudeSkills: LoadedSkill[],
   userOpencodeSkills: LoadedSkill[],

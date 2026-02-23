@@ -19,9 +19,9 @@ describe("skill CRUD operations", () => {
       expect(typeof result).toBe("string");
     });
 
-    test("filters by scope builtin", async () => {
-      //#when listing builtin skills
-      const result = await skill_list.execute!({ scope: "builtin" }, mockContext);
+    test("filters by scope plugin", async () => {
+      //#when listing plugin skills
+      const result = await skill_list.execute!({ scope: "plugin" }, mockContext);
 
       //#then should return string
       expect(typeof result).toBe("string");

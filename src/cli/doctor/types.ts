@@ -93,12 +93,12 @@ export interface LspServerInfo {
   id: string;
   installed: boolean;
   extensions: string[];
-  source: "builtin" | "config" | "plugin";
+  source: "plugin" | "config" | "plugin";
 }
 
 export interface McpServerInfo {
   id: string;
-  type: "builtin" | "user";
+  type: "plugin" | "user";
   enabled: boolean;
   valid: boolean;
   error?: string;

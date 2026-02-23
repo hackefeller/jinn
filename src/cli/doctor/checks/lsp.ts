@@ -27,7 +27,7 @@ export async function getLspServersInfo(): Promise<LspServerInfo[]> {
       id: server.id,
       installed,
       extensions: server.extensions,
-      source: "builtin",
+      source: "plugin",
     });
   }
 

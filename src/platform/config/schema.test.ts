@@ -3,7 +3,7 @@ import {
   AgentOverrideConfigSchema,
   BrowserAutomationConfigSchema,
   BrowserAutomationProviderSchema,
-  BuiltinCategoryNameSchema,
+  CategoryNameSchema,
   CategoryConfigSchema,
   GhostwireConfigSchema,
 } from "./schema";
@@ -378,7 +378,7 @@ describe("CategoryConfigSchema", () => {
   });
 });
 
-describe("BuiltinCategoryNameSchema", () => {
+describe("CategoryNameSchema", () => {
   test("accepts all builtin category names", () => {
     // #given
     const categories = [
@@ -393,7 +393,7 @@ describe("BuiltinCategoryNameSchema", () => {
 
     // #when / #then
     for (const cat of categories) {
-      const result = BuiltinCategoryNameSchema.safeParse(cat);
+      const result = CategoryNameSchema.safeParse(cat);
       expect(result.success).toBe(true);
     }
   });

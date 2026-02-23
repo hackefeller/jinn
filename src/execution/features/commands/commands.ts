@@ -1,5 +1,5 @@
 import type { CommandDefinition } from "../claude-code-command-loader";
-import type { BuiltinCommandName, BuiltinCommands } from "./types";
+import type { CommandName, Commands } from "./types";
 import { INIT_DEEP_TEMPLATE } from "./templates/init-deep";
 import {
   ULTRAWORK_LOOP_TEMPLATE,
@@ -88,7 +88,7 @@ import {
 import { PROJECT_CONSTITUTION_TEMPLATE } from "./templates/project/constitution";
 
 export const BUILTIN_COMMAND_DEFINITIONS: Record<
-  BuiltinCommandName,
+  CommandName,
   Omit<CommandDefinition, "name">
 > = {
   "ghostwire:init-deep": {
@@ -831,15 +831,15 @@ $ARGUMENTS
 };
 
 export function loadBuiltinCommands(
-  disabledCommands?: BuiltinCommandName[],
-): BuiltinCommands {
+  disabledCommands?: CommandName[],
+): Commands {
   const disabled = new Set(disabledCommands ?? []);
-  const commands: BuiltinCommands = {};
+  const commands: Commands = {};
 
   for (const [name, definition] of Object.entries(
     BUILTIN_COMMAND_DEFINITIONS,
   )) {
-    if (!disabled.has(name as BuiltinCommandName)) {
+    if (!disabled.has(name as CommandName)) {
       const { argumentHint: _argumentHint, ...openCodeCompatible } = definition;
       commands[name] = { ...openCodeCompatible, name } as CommandDefinition;
     }

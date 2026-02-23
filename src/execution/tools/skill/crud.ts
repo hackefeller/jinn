@@ -91,12 +91,12 @@ function formatSkillList(skills: SkillInfo[]): string {
 
   let result = "Available Skills:\n\n";
 
-  const builtin = skills.filter((s) => s.scope === "builtin");
+  const builtin = skills.filter((s) => s.scope === "plugin");
   const project = skills.filter((s) => s.scope === "opencode-project");
   const user = skills.filter((s) => s.scope === "user");
 
   if (builtin.length > 0) {
-    result += "### Built-in\n";
+    result += "### Plugin\n";
     for (const skill of builtin) {
       result += `- **${skill.name}**: ${skill.description}\n`;
     }
@@ -189,17 +189,17 @@ description: ${description}
 export const skill_list: ToolDefinition = tool({
   description: `List all available skills with their metadata.
 
-Shows builtin skills, project skills, and user skills. Use to discover available capabilities.
+Shows plugin skills, project skills, and user skills. Use to discover available capabilities.
 
 Arguments:
-- scope (optional): Filter by scope - "builtin", "project", "user", "all" (default: "all")
+- scope (optional): Filter by scope - "plugin", "project", "user", "all" (default: "all")
 
 Example:
 skill_list()
 Lists all available skills`,
   args: {
     scope: tool.schema
-      .enum(["builtin", "project", "user", "all"])
+      .enum(["plugin", "project", "user", "all"])
       .optional()
       .describe("Filter by scope"),
   },
@@ -208,12 +208,12 @@ Lists all available skills`,
       const loadedSkills = await discoverSkills({ includeClaudeCodePaths: true });
 
       // Also get builtin skills
-      const { createBuiltinSkills } = await import("../../features/skills/skills");
-      const builtinDefs = createBuiltinSkills({});
+      const { createSkills } = await import("../../features/skills/skills");
+      const builtinDefs = createSkills({});
       const builtinSkills: SkillInfo[] = builtinDefs.map((s) => ({
         name: s.name,
         description: s.description,
-        scope: "builtin" as SkillScope,
+        scope: "plugin" as SkillScope,
         metadata: s.metadata as Record<string, string> | undefined,
       }));
 
@@ -239,7 +239,7 @@ Lists all available skills`,
       // Filter by scope
       if (args.scope && args.scope !== "all") {
         const scopeMap: Record<string, SkillScope[]> = {
-          builtin: ["builtin"],
+          plugin: ["plugin"],
           project: ["opencode-project"],
           user: ["user", "opencode"],
         };

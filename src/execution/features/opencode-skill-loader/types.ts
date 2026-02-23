@@ -2,7 +2,7 @@ import type { CommandDefinition } from "../claude-code-command-loader/types";
 import type { SkillMcpConfig } from "../skill-mcp-manager/types";
 
 export type SkillScope =
-  | "builtin"
+  | "plugin"
   | "config"
   | "user"
   | "project"

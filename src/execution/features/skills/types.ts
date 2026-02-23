@@ -1,6 +1,6 @@
 import type { SkillMcpConfig } from "../skill-mcp-manager/types";
 
-export interface BuiltinSkill {
+export interface Skill {
   name: string;
   description: string;
   template: string;

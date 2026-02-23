@@ -52,7 +52,7 @@ import {
   discoverOpencodeProjectSkills,
   mergeSkills,
 } from "./execution/features/opencode-skill-loader";
-import { createBuiltinSkills } from "./execution/features/skills";
+import { createSkills } from "./execution/features/skills";
 import { createBuiltinAgents } from "./orchestration/agents";
 import { getSystemMcpServerNames } from "./execution/features/claude-code-mcp-loader";
 import {
@@ -366,7 +366,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
   });
   const disabledSkills = new Set(pluginConfig.disabled_skills ?? []);
   const systemMcpNames = getSystemMcpServerNames();
-  const builtinSkills = createBuiltinSkills({ browserProvider }).filter((skill) => {
+  const builtinSkills = createSkills({ browserProvider }).filter((skill) => {
     if (disabledSkills.has(skill.name as never)) return false;
     if (skill.mcpConfig) {
       for (const mcpName of Object.keys(skill.mcpConfig)) {
@@ -873,7 +873,7 @@ export type {
   AgentOverrides,
   McpName,
   HookName,
-  BuiltinCommandName,
+  CommandName,
 } from "./platform/config";
 
 // NOTE: Do NOT export functions from main index.ts!

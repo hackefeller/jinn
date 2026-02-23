@@ -10,7 +10,7 @@ function createMockCommand(name: string, description = ""): CommandInfo {
       name,
       description: description || `Test command ${name}`,
     },
-    scope: "builtin",
+    scope: "plugin",
   };
 }
 

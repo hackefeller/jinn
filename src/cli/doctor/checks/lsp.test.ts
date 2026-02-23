@@ -42,9 +42,9 @@ describe("lsp check", () => {
     it("counts installed servers correctly", () => {
       // #given servers with mixed installation status
       const servers = [
-        { id: "ts", installed: true, extensions: [".ts"], source: "builtin" as const },
-        { id: "py", installed: false, extensions: [".py"], source: "builtin" as const },
-        { id: "go", installed: true, extensions: [".go"], source: "builtin" as const },
+        { id: "ts", installed: true, extensions: [".ts"], source: "plugin" as const },
+        { id: "py", installed: false, extensions: [".py"], source: "plugin" as const },
+        { id: "go", installed: true, extensions: [".go"], source: "plugin" as const },
       ];
 
       // #when getting stats
@@ -82,9 +82,9 @@ describe("lsp check", () => {
           id: "typescript-language-server",
           installed: false,
           extensions: [".ts"],
-          source: "builtin",
+          source: "plugin",
         },
-        { id: "pyright", installed: false, extensions: [".py"], source: "builtin" },
+        { id: "pyright", installed: false, extensions: [".py"], source: "plugin" },
       ]);
 
       // #when checking
@@ -102,9 +102,9 @@ describe("lsp check", () => {
           id: "typescript-language-server",
           installed: true,
           extensions: [".ts"],
-          source: "builtin",
+          source: "plugin",
         },
-        { id: "pyright", installed: false, extensions: [".py"], source: "builtin" },
+        { id: "pyright", installed: false, extensions: [".py"], source: "plugin" },
       ]);
 
       // #when checking
@@ -122,9 +122,9 @@ describe("lsp check", () => {
           id: "typescript-language-server",
           installed: true,
           extensions: [".ts"],
-          source: "builtin",
+          source: "plugin",
         },
-        { id: "pyright", installed: false, extensions: [".py"], source: "builtin" },
+        { id: "pyright", installed: false, extensions: [".py"], source: "plugin" },
       ]);
 
       // #when checking

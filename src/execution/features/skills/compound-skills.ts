@@ -1,4 +1,4 @@
-import type { BuiltinSkill } from "./types";
+import type { Skill } from "./types";
 
 /**
  * Compound Engineering Skills - 73 skills organized by category
@@ -33,7 +33,7 @@ import type { BuiltinSkill } from "./types";
 // DEVELOPMENT SKILLS (25)
 // ============================================================================
 
-const developmentSkills: BuiltinSkill[] = [
+const developmentSkills: Skill[] = [
   {
     name: "grid:typescript-expert",
     description:
@@ -218,7 +218,7 @@ Master algorithms, data structures, and computational efficiency.`,
 // DESIGN SKILLS (18)
 // ============================================================================
 
-const designSkills: BuiltinSkill[] = [
+const designSkills: Skill[] = [
   {
     name: "grid:frontend-design",
     description: "Expert frontend UI/UX design with HTML, CSS, and modern frameworks.",
@@ -351,7 +351,7 @@ Master component APIs, composition, and reusability patterns.`,
 // DEVOPS SKILLS (12)
 // ============================================================================
 
-const devopsSkills: BuiltinSkill[] = [
+const devopsSkills: Skill[] = [
   {
     name: "grid:docker-expertise",
     description:
@@ -443,7 +443,7 @@ Master disaster recovery, failover, and business continuity.`,
 // DOCUMENTATION SKILLS (10)
 // ============================================================================
 
-const documentationSkills: BuiltinSkill[] = [
+const documentationSkills: Skill[] = [
   {
     name: "grid:api-documentation",
     description: "Expert API documentation, OpenAPI/Swagger, and interactive docs.",
@@ -520,7 +520,7 @@ Master KB organization, searchability, and content management.`,
 // ANALYSIS SKILLS (8)
 // ============================================================================
 
-const analysisSkills: BuiltinSkill[] = [
+const analysisSkills: Skill[] = [
   {
     name: "grid:code-analysis",
     description: "Expert code analysis, metrics, and code quality assessment.",
@@ -583,7 +583,7 @@ Master cost optimization, budget planning, and FinOps.`,
 // EXPORT ALL COMPOUND SKILLS
 // ============================================================================
 
-export const COMPOUND_SKILLS: BuiltinSkill[] = [
+export const COMPOUND_SKILLS: Skill[] = [
   ...developmentSkills,
   ...designSkills,
   ...devopsSkills,

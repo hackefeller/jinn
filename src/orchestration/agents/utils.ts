@@ -40,7 +40,7 @@ import {
   CATEGORY_DESCRIPTIONS,
 } from "../../execution/tools/delegate-task/constants";
 import { resolveMultipleSkills } from "../../execution/features/opencode-skill-loader/skill-content";
-import { createBuiltinSkills } from "../../execution/features/skills";
+import { createSkills } from "../../execution/features/skills";
 import type {
   LoadedSkill,
   SkillScope,
@@ -383,7 +383,7 @@ export async function createBuiltinAgents(
       "General tasks",
   }));
 
-  const builtinSkills = createBuiltinSkills({ browserProvider });
+  const builtinSkills = createSkills({ browserProvider });
   const builtinSkillNames = new Set(builtinSkills.map((s) => s.name));
 
   const builtinAvailable: AvailableSkill[] = builtinSkills.map((skill) => ({

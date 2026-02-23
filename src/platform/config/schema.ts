@@ -13,7 +13,7 @@ const AgentPermissionSchema = z.object({
   external_directory: PermissionValue.optional(),
 });
 
-export const BuiltinAgentNameSchema = z.enum([
+export const AgentNameSchema = z.enum([
    "operator",
    "planner",
    "advisor-plan",
@@ -57,7 +57,7 @@ export const BuiltinAgentNameSchema = z.enum([
   "grid:agent-audit",
 ]);
 
-export const BuiltinSkillNameSchema = z.enum([
+export const SkillNameSchema = z.enum([
   // Built-in skills
   "playwright",
   "agent-browser",
@@ -159,8 +159,6 @@ export const OverridableAgentNameSchema = z.enum([
    "orchestrator",
 ]);
 
-export const AgentNameSchema = BuiltinAgentNameSchema;
-
 export const HookNameSchema = z.enum([
   "todo-continuation-enforcer",
   "context-window-monitor",
@@ -199,7 +197,7 @@ export const HookNameSchema = z.enum([
   "orchestrator",
 ]);
 
-export const BuiltinCommandNameSchema = z.enum([
+export const CommandNameSchema = z.enum([
   "ghostwire:init-deep",
   "ghostwire:jack-in-work",
   "ghostwire:ultrawork-loop",
@@ -379,7 +377,7 @@ export const CategoryConfigSchema = z.object({
   is_unstable_agent: z.boolean().optional(),
 });
 
-export const BuiltinCategoryNameSchema = z.enum([
+export const CategoryNameSchema = z.enum([
   "visual-engineering",
   "ultrabrain",
   "deep",
@@ -587,10 +585,10 @@ export const OperatorConfigSchemaWrapper = z.object({
 export const GhostwireConfigSchema = z.object({
   $schema: z.string().optional(),
   disabled_mcps: z.array(AnyMcpNameSchema).optional(),
-  disabled_agents: z.array(BuiltinAgentNameSchema).optional(),
-  disabled_skills: z.array(BuiltinSkillNameSchema).optional(),
+  disabled_agents: z.array(AgentNameSchema).optional(),
+  disabled_skills: z.array(SkillNameSchema).optional(),
   disabled_hooks: z.array(HookNameSchema).optional(),
-  disabled_commands: z.array(BuiltinCommandNameSchema).optional(),
+  disabled_commands: z.array(CommandNameSchema).optional(),
   agents: AgentOverridesSchema.optional(),
   categories: CategoriesConfigSchema.optional(),
   claude_code: ClaudeCodeConfigSchema.optional(),
@@ -619,8 +617,8 @@ export type AgentOverrides = z.infer<typeof AgentOverridesSchema>;
 export type BackgroundTaskConfig = z.infer<typeof BackgroundTaskConfigSchema>;
 export type AgentName = z.infer<typeof AgentNameSchema>;
 export type HookName = z.infer<typeof HookNameSchema>;
-export type BuiltinCommandName = z.infer<typeof BuiltinCommandNameSchema>;
-export type BuiltinSkillName = z.infer<typeof BuiltinSkillNameSchema>;
+export type CommandName = z.infer<typeof CommandNameSchema>;
+export type SkillName = z.infer<typeof SkillNameSchema>;
 export type OperatorConfig = z.infer<typeof OperatorConfigSchema>;
 export type CommentCheckerConfig = z.infer<typeof CommentCheckerConfigSchema>;
 export type ExperimentalConfig = z.infer<typeof ExperimentalConfigSchema>;
@@ -631,7 +629,7 @@ export type UltraworkLoopConfig = z.infer<typeof UltraworkLoopConfigSchema>;
 export type NotificationConfig = z.infer<typeof NotificationConfigSchema>;
 export type CategoryConfig = z.infer<typeof CategoryConfigSchema>;
 export type CategoriesConfig = z.infer<typeof CategoriesConfigSchema>;
-export type BuiltinCategoryName = z.infer<typeof BuiltinCategoryNameSchema>;
+export type CategoryName = z.infer<typeof CategoryNameSchema>;
 export type GitMasterConfig = z.infer<typeof GitMasterConfigSchema>;
 export type BrowserAutomationProvider = z.infer<typeof BrowserAutomationProviderSchema>;
 export type BrowserAutomationConfig = z.infer<typeof BrowserAutomationConfigSchema>;

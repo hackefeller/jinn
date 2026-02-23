@@ -1,6 +1,6 @@
 import type { CommandDefinition } from "../claude-code-command-loader";
 
-export type BuiltinCommandName =
+export type CommandName =
   | "ghostwire:init-deep"
   | "ghostwire:ultrawork-loop"
   | "ghostwire:cancel-ultrawork"
@@ -72,8 +72,8 @@ export type BuiltinCommandName =
   // Project commands
   | "ghostwire:project:constitution";
 
-export interface BuiltinCommandConfig {
-  disabled_commands?: BuiltinCommandName[];
+export interface CommandConfig {
+  disabled_commands?: CommandName[];
 }
 
-export type BuiltinCommands = Record<string, CommandDefinition>;
+export type Commands = Record<string, CommandDefinition>;

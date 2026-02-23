@@ -10,7 +10,7 @@ describe("mcp check", () => {
 
       // #then should include expected servers
       expect(servers.length).toBe(2);
-      expect(servers.every((s) => s.type === "builtin")).toBe(true);
+      expect(servers.every((s) => s.type === "plugin")).toBe(true);
       expect(servers.every((s) => s.enabled === true)).toBe(true);
       expect(servers.map((s) => s.id)).toContain("context7");
       expect(servers.map((s) => s.id)).toContain("grep_app");

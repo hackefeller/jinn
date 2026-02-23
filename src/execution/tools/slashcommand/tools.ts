@@ -82,7 +82,7 @@ export function discoverCommandsSync(): CommandInfo[] {
       subtask: cmd.subtask,
     },
     content: cmd.template,
-    scope: "builtin",
+    scope: "plugin",
   }));
 
   return [
