@@ -191,14 +191,14 @@ You are NOT an interactive assistant. You are an autonomous problem-solver.
 </Category_Context>`;
 
 export const DEFAULT_CATEGORIES: Record<string, CategoryConfig> = {
-  "visual-engineering": { model: "opencode/kimi-k2.5" },
+  "visual-engineering": { model: "opencode/kimi-k2.5", is_unstable_agent: true },
   ultrabrain: { model: "opencode/kimi-k2.5", variant: "max" },
   deep: { model: "opencode/kimi-k2.5", variant: "medium" },
-  artistry: { model: "opencode/kimi-k2.5" },
+  artistry: { model: "opencode/kimi-k2.5", is_unstable_agent: true },
   quick: { model: "opencode/kimi-k2.5" },
   "unspecified-low": { model: "opencode/kimi-k2.5" },
   "unspecified-high": { model: "opencode/kimi-k2.5", variant: "max" },
-  writing: { model: "opencode/kimi-k2.5" },
+  writing: { model: "opencode/kimi-k2.5", is_unstable_agent: true },
 };
 
 export const CATEGORY_PROMPT_APPENDS: Record<string, string> = {

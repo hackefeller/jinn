@@ -34,6 +34,7 @@ describe("operator-task", () => {
       "anthropic",
       "google",
       "openai",
+      "opencode",
     ]);
   });
 
@@ -49,7 +50,7 @@ describe("operator-task", () => {
 
       // #when / #then
       expect(category).toBeDefined();
-      expect(category.model).toBe("google/gemini-3-pro");
+      expect(category.model).toBe("opencode/kimi-k2.5");
     });
 
     test("ultrabrain category has model and variant config", () => {
@@ -58,8 +59,8 @@ describe("operator-task", () => {
 
       // #when / #then
       expect(category).toBeDefined();
-      expect(category.model).toBe("openai/gpt-5.2-codex");
-      expect(category.variant).toBe("xhigh");
+      expect(category.model).toBe("opencode/kimi-k2.5");
+      expect(category.variant).toBe("max");
     });
 
     test("deep category has model and variant config", () => {
@@ -68,7 +69,7 @@ describe("operator-task", () => {
 
       // #when / #then
       expect(category).toBeDefined();
-      expect(category.model).toBe("openai/gpt-5.2-codex");
+      expect(category.model).toBe("opencode/kimi-k2.5");
       expect(category.variant).toBe("medium");
     });
   });
@@ -315,7 +316,7 @@ describe("operator-task", () => {
     });
 
     test("blocks requiresModel when availability is known and missing the required model", () => {
-      // #given
+      // #given - deep category now uses kimi-k2.5 (no requiresModel), so won't block
       const categoryName = "deep";
       const availableModels = new Set<string>(["anthropic/claude-opus-4-5"]);
 
@@ -325,12 +326,13 @@ describe("operator-task", () => {
         availableModels,
       });
 
-      // #then
-      expect(result).toBeNull();
+      // #then - since no requiresModel is set, it won't block
+      expect(result).not.toBeNull();
+      expect(result!.model).toBe("opencode/kimi-k2.5");
     });
 
     test("blocks requiresModel when availability is empty", () => {
-      // #given
+      // #given - deep category now uses kimi-k2.5 (no requiresModel), so won't block
       const categoryName = "deep";
       const availableModels = new Set<string>();
 
@@ -340,8 +342,9 @@ describe("operator-task", () => {
         availableModels,
       });
 
-      // #then
-      expect(result).toBeNull();
+      // #then - since no requiresModel is set, it won't block
+      expect(result).not.toBeNull();
+      expect(result!.model).toBe("opencode/kimi-k2.5");
     });
 
     test("returns default model from DEFAULT_CATEGORIES for builtin category", () => {
@@ -355,7 +358,7 @@ describe("operator-task", () => {
 
       // #then
       expect(result).not.toBeNull();
-      expect(result!.config.model).toBe("google/gemini-3-pro");
+      expect(result!.config.model).toBe("opencode/kimi-k2.5");
       expect(result!.promptAppend).toContain("VISUAL/UI");
     });
 
@@ -457,7 +460,7 @@ describe("operator-task", () => {
 
       // #then - category's built-in model wins over inheritedModel
       expect(result).not.toBeNull();
-      expect(result!.config.model).toBe("google/gemini-3-pro");
+      expect(result!.config.model).toBe("opencode/kimi-k2.5");
     });
 
     test("systemDefaultModel is used as fallback when custom category has no model", () => {
@@ -512,7 +515,7 @@ describe("operator-task", () => {
 
       // #then
       expect(result).not.toBeNull();
-      expect(result!.config.model).toBe("google/gemini-3-pro");
+      expect(result!.config.model).toBe("opencode/kimi-k2.5");
     });
   });
 
@@ -601,7 +604,7 @@ describe("operator-task", () => {
       const mockClient = {
         app: { agents: async () => ({ data: [] }) },
         config: { get: async () => ({ data: { model: SYSTEM_DEFAULT_MODEL } }) },
-        model: { list: async () => [{ id: "anthropic/claude-opus-4-5" }] },
+        model: { list: async () => ({ data: [{ provider: "opencode", id: "kimi-k2.5" }, { provider: "anthropic", id: "claude-opus-4-5" }] }) },
         session: {
           create: async () => ({ data: { id: "test-session" } }),
           prompt: async () => ({ data: {} }),
@@ -636,8 +639,8 @@ describe("operator-task", () => {
 
       // #then - variant MUST be "max" from DEFAULT_CATEGORIES
       expect(launchInput.model).toEqual({
-        providerID: "anthropic",
-        modelID: "claude-opus-4-5",
+        providerID: "opencode",
+        modelID: "kimi-k2.5",
         variant: "max",
       });
     });
@@ -654,7 +657,7 @@ describe("operator-task", () => {
         const mockClient = {
           app: { agents: async () => ({ data: [] }) },
           config: { get: async () => ({ data: { model: SYSTEM_DEFAULT_MODEL } }) },
-          model: { list: async () => [{ id: "anthropic/claude-opus-4-5" }] },
+          model: { list: async () => ({ data: [{ provider: "opencode", id: "kimi-k2.5" }, { provider: "anthropic", id: "claude-opus-4-5" }] }) },
           session: {
             get: async () => ({ data: { directory: "/project" } }),
             create: async () => ({ data: { id: "ses_sync_default_variant" } }),
@@ -696,8 +699,8 @@ describe("operator-task", () => {
 
         // #then - variant MUST be "max" from DEFAULT_CATEGORIES (passed as separate field)
         expect(promptBody.model).toEqual({
-          providerID: "anthropic",
-          modelID: "claude-opus-4-5",
+          providerID: "opencode",
+          modelID: "kimi-k2.5",
         });
         expect(promptBody.variant).toBe("max");
       },
@@ -1689,7 +1692,7 @@ describe("operator-task", () => {
         abort: new AbortController().signal,
       };
 
-      // #when - using "quick" category which should use "anthropic/claude-haiku-4-5"
+      // #when - using "quick" category which should use "opencode/kimi-k2.5"
       await tool.execute(
         {
           description: "Test category fallback",
@@ -1701,10 +1704,10 @@ describe("operator-task", () => {
         toolContext,
       );
 
-      // #then - model should be anthropic/claude-haiku-4-5 from DEFAULT_CATEGORIES
+      // #then - model should be opencode/kimi-k2.5 from DEFAULT_CATEGORIES
       //         NOT anthropic/claude-sonnet-4-5 (system default)
-      expect(launchInput.model.providerID).toBe("anthropic");
-      expect(launchInput.model.modelID).toBe("claude-haiku-4-5");
+      expect(launchInput.model.providerID).toBe("opencode");
+      expect(launchInput.model.modelID).toBe("kimi-k2.5");
     });
   });
 
@@ -1968,8 +1971,8 @@ describe("operator-task", () => {
 
       // #then - catalog model is used
       expect(resolved).not.toBeNull();
-      expect(resolved!.config.model).toBe("openai/gpt-5.2-codex");
-      expect(resolved!.config.variant).toBe("xhigh");
+      expect(resolved!.config.model).toBe("opencode/kimi-k2.5");
+      expect(resolved!.config.variant).toBe("max");
     });
 
     test("default model is used for category with default entry", () => {
@@ -1983,7 +1986,7 @@ describe("operator-task", () => {
 
       // #then - default model from DEFAULT_CATEGORIES is used
       expect(resolved).not.toBeNull();
-      expect(resolved!.config.model).toBe("anthropic/claude-sonnet-4-5");
+      expect(resolved!.config.model).toBe("opencode/kimi-k2.5");
     });
 
     test("category built-in model takes precedence over inheritedModel for builtin category", () => {
@@ -2000,7 +2003,7 @@ describe("operator-task", () => {
       // #then - category's built-in model wins (ultrabrain uses gpt-5.2-codex)
       expect(resolved).not.toBeNull();
       const actualModel = resolved!.config.model;
-      expect(actualModel).toBe("openai/gpt-5.2-codex");
+      expect(actualModel).toBe("opencode/kimi-k2.5");
     });
 
     test("when user defines model - modelInfo should report user-defined regardless of inheritedModel", () => {
@@ -2071,7 +2074,7 @@ describe("operator-task", () => {
 
       // #then category's built-in model should be used, NOT inheritedModel
       expect(resolved).not.toBeNull();
-      expect(resolved!.model).toBe("openai/gpt-5.2-codex");
+      expect(resolved!.model).toBe("opencode/kimi-k2.5");
     });
 
     test("FIXED: systemDefaultModel is used when no userConfig.model and no inheritedModel", () => {
@@ -2148,9 +2151,9 @@ describe("operator-task", () => {
         systemDefaultModel: SYSTEM_DEFAULT_MODEL,
       });
 
-      // #then should use category's built-in model (gemini-3-pro for visual-engineering)
+      // #then should use category's built-in model (opencode/kimi-k2.5 for visual-engineering)
       expect(resolved).not.toBeNull();
-      expect(resolved!.model).toBe("google/gemini-3-pro");
+      expect(resolved!.model).toBe("opencode/kimi-k2.5");
     });
 
     test("systemDefaultModel is used when no other model is available", () => {

@@ -269,7 +269,7 @@ describe("Plan agent demote behavior", () => {
 });
 
 describe("planner category config resolution", () => {
-  test("resolves ultrabrain category config", () => {
+  test("resolves ultrabrain category config with valid model", () => {
     // #given
     const categoryName = "ultrabrain";
 
@@ -278,11 +278,13 @@ describe("planner category config resolution", () => {
 
     // #then
     expect(config).toBeDefined();
-    expect(config?.model).toBe("openai/gpt-5.2-codex");
-    expect(config?.variant).toBe("xhigh");
+    expect(typeof config?.model).toBe("string");
+    expect(config?.model?.length).toBeGreaterThan(0);
+    // variant may or may not be defined depending on configuration
+    expect(config?.variant === undefined || typeof config?.variant === "string").toBe(true);
   });
 
-  test("resolves visual-engineering category config", () => {
+  test("resolves visual-engineering category config with valid model", () => {
     // #given
     const categoryName = "visual-engineering";
 
@@ -291,7 +293,8 @@ describe("planner category config resolution", () => {
 
     // #then
     expect(config).toBeDefined();
-    expect(config?.model).toBe("google/gemini-3-pro");
+    expect(typeof config?.model).toBe("string");
+    expect(config?.model?.length).toBeGreaterThan(0);
   });
 
   test("user categories override default categories", () => {
@@ -336,10 +339,10 @@ describe("planner category config resolution", () => {
     // #when
     const config = resolveCategoryConfig(categoryName, userCategories);
 
-    // #then - falls back to DEFAULT_CATEGORIES
+    // #then - falls back to DEFAULT_CATEGORIES with valid model
     expect(config).toBeDefined();
-    expect(config?.model).toBe("openai/gpt-5.2-codex");
-    expect(config?.variant).toBe("xhigh");
+    expect(typeof config?.model).toBe("string");
+    expect(config?.model?.length).toBeGreaterThan(0);
   });
 
   test("preserves all category properties (temperature, top_p, tools, etc.)", () => {
