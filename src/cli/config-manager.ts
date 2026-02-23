@@ -733,7 +733,7 @@ export function addProviderConfig(config: InstallConfig): ConfigMergeResult {
 }
 
 /**
- * Write default model configuration to global OpenCode settings.
+ * Write default model configuration to ghostwire.json.
  * This allows users to customize agent and category models.
  */
 export function writeModelConfig(): ConfigMergeResult {
@@ -747,20 +747,23 @@ export function writeModelConfig(): ConfigMergeResult {
     };
   }
 
-  const { format, path } = detectConfigFormat();
+  const omoConfigPath = getOmoConfig();
 
   try {
-    let existingConfig: OpenCodeConfig | null = null;
-    if (format !== "none") {
-      const parseResult = parseConfigWithError(path);
-      if (parseResult.error && !parseResult.config) {
-        existingConfig = {};
-      } else {
-        existingConfig = parseResult.config;
+    let existingConfig: Record<string, unknown> = {};
+    if (existsSync(omoConfigPath)) {
+      try {
+        const content = readFileSync(omoConfigPath, "utf-8");
+        const parsed = parseJsonc<Record<string, unknown>>(content);
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          existingConfig = parsed;
+        }
+      } catch {
+        // Start fresh if parsing fails
       }
     }
 
-    const newConfig = { ...(existingConfig ?? {}) };
+    const newConfig = { ...existingConfig };
 
     // Only write models config if it doesn't already exist
     // This preserves user customizations on updates
@@ -768,12 +771,12 @@ export function writeModelConfig(): ConfigMergeResult {
       newConfig.models = DEFAULT_MODELS_CONFIG;
     }
 
-    writeFileSync(path, JSON.stringify(newConfig, null, 2) + "\n");
-    return { success: true, configPath: path };
+    writeFileSync(omoConfigPath, JSON.stringify(newConfig, null, 2) + "\n");
+    return { success: true, configPath: omoConfigPath };
   } catch (err) {
     return {
       success: false,
-      configPath: path,
+      configPath: omoConfigPath,
       error: formatErrorWithSuggestion(err, "write model config"),
     };
   }
