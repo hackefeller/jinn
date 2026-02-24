@@ -1,6 +1,6 @@
 ---
-title: Codebase Refactoring & Nomenclature Initiative
-type: plan
+title: Codebase Restructuring
+type: refactor
 date: '2026-02-22'
 status: completed
 version: '2.0'

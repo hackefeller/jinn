@@ -1,6 +1,6 @@
 ---
-title: Configuration-Driven Model Architecture & Consolidation
-type: plan
+title: Config-Driven Model Architecture
+type: feat
 date: '2026-02-23'
 status: completed
 created: '2026-02-23'

@@ -1,5 +1,5 @@
 ---
-title: 'refactor: agent renaming and naming convention standardization'
+title: Agent Naming Standardization
 type: refactor
 date: '2026-02-20'
 status: completed

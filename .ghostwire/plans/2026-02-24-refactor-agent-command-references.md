@@ -1,6 +1,6 @@
 ---
-title: Agent & Command Reference Quality Improvement
-type: plan
+title: Agent & Command Reference Quality
+type: refactor
 date: '2026-02-24'
 status: completed
 version: '2.0'

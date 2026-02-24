@@ -1,6 +1,6 @@
 ---
-title: Workflow Command Renaming & Task-Driven Architecture
-type: plan
+title: Workflow Command Naming
+type: refactor
 date: '2026-02-23'
 status: completed
 version: '2.0'

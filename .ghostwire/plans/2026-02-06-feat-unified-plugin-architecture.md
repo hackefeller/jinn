@@ -1,5 +1,5 @@
 ---
-title: True Merge - Unified Plugin Architecture & Component Integration
+title: Unified Plugin Architecture
 type: feat
 date: '2026-02-06'
 status: completed
