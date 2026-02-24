@@ -1,10 +1,12 @@
+---
+title: 'Work Plan: Remove "builtin" Terminology from Codebase'
+type: plan
+date: '2026-02-22'
+status: completed
+---
+
 # Work Plan: Remove "builtin" Terminology from Codebase
 
-**Created:** 2026-02-22
-**Status:** ✅ COMPLETED
-**Priority:** High
-**Estimated Effort:** Medium-Large (8-12 hours)
-**Risk Level:** Medium (many files, but mechanical changes)
 
 ---
 

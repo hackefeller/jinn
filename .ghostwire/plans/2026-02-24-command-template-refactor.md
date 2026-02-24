@@ -1,7 +1,12 @@
+---
+title: Command Template Refactoring Plan
+type: plan
+date: '2026-02-24'
+status: completed
+---
+
 # Command Template Refactoring Plan
 
-**Status**: ready  
-**Date**: 2026-02-24  
 **Complexity**: Medium  
 **Total Effort**: 2-3 hours
 

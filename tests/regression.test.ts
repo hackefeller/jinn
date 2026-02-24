@@ -6,14 +6,14 @@ describe("Regression Tests", () => {
       //#given
       const pluginAgents = [
         "operator",
-        "seer-advisor",
-        "archive-researcher",
-        "scout-recon",
+        "advisor-plan",
+        "researcher-data",
+        "researcher-codebase",
         "build",
         "orchestrator",
         "planner",
-        "tactician-strategist",
-        "glitch-auditor",
+        "advisor-strategy",
+        "validator-bugs",
       ];
 
       //#when & #then
@@ -27,9 +27,9 @@ describe("Regression Tests", () => {
       //#given
       const pluginAgents = [
         "operator",
-        "seer-advisor",
-        "archive-researcher",
-        "scout-recon",
+        "advisor-plan",
+        "researcher-data",
+        "researcher-codebase",
         "build",
         "orchestrator",
       ];
@@ -46,12 +46,12 @@ describe("Regression Tests", () => {
     test("plugin commands remain unchanged", () => {
       //#given
       const pluginCommands = [
-        "init-deep",
-        "ultrawork-loop",
-        "cancel-ultrawork",
+        "project:map",
+        "work:loop",
+        "work:cancel",
         "refactor",
-        "jack-in-work",
-        "stop-continuation",
+        "workflows:execute",
+        "workflows:stop",
       ];
 
       //#when & #then
@@ -64,16 +64,16 @@ describe("Regression Tests", () => {
     test("plugin command names use consistent pattern", () => {
       //#given
       const pluginCommands = [
-        "init-deep",
-        "ultrawork-loop",
-        "cancel-ultrawork",
+        "project:map",
+        "work:loop",
+        "work:cancel",
         "refactor",
-        "jack-in-work",
-        "stop-continuation",
+        "workflows:execute",
+        "workflows:stop",
       ];
 
       //#when
-      const invalidCommands = pluginCommands.filter((cmd) => !cmd.match(/^[a-z]+(-[a-z]+)*$/));
+      const invalidCommands = pluginCommands.filter((cmd) => !cmd.match(/^[a-z:-]+$/));
 
       //#then
       expect(invalidCommands.length).toBe(0);

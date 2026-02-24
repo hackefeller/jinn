@@ -1,8 +1,12 @@
+---
+title: 'Work Plan: Consolidate Model Configuration into agents/categories Schema'
+type: plan
+date: '2026-02-23'
+status: completed
+---
+
 # Work Plan: Consolidate Model Configuration into agents/categories Schema
 
-**Status:** ✅ COMPLETED  
-**Created:** 2026-02-23  
-**Author:** planner
 
 ---
 

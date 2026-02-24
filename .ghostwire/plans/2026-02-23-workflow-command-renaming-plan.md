@@ -1,8 +1,14 @@
+---
+title: Workflow Command Renaming Plan
+type: plan
+date: '2026-02-23'
+status: completed
+branch: refactor/workflow-command-naming
+objective: Rename commands to make workflow stages explicit and guide users through the natural workflow progression
+---
+
 # Workflow Command Renaming Plan
 
-**Date**: 2026-02-23  
-**Branch**: `refactor/workflow-command-naming`  
-**Objective**: Rename commands to make workflow stages explicit and guide users through the natural workflow progression
 
 ---
 

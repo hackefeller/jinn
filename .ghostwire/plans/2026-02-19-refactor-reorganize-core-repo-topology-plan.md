@@ -1,10 +1,9 @@
 ---
-title: refactor: reorganize core repo topology
+title: 'refactor: reorganize core repo topology'
 type: refactor
-date: 2026-02-19
+date: '2026-02-19'
+status: completed
 ---
-
-**Status**: ✅ COMPLETED (Historical plan from Feb 2026)
 
 # Refactor: Reorganize Core Repo Topology
 

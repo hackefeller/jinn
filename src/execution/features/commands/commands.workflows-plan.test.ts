@@ -37,5 +37,10 @@ describe("canonical workflows plan template policy", () => {
     expect(template).toContain("issue_tracker:");
     expect(template).toContain("issue_url:");
     expect(template).toContain("## Implementation Steps");
+    expect(template).toContain(".ghostwire/plans/YYYY-MM-DD-descriptive-name-plan.md");
+    expect(template).toContain("status: draft|ready|completed|example");
+    expect(template).toContain("title, type, date, status");
+    expect(template).toContain("Implementation Steps uses checkbox tasks (`- [ ]`)");
+    expect(template).toContain("- [ ] Step with scope and expected artifact");
   });
 });

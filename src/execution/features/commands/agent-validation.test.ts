@@ -61,6 +61,7 @@ import {
 
 const COMMANDS_DIR = join(import.meta.dir, "commands");
 const TEMPLATES_DIR = join(import.meta.dir, "templates");
+const TASK_QUEUE_DIR = join(import.meta.dir, "..", "task-queue");
 
 // Constant mapping for resolving ${CONSTANT_NAME} references
 // Key = constant name (e.g., "AGENT_RESEARCHER_CODEBASE"), Value = actual agent ID (e.g., "researcher-codebase")
@@ -153,8 +154,9 @@ function extractReferences(content: string): {
   lines.forEach((line, index) => {
     const lineNum = index + 1;
 
-    // Match subagent_type="value" or subagent_type='value'
-    const subagentTypeRegex = /subagent_type\s*=\s*["']([^"']+)["']/g;
+    // Match agent references in command strings and object literals
+    const subagentTypeRegex =
+      /(?:subagent_type\s*=\s*|subagent_type\s*:\s*|subagentType\s*:\s*|defaultSubagent\s*:\s*)["']([^"']+)["']/g;
     let match;
     while ((match = subagentTypeRegex.exec(line)) !== null) {
       // Resolve constant references like ${AGENT_PLANNER}
@@ -226,6 +228,24 @@ describe("Agent Reference Validation", () => {
 
   it("templates/ must use only valid agent IDs in subagent_type", async () => {
     const files = await getTsFiles(TEMPLATES_DIR);
+    const errors: string[] = [];
+
+    for (const file of files) {
+      const content = await readFile(file, "utf-8");
+      const { subagentTypes } = extractReferences(content);
+
+      for (const { value, line } of subagentTypes) {
+        if (!isValidAgentId(value)) {
+          errors.push(`${file}:${line}: Invalid subagent_type="${value}"`);
+        }
+      }
+    }
+
+    expect(errors).toEqual([]);
+  });
+
+  it("task-queue/ must use only valid agent IDs in subagent references", async () => {
+    const files = await getTsFiles(TASK_QUEUE_DIR);
     const errors: string[] = [];
 
     for (const file of files) {

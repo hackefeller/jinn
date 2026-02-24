@@ -1,9 +1,15 @@
+---
+title: Specify → Ghostwire Integration Plan
+type: spec
+date: '2026-02-23'
+status: completed
+created: '2026-02-23'
+branch: 045-specify-integration
+related: .specify/ (to be deleted), .opencode/command/speckit.* (to be deleted)
+---
+
 # Specify → Ghostwire Integration Plan
 
-**Created**: 2026-02-23  
-**Status**: ✅ COMPLETED (Historical plan from Feb 2026)
-**Branch**: `045-specify-integration`  
-**Related**: `.specify/` (to be deleted), `.opencode/command/speckit.*` (to be deleted)
 
 ---
 

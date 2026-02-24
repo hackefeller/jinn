@@ -1,10 +1,9 @@
 ---
 title: Limit installer to OpenCode and Copilot only
 type: refactor
-date: 2026-02-19
+date: '2026-02-19'
+status: completed
 ---
-
-**Status**: ✅ COMPLETED (Historical plan from Feb 2026)
 
 # Limit Installer to OpenCode and Copilot Only
 

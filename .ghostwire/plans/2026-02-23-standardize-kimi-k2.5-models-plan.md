@@ -1,9 +1,15 @@
+---
+title: 'Implementation Plan: Standardize All Agent Models to opencode/kimi-k2.5'
+type: plan
+date: '2026-02-23'
+status: completed
+created: '2026-02-23'
+author: planner
+branch: feat/standardize-kimi-k2.5-models
+---
+
 # Implementation Plan: Standardize All Agent Models to opencode/kimi-k2.5
 
-**Status**: ✅ COMPLETED
-**Created**: 2026-02-23
-**Author**: planner
-**Branch**: `feat/standardize-kimi-k2.5-models`
 
 ---
 

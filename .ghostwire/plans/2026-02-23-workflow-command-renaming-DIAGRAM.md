@@ -1,3 +1,10 @@
+---
+title: Workflow Stage Diagram & User Journey
+type: diagram
+date: '2026-02-23'
+status: completed
+---
+
 # Workflow Stage Diagram & User Journey
 
 ## Task-Driven Architecture Overview

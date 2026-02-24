@@ -173,7 +173,7 @@ This command takes a work document (plan, specification, or todo file) and execu
    Use for complex, risky, or large changes:
    - **reviewer-simplicity**: Check for unnecessary complexity
    - **reviewer-rails**: Verify Rails conventions (Rails projects)
-   - **performance-seer-advisor**: Check for performance issues
+   - **oracle-performance**: Check for performance issues
    - **security-sentinel**: Scan for security vulnerabilities
    - **cora-test-reviewer**: Review test quality (Rails projects with comprehensive test coverage)
 

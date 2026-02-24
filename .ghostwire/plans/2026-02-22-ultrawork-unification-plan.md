@@ -1,9 +1,14 @@
+---
+title: 'Plan: Ultrawork Naming Unification'
+type: plan
+date: '2026-02-22'
+status: completed
+version: '1.0'
+related: ultrawork-unification-spec.md, ultrawork-unification-tasks.md
+---
+
 # Plan: Ultrawork Naming Unification
 
-**Version**: 1.0  
-**Date**: 2026-02-23  
-**Status**: ✅ **COMPLETED**  
-**Related**: `ultrawork-unification-spec.md`, `ultrawork-unification-tasks.md`
 
 ---
 

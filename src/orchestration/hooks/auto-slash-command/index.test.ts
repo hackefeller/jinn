@@ -115,12 +115,12 @@ describe("createAutoSlashCommandHook", () => {
   });
 
   describe("excluded commands", () => {
-    it("should NOT trigger for ghostwire:ultrawork-loop command", async () => {
-      // #given ghostwire:ultrawork-loop command
+    it("should NOT trigger for ghostwire:work:loop command", async () => {
+      // #given ghostwire:work:loop command
       const hook = createAutoSlashCommandHook();
       const sessionID = `test-session-ultrawork-${Date.now()}`;
       const input = createMockInput(sessionID);
-      const output = createMockOutput("/ghostwire:ultrawork-loop do something");
+      const output = createMockOutput("/ghostwire:work:loop do something");
       const originalText = output.parts[0].text;
 
       // #when hook is called
@@ -130,12 +130,12 @@ describe("createAutoSlashCommandHook", () => {
       expect(output.parts[0].text).toBe(originalText);
     });
 
-    it("should NOT trigger for ghostwire:cancel-ultrawork command", async () => {
-      // #given ghostwire:cancel-ultrawork command
+    it("should NOT trigger for ghostwire:work:cancel command", async () => {
+      // #given ghostwire:work:cancel command
       const hook = createAutoSlashCommandHook();
       const sessionID = `test-session-cancel-${Date.now()}`;
       const input = createMockInput(sessionID);
-      const output = createMockOutput("/ghostwire:cancel-ultrawork");
+      const output = createMockOutput("/ghostwire:work:cancel");
       const originalText = output.parts[0].text;
 
       // #when hook is called

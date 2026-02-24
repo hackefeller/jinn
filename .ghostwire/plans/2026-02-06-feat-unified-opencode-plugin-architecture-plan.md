@@ -1,10 +1,9 @@
 ---
-title: "feat: Implement Unified OpenCode Plugin Architecture"
+title: 'feat: Implement Unified OpenCode Plugin Architecture'
 type: feat
-date: 2026-02-06
+date: '2026-02-06'
+status: completed
 ---
-
-**Status**: ✅ COMPLETED (Historical plan from Feb 2026)
 
 # feat: Implement Unified OpenCode Plugin Architecture
 

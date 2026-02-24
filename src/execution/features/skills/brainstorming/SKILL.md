@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: This skill should be used before implementing features, building components, or making changes. It guides exploring user intent, approaches, and design decisions before planning. Triggers on "let's brainstorm", "help me think through", "what should we build", "scout-recon approaches", ambiguous feature requests, or when the user's request has multiple valid interpretations that need clarification.
+description: This skill should be used before implementing features, building components, or making changes. It guides exploring user intent, approaches, and design decisions before planning. Triggers on "let's brainstorm", "help me think through", "what should we build", "explore approaches", ambiguous feature requests, or when the user's request has multiple valid interpretations that need clarification.
 ---
 
 # Brainstorming
@@ -66,7 +66,7 @@ Ask questions **one at a time** to understand the user's intent. Avoid overwhelm
 4. **Ask about success criteria early**
    - "How will you know this feature is working well?"
 
-**Key Topics to Scout Recon:**
+**Key Topics to Explore:**
 
 | Topic             | Example Questions                                     |
 | ----------------- | ----------------------------------------------------- |
@@ -79,7 +79,7 @@ Ask questions **one at a time** to understand the user's intent. Avoid overwhelm
 
 **Exit Condition:** Continue until the idea is clear OR user says "proceed" or "let's move on"
 
-### Phase 2: Scout Recon Approaches
+### Phase 2: Explore Approaches
 
 After understanding the idea, propose 2-3 concrete approaches.
 

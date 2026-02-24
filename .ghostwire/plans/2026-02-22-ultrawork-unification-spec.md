@@ -1,10 +1,15 @@
+---
+title: 'Specification: Ultrawork Naming Unification'
+type: spec
+date: '2026-02-22'
+status: completed
+created: '2026-02-22'
+version: '1.0'
+---
+
 # Specification: Ultrawork Naming Unification
 
-**Status**: ✅ COMPLETED (Historical plan from Feb 2026)
-**Created**: 2026-02-22
 
-**Version**: 1.0  
-**Date**: 2026-02-23  
 **Scope**: Unify "ralph", "boulder", and "overclock" references under the "Ultrawork" brand
 
 ---

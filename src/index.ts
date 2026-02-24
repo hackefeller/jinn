@@ -749,14 +749,8 @@ const GhostwirePlugin: Plugin = async (ctx) => {
         const command = args?.command?.replace(/^\//, "").toLowerCase();
         const sessionID = input.sessionID || getMainSessionID();
 
-        if (
-          (command === "ultrawork-loop" ||
-            command === "ghostwire:ultrawork-loop" ||
-            command === "work:loop" ||
-            command === "ghostwire:work:loop") &&
-          sessionID
-        ) {
-          const rawArgs = args?.command?.replace(/^\/?(ultrawork-loop|work:loop)\s*/i, "") || "";
+        if ((command === "ghostwire:work:loop" || command === "work:loop") && sessionID) {
+          const rawArgs = args?.command?.replace(/^\/?(ghostwire:)?work:loop\s*/i, "") || "";
           const taskMatch = rawArgs.match(/^["'](.+?)["']/);
           const prompt =
             taskMatch?.[1] ||
@@ -770,10 +764,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
             maxIterations: maxIterMatch ? parseInt(maxIterMatch[1], 10) : undefined,
             completionPromise: promiseMatch?.[1],
           });
-        } else if (
-          (command === "ghostwire:cancel-ultrawork" || command === "ghostwire:work:cancel") &&
-          sessionID
-        ) {
+        } else if (command === "ghostwire:work:cancel" && sessionID) {
           ultraworkLoop.cancelLoop(sessionID);
         }
       }
@@ -783,10 +774,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
         const command = args?.command?.replace(/^\//, "").toLowerCase();
         const sessionID = input.sessionID || getMainSessionID();
 
-        if (
-          (command === "ghostwire:stop-continuation" || command === "ghostwire:workflows:stop") &&
-          sessionID
-        ) {
+        if (command === "ghostwire:workflows:stop" && sessionID) {
           stopContinuationGuard?.stop(sessionID);
           todoContinuationEnforcer?.cancelAllCountdowns();
           ultraworkLoop?.cancelLoop(sessionID);

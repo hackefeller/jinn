@@ -1,8 +1,14 @@
+---
+title: 'Implementation Breakdown: Task-Driven Workflow Architecture'
+type: plan
+date: '2026-02-24'
+status: completed
+estimated_effort: 30m
+branch: refactor/workflow-command-naming
+---
+
 # Implementation Breakdown: Task-Driven Workflow Architecture
 
-**Date**: 2026-02-24  
-**Branch**: `refactor/workflow-command-naming`  
-**Status**: Ready for Implementation  
 **Previous Planning**:
 
 - `.ghostwire/plans/2026-02-23-workflow-command-renaming-plan.md`

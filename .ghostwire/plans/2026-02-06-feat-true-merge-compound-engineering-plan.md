@@ -1,10 +1,9 @@
 ---
-title: feat: True merge ghostwire components
+title: 'feat: True merge ghostwire components'
 type: feat
-date: 2026-02-06
+date: '2026-02-06'
+status: completed
 ---
-
-**Status**: ✅ COMPLETED (Historical plan from Feb 2026)
 
 # feat: True merge ghostwire components
 

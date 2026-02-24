@@ -1,6 +1,12 @@
+---
+title: Agent Reference Drift Prevention System
+type: plan
+date: '2026-02-24'
+status: ready
+---
+
 # Agent Reference Drift Prevention System
 
-**Status**: ready  
 **Approach**: Tagged template literals with constants + build-time validation + pre-commit hook
 
 > **Note**: Project uses oxlint (Rust-based), not ESLint. Custom ESLint rules not available.

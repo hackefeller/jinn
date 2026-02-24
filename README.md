@@ -96,8 +96,8 @@ TodoContinuation: Force completion of incomplete work
 /ghostwire:git:smart-commit        # Atomic commits following conventions
 /ghostwire:project:test            # Run tests with coverage
 /ghostwire:code:review             # Multi-agent code review
-/ghostwire:security:audit          # Find vulnerabilities
-/ghostwire:docs:deploy             # Build and deploy docs
+/ghostwire:code:optimize           # Performance and quality optimization
+/ghostwire:docs:deploy-docs        # Build and deploy docs
 ```
 
 Full list in [Commands Reference](docs/reference/commands.md).
@@ -156,7 +156,7 @@ Ghostwire works out of the box. Customize as needed:
       "model": "opencode/kimi-k2.5",
       "temperature": 0.1
     },
-    "seer-advisor": {
+    "advisor-plan": {
       "enabled": true,
       "model": "opencode/kimi-k2.5"
     }

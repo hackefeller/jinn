@@ -1,9 +1,9 @@
 ---
 title: Implement CRUD Operations for Core Entities to Achieve Agent-Native Architecture Parity
 type: feat
-date: 2026-02-18
+date: '2026-02-18'
+status: completed
 priority: critical
-status: ✅ COMPLETED (Historical plan from Feb 2026)
 ---
 
 # Implement CRUD Operations for Core Entities to Achieve Agent-Native Architecture Parity

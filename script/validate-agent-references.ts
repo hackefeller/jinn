@@ -73,6 +73,13 @@ import {
 const PROJECT_ROOT = join(import.meta.dir, "..");
 const COMMANDS_DIR = join(PROJECT_ROOT, "src/execution/features/commands/commands");
 const TEMPLATES_DIR = join(PROJECT_ROOT, "src/execution/features/commands/templates");
+const TASK_QUEUE_DIR = join(PROJECT_ROOT, "src/execution/features/task-queue");
+const HOOKS_DIR = join(PROJECT_ROOT, "src/orchestration/hooks");
+const DOC_FILES = [
+  join(PROJECT_ROOT, "README.md"),
+  join(PROJECT_ROOT, "system-prompt.md"),
+  join(PROJECT_ROOT, "src/plugin/README.md"),
+];
 
 /**
  * Map of constant names to their runtime values
@@ -130,6 +137,19 @@ const CATEGORY_CONSTANT_MAP: Record<string, string> = {
   CATEGORY_WRITING,
 };
 
+const LEGACY_AGENT_REPLACEMENTS: Record<string, string> = {
+  "seer-advisor": AGENT_ADVISOR_PLAN,
+  "scout-recon": AGENT_RESEARCHER_CODEBASE,
+  "archive-researcher": AGENT_RESEARCHER_DATA,
+  "performance-seer-advisor": AGENT_ORACLE_PERFORMANCE,
+  "tactician-strategist": AGENT_ADVISOR_STRATEGY,
+  "glitch-auditor": AGENT_VALIDATOR_BUGS,
+  "zen-planner": AGENT_PLANNER,
+  plan: AGENT_PLANNER,
+  "nexus-orchestrator": AGENT_ORCHESTRATOR,
+  build: AGENT_ORCHESTRATOR,
+};
+
 /**
  * Resolve a constant reference ${CONSTANT_NAME} to its actual value
  */
@@ -148,6 +168,17 @@ function resolveConstant(value: string): string {
     }
   }
   return value;
+}
+
+function isPlaceholderValue(value: string): boolean {
+  const normalized = value.trim();
+  return (
+    normalized.length === 0 ||
+    normalized.includes("${") ||
+    normalized.includes("...") ||
+    normalized.includes("[") ||
+    normalized.includes("]")
+  );
 }
 
 /**
@@ -169,8 +200,9 @@ function extractReferences(content: string): {
   lines.forEach((line, index) => {
     const lineNum = index + 1;
 
-    // Match subagent_type="value" or subagent_type='value'
-    const subagentTypeRegex = /subagent_type\s*=\s*["']([^"']+)["']/g;
+    // Match agent references in command strings and object literals
+    const subagentTypeRegex =
+      /(?:subagent_type\s*=\s*|subagent_type\s*:\s*|subagentType\s*:\s*|defaultSubagent\s*:\s*)["']([^"']+)["']/g;
     let match;
     while ((match = subagentTypeRegex.exec(line)) !== null) {
       subagentTypes.push({ value: match[1], line: lineNum });
@@ -238,14 +270,22 @@ async function validateDirectory(dir: string): Promise<string[]> {
     // Validate agent IDs (resolve constant references first)
     for (const { value, line } of subagentTypes) {
       const resolvedValue = resolveConstant(value);
+      if (isPlaceholderValue(resolvedValue)) {
+        continue;
+      }
       if (!isValidAgentId(resolvedValue)) {
-        errors.push(`${relativePath}:${line}: Invalid subagent_type="${value}"`);
+        const suggestion = LEGACY_AGENT_REPLACEMENTS[resolvedValue];
+        const hint = suggestion ? ` (did you mean "${suggestion}"?)` : "";
+        errors.push(`${relativePath}:${line}: Invalid subagent_type="${value}"${hint}`);
       }
     }
 
     // Validate categories (resolve constant references first)
     for (const { value, line } of categories) {
       const resolvedValue = resolveConstant(value);
+      if (isPlaceholderValue(resolvedValue)) {
+        continue;
+      }
       if (!VALID_CATEGORIES.includes(resolvedValue as any)) {
         errors.push(`${relativePath}:${line}: Invalid category="${value}"`);
       }
@@ -253,6 +293,9 @@ async function validateDirectory(dir: string): Promise<string[]> {
 
     // Validate command names
     for (const { value, line } of commands) {
+      if (isPlaceholderValue(value)) {
+        continue;
+      }
       if (!isValidCommandName(value)) {
         errors.push(`${relativePath}:${line}: Invalid command="${value}"`);
       }
@@ -260,6 +303,61 @@ async function validateDirectory(dir: string): Promise<string[]> {
 
     // Validate skill names
     for (const { value, line } of skills) {
+      if (isPlaceholderValue(value)) {
+        continue;
+      }
+      if (!isValidSkillName(value)) {
+        errors.push(`${relativePath}:${line}: Invalid skill="${value}"`);
+      }
+    }
+  }
+
+  return errors;
+}
+
+async function validateFiles(files: string[]): Promise<string[]> {
+  const errors: string[] = [];
+
+  for (const file of files) {
+    const content = await readFile(file, "utf-8");
+    const { subagentTypes, categories, commands, skills } = extractReferences(content);
+    const relativePath = file.replace(PROJECT_ROOT + "/", "");
+
+    for (const { value, line } of subagentTypes) {
+      const resolvedValue = resolveConstant(value);
+      if (isPlaceholderValue(resolvedValue)) {
+        continue;
+      }
+      if (!isValidAgentId(resolvedValue)) {
+        const suggestion = LEGACY_AGENT_REPLACEMENTS[resolvedValue];
+        const hint = suggestion ? ` (did you mean "${suggestion}"?)` : "";
+        errors.push(`${relativePath}:${line}: Invalid subagent_type="${value}"${hint}`);
+      }
+    }
+
+    for (const { value, line } of categories) {
+      const resolvedValue = resolveConstant(value);
+      if (isPlaceholderValue(resolvedValue)) {
+        continue;
+      }
+      if (!VALID_CATEGORIES.includes(resolvedValue as any)) {
+        errors.push(`${relativePath}:${line}: Invalid category="${value}"`);
+      }
+    }
+
+    for (const { value, line } of commands) {
+      if (isPlaceholderValue(value)) {
+        continue;
+      }
+      if (!isValidCommandName(value)) {
+        errors.push(`${relativePath}:${line}: Invalid command="${value}"`);
+      }
+    }
+
+    for (const { value, line } of skills) {
+      if (isPlaceholderValue(value)) {
+        continue;
+      }
       if (!isValidSkillName(value)) {
         errors.push(`${relativePath}:${line}: Invalid skill="${value}"`);
       }
@@ -273,7 +371,7 @@ async function validateDirectory(dir: string): Promise<string[]> {
  * Main validation function
  */
 async function main() {
-  console.log("🔍 Validating agent references in commands and templates...\n");
+  console.log("🔍 Validating agent references across active source and docs...\n");
 
   const allErrors: string[] = [];
 
@@ -286,6 +384,20 @@ async function main() {
   console.log(`📁 Checking: ${TEMPLATES_DIR}`);
   const templateErrors = await validateDirectory(TEMPLATES_DIR);
   allErrors.push(...templateErrors);
+
+  console.log(`📁 Checking: ${TASK_QUEUE_DIR}`);
+  const taskQueueErrors = await validateDirectory(TASK_QUEUE_DIR);
+  allErrors.push(...taskQueueErrors);
+
+  console.log(`📁 Checking: ${HOOKS_DIR}`);
+  const hooksErrors = await validateDirectory(HOOKS_DIR);
+  allErrors.push(...hooksErrors);
+
+  console.log(
+    `📄 Checking docs: ${DOC_FILES.map((f) => f.replace(PROJECT_ROOT + "/", "")).join(", ")}`,
+  );
+  const docErrors = await validateFiles(DOC_FILES);
+  allErrors.push(...docErrors);
 
   // Report results
   console.log("\n" + "=".repeat(60));

@@ -30,7 +30,7 @@ Agents are organized into categories for easier discovery.
 | `kieran-python-reviewer`         | Python code review with strict conventions                      |
 | `kieran-typescript-reviewer`     | TypeScript code review with strict conventions                  |
 | `pattern-recognition-specialist` | Analyze code for patterns and anti-patterns                     |
-| `performance-seer-advisor`       | Performance analysis and optimization                           |
+| `oracle-performance`       | Performance analysis and optimization                           |
 | `security-sentinel`              | Security audits and vulnerability assessments                   |
 | `julik-frontend-races-reviewer`  | Review JavaScript/Stimulus code for race conditions             |
 

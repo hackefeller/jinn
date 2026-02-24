@@ -1,8 +1,13 @@
+---
+title: 'Example: Implement User Authentication API'
+type: example
+date: '2026-02-24'
+status: example
+framework: Task-Driven Workflow Architecture
+---
+
 # Example: Implement User Authentication API
 
-**Status**: Example Plan  
-**Date Created**: 2026-02-24  
-**Framework**: Task-Driven Workflow Architecture
 
 ---
 
