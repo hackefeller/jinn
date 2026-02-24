@@ -1,7 +1,6 @@
-
 ## 2026-02-23 03:04:57 -0800
 
-- Root cause: `createConfigHandler()` always generated Ghostwire builtin agents and merged them into OpenCode `config.agent`, which makes Ghostwire agents appear in the *global* OpenCode config layer (because `config` composition runs for global config too).
+- Root cause: `createConfigHandler()` always generated Ghostwire builtin agents and merged them into OpenCode `config.agent`, which makes Ghostwire agents appear in the _global_ OpenCode config layer (because `config` composition runs for global config too).
 - Fix: Gate builtin-agent injection behind explicit project-level configuration presence (`.opencode/opencode.json{,c}` or `.opencode/ghostwire.json{,c}`), so global config composition does not get Ghostwire agents by default.
 - Related: When builtin agents are not injected, `config.permission.delegate_task` is no longer forced to `deny` (avoids breaking plugin-provided agents that rely on default permission behavior).
 

@@ -81,7 +81,7 @@ Core workflow commands use `workflows:` prefix to avoid collisions with built-in
 | `/workflows:plan`       | Create implementation plans                             |
 | `/workflows:review`     | Run comprehensive code reviews                          |
 | `/workflows:work`       | Execute work items systematically                       |
-| `/workflows:learnings`   | Document solved problems to build team knowledge     |
+| `/workflows:learnings`  | Document solved problems to build team knowledge        |
 
 ### Utility Commands
 
@@ -123,7 +123,7 @@ Core workflow commands use `workflows:` prefix to avoid collisions with built-in
 | Skill                    | Description                                                 |
 | ------------------------ | ----------------------------------------------------------- |
 | `andrew-kane-gem-writer` | Write Ruby gems following Andrew Kane's patterns            |
-| `learnings`          | Capture solved problems as categorized documentation        |
+| `learnings`              | Capture solved problems as categorized documentation        |
 | `create-agent-skills`    | Expert guidance for creating Claude Code skills             |
 | `dhh-rails-style`        | Write Ruby/Rails code in DHH's 37signals style              |
 | `dspy-ruby`              | Build type-safe LLM applications with DSPy.rb               |

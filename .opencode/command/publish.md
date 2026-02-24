@@ -9,11 +9,13 @@ You are the release manager for ghostwire. Execute the FULL publish workflow fro
 ## CRITICAL: ARGUMENT REQUIREMENT
 
 **You MUST receive a version bump type from the user.** Valid options:
+
 - `patch`: Bug fixes, backward-compatible (1.1.7 → 1.1.8)
 - `minor`: New features, backward-compatible (1.1.7 → 1.2.0)
 - `major`: Breaking changes (1.1.7 → 2.0.0)
 
 **If the user did not provide a bump type argument, STOP IMMEDIATELY and ask:**
+
 > "배포를 진행하려면 버전 범프 타입을 지정해주세요: `patch`, `minor`, 또는 `major`"
 
 **DO NOT PROCEED without explicit user confirmation of bump type.**
@@ -48,6 +50,7 @@ You are the release manager for ghostwire. Execute the FULL publish workflow fro
 ## STEP 1: CONFIRM BUMP TYPE
 
 If bump type provided as argument, confirm with user:
+
 > "버전 범프 타입: `{bump}`. 진행할까요? (y/n)"
 
 Wait for user confirmation before proceeding.
@@ -66,11 +69,13 @@ Run: `git status --porcelain`
 ## STEP 2.5: SYNC WITH REMOTE (MANDATORY)
 
 Check if there are unpushed commits:
+
 ```bash
 git log origin/master..HEAD --oneline
 ```
 
 **If there are unpushed commits, you MUST sync before triggering workflow:**
+
 ```bash
 git pull --rebase && git push
 ```
@@ -82,11 +87,13 @@ This ensures the GitHub Actions workflow runs on the latest code including all l
 ## STEP 3: TRIGGER GITHUB ACTIONS WORKFLOW
 
 Run the publish workflow:
+
 ```bash
 gh workflow run publish -f bump={bump_type}
 ```
 
 Wait 3 seconds, then get the run ID:
+
 ```bash
 gh run list --workflow=publish --limit=1 --json databaseId,status --jq '.[0]'
 ```
@@ -96,6 +103,7 @@ gh run list --workflow=publish --limit=1 --json databaseId,status --jq '.[0]'
 ## STEP 4: WAIT FOR WORKFLOW COMPLETION
 
 Poll workflow status every 30 seconds until completion:
+
 ```bash
 gh run view {run_id} --json status,conclusion --jq '{status: .status, conclusion: .conclusion}'
 ```
@@ -105,6 +113,7 @@ Status flow: `queued` → `in_progress` → `completed`
 **IMPORTANT: Use polling loop, NOT sleep commands.**
 
 If conclusion is `failure`, show error and stop:
+
 ```bash
 gh run view {run_id} --log-failed
 ```
@@ -114,6 +123,7 @@ gh run view {run_id} --log-failed
 ## STEP 5: VERIFY GITHUB RELEASE
 
 Get the new version and verify release exists:
+
 ```bash
 # Get new version from package.json (workflow updates it)
 git pull --rebase
@@ -128,30 +138,39 @@ gh release view "v${NEW_VERSION}"
 Analyze commits since the previous version and draft release notes following project conventions:
 
 ### For PATCH releases:
+
 Keep simple format - just list commits:
+
 ```markdown
 - {hash} {conventional commit message}
 - ...
 ```
 
 ### For MINOR releases:
+
 Use feature-focused format:
+
 ```markdown
 ## New Features
 
 ### Feature Name
+
 - Description of what it does
 - Why it matters
 
 ## Bug Fixes
+
 - fix(scope): description
 
 ## Improvements
+
 - refactor(scope): description
 ```
 
 ### For MAJOR releases:
+
 Full changelog format:
+
 ```markdown
 # v{version}
 
@@ -160,18 +179,23 @@ Brief description of the release.
 ## What's New Since v{previous}
 
 ### Breaking Changes
+
 - Description of breaking change
 
 ### Features
+
 - **Feature Name**: Description
 
 ### Bug Fixes
+
 - Description
 
 ### Documentation
+
 - Description
 
 ## Migration Guide (if applicable)
+
 ...
 ```
 
@@ -182,6 +206,7 @@ Brief description of the release.
 ## STEP 7: UPDATE GITHUB RELEASE
 
 **ZERO CONTENT LOSS POLICY:**
+
 - First, fetch the existing release body with `gh release view`
 - Your enhanced notes must be PREPENDED to the existing content
 - **NOT A SINGLE CHARACTER of existing content may be removed or modified**
@@ -213,6 +238,7 @@ gh release edit "v${NEW_VERSION}" --notes-file /tmp/release-notes-v${NEW_VERSION
 ## STEP 8: VERIFY NPM PUBLICATION
 
 Poll npm registry until the new version appears:
+
 ```bash
 npm view ghostwire version
 ```
@@ -226,11 +252,13 @@ Compare with expected version. If not matching after 2 minutes, warn user about 
 The main publish workflow triggers a separate `publish-platform` workflow for platform-specific binaries.
 
 1. Find the publish-platform workflow run triggered by the main workflow:
+
 ```bash
 gh run list --workflow=publish-platform --limit=1 --json databaseId,status,conclusion --jq '.[0]'
 ```
 
 2. Poll workflow status every 30 seconds until completion:
+
 ```bash
 gh run view {platform_run_id} --json status,conclusion --jq '{status: .status, conclusion: .conclusion}'
 ```
@@ -238,6 +266,7 @@ gh run view {platform_run_id} --json status,conclusion --jq '{status: .status, c
 **IMPORTANT: Use polling loop, NOT sleep commands.**
 
 If conclusion is `failure`, show error logs:
+
 ```bash
 gh run view {platform_run_id} --log-failed
 ```
@@ -275,6 +304,7 @@ If any platform package version doesn't match, warn the user and suggest checkin
 ## STEP 9: FINAL CONFIRMATION
 
 Report success to user with:
+
 - New version number
 - GitHub release URL: https://github.com/hackefeller/ghostwire/releases/tag/v{version}
 - npm package URL: https://www.npmjs.com/package/ghostwire

@@ -27,33 +27,33 @@ flowchart TB
         Tactician Strategist["Tactician Strategist (Consultant)"]
         Glitch Auditor["Glitch Auditor (Reviewer)"]
     end
-    
+
     subgraph Execution["Execution Layer (Orchestrator)"]
         Orchestrator["Nexus Orchestrator (Conductor)"]
     end
-    
+
     subgraph Workers["Worker Layer (Specialized Agents)"]
         Junior["Cipher Operator-Junior (Task Executor)"]
         Seer Advisor["Seer Advisor (Architecture)"]
         Scout Recon["Scout Recon (Codebase Grep)"]
         Archive Researcher["Archive Researcher (Docs/OSS)"]
     end
-    
+
     User -->|"Describe work"| planner
     planner -->|"Consult"| Tactician Strategist
     planner -->|"Interview"| User
     planner -->|"Generate plan"| Plan[".ghostwire/plans/*.md"]
     Plan -->|"High accuracy?"| Glitch Auditor
     Glitch Auditor -->|"OKAY / REJECT"| planner
-    
+
     User -->|"/jack-in-work"| Orchestrator
     Plan -->|"Read"| Orchestrator
-    
+
     Orchestrator -->|"delegate_task(category)"| Junior
     Orchestrator -->|"delegate_task(agent)"| Seer Advisor
     Orchestrator -->|"delegate_task(agent)"| Scout Recon
     Orchestrator -->|"delegate_task(agent)"| Archive Researcher
-    
+
     Junior -->|"Results + Learnings"| Orchestrator
     Seer Advisor -->|"Advice"| Orchestrator
     Scout Recon -->|"Code patterns"| Orchestrator
@@ -76,10 +76,10 @@ stateDiagram-v2
     Interview --> Research: Launch researcher-codebase/researcher-data agents
     Research --> Interview: Gather codebase context
     Interview --> ClearanceCheck: After each response
-    
+
     ClearanceCheck --> Interview: Requirements unclear
     ClearanceCheck --> PlanGeneration: All requirements clear
-    
+
     state ClearanceCheck {
         [*] --> Check
         Check: ✓ Core objective defined?
@@ -88,28 +88,28 @@ stateDiagram-v2
         Check: ✓ Technical approach decided?
         Check: ✓ Test strategy confirmed?
     }
-    
+
     PlanGeneration --> TacticianConsult: Mandatory gap analysis
     TacticianConsult --> WritePlan: Incorporate findings
     WritePlan --> HighAccuracyChoice: Present to user
-    
+
     HighAccuracyChoice --> GlitchAudit: User wants high accuracy
     HighAccuracyChoice --> Done: User accepts plan
-    
+
     GlitchAudit --> WritePlan: REJECTED - fix issues
     GlitchAudit --> Done: OKAY - plan approved
-    
+
     Done --> [*]: Guide to /jack-in-work
 ```
 
 **Intent-Specific Strategies:**
 
-| Intent | planner Focus | Example Questions |
-|--------|------------------|-------------------|
-| **Refactoring** | Safety - behavior preservation | "What tests verify current behavior?" "Rollback strategy?" |
-| **Build from Scratch** | Discovery - patterns first | "Found pattern X in codebase. Follow it or deviate?" |
-| **Mid-sized Task** | Guardrails - exact boundaries | "What must NOT be included? Hard constraints?" |
-| **Architecture** | Strategic - long-term impact | "Expected lifespan? Scale requirements?" |
+| Intent                 | planner Focus                  | Example Questions                                          |
+| ---------------------- | ------------------------------ | ---------------------------------------------------------- |
+| **Refactoring**        | Safety - behavior preservation | "What tests verify current behavior?" "Rollback strategy?" |
+| **Build from Scratch** | Discovery - patterns first     | "Found pattern X in codebase. Follow it or deviate?"       |
+| **Mid-sized Task**     | Guardrails - exact boundaries  | "What must NOT be included? Hard constraints?"             |
+| **Architecture**       | Strategic - long-term impact   | "Expected lifespan? Scale requirements?"                   |
 
 ### Tactician Strategist: The Gap Analyzer
 
@@ -131,6 +131,7 @@ For high-accuracy mode, Glitch Auditor validates plans against **four core crite
 4. **Big Picture**: Is the purpose, background, and workflow clear?
 
 The Glitch Auditor only says "OKAY" when:
+
 - 100% of file references verified
 - ≥80% of tasks have clear reference sources
 - ≥90% of tasks have concrete acceptance criteria
@@ -157,25 +158,27 @@ flowchart LR
         Verify["5. Verify Results"]
         Report["6. Final Report"]
     end
-    
+
     Read --> Analyze
     Analyze --> Wisdom
     Wisdom --> Delegate
     Delegate --> Verify
     Verify -->|"More tasks"| Delegate
     Verify -->|"All done"| Report
-    
+
     Delegate -->|"background=false"| Workers["Workers"]
     Workers -->|"Results + Learnings"| Verify
 ```
 
 **What Orchestrator CAN do:**
+
 - ✅ Read files to understand context
 - ✅ Run commands to verify results
 - ✅ Use lsp_diagnostics to check for errors
 - ✅ Search patterns with grep/glob/ast-grep
 
 **What Orchestrator MUST delegate:**
+
 - ❌ Writing/editing code files
 - ❌ Fixing bugs
 - ❌ Creating tests
@@ -209,9 +212,9 @@ Independent tasks run in parallel:
 ```typescript
 // Orchestrator identifies parallelizable groups from plan
 // Group A: Tasks 2, 3, 4 (no file conflicts)
-delegate_task(category="ultrabrain", prompt="Task 2...")
-delegate_task(category="visual-engineering", prompt="Task 3...")
-delegate_task(category="general", prompt="Task 4...")
+delegate_task((category = "ultrabrain"), (prompt = "Task 2..."));
+delegate_task((category = "visual-engineering"), (prompt = "Task 3..."));
+delegate_task((category = "general"), (prompt = "Task 4..."));
 // All run simultaneously
 ```
 
@@ -229,6 +232,7 @@ Junior is the **workhorse** that actually writes code. Key characteristics:
 - **Constrained**: Cannot modify plan files (READ-ONLY)
 
 Junior doesn't need to be the smartest - it needs to be reliable. With:
+
 1. Detailed prompts from Orchestrator (50-200 lines)
 2. Accumulated wisdom passed forward
 3. Clear MUST DO / MUST NOT DO constraints
@@ -255,11 +259,11 @@ DO NOT respond until all todos are marked completed.
 
 ## When to Use What
 
-| Complexity | Approach | When to Use |
-|------------|----------|-------------|
-| **Simple** | Just prompt | Simple tasks, quick fixes, single-file changes |
-| **Complex + Lazy** | Just type `ulw` or `ultrawork` | Complex tasks where explaining context is tedious. Agent figures it out. |
-| **Complex + Precise** | `@plan` → `/jack-in-work` | Precise, multi-step work requiring true orchestration. planner plans, orchestrator executes. |
+| Complexity            | Approach                       | When to Use                                                                                  |
+| --------------------- | ------------------------------ | -------------------------------------------------------------------------------------------- |
+| **Simple**            | Just prompt                    | Simple tasks, quick fixes, single-file changes                                               |
+| **Complex + Lazy**    | Just type `ulw` or `ultrawork` | Complex tasks where explaining context is tedious. Agent figures it out.                     |
+| **Complex + Precise** | `@plan` → `/jack-in-work`      | Precise, multi-step work requiring true orchestration. planner plans, orchestrator executes. |
 
 **Decision Flow:**
 
@@ -299,17 +303,17 @@ You can control related features in `ghostwire.json`.
 ```jsonc
 {
   "cipher_agent": {
-    "disabled": false,           // Enable Nexus Orchestrator orchestration (default: false)
-    "planner_enabled": true,     // Enable planner (default: true)
-    "replace_plan": true         // Replace default plan agent with planner (default: true)
+    "disabled": false, // Enable Nexus Orchestrator orchestration (default: false)
+    "planner_enabled": true, // Enable planner (default: true)
+    "replace_plan": true, // Replace default plan agent with planner (default: true)
   },
-  
+
   "hooks": {
     "disabled": [
       // "jack-in-work",             // Disable execution trigger
       // "planner-md-only"      // Remove planner write restrictions (not recommended)
-    ]
-  }
+    ],
+  },
 }
 ```
 
@@ -326,6 +330,7 @@ You can control related features in `ghostwire.json`.
 ### 2. Explicit Over Implicit
 
 Every Junior prompt includes:
+
 - Exact task from plan
 - Clear success criteria
 - Forbidden actions
@@ -337,6 +342,7 @@ No assumptions. No guessing.
 ### 3. Trust But Verify
 
 The Orchestrator **never trusts subagent claims**:
+
 - Runs `lsp_diagnostics` at project level
 - Executes full test suite
 - Reads actual file changes
@@ -345,6 +351,7 @@ The Orchestrator **never trusts subagent claims**:
 ### 4. Model Optimization
 
 Expensive models used only where needed:
+
 - Planning decisions (once per project)
 - Debugging consultation (rare)
 - Complex architecture (rare)

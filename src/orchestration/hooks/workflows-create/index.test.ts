@@ -3,9 +3,7 @@ import type { Task } from "../../../execution/features/task-queue";
 
 // Mock implementations of hook functions for testing
 function extractFeatureDescription(promptText: string): string | null {
-  const userRequestMatch = promptText.match(
-    /<user-request>\s*([\s\S]*?)\s*<\/user-request>/i
-  );
+  const userRequestMatch = promptText.match(/<user-request>\s*([\s\S]*?)\s*<\/user-request>/i);
   if (userRequestMatch) {
     return userRequestMatch[1].trim();
   }
@@ -73,7 +71,7 @@ function extractTasksFromPlannerResponse(responseText: string): Task[] | null {
     const tasks = JSON.parse(jsonMatch[0]);
     if (!Array.isArray(tasks)) return null;
 
-    return tasks.filter(task => {
+    return tasks.filter((task) => {
       return (
         task.id &&
         task.subject &&

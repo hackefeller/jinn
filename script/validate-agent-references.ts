@@ -1,10 +1,10 @@
 #!/usr/bin/env bun
 /**
  * Build-time validation script for agent/category/command/skill references
- * 
+ *
  * Scans templates/ and commands/ directories for references and validates
  * against constants.ts. Exits with error if invalid references found.
- * 
+ *
  * Usage:
  *   bun script/validate-agent-references.ts
  *   bun run validate:agent-references
@@ -203,7 +203,7 @@ function extractReferences(content: string): {
  */
 async function getTsFiles(dir: string): Promise<string[]> {
   const files: string[] = [];
-  
+
   try {
     const entries = await readdir(dir, { withFileTypes: true });
 
@@ -289,7 +289,7 @@ async function main() {
 
   // Report results
   console.log("\n" + "=".repeat(60));
-  
+
   if (allErrors.length > 0) {
     console.log(`\n❌ Found ${allErrors.length} invalid reference(s):\n`);
     allErrors.forEach((error) => console.log(`  ${error}`));

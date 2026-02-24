@@ -1,5 +1,11 @@
 import { describe, it, expect } from "bun:test";
-import { TaskSchema, TaskStatusSchema, DelegationCategorySchema, WorkflowTaskListSchema, type Task } from "./types";
+import {
+  TaskSchema,
+  TaskStatusSchema,
+  DelegationCategorySchema,
+  WorkflowTaskListSchema,
+  type Task,
+} from "./types";
 
 describe("TaskSchema", () => {
   //#given a valid task object

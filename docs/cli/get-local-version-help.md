@@ -9,6 +9,7 @@ $ bunx ghostwire get-local-version --directory /path/to/project
 ```
 
 This command shows:
+
 - Current installed version
 - Latest available version on npm
 - Whether you're up to date

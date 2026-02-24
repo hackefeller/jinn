@@ -2,7 +2,7 @@ version: 1
 source: src/execution/features/commands/commands.ts
 description: Canonical command metadata for Ghostwire, synchronized from source code.
 metadata:
-  generated: '2026-02-22'
+  generated: "2026-02-22"
   notes:
     - Categories derived from command namespace
     - Keep in sync with docs/AGENTS-COMMANDS-SKILLS.md

@@ -21,12 +21,14 @@ This plan describes the unification of OpenCode plugin capabilities into a singl
 ## Problem Statement
 
 The ghostwire codebase originally split capabilities across multiple structures:
+
 - Core ghostwire agents, hooks, tools, and MCPs
 - External plugin dependencies for compound system features
 - Complex import/mapping layer to bridge incompatible architectures
 - Startup overhead from multi-layer initialization
 
 This fragmentation made it difficult to:
+
 - Discover available components
 - Maintain consistent behavior across agents
 - Debug cross-layer interactions
@@ -35,6 +37,7 @@ This fragmentation made it difficult to:
 ## Proposed Solution
 
 Build a **single, unified OpenCode plugin** that:
+
 1. Consolidates all capabilities from ghostwire and the compound system
 2. Provides a clean, role-based agent naming system
 3. Eliminates external plugin dependencies
@@ -56,18 +59,21 @@ Build a **single, unified OpenCode plugin** that:
 ```
 
 **Layer 1: Core Orchestration**
+
 - Location: `src/orchestration/agents/`, `src/orchestration/hooks/`
 - 29 agents across 8 categories with role-based naming
 - Orchestration hooks (grid-sync/nexus, delegates, lifecycle hooks)
 - Agent routing and delegation logic
 
 **Layer 2: Execution & Integration**
+
 - Location: `src/execution/`, `src/integration/`
 - Tools, features, skills
 - MCP servers (context7, grep_app, websearch)
 - Shared utilities (logger, parser, case-insensitive matching)
 
 **Layer 3: Configuration & Platform**
+
 - Location: `src/platform/config/`, `docs/agents.yml`
 - Zod schema for validation
 - Agent metadata and model requirements
@@ -78,7 +84,9 @@ Build a **single, unified OpenCode plugin** that:
 All phases have been executed and verified:
 
 ### Phase 1: Architecture + Skeleton ✅
+
 **Commit**: `cce662a`
+
 - ✅ Mapping layer scaffolding implemented
 - ✅ Conversion interfaces defined
 - ✅ Feature bundle structure established
@@ -87,7 +95,9 @@ All phases have been executed and verified:
 **Result**: Foundation ready for component integration.
 
 ### Phase 2: Compound Engineering Import ✅
+
 **Commits**: `342be97`, `105375e`
+
 - ✅ All Claude commands mapped to OpenCode commands
 - ✅ All tools ported to OpenCode tool registry
 - ✅ Skills integrated as first-class features
@@ -98,7 +108,9 @@ All phases have been executed and verified:
 **Result**: 125 components natively integrated.
 
 ### Phase 3: Hardening and Cleanup ✅
+
 **Commits**: `105375e`, `342be97`
+
 - ✅ External plugin references removed
 - ✅ Archive directory established for historical reference
 - ✅ Documentation updated for native components
@@ -112,18 +124,23 @@ All phases have been executed and verified:
 ### Agents (29 total)
 
 **Orchestration (4)**:
+
 - operator, orchestrator, planner, executor
 
 **Code Review (5)**:
+
 - reviewer-rails, reviewer-python, reviewer-typescript, reviewer-rails-dh, reviewer-simplicity
 
 **Research (6)**:
+
 - researcher-docs, researcher-learnings, researcher-practices, researcher-git, analyzer-media, researcher-codebase, researcher-data
 
 **Design (5)**:
+
 - designer-flow, designer-sync, designer-iterator, analyzer-design, designer-builder
 
 **Advisory & Validation (8)**:
+
 - advisor-architecture, advisor-strategy, advisor-plan, validator-audit, validator-deployment, writer-readme, writer-gem, editor-style
 
 **Status**: ✅ All 29 agents natively integrated with role-based naming convention
@@ -131,15 +148,19 @@ All phases have been executed and verified:
 ### Commands (20 total)
 
 **Workflows (4 P0)**:
+
 - `/workflows:plan`, `/workflows:review`, `/workflows:work`, `/workflows:compound`
 
 **Planning & Analysis (7 P1)**:
+
 - `/deepen-plan`, `/plan_review`, `/reproduce-bug`, `/report-bug`, `/triage`, `/test-browser`
 
 **Resolution & Parallel Execution (3 P1)**:
+
 - `/resolve_pr_parallel`, `/resolve_todo_parallel`, `/resolve_parallel`
 
 **Specialized (6 P2)**:
+
 - `/xcode-test`, `/feature-video`, `/changelog`, `/create-agent-skill`, `/generate_command`, `/heal-skill`
 
 **Status**: ✅ All 20 commands natively available
@@ -147,12 +168,15 @@ All phases have been executed and verified:
 ### Skills (14 total)
 
 **Core (3 P0)**:
+
 - frontend-design, skill-creator, create-agent-skills
 
 **Architecture & Patterns (5 P1)**:
+
 - agent-native-architecture, compound-docs, andrew-kane-gem-writer, dhh-rails-style, dspy-ruby
 
 **Utilities & Tools (6 P1-P2)**:
+
 - every-style-editor, file-todos, git-worktree, rclone, agent-browser, gemini-imagegen
 
 **Status**: ✅ All 14 skills natively available
@@ -160,10 +184,11 @@ All phases have been executed and verified:
 ### Tools (40+ total)
 
 Integrated across domains:
+
 - Task delegation (delegate_task)
 - Background agent management (background_task)
 - System analysis (grep_app, context7, websearch)
-- Code manipulation (lsp_*, session_*, read, edit, write)
+- Code manipulation (lsp*\*, session*\*, read, edit, write)
 - File operations (glob, grep, bash)
 
 **Status**: ✅ All tools natively integrated in OpenCode SDK
@@ -210,6 +235,7 @@ imports?: {
 ### Metadata Centralization
 
 `docs/agents.yml` is now the canonical source of truth:
+
 - Agent display names
 - Agent purposes and descriptions
 - Agent model requirements and fallbacks
@@ -259,32 +285,36 @@ When adding new features:
 
 ## Risk Mitigation
 
-| Risk | Mitigation |
-|------|-----------|
-| Tool semantic incompatibility | Map to nearest OpenCode tool or wrap with adapter |
-| Hook mismatch with Claude | Document gaps and simulate with OpenCode hooks |
-| Configuration drift | Keep imports behind explicit toggles with validation |
-| Scope creep | Maintain strict boundaries for supported components |
-| Integration complexity | Establish clear integration contracts and test fixtures |
+| Risk                          | Mitigation                                              |
+| ----------------------------- | ------------------------------------------------------- |
+| Tool semantic incompatibility | Map to nearest OpenCode tool or wrap with adapter       |
+| Hook mismatch with Claude     | Document gaps and simulate with OpenCode hooks          |
+| Configuration drift           | Keep imports behind explicit toggles with validation    |
+| Scope creep                   | Maintain strict boundaries for supported components     |
+| Integration complexity        | Establish clear integration contracts and test fixtures |
 
 ## Files Modified/Created
 
 ### Agents (Renamed)
+
 - 26 agent files renamed with role-based prefixes
 - 3 hook directories renamed
 
 ### Configuration
+
 - `src/platform/config/schema.ts` - Unified schema with agents section
 - `docs/agents.yml` - Agent metadata and mappings
 - `src/orchestration/agents/types.ts` - Updated BuiltinAgentName type
 - `src/orchestration/agents/model-requirements.ts` - Model fallback chains
 
 ### Metadata
+
 - `src/orchestration/agents/agent-display-names.ts` - Display name mappings
 - `src/orchestration/agents/agent-tool-restrictions.ts` - Tool permission rules
 - `src/integration/shared/agent-display-names.ts` - Shared metadata
 
 ### Cleanup
+
 - `docs/.archive/` - Historical references archived
 - `docs/plans/.archive/` - Old planning documents archived
 - External plugin references removed
@@ -301,12 +331,14 @@ cce662a feat(unified-plugin): Implement Phase 1 - Architecture + Skeleton
 ## References
 
 ### Agent Documentation
+
 - `docs/agents.yml` - Canonical agent metadata
 - `docs/AGENTS.md` - Project knowledge base
 - `src/orchestration/agents/types.ts` - Type definitions
 - `docs/plans/2026-02-20-refactor-agent-renaming-plan.md` - Naming convention details
 
 ### Integration Points
+
 - `src/orchestration/agents/index.ts` - Agent factory exports
 - `src/orchestration/hooks/index.ts` - Hook registration
 - `src/execution/tools/index.ts` - Tool registry
@@ -314,6 +346,7 @@ cce662a feat(unified-plugin): Implement Phase 1 - Architecture + Skeleton
 - `src/platform/config/schema.ts` - Configuration schema
 
 ### Historical Reference
+
 - `archive/ghostwire/` - Historical compound plugin reference
 
 ## FAQ

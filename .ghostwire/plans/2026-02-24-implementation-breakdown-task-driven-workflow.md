@@ -3,7 +3,8 @@
 **Date**: 2026-02-24  
 **Branch**: `refactor/workflow-command-naming`  
 **Status**: Ready for Implementation  
-**Previous Planning**: 
+**Previous Planning**:
+
 - `.ghostwire/plans/2026-02-23-workflow-command-renaming-plan.md`
 - `.ghostwire/plans/2026-02-23-workflow-command-renaming-DIAGRAM.md`
 
@@ -12,6 +13,7 @@
 ## Overview: What We're Building
 
 Transform the workflow system from simple command routing to a **task-driven architecture** where:
+
 1. Plans are broken down into **structured, delegatable tasks** (JSON format)
 2. Tasks have metadata for **subagent routing and parallelization**
 3. `workflows:execute` **delegates individual tasks** to the right subagents
@@ -25,6 +27,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ### PHASE 1: Command Definition Updates (No functional changes yet)
 
 #### Task 1.1: Update CommandName Type & Schema
+
 **Owner**: Backend (quick)  
 **Category**: quick  
 **Skills**: [typescript, zod]  
@@ -33,6 +36,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 1
 
 **What to do**:
+
 1. Open `src/execution/features/commands/types.ts`
 2. Find the `CommandName` type union definition
 3. Update to include new command names:
@@ -51,6 +55,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ---
 
 #### Task 1.2: Update Command Definitions
+
 **Owner**: Backend (quick)  
 **Category**: quick  
 **Skills**: [typescript]  
@@ -60,25 +65,27 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 1
 
 **What to do**:
+
 1. Open `src/execution/features/commands/commands.ts`
 2. Locate the COMMAND_DEFINITIONS object
 3. **Rename entries**:
+
    ```typescript
    // OLD:
    "ghostwire:jack-in-work": { ... }
    // NEW:
    "ghostwire:workflows:execute": { ... }
-   
+
    // OLD:
    "ghostwire:ultrawork-loop": { ... }
    // NEW:
    "ghostwire:work:loop": { ... }
-   
+
    // OLD:
    "ghostwire:cancel-ultrawork": { ... }
    // NEW:
    "ghostwire:work:cancel": { ... }
-   
+
    // OLD:
    "ghostwire:stop-continuation": { ... }
    // NEW:
@@ -86,13 +93,14 @@ Transform the workflow system from simple command routing to a **task-driven arc
    ```
 
 4. Update descriptions to mention task-driven execution:
+
    ```typescript
    "ghostwire:workflows:execute": {
      description: "Execute planned tasks from workflow plan (task-driven, with subagent delegation) [Phase: EXECUTE]",
      agent: "orchestrator",
      // ... templates
    }
-   
+
    "ghostwire:workflows:create": {
      description: "Break down workflow plan into atomic tasks with delegation metadata [Phase: BREAKDOWN]",
      agent: "orchestrator",
@@ -107,6 +115,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ---
 
 #### Task 1.3: Update Auto-Slash-Command Hook Exclusions
+
 **Owner**: Backend (quick)  
 **Category**: quick  
 **Skills**: [typescript]  
@@ -116,17 +125,18 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 2
 
 **What to do**:
+
 1. Open `src/orchestration/hooks/auto-slash-command/constants.ts`
 2. Find `EXCLUDED_COMMANDS` set
 3. Add new command names to the set:
    ```typescript
    export const EXCLUDED_COMMANDS = new Set([
-     "ghostwire:ultrawork-loop",     // Keep old for backward compat
-     "ghostwire:work:loop",          // Add new
-     "ghostwire:cancel-ultrawork",   // Keep old
-     "ghostwire:work:cancel",        // Add new
-     "ghostwire:stop-continuation",  // Keep old
-     "ghostwire:workflows:stop",     // Add new
+     "ghostwire:ultrawork-loop", // Keep old for backward compat
+     "ghostwire:work:loop", // Add new
+     "ghostwire:cancel-ultrawork", // Keep old
+     "ghostwire:work:cancel", // Add new
+     "ghostwire:stop-continuation", // Keep old
+     "ghostwire:workflows:stop", // Add new
      // ... existing entries
    ]);
    ```
@@ -138,6 +148,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ### PHASE 2: Command Routing & Handler Updates
 
 #### Task 2.1: Add Command Aliases & Routing in index.ts
+
 **Owner**: Backend (quick)  
 **Category**: quick  
 **Skills**: [typescript, regex]  
@@ -147,33 +158,51 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 2
 
 **What to do**:
+
 1. Open `src/index.ts` around line 760-795
 2. Find the slashcommand handler sections
 3. **Update ultrawork-loop routing** (around line 760):
+
    ```typescript
-   if ((command === "ultrawork-loop" || command === "ghostwire:ultrawork-loop" ||
-        command === "work:loop" || command === "ghostwire:work:loop") && sessionID) {
+   if (
+     (command === "ultrawork-loop" ||
+       command === "ghostwire:ultrawork-loop" ||
+       command === "work:loop" ||
+       command === "ghostwire:work:loop") &&
+     sessionID
+   ) {
      // existing logic
    }
    ```
 
 4. **Update cancel-ultrawork routing** (around line 775):
+
    ```typescript
-   if ((command === "ghostwire:cancel-ultrawork" || command === "ghostwire:work:cancel") && sessionID) {
+   if (
+     (command === "ghostwire:cancel-ultrawork" || command === "ghostwire:work:cancel") &&
+     sessionID
+   ) {
      // existing logic
    }
    ```
 
 5. **Update stop-continuation routing** (around line 785):
+
    ```typescript
-   if ((command === "ghostwire:stop-continuation" || command === "ghostwire:workflows:stop") && sessionID) {
+   if (
+     (command === "ghostwire:stop-continuation" || command === "ghostwire:workflows:stop") &&
+     sessionID
+   ) {
      // existing logic
    }
    ```
 
 6. **Add jack-in-work → workflows:execute routing** (new section after stop-continuation):
    ```typescript
-   if ((command === "ghostwire:jack-in-work" || command === "ghostwire:workflows:execute") && sessionID) {
+   if (
+     (command === "ghostwire:jack-in-work" || command === "ghostwire:workflows:execute") &&
+     sessionID
+   ) {
      // Trigger start-work hook with plan execution
      // (same as current jack-in-work behavior - no change yet)
    }
@@ -184,6 +213,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ---
 
 #### Task 2.2: Build & Verify Phase 1 & 2
+
 **Owner**: Backend (quick)  
 **Category**: quick  
 **Skills**: [bun, typescript]  
@@ -193,6 +223,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 2
 
 **What to do**:
+
 1. Run `bun run build` and verify no errors
 2. Run `bun run typecheck` and verify passes
 3. Verify build output includes all new command names
@@ -204,6 +235,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ### PHASE 3: Task Structure & JSON Parsing (Core feature)
 
 #### Task 3.1: Define Task Structure Types
+
 **Owner**: Backend (ultrabrain)  
 **Category**: ultrabrain  
 **Skills**: [typescript, zod]  
@@ -213,26 +245,28 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 3
 
 **What to do**:
+
 1. Open or create `src/execution/features/task-queue/task-structure.ts`
 2. Define structured task type:
+
    ```typescript
    export interface StructuredTask {
-     id: string;                              // "task-001"
-     subject: string;                         // "Set up database schema"
-     description: string;                     // Detailed description
-     owner?: string;                          // Subagent owner/category
+     id: string; // "task-001"
+     subject: string; // "Set up database schema"
+     description: string; // Detailed description
+     owner?: string; // Subagent owner/category
      category?: "visual-engineering" | "ultrabrain" | "quick" | "deep" | "artistry";
-     skills?: string[];                       // ["database-design", "sql"]
-     estimatedEffort?: string;                // "2h", "30m", "1.5h"
-     blockedBy?: string[];                    // Task IDs that block this
-     blocks?: string[];                       // Task IDs this blocks
-     wave?: number;                           // Manual parallelization (1, 2, 3...)
+     skills?: string[]; // ["database-design", "sql"]
+     estimatedEffort?: string; // "2h", "30m", "1.5h"
+     blockedBy?: string[]; // Task IDs that block this
+     blocks?: string[]; // Task IDs this blocks
+     wave?: number; // Manual parallelization (1, 2, 3...)
      status: "pending" | "in_progress" | "completed";
-     createdAt?: string;                      // ISO timestamp
-     startedAt?: string;                      // ISO timestamp
-     completedAt?: string;                    // ISO timestamp
+     createdAt?: string; // ISO timestamp
+     startedAt?: string; // ISO timestamp
+     completedAt?: string; // ISO timestamp
    }
-   
+
    export interface WorkflowTaskList {
      plan_id: string;
      plan_name: string;
@@ -241,12 +275,13 @@ Transform the workflow system from simple command routing to a **task-driven arc
      breakdown_at?: string;
      executed_at?: string;
      completed_at?: string;
-     auto_parallelization?: boolean;          // If true, auto-determine waves
-     manual_waves?: Record<number, string[]>;  // If specified, use these wave groupings
+     auto_parallelization?: boolean; // If true, auto-determine waves
+     manual_waves?: Record<number, string[]>; // If specified, use these wave groupings
    }
    ```
 
 3. Add Zod schema validation:
+
    ```typescript
    export const StructuredTaskSchema = z.object({
      id: z.string(),
@@ -264,7 +299,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
      startedAt: z.string().datetime().optional(),
      completedAt: z.string().datetime().optional(),
    });
-   
+
    export const WorkflowTaskListSchema = z.object({
      // ... similar validation
    });
@@ -275,6 +310,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ---
 
 #### Task 3.2: Create Plan File Parser
+
 **Owner**: Backend (ultrabrain)  
 **Category**: ultrabrain  
 **Skills**: [typescript, file-io, parsing]  
@@ -284,6 +320,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 3
 
 **What to do**:
+
 1. Create `src/execution/features/task-queue/plan-parser.ts`
 2. Implement `parsePlanFile(planPath: string): Promise<WorkflowTaskList>`
    - Read plan markdown file
@@ -307,6 +344,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ---
 
 #### Task 3.3: Implement Parallelization Logic
+
 **Owner**: Backend (ultrabrain)  
 **Category**: ultrabrain  
 **Skills**: [typescript, graph-algorithms]  
@@ -316,6 +354,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 3
 
 **What to do**:
+
 1. Create `src/execution/features/task-queue/parallelization.ts`
 2. Implement `calculateExecutionWaves(tasks: StructuredTask[]): number[][]`
    - Build dependency graph from `blockedBy`/`blocks`
@@ -338,6 +377,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
    - Return all tasks with .wave === waveNumber
 
 **Validation**: Tests verify:
+
 - Linear dependency chain produces N+1 waves
 - Independent tasks group into same wave
 - Manual wave override is respected
@@ -348,6 +388,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ### PHASE 4: Subagent Delegation Integration
 
 #### Task 4.1: Implement Task Delegation Engine
+
 **Owner**: Backend (ultrabrain)  
 **Category**: ultrabrain  
 **Skills**: [typescript, delegate-task]  
@@ -357,26 +398,32 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 4
 
 **What to do**:
+
 1. Create `src/execution/features/task-queue/task-delegator.ts`
 2. Implement `delegateTask(task: StructuredTask, planPath: string): Promise<void>`
    - Build delegation prompt from task metadata:
+
      ```markdown
      ## Task: {subject}
-     
+
      {description}
-     
+
      ### Metadata
+
      - Estimated Effort: {estimatedEffort}
      - Skills: {skills.join(', ')}
      - Blocked By: {blockedBy}
-     
+
      ### Expected Outcome
+
      [Auto-generate based on task type]
-     
+
      ### Must Do
+
      - Update plan file when complete: {planPath}
      - Update task.status from "pending" → "in_progress" → "completed"
      ```
+
    - Invoke `delegate_task()` with appropriate category and skills:
      ```typescript
      delegate_task(
@@ -399,6 +446,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ---
 
 #### Task 4.2: Update workflows:execute Handler
+
 **Owner**: Backend (ultrabrain)  
 **Category**: ultrabrain  
 **Skills**: [typescript, orchestration]  
@@ -408,33 +456,37 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 4
 
 **What to do**:
+
 1. Open `src/orchestration/hooks/start-work/index.ts` (the hook that runs on jack-in-work / workflows:execute)
 2. Update hook to implement task-driven execution:
+
    ```typescript
    export function createStartWorkHook() {
      return {
-       async name() { return "start-work"; },
-       
+       async name() {
+         return "start-work";
+       },
+
        async execute(context: HookContext) {
-         const planPath = context.planName;  // From command args
-         
+         const planPath = context.planName; // From command args
+
          // 1. Parse plan file to get task list
          const taskList = await parsePlanFile(planPath);
          const { tasks } = taskList;
-         
+
          // 2. Calculate execution waves (auto-determined, respecting manual overrides)
          const waves = calculateExecutionWaves(tasks);
-         
+
          // 3. Execute tasks wave by wave
          for (const wave of waves) {
            const tasksInWave = getTasksInWave(tasks, wave);
            await delegateTasksInWave(tasksInWave, planPath);
          }
-         
+
          // 4. Mark plan complete
          taskList.completed_at = new Date().toISOString();
          await updatePlanFile(planPath, taskList);
-       }
+       },
      };
    }
    ```
@@ -445,8 +497,13 @@ Transform the workflow system from simple command routing to a **task-driven arc
    ```typescript
    log(`[workflows:execute] Starting task-driven execution`, { planPath });
    log(`[workflows:execute] Found ${tasks.length} tasks`, { tasksCount: tasks.length });
-   log(`[workflows:execute] Determined ${waves.length} execution waves`, { waveCount: waves.length });
-   log(`[workflows:execute] Wave ${i}: Running ${tasksInWave.length} tasks in parallel`, { wave: i, count: tasksInWave.length });
+   log(`[workflows:execute] Determined ${waves.length} execution waves`, {
+     waveCount: waves.length,
+   });
+   log(`[workflows:execute] Wave ${i}: Running ${tasksInWave.length} tasks in parallel`, {
+     wave: i,
+     count: tasksInWave.length,
+   });
    ```
 
 **Validation**: Hook executes all tasks in correct wave order, plan file updated
@@ -456,6 +513,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ### PHASE 5: Update workflows:create for Task Structure Output
 
 #### Task 5.1: Update workflows:create Handler (Breakdown Phase)
+
 **Owner**: Backend (ultrabrain)  
 **Category**: ultrabrain  
 **Skills**: [typescript, prompt-engineering]  
@@ -465,28 +523,32 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 5
 
 **What to do**:
+
 1. Open `src/execution/features/commands/templates/workflows/create.ts` (or wherever workflows:create template lives)
 2. Update template prompt to explicitly request JSON task structure:
-   ```markdown
+
+   ````markdown
    ## Task: Break down the plan into atomic, delegatable tasks
-   
+
    You have a plan at: {planPath}
-   
+
    Your job is to:
+
    1. Read the existing plan
    2. Break it down into ATOMIC TASKS (smallest unit that can be delegated to a single subagent)
    3. For each task, specify:
-     - id: "task-001", "task-002", etc.
-     - subject: Brief title
-     - description: What needs to be done
-     - owner: Who should do it (backend/frontend/devops/qa/etc.)
-     - category: visual-engineering, ultrabrain, quick, deep, artistry
-     - skills: Required skills (e.g., ["react", "typescript"])
-     - estimatedEffort: "2h", "30m", etc.
-     - blockedBy: Tasks that must complete first
-     - blocks: Tasks that depend on this
-     - status: "pending" (initially)
-   
+
+   - id: "task-001", "task-002", etc.
+   - subject: Brief title
+   - description: What needs to be done
+   - owner: Who should do it (backend/frontend/devops/qa/etc.)
+   - category: visual-engineering, ultrabrain, quick, deep, artistry
+   - skills: Required skills (e.g., ["react", "typescript"])
+   - estimatedEffort: "2h", "30m", etc.
+   - blockedBy: Tasks that must complete first
+   - blocks: Tasks that depend on this
+   - status: "pending" (initially)
+
    4. Output the task list as a JSON code block in the plan file:
       ```json
       {
@@ -500,8 +562,12 @@ Transform the workflow system from simple command routing to a **task-driven arc
         "auto_parallelization": true
       }
       ```
-   
+   ````
+
    5. Do NOT delete existing plan content - append JSON task block
+
+   ```
+
    ```
 
 3. Invoke workflows:create via agent template (same as before, but with new prompt)
@@ -513,6 +579,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ### PHASE 6: Tests & Validation
 
 #### Task 6.1: Write Unit Tests for Task Structure
+
 **Owner**: Backend (quick)  
 **Category**: quick  
 **Skills**: [typescript, testing]  
@@ -522,6 +589,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 5
 
 **What to do**:
+
 1. Create `src/execution/features/task-queue/task-structure.test.ts`
 2. Test `StructuredTaskSchema` validation:
    - Valid task parses
@@ -546,6 +614,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ---
 
 #### Task 6.2: Write Integration Tests for Task-Driven Execution
+
 **Owner**: Backend (quick)  
 **Category**: quick  
 **Skills**: [typescript, testing]  
@@ -555,6 +624,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 5
 
 **What to do**:
+
 1. Create `tests/task-driven-execution.test.ts`
 2. Create a mock plan file with 5 tasks:
    - Task 1: No dependencies (wave 1)
@@ -577,6 +647,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ---
 
 #### Task 6.3: Update Regression Tests
+
 **Owner**: Backend (quick)  
 **Category**: quick  
 **Skills**: [typescript, testing]  
@@ -586,8 +657,10 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 6
 
 **What to do**:
+
 1. Open `tests/regression.test.ts`
 2. Add tests for new command names:
+
    ```typescript
    test("new command names are recognized", () => {
      expect(CommandNameSchema.safeParse("ghostwire:workflows:execute").success).toBe(true);
@@ -620,6 +693,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ### PHASE 7: Documentation & Migration
 
 #### Task 7.1: Create Migration Guide
+
 **Owner**: Documentation (writing)  
 **Category**: writing  
 **Skills**: [markdown]  
@@ -629,6 +703,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 6
 
 **What to do**:
+
 1. Create `docs/migration/TASK_DRIVEN_WORKFLOWS.md`
 2. Document:
    - What changed (command names, task structure)
@@ -642,6 +717,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ---
 
 #### Task 7.2: Update AGENTS.md Knowledge Base
+
 **Owner**: Documentation (writing)  
 **Category**: writing  
 **Skills**: [markdown]  
@@ -651,6 +727,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 6
 
 **What to do**:
+
 1. Open `AGENTS.md`
 2. Update command names table
 3. Add "Task-Driven Architecture" section explaining:
@@ -664,6 +741,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ---
 
 #### Task 7.3: Update README.md Examples
+
 **Owner**: Documentation (writing)  
 **Category**: writing  
 **Skills**: [markdown]  
@@ -673,6 +751,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 7
 
 **What to do**:
+
 1. Open `README.md`
 2. Update any example commands that reference old names
 3. Add example of task-driven workflow
@@ -684,6 +763,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ### PHASE 8: Final Build & Verification
 
 #### Task 8.1: Full Build & Test
+
 **Owner**: Backend (quick)  
 **Category**: quick  
 **Skills**: [bun]  
@@ -693,6 +773,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 **Wave**: 7
 
 **What to do**:
+
 1. Run `bun run typecheck` - verify no errors
 2. Run `bun test` - verify all tests pass
 3. Run `bun run build` - verify build succeeds
@@ -705,6 +786,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 ## Summary of Changes
 
 ### Files Created
+
 - `src/execution/features/task-queue/task-structure.ts` - Task types and Zod schema
 - `src/execution/features/task-queue/plan-parser.ts` - Plan file parsing and updating
 - `src/execution/features/task-queue/parallelization.ts` - Wave calculation and task grouping
@@ -713,6 +795,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 - `docs/migration/TASK_DRIVEN_WORKFLOWS.md` - Migration guide
 
 ### Files Modified
+
 - `src/execution/features/commands/types.ts` - Add new command names
 - `src/platform/config/schema.ts` - Update CommandNameSchema
 - `src/execution/features/commands/commands.ts` - Rename commands, update descriptions
@@ -724,6 +807,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 - `README.md` - Update examples
 
 ### Total Effort Estimate
+
 - Phase 1-2 (Command definitions): 2.5 hours
 - Phase 3 (Task structure): 3.5 hours
 - Phase 4 (Delegation): 3 hours
@@ -741,7 +825,7 @@ Transform the workflow system from simple command routing to a **task-driven arc
 WAVE 1 (Commands definitions - no dependencies):
   - Task 1.1: Update CommandName & Schema
   - Task 1.2: Update Command Definitions (depends on 1.1)
-  
+
 WAVE 2 (Continue definitions):
   - Task 1.3: Auto-Slash-Command Hook
   - Task 2.1: Command Routing (depends on 1.2)

@@ -9,6 +9,7 @@ This document explains the Ghostwire plugin architecture, how it executes at run
 Ghostwire is an OpenCode plugin that turns OpenCode into a multi-agent orchestration runtime.
 
 As of v3.2.x:
+
 - Compound-engineering components are integrated directly into core runtime under the `grid:` namespace.
 - Claude import/translation utilities exist as library code for migration/testing workflows.
 - Feature bundle infrastructure has been removed to keep runtime deterministic and reduce maintenance surface.
@@ -40,6 +41,7 @@ As of v3.2.x:
   - OpenCode compatibility loaders where enabled
 
 Key files:
+
 - `src/index.ts` - Main plugin entry
 - `src/plugin-config.ts` - Config load + merge
 - `src/config/schema.ts` - Config schema + types
@@ -50,10 +52,12 @@ Key files:
 ## Config Scope and Precedence
 
 **Runtime config:**
+
 - Project: `.opencode/ghostwire.jsonc` then `.opencode/ghostwire.json`
 - User: `<opencode-config-dir>/ghostwire.jsonc` then `<opencode-config-dir>/ghostwire.json`
 
 **LSP config:**
+
 - Project ghostwire files
 - User ghostwire files
 - OpenCode base config (`opencode.json`)
@@ -93,6 +97,7 @@ flowchart TD
 ## Plugin Startup
 
 At plugin initialization (`src/index.ts`), Ghostwire:
+
 1. Loads user/project ghostwire config (`loadPluginConfig`)
 2. Materializes hook enablement state (`disabled_hooks`)
 3. Instantiates managers (background, tmux, skill MCP, model cache)
@@ -106,6 +111,7 @@ This forms a deterministic startup graph: configuration first, then runtime capa
 ## Request Lifecycle
 
 ### Prompt path (`chat.message`)
+
 - Input prompt enters hook chain
 - Keyword detector may inject mode directives (e.g., ultrawork)
 - Compatibility hooks may transform/inject context
@@ -113,11 +119,13 @@ This forms a deterministic startup graph: configuration first, then runtime capa
 - Resulting transformed prompt is passed to OpenCode agent execution
 
 ### Tool path (`tool.execute.before` → tool execution → `tool.execute.after`)
+
 - Pre-tool hooks can gate/transform arguments
 - Tool executes (LSP/search/delegation/session/skills/etc.)
 - Post-tool hooks can append warnings, enforce orchestration behavior, and persist telemetry/transcript data
 
 ### Event path (`event`)
+
 - Session lifecycle events update session state, cleanup resources, recover from errors, and drive continuation behavior
 
 ---
@@ -125,18 +133,22 @@ This forms a deterministic startup graph: configuration first, then runtime capa
 ## Agent, Hook, and Tool Subsystems
 
 ### Agents
+
 - Built-in and override-expanded in `createConfigHandler`
 - Model selection is fallback-chain based and provider-aware
 - Category and skill data can mutate per-agent runtime config
 
 ### Hooks
+
 Hooks are the central runtime policy layer:
+
 - Prompt transformation
 - Pre/post tool validation and augmentation
 - Continuation/recovery logic
 - Planner/executor behavioral constraints
 
 ### Tools
+
 - Static tool set (`tools`) + dynamic factories:
   - `delegate_task`, `call_grid_agent`, background tools, skill tools, slashcommand tool
 - LSP, grep/glob, session-manager, AST-grep, and interactive bash are first-class operational tools
@@ -146,12 +158,14 @@ Hooks are the central runtime policy layer:
 ## Orchestration and Plan Execution
 
 Ghostwire separates planning and execution:
+
 - Planning phase centered on planner workflow
 - Execution phase centered on Nexus Orchestrator workflow
 
 `/jack-in-work` integration creates/updates boulder state, then Nexus Orchestrator hooks use that state to enforce plan continuation and delegation discipline.
 
 In practice:
+
 - Plan state is persisted in project-local control files (`.ghostwire/*`)
 - Nexus Orchestrator post-tool behavior injects verification/delegation reminders and progress continuity signals
 
@@ -160,9 +174,11 @@ In practice:
 ## CLI and Distribution Model
 
 CLI surface (`src/cli/index.ts`):
+
 - `install`, `run`, `doctor`, `get-local-version`, `version`
 
 Operationally:
+
 - Installer writes OpenCode plugin registration and ghostwire config
 - Doctor performs dependency/auth/config/model/LSP diagnostics
 - Build pipeline emits ESM plugin/CLI artifacts plus schema and platform binaries
@@ -172,11 +188,13 @@ Operationally:
 ## Implemented vs Not Runtime-Wired
 
 **Implemented and runtime-wired:**
+
 - Core plugin/hook/tool/agent configuration path
 - Background orchestration manager
 - MCP merge path and skill command loading path
 
 **Implemented but not currently integrated into the main runtime bootstrap:**
+
 - Claude import translation utilities under `src/features/imports/claude/*` (library/tested surfaces, not core bootstrap wiring)
 
 ---
@@ -184,6 +202,7 @@ Operationally:
 ## Why Bundles Were Removed
 
 Feature bundles were removed because they did not provide product leverage for a single-plugin runtime:
+
 - no runtime registration path in bootstrap
 - placeholder component loading in registry path
 - duplicated conceptual model versus direct integration
@@ -196,12 +215,14 @@ Direct integration is now the single source of runtime truth.
 ## Operational Hotspots
 
 Areas with higher architectural complexity:
+
 - `src/index.ts` (global runtime composition)
 - `src/features/background-agent/manager.ts` (task lifecycle/concurrency)
 - `src/orchestration/hooks/grid-sync/index.ts` (orchestration governance)
 - `src/tools/delegate-task/tools.ts` (delegation policy and execution shaping)
 
 Primary failure modes to monitor:
+
 - Hook ordering regressions
 - Cross-session state contamination in tests
 - Config/doc drift when schema or precedence changes
@@ -211,6 +232,7 @@ Primary failure modes to monitor:
 ## Contributor Guidance
 
 When adding/changing behavior:
+
 - Runtime flow: `src/index.ts`
 - Config contract: `src/config/schema.ts`
 - Effective config composition: `src/platform/opencode/config-composer.ts`
@@ -218,6 +240,7 @@ When adding/changing behavior:
 - Tool behavior: `src/tools/*`
 
 Use this rule:
+
 - **Policy change** → hooks/config-handler
 - **Capability change** → tools/agents/features
 - **Contract change** → schema + docs + tests

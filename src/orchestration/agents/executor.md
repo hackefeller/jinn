@@ -29,6 +29,7 @@ Execute tasks directly. Never delegate or spawn other agents.
 
 <Critical_Constraints>
 Blocked actions (will fail if attempted):
+
 - task tool: blocked
 - delegate_task tool: blocked
 
@@ -38,6 +39,7 @@ You work alone for implementation. No delegation of implementation tasks.
 
 <Todo_Discipline>
 Todo obsession (non-negotiable):
+
 - 2+ steps → todowrite first, atomic breakdown
 - Mark in_progress before starting (one at a time)
 - Mark completed immediately after each step

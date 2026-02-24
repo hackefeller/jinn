@@ -22,15 +22,16 @@ This plan transforms model definitions from hardcoded source files to user-contr
 
 The current system has model definitions scattered across multiple files:
 
-| File | Purpose | Problem |
-|------|---------|---------|
-| `src/orchestration/agents/model-requirements.ts` | `AGENT_MODEL_REQUIREMENTS` with fallback chains | Hardcoded, requires code changes |
-| `src/execution/tools/delegate-task/constants.ts` | `DEFAULT_CATEGORIES` with model assignments | Duplicates definitions |
-| `docs/agents.yml` | Documentation + source of truth | Mixed concerns |
-| `src/platform/config/schema.ts` | Validation schema | Already supports config, underutilized |
-| `src/orchestration/agents/model-resolver.ts` | Runtime resolution | Good 5-step cascade, but reads from hardcoded sources |
+| File                                             | Purpose                                         | Problem                                               |
+| ------------------------------------------------ | ----------------------------------------------- | ----------------------------------------------------- |
+| `src/orchestration/agents/model-requirements.ts` | `AGENT_MODEL_REQUIREMENTS` with fallback chains | Hardcoded, requires code changes                      |
+| `src/execution/tools/delegate-task/constants.ts` | `DEFAULT_CATEGORIES` with model assignments     | Duplicates definitions                                |
+| `docs/agents.yml`                                | Documentation + source of truth                 | Mixed concerns                                        |
+| `src/platform/config/schema.ts`                  | Validation schema                               | Already supports config, underutilized                |
+| `src/orchestration/agents/model-resolver.ts`     | Runtime resolution                              | Good 5-step cascade, but reads from hardcoded sources |
 
 ### Current Resolution Flow
+
 ```
 UI Selection → Config Override → Category Default → Fallback Chain → System Default
 ```
@@ -93,28 +94,28 @@ UI Selection → Config Override → Category Default → Fallback Chain → Sys
 
 ### New Files (3)
 
-| File | Purpose |
-|------|---------|
-| `src/platform/config/model-config.ts` | Types, schema, constants for model configuration |
+| File                                           | Purpose                                            |
+| ---------------------------------------------- | -------------------------------------------------- |
+| `src/platform/config/model-config.ts`          | Types, schema, constants for model configuration   |
 | `src/platform/config/model-config-resolver.ts` | Runtime resolution logic reading from config files |
-| `src/cli/commands/sync-models.ts` | Dev command to sync/update global settings |
+| `src/cli/commands/sync-models.ts`              | Dev command to sync/update global settings         |
 
 ### Modified Files (6)
 
-| File | Changes |
-|------|---------|
-| `src/platform/config/schema.ts` | Add `models` section to GhostwireConfigSchema |
-| `src/cli/install.ts` | Write default models to global settings during install |
-| `src/orchestration/agents/model-resolver.ts` | Refactor to use config instead of hardcoded |
-| `src/execution/tools/delegate-task/tools.ts` | Use new resolver for category models |
-| `docs/agents.yml` | Convert to documentation-only (remove model source of truth) |
-| `src/orchestration/agents/model-requirements.ts` | Deprecate with warnings |
+| File                                             | Changes                                                      |
+| ------------------------------------------------ | ------------------------------------------------------------ |
+| `src/platform/config/schema.ts`                  | Add `models` section to GhostwireConfigSchema                |
+| `src/cli/install.ts`                             | Write default models to global settings during install       |
+| `src/orchestration/agents/model-resolver.ts`     | Refactor to use config instead of hardcoded                  |
+| `src/execution/tools/delegate-task/tools.ts`     | Use new resolver for category models                         |
+| `docs/agents.yml`                                | Convert to documentation-only (remove model source of truth) |
+| `src/orchestration/agents/model-requirements.ts` | Deprecate with warnings                                      |
 
 ### Deprecated Files (2)
 
-| File | Action |
-|------|--------|
-| `src/orchestration/agents/model-requirements.ts` | Keep for backward compat, add deprecation warnings |
+| File                                                                  | Action                                             |
+| --------------------------------------------------------------------- | -------------------------------------------------- |
+| `src/orchestration/agents/model-requirements.ts`                      | Keep for backward compat, add deprecation warnings |
 | `src/execution/tools/delegate-task/constants.ts` `DEFAULT_CATEGORIES` | Remove hardcoded models, keep prompts/descriptions |
 
 ---
@@ -170,10 +171,7 @@ export const CONFIGURABLE_CATEGORIES = [
 /** Model ID format: provider/model-name */
 const ModelIdSchema = z
   .string()
-  .regex(
-    /^[a-z0-9-]+\/[a-z0-9-_.]+$/i,
-    "Model ID must be in format: provider/model-name"
-  );
+  .regex(/^[a-z0-9-]+\/[a-z0-9-_.]+$/i, "Model ID must be in format: provider/model-name");
 
 /** Category model configuration with optional variant */
 const CategoryModelConfigSchema = z.union([
@@ -193,16 +191,12 @@ const ModelDefaultsSchema = z.object({
 });
 
 /** Per-agent model overrides */
-const AgentModelsSchema = z.record(
-  z.enum(CONFIGURABLE_AGENTS),
-  ModelIdSchema
-).optional();
+const AgentModelsSchema = z.record(z.enum(CONFIGURABLE_AGENTS), ModelIdSchema).optional();
 
 /** Per-category model overrides */
-const CategoryModelsSchema = z.record(
-  z.enum(CONFIGURABLE_CATEGORIES),
-  CategoryModelConfigSchema
-).optional();
+const CategoryModelsSchema = z
+  .record(z.enum(CONFIGURABLE_CATEGORIES), CategoryModelConfigSchema)
+  .optional();
 
 /** Root models configuration schema */
 export const ModelsConfigSchema = z.object({
@@ -281,11 +275,7 @@ export const DEFAULT_MODELS_CONFIG: ModelsConfig = {
 
 ```typescript
 import { describe, expect, it } from "bun:test";
-import {
-  ModelsConfigSchema,
-  BUILTIN_FALLBACK_MODEL,
-  DEFAULT_MODELS_CONFIG,
-} from "./model-config";
+import { ModelsConfigSchema, BUILTIN_FALLBACK_MODEL, DEFAULT_MODELS_CONFIG } from "./model-config";
 
 describe("ModelsConfigSchema", () => {
   //#given valid model ID format
@@ -354,9 +344,7 @@ describe("DEFAULT_MODELS_CONFIG", () => {
   it("has all agents configured", () => {
     //#then all agents have models
     expect(DEFAULT_MODELS_CONFIG.agents?.operator).toBeDefined();
-    expect(DEFAULT_MODELS_CONFIG.agents?.["analyzer-media"]).toBe(
-      "google/gemini-3-flash"
-    );
+    expect(DEFAULT_MODELS_CONFIG.agents?.["analyzer-media"]).toBe("google/gemini-3-flash");
   });
 });
 
@@ -394,18 +382,9 @@ import {
 // CONFIG FILE PATHS
 // =============================================================================
 
-const GLOBAL_CONFIG_PATH = join(
-  homedir(),
-  ".config",
-  "opencode",
-  "ghostwire.json"
-);
+const GLOBAL_CONFIG_PATH = join(homedir(), ".config", "opencode", "ghostwire.json");
 
-const PROJECT_CONFIG_PATH = join(
-  process.cwd(),
-  ".opencode",
-  "ghostwire.json"
-);
+const PROJECT_CONFIG_PATH = join(process.cwd(), ".opencode", "ghostwire.json");
 
 // =============================================================================
 // CONFIG LOADING
@@ -477,9 +456,7 @@ function getGlobalConfig(): LoadedConfig {
  * 4. Global config - default agent model
  * 5. Built-in fallback
  */
-export function resolveAgentModel(
-  agentId: ConfigurableAgent
-): ModelResolutionResult {
+export function resolveAgentModel(agentId: ConfigurableAgent): ModelResolutionResult {
   const project = getProjectConfig();
   const global = getGlobalConfig();
 
@@ -521,9 +498,7 @@ export function resolveAgentModel(
  * 4. Global config - default category model
  * 5. Built-in fallback
  */
-export function resolveCategoryModel(
-  categoryId: ConfigurableCategory
-): ModelResolutionResult {
+export function resolveCategoryModel(categoryId: ConfigurableCategory): ModelResolutionResult {
   const project = getProjectConfig();
   const global = getGlobalConfig();
 
@@ -557,7 +532,7 @@ export function resolveCategoryModel(
 
 function normalizeCategoryConfig(
   config: string | { model: string; variant?: "max" | "medium" | "min" },
-  source: ModelResolutionResult["source"]
+  source: ModelResolutionResult["source"],
 ): ModelResolutionResult {
   if (typeof config === "string") {
     return { model: config, source };
@@ -611,9 +586,7 @@ export function getConfigDiagnostics(): ConfigDiagnostics {
     },
     effectiveDefaults: {
       agent:
-        project.config?.defaults?.agent ??
-        global.config?.defaults?.agent ??
-        BUILTIN_FALLBACK_MODEL,
+        project.config?.defaults?.agent ?? global.config?.defaults?.agent ?? BUILTIN_FALLBACK_MODEL,
       category:
         project.config?.defaults?.category ??
         global.config?.defaults?.category ??
@@ -708,6 +681,7 @@ describe("getConfigDiagnostics", () => {
 **Changes**: Add `models` section to `GhostwireConfigSchema`.
 
 **Before** (around line 585-612):
+
 ```typescript
 export const GhostwireConfigSchema = z.object({
   agents: AgentOverridesSchema.optional(),
@@ -718,13 +692,14 @@ export const GhostwireConfigSchema = z.object({
 ```
 
 **After**:
+
 ```typescript
 import { ModelsConfigSchema } from "./model-config";
 
 export const GhostwireConfigSchema = z.object({
   // NEW: Centralized model configuration
   models: ModelsConfigSchema.optional(),
-  
+
   // DEPRECATED: These remain for backward compatibility
   agents: AgentOverridesSchema.optional(),
   categories: CategoriesConfigSchema.optional(),
@@ -733,6 +708,7 @@ export const GhostwireConfigSchema = z.object({
 ```
 
 **Add deprecation helper** (new export):
+
 ```typescript
 /**
  * Check for deprecated config patterns and log warnings.
@@ -741,17 +717,17 @@ export function checkDeprecatedConfig(config: GhostwireConfig): void {
   if (config.default_model) {
     console.warn(
       "[ghostwire] DEPRECATED: 'default_model' is deprecated. " +
-      "Use 'models.defaults.agent' instead."
+        "Use 'models.defaults.agent' instead.",
     );
   }
-  
+
   // Check for agents with direct model assignments
   if (config.agents) {
     for (const [agentId, agentConfig] of Object.entries(config.agents)) {
       if (agentConfig.model) {
         console.warn(
           `[ghostwire] DEPRECATED: 'agents.${agentId}.model' is deprecated. ` +
-          `Use 'models.agents.${agentId}' instead.`
+            `Use 'models.agents.${agentId}' instead.`,
         );
       }
     }
@@ -770,23 +746,20 @@ export function checkDeprecatedConfig(config: GhostwireConfig): void {
 **Changes**: Write default models configuration to global settings during installation.
 
 **Add import**:
+
 ```typescript
 import { DEFAULT_MODELS_CONFIG } from "../platform/config/model-config";
 ```
 
 **Add new function** (around line 600):
+
 ```typescript
 /**
  * Write default model configuration to global settings.
  * Only writes if models section doesn't exist.
  */
 async function writeDefaultModelsConfig(): Promise<void> {
-  const globalConfigPath = join(
-    homedir(),
-    ".config",
-    "opencode",
-    "ghostwire.json"
-  );
+  const globalConfigPath = join(homedir(), ".config", "opencode", "ghostwire.json");
 
   let existingConfig: Record<string, unknown> = {};
 
@@ -803,33 +776,30 @@ async function writeDefaultModelsConfig(): Promise<void> {
   // Only add models section if not present
   if (!existingConfig.models) {
     existingConfig.models = DEFAULT_MODELS_CONFIG;
-    
+
     // Ensure directory exists
     const configDir = dirname(globalConfigPath);
     if (!existsSync(configDir)) {
       mkdirSync(configDir, { recursive: true });
     }
-    
+
     // Write config
-    writeFileSync(
-      globalConfigPath,
-      JSON.stringify(existingConfig, null, 2),
-      "utf-8"
-    );
-    
+    writeFileSync(globalConfigPath, JSON.stringify(existingConfig, null, 2), "utf-8");
+
     console.log(`[ghostwire] Wrote default model configuration to ${globalConfigPath}`);
   }
 }
 ```
 
 **Update install flow** (in main install function):
+
 ```typescript
 export async function install(): Promise<void> {
   // ... existing installation steps ...
-  
+
   // NEW: Write default models configuration
   await writeDefaultModelsConfig();
-  
+
   // ... rest of installation ...
 }
 ```
@@ -856,12 +826,7 @@ import {
   clearConfigCache,
 } from "../../platform/config/model-config-resolver";
 
-const GLOBAL_CONFIG_PATH = join(
-  homedir(),
-  ".config",
-  "opencode",
-  "ghostwire.json"
-);
+const GLOBAL_CONFIG_PATH = join(homedir(), ".config", "opencode", "ghostwire.json");
 
 interface SyncOptions {
   /** Force overwrite existing models config */
@@ -974,6 +939,7 @@ if (import.meta.main) {
 ```
 
 **Register in CLI** (`src/cli/index.ts` or similar):
+
 ```typescript
 import { syncModels } from "./commands/sync-models";
 
@@ -1000,6 +966,7 @@ program
 **Key Changes**:
 
 1. Import new resolver:
+
 ```typescript
 import {
   resolveAgentModel,
@@ -1009,11 +976,12 @@ import { BUILTIN_FALLBACK_MODEL } from "../../platform/config/model-config";
 ```
 
 2. Update `resolveModelWithFallback()` function to check config first:
+
 ```typescript
 export function resolveModelWithFallback(
   input: ExtendedModelResolutionInput,
   agentId?: string,
-  categoryId?: string
+  categoryId?: string,
 ): ModelResolutionResult {
   const { uiSelectedModel, userModel, availableModels, systemDefaultModel } = input;
 
@@ -1025,10 +993,7 @@ export function resolveModelWithFallback(
   // 2. Config-based agent override
   if (agentId) {
     const configResult = resolveAgentModel(agentId as ConfigurableAgent);
-    if (
-      configResult.source !== "builtin-fallback" &&
-      availableModels.has(configResult.model)
-    ) {
+    if (configResult.source !== "builtin-fallback" && availableModels.has(configResult.model)) {
       return {
         model: configResult.model,
         source: "override",
@@ -1040,10 +1005,7 @@ export function resolveModelWithFallback(
   // 3. Config-based category default
   if (categoryId) {
     const configResult = resolveCategoryModel(categoryId as ConfigurableCategory);
-    if (
-      configResult.source !== "builtin-fallback" &&
-      availableModels.has(configResult.model)
-    ) {
+    if (configResult.source !== "builtin-fallback" && availableModels.has(configResult.model)) {
       return {
         model: configResult.model,
         source: "category-default",
@@ -1054,9 +1016,7 @@ export function resolveModelWithFallback(
 
   // 4. Legacy user model config (deprecated path)
   if (userModel && availableModels.has(userModel)) {
-    console.warn(
-      "[model-resolver] Using deprecated userModel config. Migrate to models.agents.*"
-    );
+    console.warn("[model-resolver] Using deprecated userModel config. Migrate to models.agents.*");
     return { model: userModel, source: "override", variant: undefined };
   }
 
@@ -1088,7 +1048,7 @@ export function resolveModelWithFallback(
  */
 function resolveLegacyFallbackChain(
   input: ExtendedModelResolutionInput,
-  agentId?: string
+  agentId?: string,
 ): ModelResolutionResult | null {
   // ... existing fallback chain logic, wrapped with deprecation warning ...
   return null; // Return null to fall through to system default
@@ -1096,6 +1056,7 @@ function resolveLegacyFallbackChain(
 ```
 
 3. Add deprecation notice to file header:
+
 ```typescript
 /**
  * Model Resolution for Agents
@@ -1120,6 +1081,7 @@ function resolveLegacyFallbackChain(
 **Goal**: Remove hardcoded model assignments from `DEFAULT_CATEGORIES`.
 
 **Before** (lines 193-202):
+
 ```typescript
 export const DEFAULT_CATEGORIES = {
   "visual-engineering": { model: "opencode/kimi-k2.5" },
@@ -1129,6 +1091,7 @@ export const DEFAULT_CATEGORIES = {
 ```
 
 **After**:
+
 ```typescript
 import { resolveCategoryModel } from "../../platform/config/model-config-resolver";
 import type { ConfigurableCategory } from "../../platform/config/model-config";
@@ -1158,6 +1121,7 @@ export const DEFAULT_CATEGORIES = {
 ```
 
 **Keep unchanged**:
+
 - `CATEGORY_PROMPT_APPENDS` - these are behavioral, not model-related
 - `CATEGORY_DESCRIPTIONS` - documentation
 - `PLAN_AGENT_SYSTEM_PREPEND` - system prompts
@@ -1173,6 +1137,7 @@ export const DEFAULT_CATEGORIES = {
 **Find and update** category model resolution (search for `DEFAULT_CATEGORIES`):
 
 **Before**:
+
 ```typescript
 const categoryConfig = DEFAULT_CATEGORIES[category];
 const model = categoryConfig.model;
@@ -1180,6 +1145,7 @@ const variant = categoryConfig.variant;
 ```
 
 **After**:
+
 ```typescript
 import { getCategoryConfig } from "./constants";
 
@@ -1200,6 +1166,7 @@ const variant = categoryConfig.variant;
 **Goal**: Convert to documentation-only. Remove model as source of truth.
 
 **Add header**:
+
 ```yaml
 # =============================================================================
 # AGENTS METADATA (Documentation Only)
@@ -1220,11 +1187,12 @@ const variant = categoryConfig.variant;
 ```
 
 **Update agent entries** (change `model:` to `default_model:`):
+
 ```yaml
 agents:
   - id: operator
     display_name: operator
-    default_model: opencode/kimi-k2.5  # Documentation only
+    default_model: opencode/kimi-k2.5 # Documentation only
     purpose: Main task execution and orchestration
     note: Configure via models.agents.operator in ghostwire.json
 ```
@@ -1238,6 +1206,7 @@ agents:
 **Goal**: Add deprecation warnings without breaking existing code.
 
 **Add file header**:
+
 ```typescript
 /**
  * @deprecated MIGRATION NOTICE
@@ -1255,10 +1224,14 @@ agents:
  */
 
 /** @deprecated Use configuration files instead */
-export const AGENT_MODEL_REQUIREMENTS = { /* ... existing ... */ };
+export const AGENT_MODEL_REQUIREMENTS = {
+  /* ... existing ... */
+};
 
 /** @deprecated Use configuration files instead */
-export const CATEGORY_MODEL_REQUIREMENTS = { /* ... existing ... */ };
+export const CATEGORY_MODEL_REQUIREMENTS = {
+  /* ... existing ... */
+};
 ```
 
 ---
@@ -1267,7 +1240,7 @@ export const CATEGORY_MODEL_REQUIREMENTS = { /* ... existing ... */ };
 
 **File**: `docs/configuration/models.md`
 
-```markdown
+````markdown
 # Model Configuration Guide
 
 ## Overview
@@ -1305,6 +1278,7 @@ Priority order (highest to lowest):
   }
 }
 ```
+````
 
 ## Examples
 
@@ -1394,6 +1368,7 @@ ghostwire sync-models --dry-run
 ### Model not being used
 
 1. Check effective configuration:
+
    ```bash
    ghostwire sync-models --show
    ```
@@ -1407,6 +1382,7 @@ ghostwire sync-models --dry-run
 1. Ensure valid JSON syntax
 2. Check file permissions
 3. Verify path: `~/.config/opencode/ghostwire.json`
+
 ```
 
 ---
@@ -1514,3 +1490,4 @@ ghostwire sync-models --dry-run
 - [x] Task 5.1: Configuration resolution tests
 - [x] Task 5.2: Integration tests
 - [x] Task 5.3: Installer tests
+```

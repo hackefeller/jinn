@@ -18,6 +18,7 @@ The frontmatter provides structured metadata; the markdown body is the agent pro
 **Source**: `src/orchestration/agents/[id].md`
 
 **Fields**:
+
 - `id` (string, required): Kebab-case ID matching filename.
 - `name` (string, required): Human-readable display name.
 - `purpose` (string, required): One-line purpose statement.
@@ -32,6 +33,7 @@ The frontmatter provides structured metadata; the markdown body is the agent pro
 - `prompt` (string, required): Markdown body loaded verbatim.
 
 **Constraints**:
+
 - `id` must equal filename (without `.md`).
 - `id` must be unique across the directory.
 - Required fields must be present in frontmatter.
@@ -47,6 +49,7 @@ The frontmatter provides structured metadata; the markdown body is the agent pro
 ### Operator Prompt Metadata
 
 Agent frontmatter maps to operator prompt metadata:
+
 - `category`, `cost`, `triggers`, `useWhen`, `avoidWhen`, `promptAlias`, `keyTrigger`, `dedicatedSection`.
 
 ## Validation

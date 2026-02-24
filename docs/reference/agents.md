@@ -16,6 +16,7 @@ Ghostwire provides specialized AI agents organized in 6 phases:
 ## Using Agents
 
 ### Direct Invocation
+
 Invoke agents explicitly for specialized tasks:
 
 ```
@@ -26,6 +27,7 @@ Ask @analyzer-media to analyze this screenshot
 ```
 
 ### Background Execution
+
 Run agents in the background while you continue working:
 
 ```
@@ -33,7 +35,9 @@ delegate_task(agent="researcher-codebase", background=true, prompt="Find auth im
 ```
 
 ### Agent Thinking Budget
+
 The following agents have 32k thinking budget tokens enabled by default:
+
 - operator
 - advisor-plan
 - planner

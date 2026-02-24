@@ -42,11 +42,13 @@ Configure your Ollama provider to use `stream: false`:
 ```
 
 **Pros:**
+
 - Works immediately
 - No code changes needed
 - Simple configuration
 
 **Cons:**
+
 - Slightly slower response time (no streaming)
 - Less interactive feedback
 
@@ -74,7 +76,7 @@ Until the SDK is fixed, here's how to implement NDJSON parsing (for SDK maintain
 
 ```typescript
 async function parseOllamaStreamResponse(response: string): Promise<object> {
-  const lines = response.split('\n').filter(line => line.trim());
+  const lines = response.split("\n").filter((line) => line.trim());
   const mergedMessage = { tool_calls: [] };
 
   for (const line of lines) {
@@ -88,7 +90,7 @@ async function parseOllamaStreamResponse(response: string): Promise<object> {
       }
     } catch (e) {
       // Skip malformed lines
-      console.warn('Skipping malformed NDJSON line:', line);
+      console.warn("Skipping malformed NDJSON line:", line);
     }
   }
 

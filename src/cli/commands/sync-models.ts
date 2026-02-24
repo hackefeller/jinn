@@ -1,8 +1,8 @@
 /**
  * Sync models command - updates global OpenCode settings with latest model defaults.
- * 
+ *
  * Usage: opencode ghostwire:sync-models
- * 
+ *
  * This command writes the default model configuration to the user's global
  * OpenCode settings, allowing them to customize from there.
  */

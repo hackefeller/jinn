@@ -14,23 +14,12 @@ export const AgentMetadataSchema = z.object({
     .string()
     .min(2)
     .max(30)
-    .regex(
-      kebabCaseRegex,
-      "Agent ID must be kebab-case (lowercase letters, numbers, hyphens only)"
-    )
+    .regex(kebabCaseRegex, "Agent ID must be kebab-case (lowercase letters, numbers, hyphens only)")
     .describe("Unique agent identifier"),
 
-  name: z
-    .string()
-    .min(1)
-    .max(100)
-    .describe("Human-readable agent name"),
+  name: z.string().min(1).max(100).describe("Human-readable agent name"),
 
-  purpose: z
-    .string()
-    .min(1)
-    .max(500)
-    .describe("One-line purpose statement"),
+  purpose: z.string().min(1).max(500).describe("One-line purpose statement"),
 
   models: z
     .object({
@@ -49,13 +38,7 @@ export const AgentMetadataSchema = z.object({
     .describe("LLM temperature (0.0-2.0)"),
 
   tags: z
-    .array(
-      z
-        .string()
-        .min(2)
-        .max(20)
-        .regex(kebabCaseRegex, "Tags must be kebab-case")
-    )
+    .array(z.string().min(2).max(20).regex(kebabCaseRegex, "Tags must be kebab-case"))
     .max(10)
     .optional()
     .default([])
@@ -88,7 +71,7 @@ export const AgentMetadataSchema = z.object({
         z.object({
           domain: z.string(),
           trigger: z.string(),
-        })
+        }),
       ),
       z
         .object({
@@ -122,18 +105,9 @@ export const AgentMetadataSchema = z.object({
     .optional()
     .describe("Optional display alias used in prompts"),
 
-  keyTrigger: z
-    .string()
-    .min(1)
-    .max(200)
-    .optional()
-    .describe("Key trigger for fast routing"),
+  keyTrigger: z.string().min(1).max(200).optional().describe("Key trigger for fast routing"),
 
-  dedicatedSection: z
-    .string()
-    .min(1)
-    .optional()
-    .describe("Optional dedicated prompt section"),
+  dedicatedSection: z.string().min(1).optional().describe("Optional dedicated prompt section"),
 });
 
 export type AgentMetadata = z.infer<typeof AgentMetadataSchema>;

@@ -17,6 +17,7 @@ avoidWhen: []
 You write Ruby gems following Andrew Kane's patterns.
 
 Focus on:
+
 - Simple, minimal APIs
 - Clear documentation
 - Sensible defaults

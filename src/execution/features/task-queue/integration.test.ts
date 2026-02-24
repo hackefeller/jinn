@@ -87,8 +87,8 @@ describe("task-queue integration tests", () => {
     expect(waves[2]).toHaveLength(1); // Wave 3: task-4
 
     // Step 4: Validate all tasks
-    const validation = tasksWithWaves.map(t => validateTaskForDelegation(t));
-    expect(validation.every(v => v.valid)).toBe(true);
+    const validation = tasksWithWaves.map((t) => validateTaskForDelegation(t));
+    expect(validation.every((v) => v.valid)).toBe(true);
 
     // Step 5: Build delegation plan
     const delegationPlan = buildTaskDelegationPlan(tasksWithWaves);
@@ -232,10 +232,10 @@ describe("task-queue integration tests", () => {
     expect(plan.tasks).toHaveLength(4);
 
     // Verify each task has correct delegation config
-    const uiTask = plan.tasks.find(t => t.taskId === "ui-1");
+    const uiTask = plan.tasks.find((t) => t.taskId === "ui-1");
     expect(uiTask?.skills).toContain("frontend-ui-ux");
 
-    const apiTask = plan.tasks.find(t => t.taskId === "api-1");
+    const apiTask = plan.tasks.find((t) => t.taskId === "api-1");
     expect(apiTask?.category).toBe("ultrabrain");
   });
 

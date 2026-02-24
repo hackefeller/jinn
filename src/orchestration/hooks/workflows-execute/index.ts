@@ -37,9 +37,7 @@ interface WorkflowsExecuteOutput {
  */
 function extractPlanFilePath(promptText: string): string | null {
   // Match: /workflows:execute /path/to/file.md
-  const match = promptText.match(
-    /\/workflows:execute\s+([^\s\n<]+(?:\.md)?)/i
-  );
+  const match = promptText.match(/\/workflows:execute\s+([^\s\n<]+(?:\.md)?)/i);
   if (match && match[1]) {
     return match[1];
   }
@@ -56,10 +54,7 @@ function extractPlanFilePath(promptText: string): string | null {
 /**
  * Format execution plan as structured instruction
  */
-function formatExecutionInstruction(
-  plan: WorkflowTaskList,
-  delegationPlan: any
-): string {
+function formatExecutionInstruction(plan: WorkflowTaskList, delegationPlan: any): string {
   const waves = getTasksByWave(plan.tasks);
 
   return `## Workflow Execution Plan
@@ -81,10 +76,10 @@ ${waveTasks
   - Category: ${task.category || "unspecified-high"}
   - Effort: ${task.estimatedEffort || "unknown"}
   - Status: ${task.status}
-`
+`,
   )
   .join("")}
-`
+`,
   )
   .join("")}
 
@@ -95,7 +90,7 @@ ${plan.tasks
   .map(
     (t) => `
 - **${t.subject}** blocked by: ${t.blockedBy?.join(", ") || "none"}
-`
+`,
   )
   .join("")}
 
@@ -105,10 +100,7 @@ Each task will be delegated to subagents by category:
 
 ${Object.entries(delegationPlan.tasksByCategory)
   .filter(([, count]: [string, unknown]) => (count as number) > 0)
-  .map(
-    ([category, count]: [string, unknown]) =>
-      `- **${category}**: ${count} task(s)`
-  )
+  .map(([category, count]: [string, unknown]) => `- **${category}**: ${count} task(s)`)
   .join("\n")}
 
 ---
@@ -128,10 +120,7 @@ Use \`delegate_task(category=..., load_skills=..., description=..., prompt=...)\
 /**
  * Build detailed delegation instructions for a task
  */
-function buildDetailedTaskDelegation(
-  task: Task,
-  workflowContext: string
-): string {
+function buildDetailedTaskDelegation(task: Task, workflowContext: string): string {
   const config = getTaskDelegationConfig(task);
   const skills = [...config.skills, ...(task.skills || [])];
 
@@ -157,7 +146,7 @@ export function createWorkflowsExecuteHook(ctx: PluginInput) {
   return {
     "chat.message": async (
       input: WorkflowsExecuteInput,
-      output: WorkflowsExecuteOutput
+      output: WorkflowsExecuteOutput,
     ): Promise<void> => {
       const parts = output.parts;
       const promptText =
@@ -169,8 +158,7 @@ export function createWorkflowsExecuteHook(ctx: PluginInput) {
 
       // Only trigger on workflows:execute command
       const isWorkflowsExecuteCommand =
-        promptText.includes("workflows:execute") ||
-        promptText.includes("execute");
+        promptText.includes("workflows:execute") || promptText.includes("execute");
 
       if (!isWorkflowsExecuteCommand) {
         return;
@@ -273,10 +261,7 @@ export function createWorkflowsExecuteHook(ctx: PluginInput) {
         });
 
         // Format execution instruction
-        const executionInstruction = formatExecutionInstruction(
-          updatedPlan,
-          delegationPlan
-        );
+        const executionInstruction = formatExecutionInstruction(updatedPlan, delegationPlan);
 
         // Build individual task delegations
         const taskDelegations = tasksWithWaves

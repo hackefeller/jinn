@@ -237,29 +237,36 @@ These agents currently only exist as code and have no markdown equivalents - con
 ### Within Each Phase
 
 **Phase 1 (Research)**:
+
 - Audit tasks [T002, T003, T004, T006, T007] marked [P] can run in parallel
 - T008 depends on T001-T007 completion
 
 **Phase 2 (Tests)**:
+
 - Test writing tasks [T010-T017] marked [P] can run in parallel
 - T018, T019 can run in parallel with other tests
 
 **Phase 3 (Implementation)**:
+
 - Core implementation [T020-T027] sequential (dependencies)
 - T028-T029 verify phase complete
 
 **Phase 5 (9 new agents)**:
+
 - Conversion tasks [T039-T047] marked [P] can run in parallel
 - T048-T050 verify completion
 
 **Phase 6 (40 existing agents)**:
+
 - Batch creation tasks [T052-T055] marked [P] can run in parallel
 - T056-T058 verify completion
 
 **Phase 10 (Documentation)**:
+
 - Documentation tasks [T082-T084] marked [P] can run in parallel
 
 **Phase 11 (Validation)**:
+
 - Validation tasks [T087] spot-check can be parallel
 - Final tests T093 must pass
 
@@ -275,20 +282,25 @@ T001-T008 (Setup) → T009-T019 (Tests) → T020-T029 (Load system)
 ### Parallel Opportunities
 
 **After Phase 1**: All audit tasks run in parallel
+
 - T002, T003, T004, T006, T007 simultaneously
 
 **After Phase 2**: Tests can run in parallel
+
 - T010-T017 simultaneously (same test file)
 - T018, T019 simultaneously (different files)
 
 **After Phase 4**: Agent conversion can parallelize heavily
+
 - Phase 5: All 9 new agent conversions [T039-T047] in parallel
 - Phase 6: All 4 batches [T052-T055] in parallel (40 agents ÷ 4 batches)
 
 **Within Phase 6**:
+
 - Different agent batches can be converted by different team members simultaneously
 
 **Documentation Phase 10**:
+
 - Tasks [T082-T084] marked [P] can run in parallel
 
 ---
@@ -385,11 +397,13 @@ Each phase is independently testable:
 ### Parallel Team Strategy (3+ developers)
 
 **Team setup**:
+
 - Developer A: Research + loading system (Phases 1-4)
 - Developer B: Convert batch 1 (agents 1-20, Phase 5-6 part 1)
 - Developer C: Convert batch 2 (agents 21-40, Phase 5-6 part 2)
 
 **Timeline**:
+
 1. All team members start Phase 1 together (1 day)
 2. Dev A continues phases 2-4 while B,C wait (2 days)
 3. Dev A + B + C parallelize Phase 5-6 (2 days instead of 3)
@@ -412,31 +426,37 @@ Each phase is independently testable:
 ### Critical Checkpoints
 
 **After Phase 4** (Loading system ready):
+
 - Markdown loading system tested and working
 - All existing tests pass
 - Backwards compatibility verified
 
 **After Phase 6** (Agents converted):
+
 - All 38 agents in markdown format
 - Metadata preserved from original files
 - Naming convention consistent (kebab-case)
 
 **After Phase 7** (Loading transitioned):
+
 - createBuiltinAgents() calls loadMarkdownAgents()
 - COMPOUND_AGENT_MAPPINGS includes all markdown agents
 - No TypeScript agent imports
 
 **After Phase 8** (TypeScript deleted):
+
 - No TypeScript agent files remain
 - `grep` for agent.ts returns zero results
 - Build clean, all tests pass
 
 **After Phase 9** (Deduplication):
+
 - No duplicate agents between `src/orchestration/agents/` and `src/plugin/agents/`
 - Single source of truth established
 - Agent references still work
 
 **Final (Phase 11)**:
+
 - All 38 agents accessible by ID
 - Agent loading performance < 500ms
 - Config merging works without conflicts

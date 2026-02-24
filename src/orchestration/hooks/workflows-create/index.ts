@@ -24,9 +24,7 @@ interface WorkflowsCreateOutput {
  */
 function extractFeatureDescription(promptText: string): string | null {
   // Look for user-request tags first
-  const userRequestMatch = promptText.match(
-    /<user-request>\s*([\s\S]*?)\s*<\/user-request>/i
-  );
+  const userRequestMatch = promptText.match(/<user-request>\s*([\s\S]*?)\s*<\/user-request>/i);
   if (userRequestMatch) {
     return userRequestMatch[1].trim();
   }
@@ -71,10 +69,7 @@ function extractExistingTasks(promptText: string): Task[] | null {
 /**
  * Create workflow task list structure
  */
-function createWorkflowTaskList(
-  planName: string,
-  tasks: Task[]
-): WorkflowTaskList {
+function createWorkflowTaskList(planName: string, tasks: Task[]): WorkflowTaskList {
   return {
     plan_id: `plan_${Date.now()}`,
     plan_name: planName,
@@ -148,7 +143,7 @@ function extractTasksFromPlannerResponse(responseText: string): Task[] | null {
     if (!Array.isArray(tasks)) return null;
 
     // Validate structure
-    return tasks.filter(task => {
+    return tasks.filter((task) => {
       return (
         task.id &&
         task.subject &&
@@ -166,7 +161,7 @@ export function createWorkflowsCreateHook(ctx: PluginInput) {
   return {
     "chat.message": async (
       input: WorkflowsCreateInput,
-      output: WorkflowsCreateOutput
+      output: WorkflowsCreateOutput,
     ): Promise<void> => {
       const parts = output.parts;
       const promptText =
@@ -177,9 +172,8 @@ export function createWorkflowsCreateHook(ctx: PluginInput) {
           .trim() || "";
 
       // Only trigger on workflows:create command
-      const isWorkflowsCreateCommand = promptText.includes(
-        "workflows:create"
-      ) && promptText.includes("<session-context>");
+      const isWorkflowsCreateCommand =
+        promptText.includes("workflows:create") && promptText.includes("<session-context>");
 
       if (!isWorkflowsCreateCommand) {
         return;

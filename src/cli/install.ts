@@ -48,11 +48,7 @@ function formatConfigSummary(config: InstallConfig): string {
     formatProvider("Z.ai Coding Plan", config.hasZaiCodingPlan, "Archive Researcher/Multimodal"),
   );
   lines.push(
-    formatProvider(
-      "Kimi For Coding",
-      config.hasKimiForCoding,
-      "operator/planner fallback",
-    ),
+    formatProvider("Kimi For Coding", config.hasKimiForCoding, "operator/planner fallback"),
   );
 
   lines.push("");

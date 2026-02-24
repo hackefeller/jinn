@@ -24,12 +24,12 @@ This plan addresses the critical **CRUD Completeness gap (10%)** identified in t
 
 Agents cannot programmatically manage their own workspace:
 
-| Entity | Operations Available | Gap |
-|--------|---------------------|-----|
-| **Session** | list, read, search, info | Missing: create, update, delete |
-| **Todo** | None (managed by OpenCode core) | Missing: create, read, update, delete |
-| **Skill** | read (via load) | Missing: create, update, delete |
-| **Background Task** | create, cancel | Missing: list, update, retry |
+| Entity              | Operations Available            | Gap                                   |
+| ------------------- | ------------------------------- | ------------------------------------- |
+| **Session**         | list, read, search, info        | Missing: create, update, delete       |
+| **Todo**            | None (managed by OpenCode core) | Missing: create, read, update, delete |
+| **Skill**           | read (via load)                 | Missing: create, update, delete       |
+| **Background Task** | create, cancel                  | Missing: list, update, retry          |
 
 ### Impact
 
@@ -65,13 +65,14 @@ Agents cannot programmatically manage their own workspace:
 
 **New Operations**:
 
-| Tool | Purpose | Complexity |
-|------|---------|------------|
-| `session_create` | Create new session (optionally as child) | Medium |
-| `session_update` | Update session metadata (title, description) | Low |
-| `session_delete` | Delete session with cascade options | High |
+| Tool             | Purpose                                      | Complexity |
+| ---------------- | -------------------------------------------- | ---------- |
+| `session_create` | Create new session (optionally as child)     | Medium     |
+| `session_update` | Update session metadata (title, description) | Low        |
+| `session_delete` | Delete session with cascade options          | High       |
 
 **Key Design Decisions**:
+
 - **Authorization**: Session creator has full access; parent session creator can manage child sessions
 - **Cascade Behavior**: Configurable via `cascade` parameter:
   - `cascade: false` (default): Reject delete if session has children, todos, or active tasks
@@ -80,6 +81,7 @@ Agents cannot programmatically manage their own workspace:
 - **Storage**: Use OpenCode client API (`client.session.create`)
 
 **File Structure**:
+
 ```
 src/tools/session-manager/
 ├── tools.ts          # Add session_create, session_update, session_delete (lines 148-400+)
@@ -89,20 +91,21 @@ src/tools/session-manager/
 ```
 
 **Example Usage**:
+
 ```typescript
 // Create child session for parallel work
 const child = await session_create({
   title: "Security audit - auth module",
   description: "Analyze authentication flows for vulnerabilities",
   parent_session_id: currentSessionId,
-  initial_prompt: "Review the auth module..."
+  initial_prompt: "Review the auth module...",
 });
 
 // Clean up completed work
 await session_delete({
   session_id: child.id,
-  cascade: true,  // Also delete children, cancel tasks
-  reason: "Analysis complete, findings documented in parent"
+  cascade: true, // Also delete children, cancel tasks
+  reason: "Analysis complete, findings documented in parent",
 });
 ```
 
@@ -112,23 +115,25 @@ await session_delete({
 
 **New Operations**:
 
-| Tool | Purpose | Complexity |
-|------|---------|------------|
-| `todo_create` | Create todo in current or specified session | Low |
-| `todo_list` | List todos with filters (status, priority, session) | Low |
-| `todo_update` | Update todo content, status, priority | Low |
-| `todo_delete` | Delete todo | Low |
+| Tool          | Purpose                                             | Complexity |
+| ------------- | --------------------------------------------------- | ---------- |
+| `todo_create` | Create todo in current or specified session         | Low        |
+| `todo_list`   | List todos with filters (status, priority, session) | Low        |
+| `todo_update` | Update todo content, status, priority               | Low        |
+| `todo_delete` | Delete todo                                         | Low        |
 
 **Key Design Decisions**:
+
 - **Scope**: Todos remain session-scoped (no cross-session todos)
 - **Storage**: Use OpenCode client API (`client.session.todo`)
-- **Validation**: 
+- **Validation**:
   - Content max 500 characters
   - Priority: "low" | "medium" | "high" | "critical"
   - Status: "pending" | "in_progress" | "completed" | "cancelled"
 - **Integration**: Existing `todo-continuation-enforcer.ts` hook already listens to todo changes
 
 **File Structure**:
+
 ```
 src/tools/todo-manager/          # NEW directory
 ├── tools.ts                     # Todo CRUD tools
@@ -138,20 +143,21 @@ src/tools/todo-manager/          # NEW directory
 ```
 
 **Example Usage**:
+
 ```typescript
 // Create follow-up tasks
 await todo_create({
   session_id: currentSessionId,
   content: "Add input validation to user registration",
   priority: "high",
-  note: "Found during security audit - SQL injection risk"
+  note: "Found during security audit - SQL injection risk",
 });
 
 // Mark complete and trigger continuation check
 await todo_update({
   todo_id: "todo-123",
   status: "completed",
-  completed_note: "Added parameterized queries"
+  completed_note: "Added parameterized queries",
 });
 ```
 
@@ -161,14 +167,15 @@ await todo_update({
 
 **New Operations**:
 
-| Tool | Purpose | Complexity |
-|------|---------|------------|
-| `skill_create` | Create new skill from template | High |
-| `skill_update` | Update skill metadata or content | High |
-| `skill_delete` | Delete custom skill | Medium |
-| `skill_list` | List available skills (builtin + custom) | Low |
+| Tool           | Purpose                                  | Complexity |
+| -------------- | ---------------------------------------- | ---------- |
+| `skill_create` | Create new skill from template           | High       |
+| `skill_update` | Update skill metadata or content         | High       |
+| `skill_delete` | Delete custom skill                      | Medium     |
+| `skill_list`   | List available skills (builtin + custom) | Low        |
 
 **Key Design Decisions**:
+
 - **Builtin Protection**: Builtin skills (prefix: `grid:`) cannot be modified or deleted
 - **Storage**: File-based in `~/.config/opencode/skills/` (user) or `.opencode/skills/` (project)
 - **Validation**: Use existing `SkillDefinitionSchema` from `src/config/schema.ts:454-467`
@@ -176,6 +183,7 @@ await todo_update({
 - **Cache Invalidation**: Clear skill cache on create/update/delete
 
 **File Structure**:
+
 ```
 src/tools/skill/
 ├── tools.ts              # Add skill_create, skill_update, skill_delete, skill_list
@@ -190,26 +198,27 @@ src/tools/skill/
 ```
 
 **Example Usage**:
+
 ```typescript
 // Create a domain-specific analysis skill
 await skill_create({
   name: "rails-security-audit",
   description: "Analyze Rails code for security vulnerabilities",
   template: "analysis-skill",
-  scope: "user",  // or "project"
+  scope: "user", // or "project"
   variables: {
     domain: "Ruby on Rails",
-    focus_areas: ["SQL injection", "XSS", "CSRF", "mass assignment"]
-  }
+    focus_areas: ["SQL injection", "XSS", "CSRF", "mass assignment"],
+  },
 });
 
 // Update skill after learning new pattern
 await skill_update({
   skill_name: "rails-security-audit",
   updates: {
-    description: "Enhanced Rails security audit with GraphQL support"
+    description: "Enhanced Rails security audit with GraphQL support",
   },
-  append_to_content: "\n## GraphQL Specific Checks\n- Check for N+1 queries in resolvers\n..."
+  append_to_content: "\n## GraphQL Specific Checks\n- Check for N+1 queries in resolvers\n...",
 });
 ```
 
@@ -219,13 +228,14 @@ await skill_update({
 
 **New Operations**:
 
-| Tool | Purpose | Complexity |
-|------|---------|------------|
-| `background_task_list` | List tasks by session or status | Low |
-| `background_task_update` | Retry, pause, or resume task | Medium |
-| `background_task_info` | Get detailed task status and output | Low |
+| Tool                     | Purpose                             | Complexity |
+| ------------------------ | ----------------------------------- | ---------- |
+| `background_task_list`   | List tasks by session or status     | Low        |
+| `background_task_update` | Retry, pause, or resume task        | Medium     |
+| `background_task_info`   | Get detailed task status and output | Low        |
 
 **Key Design Decisions**:
+
 - **Storage**: Leverage existing `BackgroundManager` in-memory storage
 - **Access Control**: Task creator or parent session creator can manage tasks
 - **Operations**:
@@ -235,6 +245,7 @@ await skill_update({
   - `cancel`: Already exists via `createBackgroundCancel`
 
 **File Structure**:
+
 ```
 src/tools/background-task/
 ├── tools.ts              # Add task_list, task_update, task_info
@@ -244,18 +255,19 @@ src/tools/background-task/
 ```
 
 **Example Usage**:
+
 ```typescript
 // List all tasks for current session
 const tasks = await background_task_list({
   parent_session_id: currentSessionId,
-  status: ["running", "failed"]  // Filter options
+  status: ["running", "failed"], // Filter options
 });
 
 // Retry failed task
 await background_task_update({
   task_id: "task-456",
   operation: "retry",
-  reason: "Fixed the file permissions issue"
+  reason: "Fixed the file permissions issue",
 });
 ```
 
@@ -273,7 +285,7 @@ await background_task_update({
    - File: `src/tools/session-manager/types.ts`
    - Add `SessionPermissions` interface
    - Add ownership tracking to session metadata
-   - **Acceptance Criteria**: 
+   - **Acceptance Criteria**:
      - [ ] Authorization model documented in code comments
      - [ ] Unit tests for permission checks
 
@@ -322,40 +334,40 @@ await background_task_update({
 ```typescript
 // Test file: src/tools/session-manager/tools.test.ts
 
-describe('session_create', () => {
-  it('creates root session successfully', async () => {
+describe("session_create", () => {
+  it("creates root session successfully", async () => {
     //#given no parent session
     //#when creating session
     //#then session created with correct metadata
   });
 
-  it('creates child session with valid parent', async () => {
+  it("creates child session with valid parent", async () => {
     //#given existing parent session
     //#when creating child session
     //#then child linked to parent
   });
 
-  it('fails with invalid parent session', async () => {
+  it("fails with invalid parent session", async () => {
     //#given non-existent parent_id
     //#when creating child session
     //#then throws SessionNotFoundError
   });
 });
 
-describe('session_delete', () => {
-  it('deletes leaf session successfully', async () => {
+describe("session_delete", () => {
+  it("deletes leaf session successfully", async () => {
     //#given session with no children
     //#when deleting session
     //#then session removed
   });
 
-  it('rejects delete when children exist (cascade: false)', async () => {
+  it("rejects delete when children exist (cascade: false)", async () => {
     //#given session with children
     //#when deleting without cascade
     //#then throws SessionHasChildrenError
   });
 
-  it('cascades delete to children (cascade: true)', async () => {
+  it("cascades delete to children (cascade: true)", async () => {
     //#given session with nested children
     //#when deleting with cascade
     //#then all sessions removed recursively
@@ -428,22 +440,22 @@ describe('session_delete', () => {
 ```typescript
 // Test file: src/tools/todo-manager/tools.test.ts
 
-describe('todo_create', () => {
-  it('creates todo in current session', async () => {
+describe("todo_create", () => {
+  it("creates todo in current session", async () => {
     //#given valid session
     //#when creating todo
     //#then todo created with correct metadata
   });
 
-  it('rejects todo with content too long', async () => {
+  it("rejects todo with content too long", async () => {
     //#given content > 500 chars
     //#when creating todo
     //#then throws ValidationError
   });
 });
 
-describe('todo_update', () => {
-  it('updates status and sets completed_at', async () => {
+describe("todo_update", () => {
+  it("updates status and sets completed_at", async () => {
     //#given pending todo
     //#when marking completed
     //#then status updated and timestamp set
@@ -521,20 +533,20 @@ describe('todo_update', () => {
 ```typescript
 // Test file: src/tools/skill/tools.test.ts
 
-describe('skill_create', () => {
-  it('creates skill from template', async () => {
+describe("skill_create", () => {
+  it("creates skill from template", async () => {
     //#given valid template and variables
     //#when creating skill
     //#then SKILL.md created correctly
   });
 
-  it('rejects builtin skill name', async () => {
+  it("rejects builtin skill name", async () => {
     //#given name starting with "grid:"
     //#when creating skill
     //#then throws ReservedNameError
   });
 
-  it('invalidates cache after creation', async () => {
+  it("invalidates cache after creation", async () => {
     //#given cached skill list
     //#when creating new skill
     //#then cache cleared
@@ -591,16 +603,16 @@ describe('skill_create', () => {
 ```typescript
 // Test file: src/tools/background-task/tools.test.ts
 
-describe('background_task_list', () => {
-  it('lists tasks by session', async () => {
+describe("background_task_list", () => {
+  it("lists tasks by session", async () => {
     //#given tasks in session
     //#when listing tasks
     //#then returns correct tasks
   });
 });
 
-describe('background_task_update', () => {
-  it('retries failed task', async () => {
+describe("background_task_update", () => {
+  it("retries failed task", async () => {
     //#given failed task
     //#when retrying
     //#then task restarted
@@ -685,10 +697,10 @@ describe('background_task_update', () => {
 // src/tools/session-manager/types.ts
 
 interface SessionPermissions {
-  owner: string;              // Agent identifier who created session
-  read: string[];             // Agent patterns with read access
-  write: string[];            // Agent patterns with write access
-  delete: string[];           // Agent patterns with delete access
+  owner: string; // Agent identifier who created session
+  read: string[]; // Agent patterns with read access
+  write: string[]; // Agent patterns with write access
+  delete: string[]; // Agent patterns with delete access
 }
 
 interface SessionMetadata {
@@ -713,17 +725,17 @@ interface SessionMetadata {
 
 interface DeleteSessionOptions {
   session_id: string;
-  cascade?: boolean;          // Default: false
-  force?: boolean;            // Default: false
-  archive_todos?: boolean;    // Default: true
-  reason?: string;            // Audit trail
+  cascade?: boolean; // Default: false
+  force?: boolean; // Default: false
+  archive_todos?: boolean; // Default: true
+  reason?: string; // Audit trail
 }
 
 enum CascadeBehavior {
-  REJECT_IF_CHILDREN = 'reject',     // Safe default
-  DELETE_CHILDREN = 'delete',        // Recursive delete
-  ORPHAN_CHILDREN = 'orphan',        // Remove parent ref
-  ARCHIVE_SESSION = 'archive'        // Soft delete
+  REJECT_IF_CHILDREN = "reject", // Safe default
+  DELETE_CHILDREN = "delete", // Recursive delete
+  ORPHAN_CHILDREN = "orphan", // Remove parent ref
+  ARCHIVE_SESSION = "archive", // Soft delete
 }
 ```
 
@@ -732,10 +744,10 @@ enum CascadeBehavior {
 ```typescript
 // src/tools/todo-manager/types.ts
 
-import { z } from 'zod';
+import { z } from "zod";
 
-const TodoPriority = z.enum(['low', 'medium', 'high', 'critical']);
-const TodoStatus = z.enum(['pending', 'in_progress', 'completed', 'cancelled']);
+const TodoPriority = z.enum(["low", "medium", "high", "critical"]);
+const TodoStatus = z.enum(["pending", "in_progress", "completed", "cancelled"]);
 
 const TodoSchema = z.object({
   id: z.string(),
@@ -747,14 +759,14 @@ const TodoSchema = z.object({
   created_at: z.date(),
   updated_at: z.date(),
   completed_at: z.date().optional(),
-  created_by: z.string()
+  created_by: z.string(),
 });
 
 const CreateTodoArgsSchema = z.object({
-  session_id: z.string().optional(),  // Default: current session
+  session_id: z.string().optional(), // Default: current session
   content: z.string().min(1).max(500),
-  priority: TodoPriority.default('medium'),
-  note: z.string().max(1000).optional()
+  priority: TodoPriority.default("medium"),
+  note: z.string().max(1000).optional(),
 });
 ```
 
@@ -763,28 +775,31 @@ const CreateTodoArgsSchema = z.object({
 ```typescript
 // src/tools/skill/types.ts
 
-const SkillScope = z.enum(['user', 'project']);
+const SkillScope = z.enum(["user", "project"]);
 
 const CreateSkillArgsSchema = z.object({
-  name: z.string().regex(/^[a-z0-9-]+$/),  // kebab-case, no builtin prefix
+  name: z.string().regex(/^[a-z0-9-]+$/), // kebab-case, no builtin prefix
   description: z.string().min(10).max(200),
-  template: z.enum(['agent', 'tool', 'hook', 'analysis']),
-  scope: SkillScope.default('user'),
-  variables: z.record(z.string()).optional()
+  template: z.enum(["agent", "tool", "hook", "analysis"]),
+  scope: SkillScope.default("user"),
+  variables: z.record(z.string()).optional(),
 });
 
-const UpdateSkillArgsSchema = z.object({
-  skill_name: z.string(),
-  updates: z.object({
-    description: z.string().optional(),
-    tags: z.array(z.string()).optional()
-  }).optional(),
-  append_to_content: z.string().optional(),
-  replace_content: z.string().optional()
-}).refine(data => 
-  data.updates || data.append_to_content || data.replace_content,
-  { message: "At least one update field required" }
-);
+const UpdateSkillArgsSchema = z
+  .object({
+    skill_name: z.string(),
+    updates: z
+      .object({
+        description: z.string().optional(),
+        tags: z.array(z.string()).optional(),
+      })
+      .optional(),
+    append_to_content: z.string().optional(),
+    replace_content: z.string().optional(),
+  })
+  .refine((data) => data.updates || data.append_to_content || data.replace_content, {
+    message: "At least one update field required",
+  });
 ```
 
 ---
@@ -871,14 +886,14 @@ const UpdateSkillArgsSchema = z.object({
 
 ### Secondary Metrics
 
-| Metric | Baseline | Target | Measurement |
-|--------|----------|--------|-------------|
-| Session CRUD | 40% (list/read/search/info) | 100% | Operations available / 5 |
-| Todo CRUD | 0% | 100% | Operations available / 4 |
-| Skill CRUD | 25% (read only) | 100% | Operations available / 4 |
-| Background Task | 40% (create/cancel) | 100% | Operations available / 5 |
-| Agent Autonomy Score | N/A | +50% | Survey agents on self-management capability |
-| User Workflow Interruption | High | Low | Time spent on manual CRUD operations |
+| Metric                     | Baseline                    | Target | Measurement                                 |
+| -------------------------- | --------------------------- | ------ | ------------------------------------------- |
+| Session CRUD               | 40% (list/read/search/info) | 100%   | Operations available / 5                    |
+| Todo CRUD                  | 0%                          | 100%   | Operations available / 4                    |
+| Skill CRUD                 | 25% (read only)             | 100%   | Operations available / 4                    |
+| Background Task            | 40% (create/cancel)         | 100%   | Operations available / 5                    |
+| Agent Autonomy Score       | N/A                         | +50%   | Survey agents on self-management capability |
+| User Workflow Interruption | High                        | Low    | Time spent on manual CRUD operations        |
 
 ### User Impact Metrics
 
@@ -916,14 +931,14 @@ None. This is purely internal Ghostwire architecture work.
 
 ## Risk Analysis & Mitigation
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| **Breaking existing workflows** | Medium | High | Comprehensive testing, feature flags for gradual rollout |
-| **Data loss during cascade delete** | Low | Critical | Default to safe mode (reject if children), archive before delete, audit trail |
-| **Unauthorized access** | Low | High | Authorization checks on all destructive operations, ownership tracking |
-| **Performance degradation** | Low | Medium | Benchmarking during development, lazy loading, caching |
-| **Cache inconsistency** | Medium | Medium | Invalidate cache on all CRUD operations, add cache tests |
-| **Concurrent modification conflicts** | Low | Medium | Optimistic locking or last-write-wins with conflict detection |
+| Risk                                  | Probability | Impact   | Mitigation                                                                    |
+| ------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------- |
+| **Breaking existing workflows**       | Medium      | High     | Comprehensive testing, feature flags for gradual rollout                      |
+| **Data loss during cascade delete**   | Low         | Critical | Default to safe mode (reject if children), archive before delete, audit trail |
+| **Unauthorized access**               | Low         | High     | Authorization checks on all destructive operations, ownership tracking        |
+| **Performance degradation**           | Low         | Medium   | Benchmarking during development, lazy loading, caching                        |
+| **Cache inconsistency**               | Medium      | Medium   | Invalidate cache on all CRUD operations, add cache tests                      |
+| **Concurrent modification conflicts** | Low         | Medium   | Optimistic locking or last-write-wins with conflict detection                 |
 
 ---
 
@@ -1034,25 +1049,27 @@ Trust all agents and don't implement authorization.
 
 ### Internal References
 
-| File | Lines | Description |
-|------|-------|-------------|
-| `src/tools/session-manager/tools.ts` | 29-147 | Existing session tools (list/read/search/info) |
-| `src/tools/session-manager/storage.ts` | 1-239 | Session storage patterns |
-| `src/tools/delegate-task/tools.ts` | 270-1414 | Complex tool factory pattern example |
-| `src/features/background-agent/manager.ts` | 109-171 | Task creation pattern |
-| `src/config/schema.ts` | 454-467 | SkillDefinitionSchema |
-| `src/hooks/todo-continuation-enforcer.ts` | 1-509 | Todo hook integration |
-| `src/tools/skill/tools.ts` | 129-212 | Skill loading pattern |
+| File                                       | Lines    | Description                                    |
+| ------------------------------------------ | -------- | ---------------------------------------------- |
+| `src/tools/session-manager/tools.ts`       | 29-147   | Existing session tools (list/read/search/info) |
+| `src/tools/session-manager/storage.ts`     | 1-239    | Session storage patterns                       |
+| `src/tools/delegate-task/tools.ts`         | 270-1414 | Complex tool factory pattern example           |
+| `src/features/background-agent/manager.ts` | 109-171  | Task creation pattern                          |
+| `src/config/schema.ts`                     | 454-467  | SkillDefinitionSchema                          |
+| `src/hooks/todo-continuation-enforcer.ts`  | 1-509    | Todo hook integration                          |
+| `src/tools/skill/tools.ts`                 | 129-212  | Skill loading pattern                          |
 
 ### Research Insights
 
 **From Repo Research**:
+
 - Tools follow factory pattern for context-dependent operations
 - Storage paths centralized in constants files
 - Hook-based architecture for cross-cutting concerns
 - Event system already exists for session management
 
 **From SpecFlow Analysis**:
+
 - Authorization model is critical gap requiring immediate attention
 - Cascade delete policies must be configurable
 - Concurrent modification needs conflict resolution
@@ -1138,7 +1155,7 @@ erDiagram
     SESSION ||--o{ TODO : "contains"
     SESSION ||--o{ BACKGROUND_TASK : "launches"
     SESSION ||--o{ SKILL : "uses"
-    
+
     SESSION {
         string id
         string title
@@ -1151,7 +1168,7 @@ erDiagram
         int todo_count
         int active_task_count
     }
-    
+
     TODO {
         string id
         string session_id
@@ -1164,7 +1181,7 @@ erDiagram
         datetime completed_at
         string created_by
     }
-    
+
     BACKGROUND_TASK {
         string id
         string parent_session_id
@@ -1176,7 +1193,7 @@ erDiagram
         datetime completed_at
         string output
     }
-    
+
     SKILL {
         string name
         string description

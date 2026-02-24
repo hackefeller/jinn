@@ -20,7 +20,7 @@ export async function parsePlanFile(planPath: string): Promise<WorkflowTaskList>
     return taskList;
   } catch (error) {
     throw new Error(
-      `Failed to parse task list JSON in ${planPath}: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to parse task list JSON in ${planPath}: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 }
@@ -28,10 +28,7 @@ export async function parsePlanFile(planPath: string): Promise<WorkflowTaskList>
 /**
  * Update a plan file with new task list (updates JSON block, preserves markdown)
  */
-export async function updatePlanFile(
-  planPath: string,
-  taskList: WorkflowTaskList
-): Promise<void> {
+export async function updatePlanFile(planPath: string, taskList: WorkflowTaskList): Promise<void> {
   const content = await readFile(planPath, "utf-8");
 
   // Preserve everything except the JSON task block
@@ -50,15 +47,15 @@ export async function updatePlanFile(
  */
 export function findTaskDependers(taskId: string, tasks: Task[]): string[] {
   return tasks
-    .filter(task => task.blockedBy && task.blockedBy.includes(taskId))
-    .map(task => task.id);
+    .filter((task) => task.blockedBy && task.blockedBy.includes(taskId))
+    .map((task) => task.id);
 }
 
 /**
  * Find all task IDs that block the given task
  */
 export function findTaskDependencies(taskId: string, tasks: Task[]): string[] {
-  const task = tasks.find(t => t.id === taskId);
+  const task = tasks.find((t) => t.id === taskId);
   return task?.blockedBy || [];
 }
 
@@ -75,7 +72,7 @@ export function getTransitiveDependencies(taskId: string, tasks: Task[]): string
     visited.add(current);
 
     const deps = findTaskDependencies(current, tasks);
-    queue.push(...deps.filter(d => !visited.has(d)));
+    queue.push(...deps.filter((d) => !visited.has(d)));
   }
 
   visited.delete(taskId); // Remove the original task
@@ -120,7 +117,7 @@ export function hasCircularDependency(tasks: Task[]): boolean {
  */
 export function validateTaskDependencies(tasks: Task[]): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
-  const taskIds = new Set(tasks.map(t => t.id));
+  const taskIds = new Set(tasks.map((t) => t.id));
 
   // Check for circular dependencies
   if (hasCircularDependency(tasks)) {

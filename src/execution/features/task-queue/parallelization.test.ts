@@ -175,7 +175,7 @@ describe("parallelization", () => {
 
     expect(wave1Tasks).toHaveLength(2);
     expect(wave2Tasks).toHaveLength(1);
-    expect(wave1Tasks.map(t => t.id)).toEqual(["task-1", "task-3"]);
+    expect(wave1Tasks.map((t) => t.id)).toEqual(["task-1", "task-3"]);
   });
 
   //#given a task list with waves

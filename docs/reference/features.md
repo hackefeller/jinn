@@ -1,6 +1,7 @@
 # Ghostwire Features
 
 Complete reference for Ghostwire's features. For component details, see:
+
 - [Agents](./agents.md) - AI agent reference
 - [Tools](./tools.md) - Available tools
 - [Lifecycle Hooks](./lifecycle-hooks.md) - Hook system
@@ -14,11 +15,11 @@ Skills provide specialized workflows with embedded MCP servers and detailed inst
 
 ### Built-in Skills
 
-| Skill | Trigger | Description |
-|-------|---------|-------------|
-| **playwright** | Browser tasks, testing, screenshots | Browser automation via Playwright MCP. MUST USE for any browser-related tasks - verification, browsing, web scraping, testing, screenshots. |
-| **frontend-ui-ux** | UI/UX tasks, styling | Designer-turned-developer persona. Crafts stunning UI/UX even without design mockups. Emphasizes bold aesthetic direction, distinctive typography, cohesive color palettes. |
-| **git-master** | commit, rebase, squash, blame | MUST USE for ANY git operations. Atomic commits with automatic splitting, rebase/squash workflows, history search (blame, bisect, log -S). |
+| Skill              | Trigger                             | Description                                                                                                                                                                 |
+| ------------------ | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **playwright**     | Browser tasks, testing, screenshots | Browser automation via Playwright MCP. MUST USE for any browser-related tasks - verification, browsing, web scraping, testing, screenshots.                                 |
+| **frontend-ui-ux** | UI/UX tasks, styling                | Designer-turned-developer persona. Crafts stunning UI/UX even without design mockups. Emphasizes bold aesthetic direction, distinctive typography, cohesive color palettes. |
+| **git-master**     | commit, rebase, squash, blame       | MUST USE for ANY git operations. Atomic commits with automatic splitting, rebase/squash workflows, history search (blame, bisect, log -S).                                  |
 
 ### Skill: Browser Automation (playwright / agent-browser)
 
@@ -38,6 +39,7 @@ mcp:
 ```
 
 **Usage**:
+
 ```
 /playwright Navigate to example.com and take a screenshot
 ```
@@ -55,11 +57,13 @@ Alternative provider using [Vercel's agent-browser CLI](https://github.com/verce
 ```
 
 **Requires installation**:
+
 ```bash
 bun add -g agent-browser
 ```
 
 **Usage**:
+
 ```
 Use agent-browser to navigate to example.com and extract the main heading
 ```
@@ -96,6 +100,7 @@ Three specializations in one:
 3. **History Archaeologist**: Finding when/where specific changes were introduced
 
 **Core Principle - Multiple Commits by Default**:
+
 ```
 3+ files -> MUST be 2+ commits
 5+ files -> MUST be 3+ commits
@@ -103,10 +108,12 @@ Three specializations in one:
 ```
 
 **Automatic Style Detection**:
+
 - Analyzes last 30 commits for language (Korean/English) and style (semantic/plain/short)
 - Matches your repo's commit conventions automatically
 
 **Usage**:
+
 ```
 /git-master commit these changes
 /git-master rebase onto main
@@ -116,6 +123,7 @@ Three specializations in one:
 ### Custom Skills
 
 Load custom skills from:
+
 - `.opencode/skills/*/SKILL.md` (project)
 - `~/.config/opencode/skills/*/SKILL.md` (user)
 - `.claude/skills/*/SKILL.md` (Claude Code compat)
@@ -131,21 +139,22 @@ Commands are slash-triggered workflows that execute predefined templates.
 
 ### Built-in Commands
 
-| Command | Description |
-|---------|-------------|
-| `/project:map` | Map project structure and generate hierarchical AGENTS.md knowledge base |
-| `/init-deep` | (deprecated, use /project:map) |
-| `/overclock-loop` | Start self-referential development loop until completion |
-| `/ulw-overclock` | Start ultrawork loop - continues with ultrawork mode |
-| `/cancel-overclock` | Cancel active Ralph Loop |
-| `/refactor` | Intelligent refactoring with LSP, AST-grep, architecture analysis, and TDD verification |
-| `/jack-in-work` | Start Cipher Operator work session from planner plan |
+| Command             | Description                                                                             |
+| ------------------- | --------------------------------------------------------------------------------------- |
+| `/project:map`      | Map project structure and generate hierarchical AGENTS.md knowledge base                |
+| `/init-deep`        | (deprecated, use /project:map)                                                          |
+| `/overclock-loop`   | Start self-referential development loop until completion                                |
+| `/ulw-overclock`    | Start ultrawork loop - continues with ultrawork mode                                    |
+| `/cancel-overclock` | Cancel active Ralph Loop                                                                |
+| `/refactor`         | Intelligent refactoring with LSP, AST-grep, architecture analysis, and TDD verification |
+| `/jack-in-work`     | Start Cipher Operator work session from planner plan                                    |
 
 ### Command: /project:map
 
 **Purpose**: Map project structure and generate hierarchical AGENTS.md files throughout your project
 
 **Usage**:
+
 ```
 /project:map [--create-new] [--max-depth=N]
 ```
@@ -153,6 +162,7 @@ Commands are slash-triggered workflows that execute predefined templates.
 **Aliases**: `/init-deep` (deprecated, use /project:map)
 
 Creates directory-specific context files that agents automatically read:
+
 ```
 project/
 ├── AGENTS.md              # Project-wide context
@@ -169,12 +179,14 @@ project/
 **Named after**: Anthropic's Ralph Wiggum plugin
 
 **Usage**:
+
 ```
 /overclock-loop "Build a REST API with authentication"
 /overclock-loop "Refactor the payment module" --max-iterations=50
 ```
 
 **Behavior**:
+
 - Agent works continuously toward the goal
 - Detects `<promise>DONE</promise>` to know when complete
 - Auto-continues if agent stops without completion
@@ -193,11 +205,13 @@ Everything runs at maximum intensity - parallel agents, background tasks, aggres
 **Purpose**: Intelligent refactoring with full toolchain
 
 **Usage**:
+
 ```
 /refactor <target> [--scope=<file|module|project>] [--strategy=<safe|aggressive>]
 ```
 
 **Features**:
+
 - LSP-powered rename and navigation
 - AST-grep for pattern matching
 - Architecture analysis before changes
@@ -209,6 +223,7 @@ Everything runs at maximum intensity - parallel agents, background tasks, aggres
 **Purpose**: Start execution from a planner-generated plan
 
 **Usage**:
+
 ```
 /jack-in-work [plan-name]
 ```
@@ -218,6 +233,7 @@ Uses orchestrator agent to execute planned tasks systematically.
 ### Custom Commands
 
 Load custom commands from:
+
 - `.opencode/command/*.md` (project)
 - `~/.config/opencode/command/*.md` (user)
 - `.claude/commands/*.md` (Claude Code compat)
@@ -272,6 +288,7 @@ mcp:
 ```
 
 When a skill MCP has `oauth` configured:
+
 - **Auto-discovery**: Fetches `/.well-known/oauth-protected-resource` (RFC 9728), falls back to `/.well-known/oauth-authorization-server` (RFC 8414)
 - **Dynamic Client Registration**: Auto-registers with servers supporting RFC 7591 (clientId becomes optional)
 - **PKCE**: Mandatory for all flows
@@ -313,11 +330,13 @@ Inject rules from `.claude/rules/` when conditions match:
 globs: ["*.ts", "src/**/*.js"]
 description: "TypeScript/JavaScript coding rules"
 ---
+
 - Use PascalCase for interface names
 - Use camelCase for function names
 ```
 
 Supports:
+
 - `.md` and `.mdc` files
 - `globs` field for pattern matching
 - `alwaysApply: true` for unconditional rules
@@ -331,21 +350,21 @@ Full compatibility layer for Claude Code configurations.
 
 ### Config Loaders
 
-| Type | Locations |
-|------|-----------|
-| **Commands** | `~/.claude/commands/`, `.claude/commands/` |
-| **Skills** | `~/.claude/skills/*/SKILL.md`, `.claude/skills/*/SKILL.md` |
-| **Agents** | `~/.claude/agents/*.md`, `.claude/agents/*.md` |
-| **MCPs** | `~/.claude/.mcp.json`, `.mcp.json`, `.claude/.mcp.json` |
+| Type         | Locations                                                  |
+| ------------ | ---------------------------------------------------------- |
+| **Commands** | `~/.claude/commands/`, `.claude/commands/`                 |
+| **Skills**   | `~/.claude/skills/*/SKILL.md`, `.claude/skills/*/SKILL.md` |
+| **Agents**   | `~/.claude/agents/*.md`, `.claude/agents/*.md`             |
+| **MCPs**     | `~/.claude/.mcp.json`, `.mcp.json`, `.claude/.mcp.json`    |
 
 MCP configs support environment variable expansion: `${VAR}`.
 
 ### Data Storage
 
-| Data | Location | Format |
-|------|----------|--------|
-| Todos | `~/.claude/todos/` | Claude Code compatible |
-| Transcripts | `~/.claude/transcripts/` | JSONL |
+| Data        | Location                 | Format                 |
+| ----------- | ------------------------ | ---------------------- |
+| Todos       | `~/.claude/todos/`       | Claude Code compatible |
+| Transcripts | `~/.claude/transcripts/` | JSONL                  |
 
 ### Compatibility Toggles
 
@@ -364,14 +383,14 @@ Disable specific features:
 }
 ```
 
-| Toggle | Disables |
-|--------|----------|
-| `mcp` | `.mcp.json` files (keeps built-in MCPs) |
-| `commands` | `~/.claude/commands/`, `.claude/commands/` |
-| `skills` | `~/.claude/skills/`, `.claude/skills/` |
-| `agents` | `~/.claude/agents/` (keeps built-in agents) |
-| `hooks` | settings.json hooks |
-| `plugins` | Claude Code marketplace plugins |
+| Toggle     | Disables                                    |
+| ---------- | ------------------------------------------- |
+| `mcp`      | `.mcp.json` files (keeps built-in MCPs)     |
+| `commands` | `~/.claude/commands/`, `.claude/commands/`  |
+| `skills`   | `~/.claude/skills/`, `.claude/skills/`      |
+| `agents`   | `~/.claude/agents/` (keeps built-in agents) |
+| `hooks`    | settings.json hooks                         |
+| `plugins`  | Claude Code marketplace plugins             |
 
 Disable specific plugins:
 

@@ -181,7 +181,7 @@ export function createConfigHandler(deps: ConfigHandlerDeps) {
       (config as { default_agent?: string }).default_agent = "operator";
 
       const agentConfig: Record<string, unknown> = {
-        "operator": builtinAgents["operator"],
+        operator: builtinAgents["operator"],
       };
 
       const executorBase = builtinAgents["executor"] as SDKAgentConfig | undefined;

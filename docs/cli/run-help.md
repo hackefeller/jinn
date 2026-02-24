@@ -11,5 +11,6 @@ $ bunx ghostwire run --timeout 3600000 "Large refactoring task"
 ## Notes
 
 Unlike `opencode run`, this command waits until:
+
 - All todos are completed or cancelled
 - All child sessions (background tasks) are idle

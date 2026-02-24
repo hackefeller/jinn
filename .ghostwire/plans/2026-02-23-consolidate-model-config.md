@@ -2,7 +2,7 @@
 
 **Status:** ✅ COMPLETED  
 **Created:** 2026-02-23  
-**Author:** planner  
+**Author:** planner
 
 ---
 
@@ -13,6 +13,7 @@ Remove the duplicate `models` section from ghostwire.json configuration and cons
 ## Context
 
 The ghostwire.json currently has 3 ways to set models:
+
 1. `models.defaults.agent` - NEW (duplicate, remove)
 2. `models.agents.operator` - NEW (duplicate, remove)
 3. `agents.operator.model` - EXISTING (correct, keep)
@@ -23,6 +24,7 @@ The `models` section was recently added but duplicates functionality already pre
 ## Target State
 
 **Single way to configure models:**
+
 ```json
 {
   "agents": {
@@ -92,6 +94,7 @@ The `models` section was recently added but duplicates functionality already pre
 - [x] **TODO-3.2**: Create new DEFAULT_AGENT_MODEL_OVERRIDES constant
   - **File:** `src/cli/config-manager.ts`
   - **Action:** Add constant at top of file (after imports):
+
   ```typescript
   /** Default agent model configuration for installation */
   const DEFAULT_AGENT_MODEL_OVERRIDES = {
@@ -111,6 +114,7 @@ The `models` section was recently added but duplicates functionality already pre
 - [x] **TODO-3.3**: Create new DEFAULT_CATEGORY_MODEL_OVERRIDES constant
   - **File:** `src/cli/config-manager.ts`
   - **Action:** Add constant after DEFAULT_AGENT_MODEL_OVERRIDES:
+
   ```typescript
   /** Default category model configuration for installation */
   const DEFAULT_CATEGORY_MODEL_OVERRIDES = {
@@ -129,6 +133,7 @@ The `models` section was recently added but duplicates functionality already pre
   - **File:** `src/cli/config-manager.ts`
   - **Lines:** 739-783
   - **Action:** Replace the function body to write to `agents` and `categories` instead of `models`:
+
   ```typescript
   export function writeModelConfig(): ConfigMergeResult {
     try {
@@ -206,26 +211,29 @@ The `models` section was recently added but duplicates functionality already pre
 ## Files Summary
 
 ### Files to DELETE (4)
-| File | Reason |
-|------|--------|
-| `src/platform/config/model-config.ts` | Duplicate functionality |
-| `src/platform/config/model-config.test.ts` | Tests for deleted file |
-| `src/platform/config/model-config-resolver.ts` | Duplicate resolution logic |
-| `src/platform/config/model-config-resolver.test.ts` | Tests for deleted file |
+
+| File                                                | Reason                     |
+| --------------------------------------------------- | -------------------------- |
+| `src/platform/config/model-config.ts`               | Duplicate functionality    |
+| `src/platform/config/model-config.test.ts`          | Tests for deleted file     |
+| `src/platform/config/model-config-resolver.ts`      | Duplicate resolution logic |
+| `src/platform/config/model-config-resolver.test.ts` | Tests for deleted file     |
 
 ### Files to MODIFY (2)
-| File | Changes |
-|------|---------|
-| `src/platform/config/schema.ts` | Remove import, models field, ModelsConfig export |
-| `src/cli/config-manager.ts` | Remove import, add constants, rewrite writeModelConfig() |
+
+| File                            | Changes                                                  |
+| ------------------------------- | -------------------------------------------------------- |
+| `src/platform/config/schema.ts` | Remove import, models field, ModelsConfig export         |
+| `src/cli/config-manager.ts`     | Remove import, add constants, rewrite writeModelConfig() |
 
 ### Files UNCHANGED (correct existing implementation)
-| File | Reason |
-|------|--------|
-| `src/orchestration/agents/model-resolver.ts` | Correct resolver using categories |
-| `src/execution/tools/delegate-task/constants.ts` | DEFAULT_CATEGORIES with model property |
-| `src/execution/tools/delegate-task/tools.ts` | resolveCategoryConfig() already works |
-| `src/cli/commands/sync-models.ts` | Already uses writeModelConfig() generically |
+
+| File                                             | Reason                                      |
+| ------------------------------------------------ | ------------------------------------------- |
+| `src/orchestration/agents/model-resolver.ts`     | Correct resolver using categories           |
+| `src/execution/tools/delegate-task/constants.ts` | DEFAULT_CATEGORIES with model property      |
+| `src/execution/tools/delegate-task/tools.ts`     | resolveCategoryConfig() already works       |
+| `src/cli/commands/sync-models.ts`                | Already uses writeModelConfig() generically |
 
 ---
 
@@ -240,11 +248,11 @@ The `models` section was recently added but duplicates functionality already pre
 
 ## Risks & Mitigations
 
-| Risk | Mitigation |
-|------|------------|
-| Breaking existing configs with `models` section | Greenfield - no users have this yet |
-| Missing import in obscure file | Grep + typecheck will catch |
-| Sync-models command broken | Command already calls writeModelConfig() generically |
+| Risk                                            | Mitigation                                           |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| Breaking existing configs with `models` section | Greenfield - no users have this yet                  |
+| Missing import in obscure file                  | Grep + typecheck will catch                          |
+| Sync-models command broken                      | Command already calls writeModelConfig() generically |
 
 ---
 

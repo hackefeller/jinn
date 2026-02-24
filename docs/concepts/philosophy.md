@@ -15,6 +15,7 @@ Think about autonomous driving. When a human has to take over the wheel, that's 
 **Why is coding any different?**
 
 When you find yourself:
+
 - Fixing the AI's half-finished code
 - Manually correcting obvious mistakes
 - Guiding the agent step-by-step through a task
@@ -33,6 +34,7 @@ When you find yourself:
 Not "AI-generated code that needs cleanup." Not "a good starting point." The actual, final, production-ready code.
 
 This means:
+
 - Following existing codebase patterns exactly
 - Proper error handling without being asked
 - Tests that actually test the right things
@@ -48,6 +50,7 @@ If you can tell whether a commit was made by a human or an agent, the agent has 
 **Higher token usage is acceptable if it significantly increases productivity.**
 
 Using more tokens to:
+
 - Have multiple specialized agents research in parallel
 - Get the job done completely without human intervention
 - Verify work thoroughly before completion
@@ -58,6 +61,7 @@ Using more tokens to:
 **However:**
 
 Unnecessary token waste is not pursued. The system optimizes for:
+
 - Using cheaper models for simple tasks
 - Avoiding redundant exploration
 - Caching learnings across sessions
@@ -78,6 +82,7 @@ Two approaches to achieve this:
 You say: "I want to add authentication."
 
 planner:
+
 - Researches your codebase to understand existing patterns
 - Asks clarifying questions based on actual findings
 - Surfaces edge cases you hadn't considered
@@ -91,6 +96,7 @@ planner:
 You say: "ulw add authentication"
 
 The agent:
+
 - Figures out the right approach
 - Researches best practices
 - Implements following conventions
@@ -110,6 +116,7 @@ In both cases, the human's job is to **express what they want**, not to manage h
 ### Predictable
 
 Given the same inputs:
+
 - Same codebase patterns
 - Same requirements
 - Same constraints
@@ -119,6 +126,7 @@ Given the same inputs:
 ### Continuous
 
 Work should survive interruptions:
+
 - Session crashes? Resume with `/jack-in-work`
 - Need to step away? Progress is tracked
 - Multi-day project? Context is preserved
@@ -130,6 +138,7 @@ The agent maintains state. You don't have to.
 Just like you can assign a task to a capable team member and trust them to handle it, you should be able to delegate to the agent.
 
 This means:
+
 - Clear acceptance criteria, verified independently
 - Self-correcting behavior when something goes wrong
 - Escalation (to Seer Advisor, to user) only when truly needed
@@ -148,16 +157,16 @@ Human Intent → Agent Execution → Verified Result
 
 Everything in Ghostwire is designed to make this loop work:
 
-| Feature | Purpose |
-|---------|---------|
-| planner | Extract intent through intelligent interview |
-| Tactician Strategist | Catch ambiguities before they become bugs |
-| Glitch Auditor | Verify plans are complete before execution |
-| Orchestrator | Coordinate work without human micromanagement |
-| Todo Continuation | Force completion, prevent "I'm done" lies |
-| Category System | Route to optimal model without human decision |
-| Background Agents | Parallel research without blocking user |
-| Wisdom Accumulation | Learn from work, don't repeat mistakes |
+| Feature              | Purpose                                       |
+| -------------------- | --------------------------------------------- |
+| planner              | Extract intent through intelligent interview  |
+| Tactician Strategist | Catch ambiguities before they become bugs     |
+| Glitch Auditor       | Verify plans are complete before execution    |
+| Orchestrator         | Coordinate work without human micromanagement |
+| Todo Continuation    | Force completion, prevent "I'm done" lies     |
+| Category System      | Route to optimal model without human decision |
+| Background Agents    | Parallel research without blocking user       |
+| Wisdom Accumulation  | Learn from work, don't repeat mistakes        |
 
 ---
 
@@ -178,6 +187,7 @@ Everything in Ghostwire is designed to make this loop work:
 ## The Future We're Building
 
 A world where:
+
 - Human developers focus on **what** to build, not **how** to get AI to build it
 - Code quality is independent of who (or what) wrote it
 - Complex projects are as easy as simple ones (just take longer)

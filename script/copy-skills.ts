@@ -9,21 +9,8 @@ import { join } from "node:path";
  */
 async function main(): Promise<void> {
   const projectRoot = process.cwd();
-  const sourceSkillsDir = join(
-    projectRoot,
-    "src",
-    "execution",
-    "features",
-    "skills",
-  );
-  const destinationSkillsDir = join(
-    projectRoot,
-    "dist",
-    "src",
-    "execution",
-    "features",
-    "skills",
-  );
+  const sourceSkillsDir = join(projectRoot, "src", "execution", "features", "skills");
+  const destinationSkillsDir = join(projectRoot, "dist", "src", "execution", "features", "skills");
 
   await mkdir(destinationSkillsDir, { recursive: true });
 
@@ -49,9 +36,7 @@ async function main(): Promise<void> {
     copiedCount += 1;
   }
 
-  console.log(
-    `Copied ${copiedCount} skill director${copiedCount === 1 ? "y" : "ies"} to dist.`,
-  );
+  console.log(`Copied ${copiedCount} skill director${copiedCount === 1 ? "y" : "ies"} to dist.`);
 }
 
 main().catch((error) => {

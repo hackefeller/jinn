@@ -81,7 +81,7 @@ export const VALID_CATEGORIES = [
   CATEGORY_WRITING,
 ] as const;
 
-export type ValidCategory = typeof VALID_CATEGORIES[number];
+export type ValidCategory = (typeof VALID_CATEGORIES)[number];
 
 /**
  * Validate that a category is valid
@@ -132,7 +132,7 @@ export const VALID_AGENT_IDS = [
   AGENT_RESOLVER_PR,
 ] as const;
 
-export type ValidAgentId = typeof VALID_AGENT_IDS[number];
+export type ValidAgentId = (typeof VALID_AGENT_IDS)[number];
 
 /**
  * Validate that an agent ID is valid
@@ -317,7 +317,7 @@ export const VALID_COMMAND_NAMES = [
   COMMAND_WORK_CANCEL,
 ] as const;
 
-export type ValidCommandName = typeof VALID_COMMAND_NAMES[number];
+export type ValidCommandName = (typeof VALID_COMMAND_NAMES)[number];
 
 /**
  * Validate that a command name is valid
@@ -376,7 +376,7 @@ export const VALID_SKILL_NAMES = [
   SKILL_SKILL_CREATOR,
 ] as const;
 
-export type ValidSkillName = typeof VALID_SKILL_NAMES[number];
+export type ValidSkillName = (typeof VALID_SKILL_NAMES)[number];
 
 /**
  * Validate that a skill name is valid

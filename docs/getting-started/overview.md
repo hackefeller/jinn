@@ -34,6 +34,7 @@ ulw add authentication to my Next.js app
 ```
 
 The agent will automatically:
+
 1. Search your codebase to understand existing patterns
 2. Research best practices via specialized agents
 3. Implement the feature following your conventions
@@ -61,6 +62,7 @@ For complex or critical tasks, press **Tab** to switch to planner mode.
    - Tracks progress across sessions (resume anytime)
 
 **When to use planner:**
+
 - Multi-day or multi-session projects
 - Critical production changes
 - Complex refactoring spanning many files
@@ -77,6 +79,7 @@ For complex or critical tasks, press **Tab** to switch to planner mode.
 The orchestrator is designed to execute work plans created by planner. Using it directly without a plan leads to unpredictable behavior.
 
 **Correct workflow:**
+
 ```
 1. Press Tab → Enter planner mode
 2. Describe work → planner interviews you
@@ -97,6 +100,7 @@ Ghostwire automatically configures models based on your available providers. You
 **1. At Installation Time (Interactive Installer)**
 
 When you run `bunx ghostwire install`, the installer asks which providers you have:
+
 - Claude Pro/Max subscription?
 - OpenAI/ChatGPT Plus?
 - Google Gemini?
@@ -131,20 +135,21 @@ Here's a real-world config for a user with **Claude, OpenAI, Gemini, and Z.ai** 
     "orchestrator": { "model": "opencode/kimi-k2.5" },
     "researcher-data": { "model": "opencode/kimi-k2.5" },
     "researcher-codebase": { "model": "opencode/kimi-k2.5" },
-    "analyzer-media": { "model": "opencode/kimi-k2.5" }
+    "analyzer-media": { "model": "opencode/kimi-k2.5" },
   },
   "categories": {
     // Override categories for optimization
     "quick": { "model": "opencode/kimi-k2.5" },
-    "unspecified-low": { "model": "opencode/kimi-k2.5" }
+    "unspecified-low": { "model": "opencode/kimi-k2.5" },
   },
   "experimental": {
-    "aggressive_truncation": true
-  }
+    "aggressive_truncation": true,
+  },
 }
 ```
 
 **Key points:**
+
 - You only need to override what you want to change
 - Unspecified agents/categories use the automatic fallback chain
 - Mix providers freely (Claude for main work, Z.ai for cheap tasks, etc.)
@@ -162,16 +167,19 @@ For detailed configuration options including per-agent settings, category custom
 ## Next Steps
 
 ### Core Documentation
+
 - [Installation Guide](./installation.md) - Detailed installation instructions
 - [Architecture](../concepts/orchestration.md) - Deep dive into planner → orchestrator → operator workflow
 - [Philosophy](../concepts/philosophy.md) - Principles behind Ghostwire
 
 ### Reference Documentation
+
 - [Configuration Guide](../reference/configurations.md) - Customize agents, models, and behaviors
 - [Features Reference](../reference/features.md) - Skills, commands, MCPs, and compatibility
 - [Category & Skill Guide](../how-to/category-skills.md) - Delegation system and combinations
 
 ### Component Reference
+
 - [Agents](../reference/agents.md) - AI agents and capabilities
 - [Tools](../reference/tools.md) - Available tools and usage
 - [Lifecycle Hooks](../reference/lifecycle-hooks.md) - Hook system and events

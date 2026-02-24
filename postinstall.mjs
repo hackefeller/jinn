@@ -13,7 +13,7 @@ function getLibcFamily() {
   if (process.platform !== "linux") {
     return undefined;
   }
-  
+
   try {
     const detectLibc = require("detect-libc");
     return detectLibc.familySync();
@@ -25,11 +25,11 @@ function getLibcFamily() {
 function main() {
   const { platform, arch } = process;
   const libcFamily = getLibcFamily();
-  
+
   try {
     const pkg = getPlatformPackage({ platform, arch, libcFamily });
     const binPath = getBinaryPath(pkg, platform);
-    
+
     // Try to resolve the binary
     require.resolve(binPath);
     console.log(`✓ ghostwire binary installed for ${platform}-${arch}`);

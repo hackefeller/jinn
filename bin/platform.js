@@ -13,14 +13,14 @@ export function getPlatformPackage({ platform, arch, libcFamily }) {
     if (libcFamily === null || libcFamily === undefined) {
       throw new Error(
         "Could not detect libc on Linux. " +
-        "Please ensure detect-libc is installed or report this issue."
+          "Please ensure detect-libc is installed or report this issue.",
       );
     }
     if (libcFamily === "musl") {
       suffix = "-musl";
     }
   }
-  
+
   // Map platform names: win32 -> windows (for package name)
   const os = platform === "win32" ? "windows" : platform;
   return `ghostwire-${os}-${arch}${suffix}`;

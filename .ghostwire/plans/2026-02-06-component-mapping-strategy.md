@@ -12,10 +12,11 @@ This document defines the mapping strategy for integrating 125+ ghostwire compon
 ### Current Compound-Engineering Inventory
 
 #### **Agents (28 total)**
+
 ```yaml
 Review Agents (5):
   - kieran-rails-reviewer
-  - kieran-python-reviewer  
+  - kieran-python-reviewer
   - kieran-typescript-reviewer
   - dhh-rails-reviewer
   - code-simplicity-reviewer
@@ -53,11 +54,12 @@ Documentation Agents (12):
 ```
 
 #### **Commands (24 total)**
+
 ```yaml
 Workflow Commands (4):
   - workflows:plan
   - workflows:create
-  - workflows:status  
+  - workflows:status
   - workflows:complete
 
 Code Commands (4):
@@ -92,6 +94,7 @@ Documentation Commands (4):
 ```
 
 #### **Skills (73 total)**
+
 ```yaml
 Development Skills (25):
   # Language/Framework specific programming skills
@@ -125,13 +128,15 @@ Analysis Skills (8):
 
 **Primary Namespace**: `grid:` prefix for all merged components
 
-**Rationale**: 
+**Rationale**:
+
 - Clear identification of ghostwire origin
 - Prevents naming conflicts with existing ghostwire components
 - Maintains traceability for debugging and documentation
 - Allows selective enabling/disabling by namespace
 
 **Examples**:
+
 - `grid:kieran-rails-reviewer`
 - `grid:workflows:plan`
 - `grid:frontend-design`
@@ -139,6 +144,7 @@ Analysis Skills (8):
 ### **2. Directory Structure Mapping**
 
 #### **Agents Integration**
+
 ```
 src/agents/compound/
 ├── review/                    # 5 review agents
@@ -177,6 +183,7 @@ src/agents/compound/
 ```
 
 #### **Commands Integration**
+
 ```
 src/features/builtin-commands/compound/
 ├── workflows/                   # 4 workflow commands
@@ -212,6 +219,7 @@ src/features/builtin-commands/compound/
 ```
 
 #### **Skills Integration**
+
 ```
 src/features/builtin-skills/compound/
 ├── development/                 # 25 development skills
@@ -237,58 +245,62 @@ src/features/builtin-skills/compound/
 ### **3. Conflict Analysis**
 
 #### **Potential Naming Conflicts**
+
 ```typescript
 // Existing ghostwire agents
 const existingAgents = [
-  'cipher-operator', 'seer-advisor', 'archive-researcher', 'scout-recon', 'zen-planner'
+  "cipher-operator",
+  "seer-advisor",
+  "archive-researcher",
+  "scout-recon",
+  "zen-planner",
 ];
 
 // Compound agents (no conflicts - all have descriptive names)
 const compoundAgents = [
-  'kieran-rails-reviewer', 'kieran-python-reviewer', 'framework-docs-researcher'
+  "kieran-rails-reviewer",
+  "kieran-python-reviewer",
+  "framework-docs-researcher",
   // ... all unique names
 ];
 
 // Resolution: Use grid: prefix
-const finalAgentNames = compoundAgents.map(name => `grid:${name}`);
+const finalAgentNames = compoundAgents.map((name) => `grid:${name}`);
 ```
 
 #### **Command Conflicts**
+
 ```typescript
 // Potential conflicts with existing commands
-const existingCommands = [
-  'ulw', 'overclock-loop', 'refactor', 'init-deep', 'jack-in-work'
-];
+const existingCommands = ["ulw", "overclock-loop", "refactor", "init-deep", "jack-in-work"];
 
 // Compound commands (potential conflicts)
-const conflicts = [
-  'refactor', 'init', 'test', 'review'
-];
+const conflicts = ["refactor", "init", "test", "review"];
 
 // Resolution: grid: prefix maintains uniqueness
-const compoundCommands = [
-  'grid:workflows:plan',
-  'grid:code:refactor', 
-  'grid:project:test'
-];
+const compoundCommands = ["grid:workflows:plan", "grid:code:refactor", "grid:project:test"];
 ```
 
 #### **Skill Conflicts**
+
 ```typescript
 // Minimal skill name conflicts expected
 // Most compound skills have unique, descriptive names
 const compoundSkills = [
-  'frontend-design', 'figma-design-sync', 'andrew-kane-gem-writer'
+  "frontend-design",
+  "figma-design-sync",
+  "andrew-kane-gem-writer",
   // ... all unique
 ];
 
 // Resolution: grid: prefix for consistency
-const finalSkillNames = compoundSkills.map(name => `grid:${name}`);
+const finalSkillNames = compoundSkills.map((name) => `grid:${name}`);
 ```
 
 ### **4. Integration Patterns**
 
 #### **Agent Factory Pattern**
+
 ```typescript
 // Example: kieran-rails-reviewer.ts
 export function createKieranRailsReviewerAgent(): AgentConfig {
@@ -298,12 +310,13 @@ export function createKieranRailsReviewerAgent(): AgentConfig {
     temperature: 0.1,
     description: "Rails code review with Kieran's strict conventions",
     prompt: `You are Kieran, conducting Rails code review...`,
-    toolRestrictions: createAgentToolRestrictions(['lsp', 'ast_grep', 'delegate_task'])
+    toolRestrictions: createAgentToolRestrictions(["lsp", "ast_grep", "delegate_task"]),
   };
 }
 ```
 
 #### **Command Template Pattern**
+
 ```typescript
 // Example: workflows:plan.ts
 export const workflowsPlanCommand: Omit<CommandDefinition, "name"> = {
@@ -318,22 +331,25 @@ ${TEMPLATE}
 ```
 
 #### **Skill Definition Pattern**
+
 ```typescript
 // Example: frontend-design.ts
 export const frontendDesignSkill: BuiltinSkill = {
   name: "grid:frontend-design",
-  description: "This skill should be used when creating distinctive, production-grade frontend interfaces",
+  description:
+    "This skill should be used when creating distinctive, production-grade frontend interfaces",
   template: `# Frontend Design Skill
 
 You are creating frontend interfaces that avoid generic AI aesthetics...
 `,
-  mcpConfig: undefined
+  mcpConfig: undefined,
 };
 ```
 
 ## **5. Migration Strategy**
 
 ### **Configuration Migration**
+
 ```typescript
 // Before: Import configuration
 interface ImportConfig {
@@ -341,10 +357,10 @@ interface ImportConfig {
     enabled: boolean;
     path: string;
     namespace: string;
-  }
+  };
 }
 
-// After: Unified configuration  
+// After: Unified configuration
 interface CompoundConfig {
   enabled: boolean;
   components: {
@@ -366,12 +382,13 @@ export function migrateConfig(oldConfig: ImportConfig): CompoundConfig {
       skills: true,
     },
     disabled_components: [],
-    namespace: "compound"
+    namespace: "compound",
   };
 }
 ```
 
 ### **Registration Updates**
+
 ```typescript
 // src/agents/utils.ts - Update agent sources
 export const agentSources: Record<BuiltinAgentName, AgentSource> = {
@@ -399,14 +416,16 @@ const compoundSkills: BuiltinSkill[] = [
 ## **Implementation Priority**
 
 ### **Phase 1 Execution Order**
+
 1. **Directory Structure Creation** (Day 1)
 2. **Agent Integration** (Days 1-2) - 28 components
-3. **Command Integration** (Days 2-3) - 24 components  
+3. **Command Integration** (Days 2-3) - 24 components
 4. **Skill Integration** (Days 3-4) - 73 components
 5. **Registration System Updates** (Day 4)
 6. **Configuration Migration System** (Day 5)
 
 ### **Critical Success Factors**
+
 - **Namespace Consistency**: All components use `grid:` prefix
 - **Performance Impact**: < 100MB additional memory overhead
 - **Startup Time**: < 5 seconds with all components enabled

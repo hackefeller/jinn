@@ -9,21 +9,24 @@ IMMEDIATELY output the analysis. NO questions. NO preamble.
 ## CRITICAL: DO NOT just copy commit messages!
 
 For each commit, you MUST:
+
 1. Read the actual diff to understand WHAT CHANGED
 2. Describe the REAL change in plain language
 3. Explain WHY it matters (if not obvious)
 
 ## Steps:
+
 1. Run `git diff v{published-version}..HEAD` to see actual changes
 2. Group by type (feat/fix/refactor/docs) with REAL descriptions
 3. Note breaking changes if any
 4. Recommend version bump (major/minor/patch)
 
 ## Output Format:
+
 - feat: "Added X that does Y" (not just "add X feature")
 - fix: "Fixed bug where X happened, now Y" (not just "fix X bug")
 - refactor: "Changed X from A to B, now supports C" (not just "rename X")
-</command-instruction>
+  </command-instruction>
 
 <version-context>
 <published-version>
@@ -53,32 +56,39 @@ For each commit, you MUST:
 ## Unpublished Changes (v{published} → HEAD)
 
 ### feat
-| Scope | What Changed |
-|-------|--------------|
-| X |  Actual change description |
+
+| Scope | What Changed              |
+| ----- | ------------------------- |
+| X     | Actual change description |
 
 ### fix
-| Scope | What Changed |
-|-------|--------------|
-| X |  Actual change description |
+
+| Scope | What Changed              |
+| ----- | ------------------------- |
+| X     | Actual change description |
 
 ### refactor
-| Scope | What Changed |
-|-------|--------------|
-| X |  Actual change description |
+
+| Scope | What Changed              |
+| ----- | ------------------------- |
+| X     | Actual change description |
 
 ### docs
-| Scope | What Changed |
-|-------|--------------|
-| X |  Actual change description |
+
+| Scope | What Changed              |
+| ----- | ------------------------- |
+| X     | Actual change description |
 
 ### Breaking Changes
+
 None 또는 목록
 
 ### Files Changed
+
 {diff-stat}
 
 ### Suggested Version Bump
+
 - **Recommendation**: patch|minor|major
 - **Reason**: 이유
-</output-format>
+  </output-format>

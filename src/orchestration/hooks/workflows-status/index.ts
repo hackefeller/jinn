@@ -67,9 +67,7 @@ function calculateMetrics(tasks: Task[]): WorkflowMetrics {
   }
   const currentWave = Math.min(
     maxWave,
-    completedWaves.size > 0
-      ? Math.max(...Array.from(completedWaves)) + 1
-      : 1
+    completedWaves.size > 0 ? Math.max(...Array.from(completedWaves)) + 1 : 1,
   );
 
   // Estimate remaining time (based on effort estimates of pending/in-progress tasks)
@@ -86,8 +84,7 @@ function calculateMetrics(tasks: Task[]): WorkflowMetrics {
 
   const hours = Math.floor(remainingEffort / 60);
   const mins = remainingEffort % 60;
-  const estimatedRemaining =
-    hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+  const estimatedRemaining = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
   return {
     completed,
@@ -115,11 +112,7 @@ function buildProgressBar(metrics: WorkflowMetrics): string {
 /**
  * Format status report
  */
-function formatStatusReport(
-  planPath: string,
-  metrics: WorkflowMetrics,
-  tasks: Task[]
-): string {
+function formatStatusReport(planPath: string, metrics: WorkflowMetrics, tasks: Task[]): string {
   const completedTasks = tasks.filter((t) => t.status === "completed");
   const inProgressTasks = tasks.filter((t) => t.status === "in_progress");
   const pendingTasks = tasks.filter((t) => t.status === "pending");
@@ -129,8 +122,7 @@ function formatStatusReport(
   if (metrics.percentage === 100) {
     nextAction = `Run: \`/ghostwire:workflows:complete ${planPath}\``;
   } else if (metrics.inProgress > 0) {
-    nextAction =
-      `Wave ${metrics.currentWave} in progress. Check back soon, or run: \`/ghostwire:workflows:execute ${planPath}\` to continue`;
+    nextAction = `Wave ${metrics.currentWave} in progress. Check back soon, or run: \`/ghostwire:workflows:execute ${planPath}\` to continue`;
   } else if (metrics.pending > 0) {
     nextAction = `Run: \`/ghostwire:workflows:execute ${planPath}\` to start next wave`;
   } else {
@@ -154,18 +146,14 @@ ${buildProgressBar(metrics)}
 ### Completed Tasks (${completedTasks.length})
 ${
   completedTasks.length > 0
-    ? completedTasks
-        .map((t) => `- ✅ **${t.subject}** (\`${t.id}\`)`)
-        .join("\n")
+    ? completedTasks.map((t) => `- ✅ **${t.subject}** (\`${t.id}\`)`).join("\n")
     : "None yet"
 }
 
 ### In Progress Tasks (${inProgressTasks.length})
 ${
   inProgressTasks.length > 0
-    ? inProgressTasks
-        .map((t) => `- ⏳ **${t.subject}** (\`${t.id}\`)`)
-        .join("\n")
+    ? inProgressTasks.map((t) => `- ⏳ **${t.subject}** (\`${t.id}\`)`).join("\n")
     : "None"
 }
 
@@ -201,7 +189,7 @@ export function createWorkflowsStatusHook(ctx: PluginInput) {
   return {
     "chat.message": async (
       input: WorkflowsStatusInput,
-      output: WorkflowsStatusOutput
+      output: WorkflowsStatusOutput,
     ): Promise<void> => {
       const parts = output.parts;
       const promptText =
@@ -214,8 +202,7 @@ export function createWorkflowsStatusHook(ctx: PluginInput) {
       // Only trigger on workflows:status command
       const isWorkflowsStatusCommand =
         promptText.includes("workflows:status") ||
-        (promptText.includes("status") &&
-          promptText.includes("workflow"));
+        (promptText.includes("status") && promptText.includes("workflow"));
 
       if (!isWorkflowsStatusCommand) {
         return;

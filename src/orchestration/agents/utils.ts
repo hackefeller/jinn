@@ -18,11 +18,7 @@ import type {
   AvailableCategory,
   AvailableSkill,
 } from "./dynamic-agent-prompt-builder";
-import {
-  deepMerge,
-  findCaseInsensitive,
-  includesCaseInsensitive,
-} from "../../integration/shared";
+import { deepMerge, findCaseInsensitive, includesCaseInsensitive } from "../../integration/shared";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -41,10 +37,7 @@ import {
 } from "../../execution/tools/delegate-task/constants";
 import { resolveMultipleSkills } from "../../execution/features/opencode-skill-loader/skill-content";
 import { createSkills } from "../../execution/features/skills";
-import type {
-  LoadedSkill,
-  SkillScope,
-} from "../../execution/features/opencode-skill-loader/types";
+import type { LoadedSkill, SkillScope } from "../../execution/features/opencode-skill-loader/types";
 import type { BrowserAutomationProvider } from "../../platform/config/schema";
 export {
   createAgentToolAllowlist,
@@ -180,10 +173,7 @@ export function buildAgent(
       if (!base.model) {
         base.model = categoryConfig.model;
       }
-      if (
-        base.temperature === undefined &&
-        categoryConfig.temperature !== undefined
-      ) {
+      if (base.temperature === undefined && categoryConfig.temperature !== undefined) {
         base.temperature = categoryConfig.temperature;
       }
       if (base.variant === undefined && categoryConfig.variant !== undefined) {
@@ -260,27 +250,20 @@ function applyCategoryOverride(
 
   const result = { ...config } as AgentConfig & Record<string, unknown>;
   if (categoryConfig.model) result.model = categoryConfig.model;
-  if (categoryConfig.variant !== undefined)
-    result.variant = categoryConfig.variant;
-  if (categoryConfig.temperature !== undefined)
-    result.temperature = categoryConfig.temperature;
+  if (categoryConfig.variant !== undefined) result.variant = categoryConfig.variant;
+  if (categoryConfig.temperature !== undefined) result.temperature = categoryConfig.temperature;
   if (categoryConfig.reasoningEffort !== undefined)
     result.reasoningEffort = categoryConfig.reasoningEffort;
   if (categoryConfig.textVerbosity !== undefined)
     result.textVerbosity = categoryConfig.textVerbosity;
-  if (categoryConfig.thinking !== undefined)
-    result.thinking = categoryConfig.thinking;
+  if (categoryConfig.thinking !== undefined) result.thinking = categoryConfig.thinking;
   if (categoryConfig.top_p !== undefined) result.top_p = categoryConfig.top_p;
-  if (categoryConfig.maxTokens !== undefined)
-    result.maxTokens = categoryConfig.maxTokens;
+  if (categoryConfig.maxTokens !== undefined) result.maxTokens = categoryConfig.maxTokens;
 
   return result as AgentConfig;
 }
 
-function mergeAgentConfig(
-  base: AgentConfig,
-  override: AgentOverrideConfig,
-): AgentConfig {
+function mergeAgentConfig(base: AgentConfig, override: AgentOverrideConfig): AgentConfig {
   const { prompt_append, ...rest } = override;
   const merged = deepMerge(base, rest as Partial<AgentConfig>);
 
@@ -327,13 +310,9 @@ export async function createAgents(
   } = options;
   // If no directory provided, don't construct one - let loadMarkdownAgents
   // use the embedded manifest exclusively
-  const agentsDir = directory
-    ? join(directory, "src/orchestration/agents")
-    : undefined;
+  const agentsDir = directory ? join(directory, "src/orchestration/agents") : undefined;
   const markdownAgents = await loadMarkdownAgents(agentsDir);
-  const markdownAgentMap = new Map(
-    markdownAgents.map((agent) => [agent.id, agent]),
-  );
+  const markdownAgentMap = new Map(markdownAgents.map((agent) => [agent.id, agent]));
   const agentSources = new Map<string, AgentSource>(
     markdownAgents
       .filter((agent) => agent.id !== "operator" && agent.id !== "orchestrator")
@@ -350,9 +329,8 @@ export async function createAgents(
   let connectedProviders = readConnectedProvidersCache();
   if (connectedProviders === null && client) {
     try {
-      const { updateConnectedProvidersCache } = await import(
-        "../../platform/opencode/connected-providers-cache"
-      );
+      const { updateConnectedProvidersCache } =
+        await import("../../platform/opencode/connected-providers-cache");
       await updateConnectedProvidersCache(client);
       connectedProviders = readConnectedProvidersCache();
     } catch (err) {
@@ -373,15 +351,13 @@ export async function createAgents(
     ? { ...DEFAULT_CATEGORIES, ...categories }
     : DEFAULT_CATEGORIES;
 
-  const availableCategories: AvailableCategory[] = Object.entries(
-    mergedCategories,
-  ).map(([name]) => ({
-    name,
-    description:
-      categories?.[name]?.description ??
-      CATEGORY_DESCRIPTIONS[name] ??
-      "General tasks",
-  }));
+  const availableCategories: AvailableCategory[] = Object.entries(mergedCategories).map(
+    ([name]) => ({
+      name,
+      description:
+        categories?.[name]?.description ?? CATEGORY_DESCRIPTIONS[name] ?? "General tasks",
+    }),
+  );
 
   const skills = createSkills({ browserProvider });
   const skillNames = new Set(skills.map((s) => s.name));
@@ -400,13 +376,9 @@ export async function createAgents(
       location: mapScopeToLocation(skill.scope),
     }));
 
-  const availableSkills: AvailableSkill[] = [
-    ...skillsAvailable,
-    ...discoveredAvailable,
-  ];
+  const availableSkills: AvailableSkill[] = [...skillsAvailable, ...discoveredAvailable];
 
   for (const [agentName, source] of agentSources.entries()) {
-
     if (agentName === "orchestrator") continue;
     if (includesCaseInsensitive(disabledAgents, agentName)) continue;
 
@@ -462,14 +434,11 @@ export async function createAgents(
     }
 
     // Expand override.category into concrete properties (higher priority than factory/resolved)
-    const overrideCategory = (override as Record<string, unknown> | undefined)
-      ?.category as string | undefined;
+    const overrideCategory = (override as Record<string, unknown> | undefined)?.category as
+      | string
+      | undefined;
     if (overrideCategory) {
-      config = applyCategoryOverride(
-        config,
-        overrideCategory,
-        mergedCategories,
-      );
+      config = applyCategoryOverride(config, overrideCategory, mergedCategories);
     }
 
     if (agentName === "researcher-data" && directory && config.prompt) {
@@ -484,9 +453,7 @@ export async function createAgents(
 
     result[agentName] = config;
 
-    const metadata = markdownAgent
-      ? mapMarkdownMetadataToPromptMetadata(markdownAgent)
-      : undefined;
+    const metadata = markdownAgent ? mapMarkdownMetadataToPromptMetadata(markdownAgent) : undefined;
     if (metadata) {
       availableAgents.push({
         name: agentName,
@@ -510,8 +477,7 @@ export async function createAgents(
     });
 
     if (cipherResolution && operatorMarkdown) {
-      const { model: cipherModel, variant: cipherResolvedVariant } =
-        cipherResolution;
+      const { model: cipherModel, variant: cipherResolvedVariant } = cipherResolution;
 
       let cipherConfig = buildOperatorAgentConfig(operatorMarkdown, cipherModel);
 
@@ -519,15 +485,10 @@ export async function createAgents(
         cipherConfig = { ...cipherConfig, variant: cipherResolvedVariant };
       }
 
-      const sisOverrideCategory = (
-        cipherOverride as Record<string, unknown> | undefined
-      )?.category as string | undefined;
+      const sisOverrideCategory = (cipherOverride as Record<string, unknown> | undefined)
+        ?.category as string | undefined;
       if (sisOverrideCategory) {
-        cipherConfig = applyCategoryOverride(
-          cipherConfig,
-          sisOverrideCategory,
-          mergedCategories,
-        );
+        cipherConfig = applyCategoryOverride(cipherConfig, sisOverrideCategory, mergedCategories);
       }
 
       if (directory && cipherConfig.prompt) {
@@ -560,13 +521,9 @@ export async function createAgents(
     });
 
     if (nexusResolution && orchestratorMarkdown) {
-      const { model: nexusModel, variant: nexusResolvedVariant } =
-        nexusResolution;
+      const { model: nexusModel, variant: nexusResolvedVariant } = nexusResolution;
 
-      let orchestratorConfig = buildOrchestratorAgentConfig(
-        orchestratorMarkdown,
-        nexusModel,
-      );
+      let orchestratorConfig = buildOrchestratorAgentConfig(orchestratorMarkdown, nexusModel);
 
       if (nexusResolvedVariant) {
         orchestratorConfig = {
@@ -575,9 +532,8 @@ export async function createAgents(
         };
       }
 
-      const nexusOverrideCategory = (
-        orchestratorOverride as Record<string, unknown> | undefined
-      )?.category as string | undefined;
+      const nexusOverrideCategory = (orchestratorOverride as Record<string, unknown> | undefined)
+        ?.category as string | undefined;
       if (nexusOverrideCategory) {
         orchestratorConfig = applyCategoryOverride(
           orchestratorConfig,
@@ -587,10 +543,7 @@ export async function createAgents(
       }
 
       if (orchestratorOverride) {
-        orchestratorConfig = mergeAgentConfig(
-          orchestratorConfig,
-          orchestratorOverride,
-        );
+        orchestratorConfig = mergeAgentConfig(orchestratorConfig, orchestratorOverride);
       }
 
       result["orchestrator"] = orchestratorConfig;

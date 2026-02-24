@@ -14,15 +14,15 @@ const AgentPermissionSchema = z.object({
 });
 
 export const AgentNameSchema = z.enum([
-   "operator",
-   "planner",
-   "advisor-plan",
-   "researcher-data",
-   "researcher-codebase",
-   "analyzer-media",
-   "advisor-strategy",
-   "validator-audit",
-   "orchestrator",
+  "operator",
+  "planner",
+  "advisor-plan",
+  "researcher-data",
+  "researcher-codebase",
+  "analyzer-media",
+  "advisor-strategy",
+  "validator-audit",
+  "orchestrator",
   // Compound Agents (28 total)
   // Review Agents (5) - Phase 11
   "void.review-rails",
@@ -146,17 +146,17 @@ export const SkillNameSchema = z.enum([
 export const OverridableAgentNameSchema = z.enum([
   "build",
   "plan",
-   "operator",
-   "executor",
-   "OpenCode-Builder",
-   "planner",
-   "advisor-strategy",
-   "validator-audit",
-   "advisor-plan",
-   "researcher-data",
-   "researcher-codebase",
-   "analyzer-media",
-   "orchestrator",
+  "operator",
+  "executor",
+  "OpenCode-Builder",
+  "planner",
+  "advisor-strategy",
+  "validator-audit",
+  "advisor-plan",
+  "researcher-data",
+  "researcher-codebase",
+  "analyzer-media",
+  "orchestrator",
 ]);
 
 export const HookNameSchema = z.enum([
@@ -314,17 +314,17 @@ export const AgentOverrideConfigSchema = z.object({
 export const AgentOverridesSchema = z.object({
   build: AgentOverrideConfigSchema.optional(),
   plan: AgentOverrideConfigSchema.optional(),
-  "operator": AgentOverrideConfigSchema.optional(),
-   "executor": AgentOverrideConfigSchema.optional(),
-   "OpenCode-Builder": AgentOverrideConfigSchema.optional(),
-   "planner": AgentOverrideConfigSchema.optional(),
-   "advisor-strategy": AgentOverrideConfigSchema.optional(),
-   "validator-audit": AgentOverrideConfigSchema.optional(),
-   "advisor-plan": AgentOverrideConfigSchema.optional(),
-   "researcher-data": AgentOverrideConfigSchema.optional(),
-   "researcher-codebase": AgentOverrideConfigSchema.optional(),
-   "analyzer-media": AgentOverrideConfigSchema.optional(),
-   "orchestrator": AgentOverrideConfigSchema.optional(),
+  operator: AgentOverrideConfigSchema.optional(),
+  executor: AgentOverrideConfigSchema.optional(),
+  "OpenCode-Builder": AgentOverrideConfigSchema.optional(),
+  planner: AgentOverrideConfigSchema.optional(),
+  "advisor-strategy": AgentOverrideConfigSchema.optional(),
+  "validator-audit": AgentOverrideConfigSchema.optional(),
+  "advisor-plan": AgentOverrideConfigSchema.optional(),
+  "researcher-data": AgentOverrideConfigSchema.optional(),
+  "researcher-codebase": AgentOverrideConfigSchema.optional(),
+  "analyzer-media": AgentOverrideConfigSchema.optional(),
+  orchestrator: AgentOverrideConfigSchema.optional(),
 });
 
 export const ClaudeCodeConfigSchema = z.object({

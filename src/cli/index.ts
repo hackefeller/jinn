@@ -5,6 +5,7 @@ import { run } from "./run";
 import { getLocalVersion } from "./get-local-version";
 import { doctor } from "./doctor";
 import { createMcpOAuthCommand } from "./mcp-oauth";
+import { exportGenius } from "./export";
 import type { InstallArgs } from "./types";
 import type { RunOptions } from "./run";
 import type { GetLocalVersionOptions } from "./get-local-version/types";
@@ -24,6 +25,10 @@ const GET_LOCAL_VERSION_HELP = fs.readFileSync(
 );
 const DOCTOR_HELP = fs.readFileSync(
   new URL("../../docs/cli/doctor-help.md", import.meta.url),
+  "utf8",
+);
+const EXPORT_HELP = fs.readFileSync(
+  new URL("../../docs/cli/export-help.md", import.meta.url),
   "utf8",
 );
 
@@ -112,6 +117,22 @@ program
       category: options.category,
     };
     const exitCode = await doctor(doctorOptions);
+    process.exit(exitCode);
+  });
+
+program
+  .command("export")
+  .description("Export Ghostwire orchestration intelligence for external agent runtimes")
+  .option("--target <value>", "Export target: copilot, codex, all (default: all)")
+  .option("-d, --directory <path>", "Output directory (default: current working directory)")
+  .option("--force", "Overwrite existing output files")
+  .addHelpText("after", EXPORT_HELP)
+  .action(async (options) => {
+    const exitCode = await exportGenius({
+      target: options.target,
+      directory: options.directory,
+      force: options.force ?? false,
+    });
     process.exit(exitCode);
   });
 

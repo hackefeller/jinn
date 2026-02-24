@@ -1,6 +1,6 @@
 /**
  * Template for ghostwire:spec:create command
- * 
+ *
  * Creates a feature specification from a natural language description.
  * Replaces: .specify/templates/spec-template.md + speckit.specify.md logic
  */
@@ -98,19 +98,62 @@ $ASSUMPTIONS
 export function generateShortName(description: string): string {
   // Common stop words to filter out
   const stopWords = new Set([
-    'i', 'a', 'an', 'the', 'to', 'for', 'of', 'in', 'on', 'at', 'by', 'with', 'from',
-    'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had',
-    'do', 'does', 'did', 'will', 'would', 'should', 'could', 'can', 'may', 'might',
-    'must', 'shall', 'this', 'that', 'these', 'those', 'my', 'your', 'our', 'their',
-    'want', 'need', 'add', 'get', 'set'
+    "i",
+    "a",
+    "an",
+    "the",
+    "to",
+    "for",
+    "of",
+    "in",
+    "on",
+    "at",
+    "by",
+    "with",
+    "from",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "been",
+    "being",
+    "have",
+    "has",
+    "had",
+    "do",
+    "does",
+    "did",
+    "will",
+    "would",
+    "should",
+    "could",
+    "can",
+    "may",
+    "might",
+    "must",
+    "shall",
+    "this",
+    "that",
+    "these",
+    "those",
+    "my",
+    "your",
+    "our",
+    "their",
+    "want",
+    "need",
+    "add",
+    "get",
+    "set",
   ]);
 
   // Clean and split
-  const clean = description.toLowerCase().replace(/[^a-z0-9]/g, ' ');
-  const words = clean.split(/\s+/).filter(w => w.length > 0);
+  const clean = description.toLowerCase().replace(/[^a-z0-9]/g, " ");
+  const words = clean.split(/\s+/).filter((w) => w.length > 0);
 
   // Filter meaningful words
-  const meaningful = words.filter(word => {
+  const meaningful = words.filter((word) => {
     if (stopWords.has(word)) return false;
     if (word.length >= 3) return true;
     // Keep short words if uppercase in original (acronyms)
@@ -119,7 +162,7 @@ export function generateShortName(description: string): string {
 
   // Take first 3-4 words
   const maxWords = Math.min(meaningful.length, 4);
-  return meaningful.slice(0, maxWords).join('-');
+  return meaningful.slice(0, maxWords).join("-");
 }
 
 /**
@@ -128,7 +171,7 @@ export function generateShortName(description: string): string {
  */
 export function getNextFeatureNumber(existingSpecs: string[]): number {
   let highest = 0;
-  
+
   for (const spec of existingSpecs) {
     const match = spec.match(/^(\d+)/);
     if (match) {
@@ -136,7 +179,7 @@ export function getNextFeatureNumber(existingSpecs: string[]): number {
       if (num > highest) highest = num;
     }
   }
-  
+
   return highest + 1;
 }
 
@@ -144,7 +187,7 @@ export function getNextFeatureNumber(existingSpecs: string[]): number {
  * Branch name generation
  */
 export function generateBranchName(featureNum: number, shortName: string): string {
-  const paddedNum = featureNum.toString().padStart(3, '0');
+  const paddedNum = featureNum.toString().padStart(3, "0");
   return `${paddedNum}-${shortName}`;
 }
 

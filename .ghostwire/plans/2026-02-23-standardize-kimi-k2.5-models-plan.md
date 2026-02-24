@@ -10,15 +10,18 @@
 ## Context
 
 ### User Request Summary
+
 Standardize ALL agents and categories to use `opencode/kimi-k2.5` as the primary model with a simplified fallback chain prioritizing `opencode` then `github-copilot` providers.
 
 ### Key Decisions
+
 1. **Primary model**: `opencode/kimi-k2.5` for ALL agents (uniform strategy)
 2. **Test approach**: Make tests model-agnostic (not hardcoded to specific models)
 3. **Fallback chain priority**: `opencode` → `github-copilot`
 4. **Exception**: Keep `google/gemini-3-flash` for `analyzer-media` (vision capabilities required)
 
 ### Scope Boundaries
+
 - **INCLUDE**: All model references in agents.yml, model-requirements.ts, constants.ts, and documentation
 - **INCLUDE**: Test files with hardcoded model assertions
 - **EXCLUDE**: Vision-specific agents (analyzer-media uses gemini-3-flash for vision)
@@ -28,14 +31,14 @@ Standardize ALL agents and categories to use `opencode/kimi-k2.5` as the primary
 
 ## Task Dependency Graph
 
-| Task | Depends On | Reason |
-|------|------------|--------|
-| Task 1: Update model-requirements.ts | None | Core source of truth for programmatic requirements |
-| Task 2: Update delegate-task constants.ts | None | Category defaults independent of agent requirements |
-| Task 3: Update agents.yml | Task 1 | YAML mirrors model-requirements.ts |
-| Task 4: Update documentation files | Task 1, Task 2, Task 3 | Docs reference the source of truth |
-| Task 5: Refactor test files | Task 1, Task 2 | Tests validate the new model configuration |
-| Task 6: Verification | Task 1, Task 2, Task 3, Task 4, Task 5 | Final validation |
+| Task                                      | Depends On                             | Reason                                              |
+| ----------------------------------------- | -------------------------------------- | --------------------------------------------------- |
+| Task 1: Update model-requirements.ts      | None                                   | Core source of truth for programmatic requirements  |
+| Task 2: Update delegate-task constants.ts | None                                   | Category defaults independent of agent requirements |
+| Task 3: Update agents.yml                 | Task 1                                 | YAML mirrors model-requirements.ts                  |
+| Task 4: Update documentation files        | Task 1, Task 2, Task 3                 | Docs reference the source of truth                  |
+| Task 5: Refactor test files               | Task 1, Task 2                         | Tests validate the new model configuration          |
+| Task 6: Verification                      | Task 1, Task 2, Task 3, Task 4, Task 5 | Final validation                                    |
 
 ---
 
@@ -69,10 +72,12 @@ Estimated Parallel Speedup: 30% faster than sequential
 **Description**: Update `src/orchestration/agents/model-requirements.ts` to standardize all agent and category fallback chains to `opencode/kimi-k2.5`.
 
 **Delegation Recommendation**:
+
 - Category: `quick` - Single file, straightforward text replacement
 - Skills: [`git-master`] - For atomic commits
 
 **Skills Evaluation**:
+
 - INCLUDED `git-master`: Atomic commit for this single file change
 - OMITTED `frontend-ui-ux`: No UI work
 - OMITTED `playwright`: No browser automation
@@ -80,6 +85,7 @@ Estimated Parallel Speedup: 30% faster than sequential
 **Depends On**: None
 
 **Acceptance Criteria**:
+
 - All 10 agents use `kimi-k2.5` with `opencode` → `github-copilot` fallback (except `analyzer-media`)
 - All 8 categories use `kimi-k2.5` with appropriate variants
 - `analyzer-media` retains `gemini-3-flash` for vision
@@ -87,6 +93,7 @@ Estimated Parallel Speedup: 30% faster than sequential
 - `bun test src/orchestration/agents/model-requirements.test.ts` passes (after Task 5)
 
 **Before**:
+
 ```typescript
 // Example: operator
 operator: {
@@ -104,6 +111,7 @@ operator: {
 ```
 
 **After**:
+
 ```typescript
 // Example: operator
 operator: {
@@ -120,31 +128,31 @@ operator: {
 
 #### AGENT_MODEL_REQUIREMENTS Changes
 
-| Agent | Old Primary | New Primary | Fallback Chain |
-|-------|-------------|-------------|----------------|
-| `operator` | `claude-opus-4-5` | `kimi-k2.5` | `opencode → github-copilot` |
-| `executor` | `claude-sonnet-4-5` | `kimi-k2.5` | `opencode → github-copilot` |
-| `advisor-plan` | `gpt-5.2` | `kimi-k2.5` | `opencode → github-copilot` |
-| `researcher-data` | `glm-4.7` | `kimi-k2.5` | `opencode → github-copilot` |
-| `researcher-codebase` | `claude-haiku-4-5` | `kimi-k2.5` | `opencode → github-copilot` |
-| `analyzer-media` | `gemini-3-flash` | **KEEP gemini-3-flash** | `google → github-copilot → opencode` (vision) |
-| `planner` | `claude-opus-4-5` | `kimi-k2.5` | `opencode → github-copilot` |
-| `advisor-strategy` | `claude-opus-4-5` | `kimi-k2.5` | `opencode → github-copilot` |
-| `validator-audit` | `gpt-5.2` | `kimi-k2.5` | `opencode → github-copilot` |
-| `orchestrator` | `k2p5` | `kimi-k2.5` | `opencode → github-copilot` |
+| Agent                 | Old Primary         | New Primary             | Fallback Chain                                |
+| --------------------- | ------------------- | ----------------------- | --------------------------------------------- |
+| `operator`            | `claude-opus-4-5`   | `kimi-k2.5`             | `opencode → github-copilot`                   |
+| `executor`            | `claude-sonnet-4-5` | `kimi-k2.5`             | `opencode → github-copilot`                   |
+| `advisor-plan`        | `gpt-5.2`           | `kimi-k2.5`             | `opencode → github-copilot`                   |
+| `researcher-data`     | `glm-4.7`           | `kimi-k2.5`             | `opencode → github-copilot`                   |
+| `researcher-codebase` | `claude-haiku-4-5`  | `kimi-k2.5`             | `opencode → github-copilot`                   |
+| `analyzer-media`      | `gemini-3-flash`    | **KEEP gemini-3-flash** | `google → github-copilot → opencode` (vision) |
+| `planner`             | `claude-opus-4-5`   | `kimi-k2.5`             | `opencode → github-copilot`                   |
+| `advisor-strategy`    | `claude-opus-4-5`   | `kimi-k2.5`             | `opencode → github-copilot`                   |
+| `validator-audit`     | `gpt-5.2`           | `kimi-k2.5`             | `opencode → github-copilot`                   |
+| `orchestrator`        | `k2p5`              | `kimi-k2.5`             | `opencode → github-copilot`                   |
 
 #### CATEGORY_MODEL_REQUIREMENTS Changes
 
-| Category | Old Primary | New Primary | Variant | Fallback Chain |
-|----------|-------------|-------------|---------|----------------|
-| `visual-engineering` | `gemini-3-pro` | `kimi-k2.5` | - | `opencode → github-copilot` |
-| `ultrabrain` | `gpt-5.2-codex` | `kimi-k2.5` | `max` | `opencode → github-copilot` |
-| `deep` | `gpt-5.2-codex` | `kimi-k2.5` | `medium` | `opencode → github-copilot` |
-| `artistry` | `gemini-3-pro` | `kimi-k2.5` | - | `opencode → github-copilot` |
-| `quick` | `claude-haiku-4-5` | `kimi-k2.5` | - | `opencode → github-copilot` |
-| `unspecified-low` | `claude-sonnet-4-5` | `kimi-k2.5` | - | `opencode → github-copilot` |
-| `unspecified-high` | `claude-opus-4-5` | `kimi-k2.5` | `max` | `opencode → github-copilot` |
-| `writing` | `gemini-3-flash` | `kimi-k2.5` | - | `opencode → github-copilot` |
+| Category             | Old Primary         | New Primary | Variant  | Fallback Chain              |
+| -------------------- | ------------------- | ----------- | -------- | --------------------------- |
+| `visual-engineering` | `gemini-3-pro`      | `kimi-k2.5` | -        | `opencode → github-copilot` |
+| `ultrabrain`         | `gpt-5.2-codex`     | `kimi-k2.5` | `max`    | `opencode → github-copilot` |
+| `deep`               | `gpt-5.2-codex`     | `kimi-k2.5` | `medium` | `opencode → github-copilot` |
+| `artistry`           | `gemini-3-pro`      | `kimi-k2.5` | -        | `opencode → github-copilot` |
+| `quick`              | `claude-haiku-4-5`  | `kimi-k2.5` | -        | `opencode → github-copilot` |
+| `unspecified-low`    | `claude-sonnet-4-5` | `kimi-k2.5` | -        | `opencode → github-copilot` |
+| `unspecified-high`   | `claude-opus-4-5`   | `kimi-k2.5` | `max`    | `opencode → github-copilot` |
+| `writing`            | `gemini-3-flash`    | `kimi-k2.5` | -        | `opencode → github-copilot` |
 
 **Full Replacement Code**:
 
@@ -311,21 +319,25 @@ export const CATEGORY_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
 **Description**: Update `src/execution/tools/delegate-task/constants.ts` to update `DEFAULT_CATEGORIES` with `opencode/kimi-k2.5`.
 
 **Delegation Recommendation**:
+
 - Category: `quick` - Single file, straightforward text replacement
 - Skills: [`git-master`] - For atomic commits
 
 **Skills Evaluation**:
+
 - INCLUDED `git-master`: Atomic commit for this single file change
 - OMITTED `frontend-ui-ux`: No UI work
 
 **Depends On**: None
 
 **Acceptance Criteria**:
+
 - All 8 categories in `DEFAULT_CATEGORIES` use `opencode/kimi-k2.5`
 - Preserve existing variants where specified
 - `bun run typecheck` passes
 
 **Before** (lines 193-202):
+
 ```typescript
 export const DEFAULT_CATEGORIES: Record<string, CategoryConfig> = {
   "visual-engineering": { model: "google/gemini-3-pro" },
@@ -340,6 +352,7 @@ export const DEFAULT_CATEGORIES: Record<string, CategoryConfig> = {
 ```
 
 **After**:
+
 ```typescript
 export const DEFAULT_CATEGORIES: Record<string, CategoryConfig> = {
   "visual-engineering": { model: "opencode/kimi-k2.5" },
@@ -356,6 +369,7 @@ export const DEFAULT_CATEGORIES: Record<string, CategoryConfig> = {
 **Additional Changes in constants.ts**:
 
 Update `QUICK_CATEGORY_PROMPT_APPEND` warning message (line 72):
+
 ```typescript
 // Before:
 // THIS CATEGORY USES A LESS CAPABLE MODEL (claude-haiku-4-5).
@@ -365,6 +379,7 @@ Update `QUICK_CATEGORY_PROMPT_APPEND` warning message (line 72):
 ```
 
 Update `UNSPECIFIED_LOW_CATEGORY_PROMPT_APPEND` warning (line 123):
+
 ```typescript
 // Before:
 // THIS CATEGORY USES A MID-TIER MODEL (claude-sonnet-4-5).
@@ -380,16 +395,19 @@ Update `UNSPECIFIED_LOW_CATEGORY_PROMPT_APPEND` warning (line 123):
 **Description**: Update `docs/agents.yml` to reflect the new model assignments for all agents and categories.
 
 **Delegation Recommendation**:
+
 - Category: `unspecified-low` - Moderate effort, YAML updates
 - Skills: [`git-master`] - For atomic commits
 
 **Skills Evaluation**:
+
 - INCLUDED `git-master`: Atomic commit
 - OMITTED `frontend-ui-ux`: No UI work
 
 **Depends On**: Task 1 (must mirror model-requirements.ts)
 
 **Acceptance Criteria**:
+
 - All agents (except `analyzer-media`) show `opencode/kimi-k2.5` as primary model
 - All fallback chains simplified to `opencode → github-copilot`
 - `analyzer-media` retains `google/gemini-3-flash` with vision fallbacks
@@ -398,6 +416,7 @@ Update `UNSPECIFIED_LOW_CATEGORY_PROMPT_APPEND` warning (line 123):
 **Key Changes**:
 
 For each agent (except `analyzer-media`), update:
+
 ```yaml
 # Before example (advisor-plan):
 - id: advisor-plan
@@ -436,11 +455,13 @@ For each agent (except `analyzer-media`), update:
 9. `executor` (line 127-131, currently no fallback_chain, add one)
 
 **Agents to KEEP unchanged**:
+
 - `analyzer-media` (lines 72-102) - Vision capabilities require gemini-3-flash
 
 **Categories to Update** (lines 350-499):
 
 All 8 categories need their fallback_chain updated to:
+
 ```yaml
 fallback_chain:
   - providers: [opencode, github-copilot]
@@ -448,6 +469,7 @@ fallback_chain:
 ```
 
 With variants for:
+
 - `ultrabrain`: `variant: max`
 - `unspecified-high`: `variant: max`
 - `deep`: `variant: medium`
@@ -459,16 +481,19 @@ With variants for:
 **Description**: Update all documentation files to reflect the new model configuration.
 
 **Delegation Recommendation**:
+
 - Category: `writing` - Documentation updates
 - Skills: [`git-master`] - For atomic commits
 
 **Skills Evaluation**:
+
 - INCLUDED `git-master`: Atomic commits
 - OMITTED `frontend-ui-ux`: No UI work
 
 **Depends On**: Task 1, Task 2, Task 3
 
 **Acceptance Criteria**:
+
 - All model references in docs updated to `opencode/kimi-k2.5`
 - Example configurations use new models
 - Agent tables reflect new assignments
@@ -478,6 +503,7 @@ With variants for:
 #### 4.1. docs/reference/configurations.md
 
 **Lines 23-25** - Quick Start example:
+
 ```jsonc
 // Before:
 "agents": {
@@ -495,6 +521,7 @@ With variants for:
 ```
 
 **Lines 29-32** - Categories example:
+
 ```jsonc
 // Before:
 "categories": {
@@ -524,6 +551,7 @@ Update all models and provider chains
 #### 4.2. docs/reference/agents.md
 
 **Lines 46-60** - Example configuration:
+
 ```json
 // Before:
 {
@@ -555,25 +583,29 @@ Update all models and provider chains
 #### 4.3. docs/getting-started/overview.md
 
 **Line 9** - Update recommendation:
+
 ```markdown
 // Before:
+
 > **Cipher Operator agent strongly recommends Opus 4.5 model. Using other models may result in significantly degraded experience.**
 
 // After:
+
 > **Cipher Operator agent uses kimi-k2.5 model by default for all agents. Using other models may result in varied experience.**
 ```
 
 **Lines 116-120** - Example fallback chain:
+
 ```markdown
 // Before:
 google → openai → zai-coding-plan → anthropic → opencode
-   ↓        ↓           ↓              ↓           ↓
-gemini   gpt-5.2     glm-4.6v       haiku     gpt-5-nano
+↓ ↓ ↓ ↓ ↓
+gemini gpt-5.2 glm-4.6v haiku gpt-5-nano
 
 // After:
 opencode → github-copilot
-    ↓           ↓
-kimi-k2.5   kimi-k2.5
+↓ ↓
+kimi-k2.5 kimi-k2.5
 ```
 
 **Lines 127-145** - Example config:
@@ -585,15 +617,15 @@ Update all models to `opencode/kimi-k2.5`
 Update the Model column for all agents to show `opencode/kimi-k2.5` (except Gemini for vision)
 
 ```markdown
-| Agent | Superpower | Model |
-|-------|-----------|-------|
-| **Cipher Operator** | Main orchestrator, deep analysis | Kimi K2.5 |
-| **Seer Advisor** | Architecture decisions, debugging | Kimi K2.5 |
-| **Frontend UI/UX** | React, styling, animations | Kimi K2.5 |
-| **Archive Researcher** | Docs, open-source patterns, history | Kimi K2.5 |
-| **Scout Recon** | Lightning-fast codebase exploration | Kimi K2.5 |
-| **Media Analyzer** | Image/PDF analysis, vision | Gemini 3 Flash |
-| ... | ... | ... |
+| Agent                  | Superpower                          | Model          |
+| ---------------------- | ----------------------------------- | -------------- |
+| **Cipher Operator**    | Main orchestrator, deep analysis    | Kimi K2.5      |
+| **Seer Advisor**       | Architecture decisions, debugging   | Kimi K2.5      |
+| **Frontend UI/UX**     | React, styling, animations          | Kimi K2.5      |
+| **Archive Researcher** | Docs, open-source patterns, history | Kimi K2.5      |
+| **Scout Recon**        | Lightning-fast codebase exploration | Kimi K2.5      |
+| **Media Analyzer**     | Image/PDF analysis, vision          | Gemini 3 Flash |
+| ...                    | ...                                 | ...            |
 ```
 
 ---
@@ -603,16 +635,19 @@ Update the Model column for all agents to show `opencode/kimi-k2.5` (except Gemi
 **Description**: Refactor test files to be model-agnostic by removing hardcoded model assertions and using dynamic values or constants.
 
 **Delegation Recommendation**:
+
 - Category: `unspecified-high` - High effort, many files, requires careful refactoring
 - Skills: [`git-master`] - For atomic commits per logical group
 
 **Skills Evaluation**:
+
 - INCLUDED `git-master`: Multiple atomic commits for different test file groups
 - OMITTED `frontend-ui-ux`: No UI work
 
 **Depends On**: Task 1, Task 2
 
 **Acceptance Criteria**:
+
 - All 38 test files with hardcoded models refactored
 - Tests validate structure/behavior, not specific model strings
 - `bun test` passes (594 test files)
@@ -652,10 +687,13 @@ Create a test constants file that mirrors source constants:
 
 ```typescript
 // src/test-utils/model-constants.ts
-import { AGENT_MODEL_REQUIREMENTS, CATEGORY_MODEL_REQUIREMENTS } from "../orchestration/agents/model-requirements";
+import {
+  AGENT_MODEL_REQUIREMENTS,
+  CATEGORY_MODEL_REQUIREMENTS,
+} from "../orchestration/agents/model-requirements";
 
 // Re-export for tests that need to validate current config
-export const getExpectedAgentModel = (agent: string) => 
+export const getExpectedAgentModel = (agent: string) =>
   AGENT_MODEL_REQUIREMENTS[agent]?.fallbackChain[0]?.model;
 
 export const getExpectedCategoryModel = (category: string) =>
@@ -665,26 +703,28 @@ export const getExpectedCategoryModel = (category: string) =>
 #### Strategy C: Structural Validation
 
 Tests should validate:
+
 1. Required fields exist
 2. Arrays are non-empty
 3. Types are correct
 4. Relationships are valid
 
 NOT:
+
 1. Specific model strings
 2. Specific provider strings
 3. Hardcoded variants
 
 **Files to Refactor**:
 
-| File | Current Issue | Fix |
-|------|---------------|-----|
-| `model-requirements.test.ts` | 20+ hardcoded model assertions | Use Strategy A - validate structure |
-| `tools.test.ts` (delegate-task) | Hardcoded model in DEFAULT_CATEGORIES | Import constants, validate structure |
-| `config-composer.test.ts` | Model string comparisons | Use getExpectedModel() helper |
-| `model-availability.test.ts` | Mocked model lists | Update mock to include `kimi-k2.5` |
-| `model-resolver.test.ts` | Specific model resolution tests | Test resolution logic, not specific models |
-| All others | Various hardcoded strings | Apply appropriate strategy |
+| File                            | Current Issue                         | Fix                                        |
+| ------------------------------- | ------------------------------------- | ------------------------------------------ |
+| `model-requirements.test.ts`    | 20+ hardcoded model assertions        | Use Strategy A - validate structure        |
+| `tools.test.ts` (delegate-task) | Hardcoded model in DEFAULT_CATEGORIES | Import constants, validate structure       |
+| `config-composer.test.ts`       | Model string comparisons              | Use getExpectedModel() helper              |
+| `model-availability.test.ts`    | Mocked model lists                    | Update mock to include `kimi-k2.5`         |
+| `model-resolver.test.ts`        | Specific model resolution tests       | Test resolution logic, not specific models |
+| All others                      | Various hardcoded strings             | Apply appropriate strategy                 |
 
 **Detailed Changes for model-requirements.test.ts**:
 
@@ -738,21 +778,25 @@ test("analyzer-media uses gemini-3-flash for vision capabilities", () => {
 **Description**: Run full test suite and type checking to verify all changes.
 
 **Delegation Recommendation**:
+
 - Category: `quick` - Running commands and validation
 - Skills: [`git-master`] - For final verification
 
 **Skills Evaluation**:
+
 - INCLUDED `git-master`: Final verification and commit
 - OMITTED others: Simple command execution
 
 **Depends On**: Task 1, Task 2, Task 3, Task 4, Task 5
 
 **Acceptance Criteria**:
+
 - `bun run typecheck` passes with 0 errors
 - `bun test` passes (594 tests)
 - Manual spot-check of agent model resolution via `bunx ghostwire doctor --verbose`
 
 **Verification Commands**:
+
 ```bash
 # Type checking
 bun run typecheck
@@ -784,10 +828,10 @@ Follow atomic commit principles per task:
    - Files: `docs/agents.yml`
 
 4. **Commit 4**: `docs: update documentation with kimi-k2.5 model references`
-   - Files: All docs/*.md files
+   - Files: All docs/\*.md files
 
 5. **Commit 5**: `test: make model tests agnostic to specific model strings`
-   - Files: All *.test.ts files with model assertions
+   - Files: All \*.test.ts files with model assertions
 
 ---
 
@@ -806,11 +850,13 @@ Follow atomic commit principles per task:
 If issues arise after deployment:
 
 1. **Immediate**: Revert to previous commit
+
    ```bash
    git revert HEAD~5..HEAD
    ```
 
 2. **Partial**: If specific agents have issues, users can override in `ghostwire.json`:
+
    ```json
    {
      "agents": {
@@ -828,12 +874,12 @@ If issues arise after deployment:
 
 ## Risk Assessment
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Kimi K2.5 unavailable for some users | Medium | High | Fallback to github-copilot provider |
-| Performance regression | Low | Medium | Users can override individual agents |
-| Test failures | Medium | Low | Tests refactored to be model-agnostic |
-| Documentation inconsistency | Low | Low | Single pass update, cross-reference check |
+| Risk                                 | Likelihood | Impact | Mitigation                                |
+| ------------------------------------ | ---------- | ------ | ----------------------------------------- |
+| Kimi K2.5 unavailable for some users | Medium     | High   | Fallback to github-copilot provider       |
+| Performance regression               | Low        | Medium | Users can override individual agents      |
+| Test failures                        | Medium     | Low    | Tests refactored to be model-agnostic     |
+| Documentation inconsistency          | Low        | Low    | Single pass update, cross-reference check |
 
 ---
 

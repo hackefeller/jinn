@@ -2,7 +2,7 @@
 
 **Status**: Example Plan  
 **Date Created**: 2026-02-24  
-**Framework**: Task-Driven Workflow Architecture  
+**Framework**: Task-Driven Workflow Architecture
 
 ---
 
@@ -13,6 +13,7 @@ This plan demonstrates the new task-driven workflow architecture with structured
 ## Feature Description
 
 Add dark mode toggle to a React application with:
+
 - Settings page toggle switch
 - CSS theme variables
 - Local storage persistence
@@ -22,6 +23,7 @@ Add dark mode toggle to a React application with:
 ## Task List (Structured JSON Format)
 
 The tasks below are in **JSON format** suitable for parsing and delegation to subagents. Each task has metadata enabling:
+
 - **Automatic parallelization** (tasks without dependencies run in parallel)
 - **Intelligent delegation** (tasks assigned to appropriate agent categories)
 - **Progress tracking** (status updates as work progresses)
@@ -132,18 +134,22 @@ The tasks below are in **JSON format** suitable for parsing and delegation to su
 The system automatically calculated these execution waves based on task dependencies:
 
 **Wave 1** (Parallel): Setup phase
+
 - task-001: Create dark mode theme CSS variables
 - task-002: Build theme context and hook
 
 **Wave 2** (Parallel): Component updates
+
 - task-003: Implement theme toggle in settings page
 - task-004: Update component library with theme support
 - task-005: Add system preference detection
 
 **Wave 3** (Sequential): Testing
+
 - task-006: Write tests for dark mode functionality
 
 **Wave 4** (Sequential): Documentation
+
 - task-007: Create dark mode documentation
 
 ---
@@ -151,18 +157,22 @@ The system automatically calculated these execution waves based on task dependen
 ## Delegation Strategy
 
 ### Wave 1 Tasks
+
 - **task-001** → `visual-engineering` agent (CSS/styling expert)
 - **task-002** → `visual-engineering` agent (React/hooks expert)
 
 ### Wave 2 Tasks
+
 - **task-003** → `visual-engineering` agent (UI component expert)
 - **task-004** → `visual-engineering` agent (component updates)
 - **task-005** → `visual-engineering` agent (browser APIs expert)
 
 ### Wave 3 Tasks
+
 - **task-006** → `quick` agent (straightforward testing)
 
 ### Wave 4 Tasks
+
 - **task-007** → `writing` agent (documentation specialist)
 
 ---
@@ -193,7 +203,9 @@ To execute this plan with the task-driven workflow:
 ## Key Features Demonstrated
 
 ### 1. Structured Task Metadata
+
 Each task includes:
+
 - `id`: Unique identifier
 - `subject`: One-line title
 - `description`: Detailed description suitable for subagent execution
@@ -206,19 +218,25 @@ Each task includes:
 - `wave`: Auto-calculated execution wave
 
 ### 2. Automatic Parallelization
+
 Tasks with no dependencies execute in parallel (Wave 1):
+
 - Both task-001 and task-002 can run simultaneously
 - Saves ~1h 45m of execution time
 - System automatically groups independent work
 
 ### 3. Intelligent Delegation
+
 Tasks automatically routed to appropriate agents:
+
 - UI/styling work → `visual-engineering` agent
 - Simple testing → `quick` agent (cheaper)
 - Documentation → `writing` agent (specialized)
 
 ### 4. Progress Tracking
+
 Status updates tracked across sessions:
+
 - Pick up where you left off
 - View which tasks completed
 - Know which tasks are in progress
@@ -235,6 +253,7 @@ Status updates tracked across sessions:
 5. **Run `/ghostwire:workflows:execute`** to start
 
 The system will:
+
 - Parse the JSON task structure
 - Validate dependencies (no circular dependencies)
 - Calculate optimal execution waves
@@ -246,6 +265,7 @@ The system will:
 ## Expected Outcome
 
 After completing this workflow:
+
 - ✅ Dark mode CSS variables defined and tested
 - ✅ React Context and hook implemented
 - ✅ Theme toggle in settings page

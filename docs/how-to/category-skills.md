@@ -19,16 +19,16 @@ A Category is an agent configuration preset optimized for specific domains.
 
 ### Available Built-in Categories
 
-| Category | Default Model | Use Cases |
-|----------|---------------|-----------|
-| `visual-engineering` | `opencode/kimi-k2.5` | Frontend, UI/UX, design, styling, animation |
-| `ultrabrain` | `opencode/kimi-k2.5` | Deep logical reasoning, complex architecture decisions requiring extensive analysis |
-| `deep` | `opencode/kimi-k2.5` | Goal-oriented autonomous problem-solving. Thorough research before action. For hairy problems requiring deep understanding. |
-| `artistry` | `opencode/kimi-k2.5` | Highly creative/artistic tasks, novel ideas |
-| `quick` | `opencode/kimi-k2.5` | Trivial tasks - single file changes, typo fixes, simple modifications |
-| `unspecified-low` | `opencode/kimi-k2.5` | Tasks that don't fit other categories, low effort required |
-| `unspecified-high` | `opencode/kimi-k2.5` | Tasks that don't fit other categories, high effort required |
-| `writing` | `opencode/kimi-k2.5` | Documentation, prose, technical writing |
+| Category             | Default Model        | Use Cases                                                                                                                   |
+| -------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `visual-engineering` | `opencode/kimi-k2.5` | Frontend, UI/UX, design, styling, animation                                                                                 |
+| `ultrabrain`         | `opencode/kimi-k2.5` | Deep logical reasoning, complex architecture decisions requiring extensive analysis                                         |
+| `deep`               | `opencode/kimi-k2.5` | Goal-oriented autonomous problem-solving. Thorough research before action. For hairy problems requiring deep understanding. |
+| `artistry`           | `opencode/kimi-k2.5` | Highly creative/artistic tasks, novel ideas                                                                                 |
+| `quick`              | `opencode/kimi-k2.5` | Trivial tasks - single file changes, typo fixes, simple modifications                                                       |
+| `unspecified-low`    | `opencode/kimi-k2.5` | Tasks that don't fit other categories, low effort required                                                                  |
+| `unspecified-high`   | `opencode/kimi-k2.5` | Tasks that don't fit other categories, high effort required                                                                 |
+| `writing`            | `opencode/kimi-k2.5` | Documentation, prose, technical writing                                                                                     |
 
 ### Usage
 
@@ -36,14 +36,15 @@ Specify the `category` parameter when invoking the `delegate_task` tool.
 
 ```typescript
 delegate_task(
-  category="visual-engineering",
-  prompt="Add a responsive chart component to the dashboard page"
-)
+  (category = "visual-engineering"),
+  (prompt = "Add a responsive chart component to the dashboard page"),
+);
 ```
 
 ### Cipher Operator-Junior (Delegated Executor)
 
 When you use a Category, a special agent called **Cipher Operator-Junior** performs the work.
+
 - **Characteristic**: Cannot **re-delegate** tasks to other agents.
 - **Purpose**: Prevents infinite delegation loops and ensures focus on the assigned task.
 
@@ -75,10 +76,10 @@ Add desired skill names to the `load_skills` array.
 
 ```typescript
 delegate_task(
-  category="quick",
-  load_skills=["git-master"],
-  prompt="Commit current changes. Follow commit message style."
-)
+  (category = "quick"),
+  (load_skills = ["git-master"]),
+  (prompt = "Commit current changes. Follow commit message style."),
+);
 ```
 
 ### Skill Customization (SKILL.md)
@@ -110,16 +111,19 @@ This content will be injected into the agent's system prompt.
 You can create powerful specialized agents by combining Categories and Skills.
 
 ### 🎨 The Designer (UI Implementation)
+
 - **Category**: `visual-engineering`
 - **load_skills**: `["frontend-ui-ux", "playwright"]`
 - **Effect**: Implements aesthetic UI and verifies rendering results directly in browser.
 
 ### 🏗️ The Architect (Design Review)
+
 - **Category**: `ultrabrain`
 - **load_skills**: `[]` (pure reasoning)
 - **Effect**: Leverages GPT-5.2's logical reasoning for in-depth system architecture analysis.
 
 ### ⚡ The Maintainer (Quick Fixes)
+
 - **Category**: `quick`
 - **load_skills**: `["git-master"]`
 - **Effect**: Uses cost-effective models to quickly fix code and generate clean commits.
@@ -139,9 +143,11 @@ When delegating, **clear and specific** prompts are essential. Include these 7 e
 7. **CONTEXT**: File paths, existing patterns, reference materials
 
 **Bad Example**:
+
 > "Fix this"
 
 **Good Example**:
+
 > **TASK**: Fix mobile layout breaking issue in `LoginButton.tsx`
 > **CONTEXT**: `src/components/LoginButton.tsx`, using Tailwind CSS
 > **MUST DO**: Change flex-direction at `md:` breakpoint
@@ -156,20 +162,20 @@ You can fine-tune categories in `ghostwire.json`.
 
 ### Category Configuration Schema (CategoryConfig)
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `description` | string | Human-readable description of the category's purpose. Shown in delegate_task prompt. |
-| `model` | string | AI model ID to use (e.g., `opencode/kimi-k2.5`) |
-| `variant` | string | Model variant (e.g., `max`, `xhigh`) |
-| `temperature` | number | Creativity level (0.0 ~ 2.0). Lower is more deterministic. |
-| `top_p` | number | Nucleus sampling parameter (0.0 ~ 1.0) |
-| `prompt_append` | string | Content to append to system prompt when this category is selected |
-| `thinking` | object | Thinking model configuration (`{ type: "enabled", budgetTokens: 16000 }`) |
-| `reasoningEffort` | string | Reasoning effort level (`low`, `medium`, `high`) |
-| `textVerbosity` | string | Text verbosity level (`low`, `medium`, `high`) |
-| `tools` | object | Tool usage control (disable with `{ "tool_name": false }`) |
-| `maxTokens` | number | Maximum response token count |
-| `is_unstable_agent` | boolean | Mark agent as unstable - forces background mode for monitoring |
+| Field               | Type    | Description                                                                          |
+| ------------------- | ------- | ------------------------------------------------------------------------------------ |
+| `description`       | string  | Human-readable description of the category's purpose. Shown in delegate_task prompt. |
+| `model`             | string  | AI model ID to use (e.g., `opencode/kimi-k2.5`)                                      |
+| `variant`           | string  | Model variant (e.g., `max`, `xhigh`)                                                 |
+| `temperature`       | number  | Creativity level (0.0 ~ 2.0). Lower is more deterministic.                           |
+| `top_p`             | number  | Nucleus sampling parameter (0.0 ~ 1.0)                                               |
+| `prompt_append`     | string  | Content to append to system prompt when this category is selected                    |
+| `thinking`          | object  | Thinking model configuration (`{ type: "enabled", budgetTokens: 16000 }`)            |
+| `reasoningEffort`   | string  | Reasoning effort level (`low`, `medium`, `high`)                                     |
+| `textVerbosity`     | string  | Text verbosity level (`low`, `medium`, `high`)                                       |
+| `tools`             | object  | Tool usage control (disable with `{ "tool_name": false }`)                           |
+| `maxTokens`         | number  | Maximum response token count                                                         |
+| `is_unstable_agent` | boolean | Mark agent as unstable - forces background mode for monitoring                       |
 
 ### Example Configuration
 
@@ -180,13 +186,13 @@ You can fine-tune categories in `ghostwire.json`.
     "korean-writer": {
       "model": "opencode/kimi-k2.5",
       "temperature": 0.5,
-      "prompt_append": "You are a Korean technical writer. Maintain a friendly and clear tone."
+      "prompt_append": "You are a Korean technical writer. Maintain a friendly and clear tone.",
     },
-    
+
     // 2. Override existing category (change model)
     "visual-engineering": {
       "model": "opencode/kimi-k2.5", // Can change model
-      "temperature": 0.8
+      "temperature": 0.8,
     },
 
     // 3. Configure thinking model and restrict tools
@@ -194,15 +200,15 @@ You can fine-tune categories in `ghostwire.json`.
       "model": "opencode/kimi-k2.5",
       "thinking": {
         "type": "enabled",
-        "budgetTokens": 32000
+        "budgetTokens": 32000,
       },
       "tools": {
-        "websearch_web_search_exa": false // Disable web search
-      }
-    }
+        "websearch_web_search_exa": false, // Disable web search
+      },
+    },
   },
-  
+
   // Disable skills
-  "disabled_skills": ["playwright"]
+  "disabled_skills": ["playwright"],
 }
 ```

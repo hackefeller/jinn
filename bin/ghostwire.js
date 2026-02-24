@@ -47,9 +47,7 @@ function main() {
     binPath = require.resolve(binRelPath);
   } catch {
     console.error(`\nghostwire: Platform binary not installed.`);
-    console.error(
-      `\nYour platform: ${platform}-${arch}${libcFamily === "musl" ? "-musl" : ""}`,
-    );
+    console.error(`\nYour platform: ${platform}-${arch}${libcFamily === "musl" ? "-musl" : ""}`);
     console.error(`Expected package: ${pkg}`);
     console.error(`\nTo fix, run:`);
     console.error(`  npm install ${pkg}\n`);

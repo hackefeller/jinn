@@ -17,8 +17,9 @@ This builds on the completed Phase 1 foundation (backup, mapping strategy, direc
 ## Problem Statement
 
 **Current State (Post-Phase 1):**
+
 - ✅ Phase 1 complete: Foundation established, strategy documented, directories created
-- ✅ Import/bundle system functional but targeted for removal  
+- ✅ Import/bundle system functional but targeted for removal
 - ✅ Component mapping strategy defined (125+ components catalogued)
 - ✅ Configuration migration system designed
 - ✅ Test suite foundation established
@@ -27,8 +28,9 @@ This builds on the completed Phase 1 foundation (backup, mapping strategy, direc
 Users want direct access to all ghostwire components without external plugin dependencies. The current import system adds complexity and startup overhead that direct integration would eliminate.
 
 **Business Impact:**
+
 - **User Experience**: Simplified setup, all features immediately available
-- **Performance**: Remove import layer overhead, faster startup  
+- **Performance**: Remove import layer overhead, faster startup
 - **Maintenance**: Single codebase instead of plugin system complexity
 - **Adoption**: Lower barrier to entry for ghostwire features
 
@@ -39,7 +41,7 @@ Users want direct access to all ghostwire components without external plugin dep
 Implement direct component integration using established ghostwire patterns:
 
 1. **Agent Integration**: Convert 28 ghostwire agents to TypeScript agent factories following Seer Advisor/Cipher Operator patterns
-2. **Command Integration**: Convert 24 compound commands to builtin command templates following overclock-loop/jack-in-work patterns  
+2. **Command Integration**: Convert 24 compound commands to builtin command templates following overclock-loop/jack-in-work patterns
 3. **Skill Integration**: Convert 73 compound skills to builtin skill definitions following playwright/git-master patterns
 4. **Configuration Migration**: Implement automatic migration from import config to unified config
 5. **Import System Removal**: Clean removal of src/features/imports/ and src/features/bundles/
@@ -47,11 +49,13 @@ Implement direct component integration using established ghostwire patterns:
 ### **Component Organization Strategy**
 
 **Namespace Consistency**: All components use `grid:` prefix
+
 - Agents: `grid:kieran-rails-reviewer`, `grid:dhh-rails-reviewer`
-- Commands: `grid:workflows:plan`, `grid:code:refactor`  
+- Commands: `grid:workflows:plan`, `grid:code:refactor`
 - Skills: `grid:frontend-design`, `grid:andrew-kane-gem-writer`
 
 **Directory Structure**: Organized by component type and functional grouping
+
 ```typescript
 src/agents/compound/{review,research,design,workflow,docs}/
 src/features/builtin-commands/compound/{workflows,code,git,project,util,docs}/
@@ -63,38 +67,42 @@ src/features/builtin-skills/compound/{development,design,devops,documentation,an
 ### **Architecture**
 
 #### **Agent Factory Implementation Pattern**
+
 Based on `src/agents/seer-advisor.ts` pattern:
 
 ```typescript
 // Example: src/agents/compound/review/kieran-rails-reviewer.ts
 export function createKieranRailsReviewerAgent(model: string): AgentConfig {
-  const restrictions = createAgentToolRestrictions([
-    "write", "edit", "delegate_task"  
-  ])
-  
+  const restrictions = createAgentToolRestrictions(["write", "edit", "delegate_task"]);
+
   return {
     description: "Rails code review with Kieran's strict conventions and taste preferences",
     model,
     temperature: 0.1,
     prompt: KIERAN_RAILS_REVIEWER_PROMPT,
     ...restrictions,
-  }
+  };
 }
 
 // Agent metadata for Cipher Operator integration
 export const KIERAN_RAILS_REVIEWER_METADATA: AgentPromptMetadata = {
   category: "review",
   cost: "MODERATE",
-  promptAlias: "Kieran Rails Reviewer", 
+  promptAlias: "Kieran Rails Reviewer",
   triggers: [
-    { domain: "Rails code changes", trigger: "After implementing features, modifying existing code, creating new Rails components" }
+    {
+      domain: "Rails code changes",
+      trigger:
+        "After implementing features, modifying existing code, creating new Rails components",
+    },
   ],
   useWhen: ["Rails code review", "Convention compliance checking"],
   avoidWhen: ["Non-Rails code", "Initial exploration"],
-}
+};
 ```
 
-#### **Command Template Implementation Pattern**  
+#### **Command Template Implementation Pattern**
+
 Based on `src/features/builtin-commands/commands.ts` pattern:
 
 ```typescript
@@ -115,7 +123,7 @@ Create a detailed markdown plan following project conventions with phases, tasks
 "grid:workflows:plan": {
   description: "Create comprehensive implementation plans",
   template: `<command-instruction>
-${WORKFLOWS_PLAN_TEMPLATE}  
+${WORKFLOWS_PLAN_TEMPLATE}
 </command-instruction>
 
 <user-task>
@@ -126,13 +134,15 @@ $ARGUMENTS
 ```
 
 #### **Skill Definition Implementation Pattern**
+
 Based on `src/features/builtin-skills/skills.ts` pattern:
 
 ```typescript
-// Example: src/features/builtin-skills/compound/design/frontend-design.ts  
+// Example: src/features/builtin-skills/compound/design/frontend-design.ts
 const frontendDesignSkill: BuiltinSkill = {
-  name: "grid:frontend-design", 
-  description: "This skill should be used when creating distinctive, production-grade frontend interfaces with high design quality",
+  name: "grid:frontend-design",
+  description:
+    "This skill should be used when creating distinctive, production-grade frontend interfaces with high design quality",
   template: `# Frontend Design Skill
 
 You are creating frontend interfaces that avoid generic AI aesthetics and deliver polished, production-ready experiences.
@@ -156,26 +166,28 @@ You are creating frontend interfaces that avoid generic AI aesthetics and delive
 - Progressive enhancement with JavaScript
 - Responsive design across all device sizes
 - Performance optimized (fast loading, smooth interactions)`,
-  mcpConfig: undefined
-}
+  mcpConfig: undefined,
+};
 ```
 
 #### **Registration System Updates**
 
 **Agent Registration** (`src/agents/utils.ts`):
+
 ```typescript
 const agentSources: Record<BuiltinAgentName, AgentSource> = {
   // ... existing agents
   "grid:kieran-rails-reviewer": createKieranRailsReviewerAgent,
-  "grid:kieran-python-reviewer": createKieranPythonReviewerAgent, 
+  "grid:kieran-python-reviewer": createKieranPythonReviewerAgent,
   "grid:dhh-rails-reviewer": createDHHRailsReviewerAgent,
   "grid:framework-docs-researcher": createFrameworkDocsResearcherAgent,
   "grid:figma-design-sync": createFigmaDesignSyncAgent,
   // ... all 28 compound agents
-}
+};
 ```
 
 **Command Registration** (`src/features/builtin-commands/commands.ts`):
+
 ```typescript
 const COMPOUND_COMMAND_DEFINITIONS: Record<string, Omit<CommandDefinition, "name">> = {
   "grid:workflows:plan": workflowsPlanCommand,
@@ -183,28 +195,29 @@ const COMPOUND_COMMAND_DEFINITIONS: Record<string, Omit<CommandDefinition, "name
   "grid:code:refactor": codeRefactorCommand,
   "grid:git:smart-commit": gitSmartCommitCommand,
   // ... all 24 compound commands
-}
+};
 
 // Merge with existing builtin commands
 const BUILTIN_COMMAND_DEFINITIONS: Record<BuiltinCommandName, Omit<CommandDefinition, "name">> = {
   // ... existing commands
-  ...COMPOUND_COMMAND_DEFINITIONS
-}
+  ...COMPOUND_COMMAND_DEFINITIONS,
+};
 ```
 
 **Skill Registration** (`src/features/builtin-skills/skills.ts`):
+
 ```typescript
 const compoundSkills: BuiltinSkill[] = [
   frontendDesignSkill,
-  figmaDesignSyncSkill, 
+  figmaDesignSyncSkill,
   andrewKaneGemWriterSkill,
   everyStyleEditorSkill,
   // ... all 73 compound skills
-]
+];
 
 export function createBuiltinSkills(options: CreateBuiltinSkillsOptions = {}): BuiltinSkill[] {
-  const coreSkills = [playwrightSkill, frontendUiUxSkill, gitMasterSkill, devBrowserSkill]
-  return [...coreSkills, ...compoundSkills]
+  const coreSkills = [playwrightSkill, frontendUiUxSkill, gitMasterSkill, devBrowserSkill];
+  return [...coreSkills, ...compoundSkills];
 }
 ```
 
@@ -215,37 +228,55 @@ Update `src/config/schema.ts` to support new components:
 ```typescript
 // Add all compound agents to schema
 export const BuiltinAgentNameSchema = z.enum([
-  "cipher-operator", "zen-planner", "seer-advisor", "archive-researcher", "scout-recon", "optic-analyst", "tactician-strategist", "glitch-auditor", "nexus-orchestrator",
+  "cipher-operator",
+  "zen-planner",
+  "seer-advisor",
+  "archive-researcher",
+  "scout-recon",
+  "optic-analyst",
+  "tactician-strategist",
+  "glitch-auditor",
+  "nexus-orchestrator",
   // Compound Review Agents
-  "grid:kieran-rails-reviewer", "grid:kieran-python-reviewer", "grid:kieran-typescript-reviewer",
-  "grid:dhh-rails-reviewer", "grid:code-simplicity-reviewer",
-  // Compound Research Agents  
-  "grid:framework-docs-researcher", "grid:learnings-researcher", 
-  "grid:best-practices-researcher", "grid:git-history-analyzer",
+  "grid:kieran-rails-reviewer",
+  "grid:kieran-python-reviewer",
+  "grid:kieran-typescript-reviewer",
+  "grid:dhh-rails-reviewer",
+  "grid:code-simplicity-reviewer",
+  // Compound Research Agents
+  "grid:framework-docs-researcher",
+  "grid:learnings-researcher",
+  "grid:best-practices-researcher",
+  "grid:git-history-analyzer",
   // ... all 28 compound agents
-])
+]);
 
 // Add compound commands to schema
 export const BuiltinCommandNameSchema = z.enum([
-  "init-deep", "jack-in-work",
+  "init-deep",
+  "jack-in-work",
   // Compound Commands
-  "grid:workflows:plan", "grid:workflows:review", "grid:code:refactor",
-  // ... all 24 compound commands  
-])
+  "grid:workflows:plan",
+  "grid:workflows:review",
+  "grid:code:refactor",
+  // ... all 24 compound commands
+]);
 
 // Update unified configuration schema
-export const UnifiedCompoundEngineeringConfigSchema = z.object({
-  enabled: z.boolean().default(true),
-  components: z.object({
-    agents: z.boolean().default(true),
-    commands: z.boolean().default(true), 
-    skills: z.boolean().default(true),
-  }),
-  namespace: z.string().default("compound"),
-  disabled_components: z.array(z.string()).default([]),
-  migration_version: z.string().default("1.0.0"),
-  migrated_at: z.string().optional(),
-}).optional()
+export const UnifiedCompoundEngineeringConfigSchema = z
+  .object({
+    enabled: z.boolean().default(true),
+    components: z.object({
+      agents: z.boolean().default(true),
+      commands: z.boolean().default(true),
+      skills: z.boolean().default(true),
+    }),
+    namespace: z.string().default("compound"),
+    disabled_components: z.array(z.string()).default([]),
+    migration_version: z.string().default("1.0.0"),
+    migrated_at: z.string().optional(),
+  })
+  .optional();
 ```
 
 ### **Implementation Phases**
@@ -255,9 +286,10 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 **Objective**: Convert and integrate all 28 ghostwire agents
 
 **Tasks:**
+
 - [x] **Convert Review Agents (5 components)**
   - kieran-rails-reviewer.ts
-  - kieran-python-reviewer.ts  
+  - kieran-python-reviewer.ts
   - kieran-typescript-reviewer.ts
   - dhh-rails-reviewer.ts
   - code-simplicity-reviewer.ts
@@ -269,12 +301,12 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 - [x] **Convert Design Agents (4 components)**
   - figma-design-sync.ts
   - design-implementation-reviewer.ts
-  - design-iterator.ts  
+  - design-iterator.ts
   - frontend-design.ts
 - [x] **Convert Workflow Agents (3 components)**
   - spec-flow-analyzer.ts
   - agent-native-architecture.ts
-  - deployment-verification-agent.ts  
+  - deployment-verification-agent.ts
 - [x] **Convert Documentation Agents (12 components)**
   - ankane-readme-writer.ts through agent-native-audit.ts
 - [x] **Update agent registration in src/agents/utils.ts**
@@ -282,8 +314,9 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 - [x] **Write agent factory tests**
 
 **Success Criteria:**
+
 - All 28 agent factories created and tested
-- Agent registration system updated  
+- Agent registration system updated
 - Schema validation passing
 - All agents discoverable in Cipher Operator prompt building
 
@@ -292,9 +325,10 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 **Objective**: Convert and integrate all 24 ghostwire commands
 
 **Tasks:**
+
 - [x] **Convert Workflow Commands (4 components)**
   - workflows/plan.ts, create.ts, status.ts, complete.ts
-- [x] **Convert Code Commands (4 components)**  
+- [x] **Convert Code Commands (4 components)**
   - code/refactor.ts, review.ts, optimize.ts, format.ts
 - [x] **Convert Git Commands (4 components)**
   - git/smart-commit.ts, branch.ts, merge.ts, cleanup.ts
@@ -302,30 +336,32 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
   - project/init.ts, build.ts, deploy.ts, test.ts
 - [x] **Convert Utility Commands (4 components)**
   - util/clean.ts, backup.ts, restore.ts, doctor.ts
-- [x] **Convert Documentation Commands (4 components)** 
+- [x] **Convert Documentation Commands (4 components)**
   - docs/deploy-docs.ts, release-docs.ts, feature-video.ts, test-browser.ts
 - [x] **Update command registration system**
 - [x] **Update schema with all command names**
 - [x] **Write command template tests**
 
 **Success Criteria:**
+
 - All 24 command templates created and tested
 - Command registration system updated
 - All commands accessible via /grid: prefix
 - Template argument parsing working correctly
 
-#### **Phase 2C: Skill Integration (Days 6-8)**  
+#### **Phase 2C: Skill Integration (Days 6-8)**
 
 **Objective**: Convert and integrate all 73 ghostwire skills
 
 **Tasks:**
+
 - [x] **Convert Development Skills (25 components)**
   - Language/framework specific programming skills
 - [x] **Convert Design Skills (18 components)**
   - frontend-design, figma-design-sync, design-implementation-reviewer, etc.
 - [x] **Convert DevOps Skills (12 components)**
   - Infrastructure, deployment, monitoring skills
-- [x] **Convert Documentation Skills (10 components)**  
+- [x] **Convert Documentation Skills (10 components)**
   - andrew-kane-gem-writer, ankane-readme-writer, every-style-editor, etc.
 - [x] **Convert Analysis Skills (8 components)**
   - framework-docs-researcher, learnings-researcher, best-practices-researcher, etc.
@@ -334,6 +370,7 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 - [x] **Write skill integration tests**
 
 **Success Criteria:**
+
 - All 73 skill definitions created and tested
 - Skill loading system updated
 - Skills discoverable in task delegation
@@ -344,9 +381,10 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 **Objective**: Complete system integration and remove import system
 
 **Tasks:**
+
 - [x] **Implement configuration migration system**
   - detectMigrationNeeded() function
-  - migrateConfiguration() function  
+  - migrateConfiguration() function
   - automatic backup creation
   - rollback support
 - [x] **Update main plugin initialization (src/index.ts)**
@@ -355,7 +393,7 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
   - Add migration trigger
 - [x] **Remove import/bundle system entirely**
   - Delete src/features/imports/ directory
-  - Delete src/features/bundles/ directory  
+  - Delete src/features/bundles/ directory
   - Clean up any references in other files
 - [x] **Update configuration loading**
   - Remove import schema sections
@@ -367,6 +405,7 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
   - Optimize memory usage for large component sets
 
 **Success Criteria:**
+
 - Configuration migration working automatically
 - Import system completely removed
 - Performance impact < 100MB additional memory
@@ -377,27 +416,29 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 **Objective**: Comprehensive testing of integrated system
 
 **Tasks:**
+
 - [x] **Unit tests for all components**
   - Agent factory tests (28 test files)
-  - Command template tests (24 test files)  
+  - Command template tests (24 test files)
   - Skill definition tests (73 test files)
 - [x] **Integration tests**
   - Component interaction testing
   - Cross-component dependencies
   - Configuration migration testing
 - [x] **Performance tests**
-  - Startup time benchmarking  
+  - Startup time benchmarking
   - Memory usage profiling
   - Component loading performance
 - [x] **End-to-end workflow tests**
   - Complete user workflows
   - Migration scenarios
   - Error handling and recovery
-- [x] **Regression testing**  
+- [x] **Regression testing**
   - Existing functionality preservation
   - No breaking changes to current features
 
 **Success Criteria:**
+
 - All 125+ components have unit tests
 - Integration test suite passing
 - Performance benchmarks met
@@ -406,19 +447,25 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ## Alternative Approaches Considered
 
 ### **Option A: Gradual Migration (Rejected)**
+
 **Approach**: Keep import system, gradually move components to builtin
+
 - **Rejected**: Increased complexity, user confusion, dual maintenance
 - **Pros**: Lower risk, easier rollback
 - **Cons**: Complex migration path, ongoing maintenance burden
 
-### **Option B: Hybrid System (Rejected)**  
+### **Option B: Hybrid System (Rejected)**
+
 **Approach**: Support both import and builtin components simultaneously
+
 - **Rejected**: Architectural complexity, performance overhead
 - **Pros**: Maximum flexibility, easier transition
 - **Cons**: Complex codebase, confusing for users
 
 ### **Option C: Selected Direct Integration**
+
 **Approach**: Complete migration to builtin components with namespace isolation
+
 - **Selected**: Clean architecture, best performance, clear user experience
 - **Pros**: Simplified codebase, optimal performance, easier maintenance
 - **Cons**: Higher implementation effort, migration complexity
@@ -437,7 +484,7 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ### **Non-Functional Requirements**
 
 - [x] Startup time increase < 50% from pre-integration baseline
-- [x] Memory usage increase < 100MB additional overhead  
+- [x] Memory usage increase < 100MB additional overhead
 - [x] Component loading performance < 2 seconds per component type
 - [x] Migration success rate > 95% in testing scenarios
 - [x] Rollback capability tested and working
@@ -448,26 +495,29 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 - [x] 95%+ test coverage for all new components
 - [x] All integration tests passing
 - [x] Performance benchmarks met or exceeded
-- [x] Security audit passed for integrated components  
+- [x] Security audit passed for integrated components
 - [x] Documentation completeness 100%
 - [x] Migration testing across various configurations
 
 ## Success Metrics
 
 ### **Technical Metrics**
+
 - **Component Integration Success Rate**: 100% (all 125+ components working)
 - **Test Coverage**: > 95% for all new code
 - **Performance Regression**: < 50% startup time increase
 - **Migration Success Rate**: > 95% across test scenarios
 - **Memory Usage**: < 100MB additional overhead
 
-### **User Experience Metrics**  
+### **User Experience Metrics**
+
 - **Setup Time**: 80% reduction from import-based setup
 - **Feature Discovery Time**: < 60 seconds to find relevant component
 - **User Satisfaction**: > 4.5/5 in feedback surveys
 - **Support Request Volume**: < 10% increase from baseline
 
 ### **Quality Metrics**
+
 - **Bug Reports**: < 5 issues per 1000 components in first month
 - **Documentation Completeness**: 100% of components documented
 - **Code Review Approval**: All changes approved without major revisions
@@ -475,19 +525,22 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ## Dependencies & Prerequisites
 
 ### **Completed Prerequisites (Phase 1)**
+
 - ✅ Component mapping strategy documented
-- ✅ Configuration migration system designed  
+- ✅ Configuration migration system designed
 - ✅ Directory structure created
 - ✅ Test suite foundation established
 - ✅ Backup created with rollback capability
 
 ### **External Dependencies**
+
 - **No external dependencies**: All ghostwire components are now integrated
 - **Development environment**: Bun, TypeScript, existing ghostwire build system
 - **Testing framework**: Existing test infrastructure
 - **All patterns**: Consistent with existing ghostwire architecture
 
 ### **Technical Prerequisites**
+
 - **Schema build system**: `bun run build:schema` working
 - **Test runner**: `bun test` functional
 - **Type checking**: `bun run typecheck` passing
@@ -498,30 +551,36 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ### **High Risk Items**
 
 #### **Memory Usage Explosion**
+
 **Risk**: 125+ components significantly increase memory consumption
 **Probability**: High (70%)
 **Impact**: High (poor user experience, system instability)
 **Mitigation**:
-- Implement lazy loading for P1/P2/P3 priority components  
+
+- Implement lazy loading for P1/P2/P3 priority components
 - Use component pooling and weak references where possible
 - Add memory usage monitoring and alerts
 - Establish maximum memory budget (100MB additional)
 
 #### **Startup Performance Degradation**
+
 **Risk**: Component loading significantly slows startup time
 **Probability**: Medium (60%)
 **Impact**: High (user frustration, abandonment)  
 **Mitigation**:
+
 - Implement performance benchmarking before/after
 - Use asynchronous component loading where possible
 - Optimize component indexing and caching
 - Set maximum startup time budget (5 seconds total)
 
 #### **Configuration Migration Failures**
+
 **Risk**: Users lose existing configurations during migration
 **Probability**: Medium (40%)  
 **Impact**: High (data loss, system unusable)
 **Mitigation**:
+
 - Create automatic configuration backups before migration
 - Implement comprehensive migration validation
 - Provide manual rollback procedures
@@ -530,30 +589,36 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ### **Medium Risk Items**
 
 #### **Component Registration Conflicts**
+
 **Risk**: Namespace conflicts or registration failures break system
 **Probability**: Medium (50%)
 **Impact**: Medium (features broken, confusing errors)
 **Mitigation**:
+
 - Implement comprehensive conflict detection
-- Use `grid:` namespace isolation consistently  
+- Use `grid:` namespace isolation consistently
 - Add validation for component name uniqueness
 - Provide clear error messages for conflicts
 
-#### **Development Productivity Impact**  
+#### **Development Productivity Impact**
+
 **Risk**: Large codebase becomes harder to maintain and develop
 **Probability**: Medium (45%)
 **Impact**: Medium (slower development, more bugs)
 **Mitigation**:
+
 - Follow established patterns consistently
 - Maintain comprehensive test coverage
 - Use automated code generation where possible
 - Document architectural decisions thoroughly
 
 #### **User Overwhelm from Component Quantity**
+
 **Risk**: 125+ components confuse users, reduce adoption
 **Probability**: High (65%)
 **Impact**: Medium (poor UX, feature underutilization)  
 **Mitigation**:
+
 - Implement component categorization and search
 - Create guided discovery workflows
 - Provide usage examples and documentation
@@ -562,10 +627,12 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ### **Low Risk Items**
 
 #### **Test Suite Maintenance Overhead**
+
 **Risk**: 125+ test files become difficult to maintain
 **Probability**: Medium (50%)
 **Impact**: Low (slower testing, potential tech debt)
 **Mitigation**:
+
 - Use consistent testing patterns
 - Implement automated test generation
 - Regular test suite refactoring
@@ -574,6 +641,7 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ## Resource Requirements
 
 ### **Development Team Requirements**
+
 - **Core Developer**: 1 full-time (12 days Phase 2 execution)
 - **Integration Specialist**: 0.5 full-time (days 9-12)
 - **QA Engineer**: 0.5 full-time (days 11-12)
@@ -581,14 +649,16 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 - **Total Effort**: ~15 person-days
 
 ### **Technical Infrastructure**
+
 - **Development Environment**: Existing setup sufficient
 - **Testing Resources**: Additional memory/CPU for comprehensive testing
 - **CI/CD Capacity**: Extended build times for larger test suite
 - **No new infrastructure**: All work within existing systems
 
 ### **Time Requirements**
+
 - **Total Duration**: 12 working days (2.5 weeks)
-- **Critical Path**: Phase 2A → 2B → 2C → 2D  
+- **Critical Path**: Phase 2A → 2B → 2C → 2D
 - **Parallel Work**: Documentation can start during Phase 2C
 - **Buffer Time**: 2 days included for unexpected issues
 
@@ -597,12 +667,14 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ### **Extensibility**
 
 #### **Component Update Delivery**
+
 - Framework for component versioning and updates
 - Automated synchronization with ghostwire source
 - Conflict resolution for component changes
 - User notification of available updates
 
 #### **Additional Integration Sources**
+
 - Pattern established for integrating other plugin ecosystems
 - Namespace system supports multiple sources (e.g., `other:component`)
 - Automated conversion tools for common plugin formats
@@ -610,13 +682,15 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 
 ### **Scalability**
 
-#### **Performance Optimization**  
+#### **Performance Optimization**
+
 - Advanced lazy loading with predictive preloading
-- Component usage analytics for optimization  
+- Component usage analytics for optimization
 - Automatic performance regression detection
 - Resource pooling for memory efficiency
 
 #### **Developer Experience**
+
 - Code generation tools for new component integration
 - Automated testing scaffold generation
 - Documentation generation from component metadata
@@ -625,9 +699,10 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ### **Maintenance Strategy**
 
 #### **Component Lifecycle Management**
+
 - Deprecation pathway for obsolete components
 - Breaking change management across component versions
-- Migration tools for component API changes  
+- Migration tools for component API changes
 - Community contribution integration process
 
 ## Documentation Plan
@@ -635,18 +710,21 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ### **Technical Documentation**
 
 #### **Architecture Decision Records (ADRs)**
+
 - [x] **ADR-004**: Direct integration vs import system architecture
-- [x] **ADR-005**: Component namespace strategy and conflict resolution  
+- [x] **ADR-005**: Component namespace strategy and conflict resolution
 - [x] **ADR-006**: Configuration migration approach and rollback strategy
 - [x] **ADR-007**: Performance optimization strategy for large component sets
 
-#### **Implementation Documentation**  
+#### **Implementation Documentation**
+
 - [x] **Component Integration Guide**: Step-by-step process for adding new components
 - [x] **Testing Strategy Guide**: Patterns and requirements for component testing
-- [x] **Performance Monitoring Guide**: Benchmarking and optimization procedures  
+- [x] **Performance Monitoring Guide**: Benchmarking and optimization procedures
 - [x] **Migration Troubleshooting Guide**: Common issues and resolution steps
 
 #### **API Documentation**
+
 - [x] **Component Factory API**: Agent, command, and skill factory patterns
 - [x] **Configuration Schema API**: Updated schema documentation with examples
 - [x] **Registration System API**: How components are discovered and loaded
@@ -655,12 +733,14 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ### **User Documentation**
 
 #### **User Guides**
+
 - [x] **Component Discovery Guide**: How to find and use 125+ integrated components
 - [x] **Configuration Management**: How to enable/disable components and optimize performance
 - [x] **Migration Guide**: What to expect during the import-to-unified transition
 - [x] **Troubleshooting Guide**: Common issues and solutions post-integration
 
 #### **Component Reference**
+
 - [x] **Agent Reference**: Complete catalog of all 28 integrated agents with usage examples
 - [x] **Command Reference**: Documentation for all 24 integrated commands with syntax
 - [x] **Skill Reference**: Guide to all 73 integrated skills with use cases
@@ -670,11 +750,11 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 
 ### **Internal References**
 
-- **Phase 1 Foundation**: docs/plans/2026-02-06-feat-true-merge-ghostwire-plan.md  
+- **Phase 1 Foundation**: docs/plans/2026-02-06-feat-true-merge-ghostwire-plan.md
 - **Component Mapping**: docs/plans/2026-02-06-component-mapping-strategy.md
 - **Configuration Migration**: docs/plans/2026-02-06-configuration-migration-system.md
 - **Agent Patterns**: src/agents/seer-advisor.ts:1, src/agents/cipher-operator.ts:1
-- **Command Patterns**: src/features/builtin-commands/commands.ts:9  
+- **Command Patterns**: src/features/builtin-commands/commands.ts:9
 - **Skill Patterns**: src/features/builtin-skills/skills.ts:4
 - **Schema Management**: src/config/schema.ts:19
 - **Test Patterns**: src/agents/glitch-auditor.test.ts:1
@@ -696,21 +776,24 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ### **Component Inventory Reference**
 
 #### **Agents (28 total by category)**
+
 - **Review (5)**: kieran-rails-reviewer, kieran-python-reviewer, kieran-typescript-reviewer, dhh-rails-reviewer, code-simplicity-reviewer
-- **Research (4)**: framework-docs-researcher, learnings-researcher, best-practices-researcher, git-history-analyzer  
+- **Research (4)**: framework-docs-researcher, learnings-researcher, best-practices-researcher, git-history-analyzer
 - **Design (4)**: figma-design-sync, design-implementation-reviewer, design-iterator, frontend-design
 - **Workflow (3)**: spec-flow-analyzer, agent-native-architecture, deployment-verification-agent
 - **Documentation (12)**: ankane-readme-writer, every-style-editor, andrew-kane-gem-writer, brainstorming, creating-agent-skills, skill-creator, compound-docs, file-todos, agent-browser, rclone, git-worktree, agent-native-audit
 
 #### **Commands (24 total by category)**
+
 - **Workflows (4)**: workflows:plan, workflows:review, workflows:status, workflows:complete
 - **Code (4)**: code:refactor, code:review, code:optimize, code:format
 - **Git (4)**: git:smart-commit, git:branch, git:merge, git:cleanup
 - **Project (4)**: project:init, project:build, project:deploy, project:test
-- **Utility (4)**: util:clean, util:backup, util:restore, util:doctor  
+- **Utility (4)**: util:clean, util:backup, util:restore, util:doctor
 - **Documentation (4)**: deploy-docs, release-docs, feature-video, test-browser
 
 #### **Skills (73 total by category)**
+
 - **Development (25)**: Language/framework specific programming skills
 - **Design (18)**: frontend-design, figma-design-sync, design-implementation-reviewer, design-iterator, etc.
 - **DevOps (12)**: Infrastructure, deployment, monitoring skills
@@ -720,12 +803,14 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 ## Implementation Checklist
 
 ### **Pre-Implementation Setup**
+
 - [x] Verify Phase 1 completion (backup, directories, planning)
 - [x] Confirm ghostwire source access
 - [x] Establish performance baseline measurements
 - [x] Prepare development environment for large-scale changes
 
 ### **Phase 2A: Agent Integration**
+
 - [x] Create all 28 agent factory TypeScript files
 - [x] Implement agent metadata for Cipher Operator integration
 - [x] Update src/agents/utils.ts registration
@@ -733,7 +818,8 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 - [x] Write comprehensive agent factory tests
 - [x] Verify agent discovery and loading
 
-### **Phase 2B: Command Integration**  
+### **Phase 2B: Command Integration**
+
 - [x] Create all 24 command template TypeScript files
 - [x] Update src/features/builtin-commands/commands.ts registration
 - [x] Update configuration schema with command names
@@ -741,13 +827,15 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 - [x] Verify command execution and argument parsing
 
 ### **Phase 2C: Skill Integration**
+
 - [x] Create all 73 skill definition TypeScript files
 - [x] Update src/features/builtin-skills/skills.ts registration
-- [x] Add MCP configurations where applicable  
+- [x] Add MCP configurations where applicable
 - [x] Write comprehensive skill integration tests
 - [x] Verify skill loading and task delegation
 
 ### **Phase 2D: System Integration**
+
 - [x] Implement configuration migration functions
 - [x] Update main plugin initialization (src/index.ts)
 - [x] Remove src/features/imports/ and src/features/bundles/
@@ -755,6 +843,7 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 - [x] Implement performance optimizations (lazy loading)
 
 ### **Phase 2E: Testing & Validation**
+
 - [x] Execute all unit tests (125+ component tests)
 - [x] Run integration test suite
 - [x] Perform performance benchmarking
@@ -762,6 +851,7 @@ export const UnifiedCompoundEngineeringConfigSchema = z.object({
 - [x] Validate migration scenarios and rollback capability
 
 ### **Final Verification**
+
 - [x] All acceptance criteria met
 - [x] Performance targets achieved
 - [x] Documentation complete

@@ -132,6 +132,7 @@ When reviewing code:
 Your reviews should ruthlessly eliminate unnecessary complexity while maintaining functionality. Remember: the best code is no code, the second-best code is simple code.
 
 Ask the hard questions:
+
 - "Do we really need this abstraction?"
 - "Could a simple function replace this class?"
 - "Is this configuration actually necessary?"

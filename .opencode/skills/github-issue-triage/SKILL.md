@@ -6,6 +6,7 @@ description: "Triage GitHub issues with parallel analysis. 1 issue = 1 backgroun
 # GitHub Issue Triage Specialist
 
 You are a GitHub issue triage automation agent. Your job is to:
+
 1. Fetch **EVERY SINGLE ISSUE** within a specified time range using **EXHAUSTIVE PAGINATION**
 2. Launch ONE background agent PER issue for parallel analysis
 3. Collect results and generate a comprehensive triage report
@@ -18,12 +19,12 @@ You are a GitHub issue triage automation agent. Your job is to:
 
 ## YOU MUST FETCH ALL ISSUES. PERIOD.
 
-| WRONG | CORRECT |
-|----------|------------|
-| `gh issue list --limit 100` and stop | Paginate until ZERO results returned |
-| "I found 16 issues" (first page only) | "I found 61 issues after 5 pages" |
-| Assuming first page is enough | Using `--limit 500` and verifying count |
-| Stopping when you "feel" you have enough | Stopping ONLY when API returns empty |
+| WRONG                                    | CORRECT                                 |
+| ---------------------------------------- | --------------------------------------- |
+| `gh issue list --limit 100` and stop     | Paginate until ZERO results returned    |
+| "I found 16 issues" (first page only)    | "I found 61 issues after 5 pages"       |
+| Assuming first page is enough            | Using `--limit 500` and verifying count |
+| Stopping when you "feel" you have enough | Stopping ONLY when API returns empty    |
 
 ### WHY THIS MATTERS
 
@@ -51,6 +52,7 @@ gh issue list --repo $REPO --state all --limit 500 --json number,title,state,cre
 ### 1.1 Determine Repository and Time Range
 
 Extract from user request:
+
 - `REPO`: Repository in `owner/repo` format (default: current repo via `gh repo view --json nameWithOwner -q .nameWithOwner`)
 - `TIME_RANGE`: Hours to look back (default: 48)
 
@@ -62,20 +64,20 @@ Extract from user request:
 
 ### Default Ratio: `unspecified-low:8, quick:1, writing:1`
 
-| Category | Ratio | Use For | Cost |
-|----------|-------|---------|------|
-| `unspecified-low` | 80% | Standard issue analysis - read issue, fetch comments, categorize | $ |
-| `quick` | 10% | Trivial issues - obvious duplicates, spam, clearly resolved | ¢ |
-| `writing` | 10% | Report generation, response drafting, summary synthesis | $$ |
+| Category          | Ratio | Use For                                                          | Cost |
+| ----------------- | ----- | ---------------------------------------------------------------- | ---- |
+| `unspecified-low` | 80%   | Standard issue analysis - read issue, fetch comments, categorize | $    |
+| `quick`           | 10%   | Trivial issues - obvious duplicates, spam, clearly resolved      | ¢    |
+| `writing`         | 10%   | Report generation, response drafting, summary synthesis          | $$   |
 
 ### When to Override Default Ratio
 
-| Scenario | Recommended Ratio | Reason |
-|----------|-------------------|--------|
-| Bug-heavy triage | `unspecified-low:7, quick:2, writing:1` | More simple duplicates |
-| Feature request triage | `unspecified-low:6, writing:3, quick:1` | More response drafting needed |
-| Security audit | `unspecified-high:5, unspecified-low:4, writing:1` | Deeper analysis required |
-| First-pass quick filter | `quick:8, unspecified-low:2` | Just categorize, don't analyze deeply |
+| Scenario                | Recommended Ratio                                  | Reason                                |
+| ----------------------- | -------------------------------------------------- | ------------------------------------- |
+| Bug-heavy triage        | `unspecified-low:7, quick:2, writing:1`            | More simple duplicates                |
+| Feature request triage  | `unspecified-low:6, writing:3, quick:1`            | More response drafting needed         |
+| Security audit          | `unspecified-high:5, unspecified-low:4, writing:1` | Deeper analysis required              |
+| First-pass quick filter | `quick:8, unspecified-low:2`                       | Just categorize, don't analyze deeply |
 
 ### Agent Assignment Algorithm
 
@@ -83,19 +85,19 @@ Extract from user request:
 function assignAgentCategory(issues: Issue[], ratio: Record<string, number>): Map<Issue, string> {
   const assignments = new Map<Issue, string>();
   const total = Object.values(ratio).reduce((a, b) => a + b, 0);
-  
+
   // Calculate counts for each category
   const counts: Record<string, number> = {};
   for (const [category, weight] of Object.entries(ratio)) {
     counts[category] = Math.floor(issues.length * (weight / total));
   }
-  
+
   // Assign remaining to largest category
   const assigned = Object.values(counts).reduce((a, b) => a + b, 0);
   const remaining = issues.length - assigned;
   const largestCategory = Object.entries(ratio).sort((a, b) => b[1] - a[1])[0][0];
   counts[largestCategory] += remaining;
-  
+
   // Distribute issues
   let issueIndex = 0;
   for (const [category, count] of Object.entries(counts)) {
@@ -103,7 +105,7 @@ function assignAgentCategory(issues: Issue[], ratio: Record<string, number>): Ma
       assignments.set(issues[issueIndex++], category);
     }
   }
-  
+
   return assignments;
 }
 ```
@@ -112,17 +114,17 @@ function assignAgentCategory(issues: Issue[], ratio: Record<string, number>): Ma
 
 **Before launching agents, pre-classify issues for smarter category assignment:**
 
-| Issue Signal | Assign To | Reason |
-|--------------|-----------|--------|
-| Has `duplicate` label | `quick` | Just confirm and close |
-| Has `wontfix` label | `quick` | Just confirm and close |
-| No comments, < 50 char body | `quick` | Likely spam or incomplete |
-| Has linked PR | `quick` | Already being addressed |
-| Has `bug` label + long body | `unspecified-low` | Needs proper analysis |
-| Has `feature` label | `unspecified-low` or `writing` | May need response |
-| User is maintainer | `quick` | They know what they're doing |
-| 5+ comments | `unspecified-low` | Complex discussion |
-| Needs response drafted | `writing` | Prose quality matters |
+| Issue Signal                | Assign To                      | Reason                       |
+| --------------------------- | ------------------------------ | ---------------------------- |
+| Has `duplicate` label       | `quick`                        | Just confirm and close       |
+| Has `wontfix` label         | `quick`                        | Just confirm and close       |
+| No comments, < 50 char body | `quick`                        | Likely spam or incomplete    |
+| Has linked PR               | `quick`                        | Already being addressed      |
+| Has `bug` label + long body | `unspecified-low`              | Needs proper analysis        |
+| Has `feature` label         | `unspecified-low` or `writing` | May need response            |
+| User is maintainer          | `quick`                        | They know what they're doing |
+| 5+ comments                 | `unspecified-low`              | Complex discussion           |
+| Needs response drafted      | `writing`                      | Prose quality matters        |
 
 ---
 
@@ -175,43 +177,43 @@ if [ "$FIRST_COUNT" -eq 500 ]; then
   echo ""
   echo "WARNING: Got exactly 500 results. MORE PAGES EXIST!"
   echo "Continuing pagination..."
-  
+
   PAGE=2
   LAST_ISSUE_NUMBER=$(echo "$FIRST_FETCH" | jq '.[- 1].number')
-  
+
   # Keep fetching until we get less than 500
   while true; do
     echo ""
     echo "[Page $PAGE] Fetching more issues..."
-    
+
     # Use search API with pagination for more results
     NEXT_FETCH=$(gh issue list --repo $REPO --state all --limit 500 \
       --json number,title,state,createdAt,updatedAt,labels,author \
       --search "created:<$(echo "$FIRST_FETCH" | jq -r '.[-1].createdAt')")
-    
+
     NEXT_COUNT=$(echo "$NEXT_FETCH" | jq 'length')
     echo "[Page $PAGE] Raw count: $NEXT_COUNT"
-    
+
     if [ "$NEXT_COUNT" -eq 0 ]; then
       echo "[Page $PAGE] No more results. Pagination complete."
       break
     fi
-    
+
     # Filter and merge
     NEXT_FILTERED=$(echo "$NEXT_FETCH" | jq --arg cutoff "$CUTOFF_DATE" \
       '[.[] | select(.createdAt >= $cutoff or .updatedAt >= $cutoff)]')
     ALL_ISSUES=$(echo "$ALL_ISSUES $NEXT_FILTERED" | jq -s 'add | unique_by(.number)')
-    
+
     CURRENT_TOTAL=$(echo "$ALL_ISSUES" | jq 'length')
     echo "[Page $PAGE] Running total: $CURRENT_TOTAL issues"
-    
+
     if [ "$NEXT_COUNT" -lt 500 ]; then
       echo "[Page $PAGE] Less than 500 results. Pagination complete."
       break
     fi
-    
+
     PAGE=$((PAGE + 1))
-    
+
     # Safety limit
     if [ $PAGE -gt 20 ]; then
       echo "SAFETY LIMIT: Stopped at page 20"
@@ -250,16 +252,17 @@ CHECKLIST:
 
 ## ANTI-PATTERNS (WILL CAUSE FAILURE)
 
-| NEVER DO THIS | Why It Fails |
-|------------------|--------------|
-| Single `gh issue list --limit 500` | If 500 returned, you missed the rest! |
-| `--limit 100` | Misses 80%+ of issues in active repos |
-| Stopping at first fetch | GitHub paginates - you got 1 page of N |
-| Not counting results | Can't verify completeness |
-| Filtering only by createdAt | Misses updated issues |
-| Assuming small repos have few issues | Even small repos can have bursts |
+| NEVER DO THIS                        | Why It Fails                           |
+| ------------------------------------ | -------------------------------------- |
+| Single `gh issue list --limit 500`   | If 500 returned, you missed the rest!  |
+| `--limit 100`                        | Misses 80%+ of issues in active repos  |
+| Stopping at first fetch              | GitHub paginates - you got 1 page of N |
+| Not counting results                 | Can't verify completeness              |
+| Filtering only by createdAt          | Misses updated issues                  |
+| Assuming small repos have few issues | Even small repos can have bursts       |
 
 **THE LOOP MUST RUN UNTIL:**
+
 1. Fetch returns 0 results, OR
 2. Fetch returns less than 500 results
 
@@ -283,7 +286,7 @@ gh pr list --repo $REPO --state all --limit 500 --json number,title,state,create
 Total issues: N
 Agent categories based on ratio:
 - unspecified-low: floor(N * 0.8)
-- quick: floor(N * 0.1)  
+- quick: floor(N * 0.1)
 - writing: ceil(N * 0.1)  # For report generation
 ```
 
@@ -295,10 +298,10 @@ For each issue, launch:
 
 ```typescript
 delegate_task(
-  category="unspecified-low",  // or quick/writing per ratio
-  load_skills=[],
-  run_in_background=true,
-  prompt=`
+  (category = "unspecified-low"), // or quick/writing per ratio
+  (load_skills = []),
+  (run_in_background = true),
+  (prompt = `
 ## TASK
 Analyze GitHub issue #${issue.number} for ${REPO}.
 
@@ -309,7 +312,7 @@ Analyze GitHub issue #${issue.number} for ${REPO}.
 - Author: ${issue.author.login}
 - Created: ${issue.createdAt}
 - Updated: ${issue.updatedAt}
-- Labels: ${issue.labels.map(l => l.name).join(', ')}
+- Labels: ${issue.labels.map((l) => l.name).join(", ")}
 
 ## ISSUE BODY
 ${issue.body}
@@ -347,8 +350,8 @@ SUMMARY: [1-2 sentence summary]
 ACTION: [Recommended maintainer action]
 DRAFT_RESPONSE: [If auto-answerable, provide English draft. Otherwise "NEEDS_MANUAL_REVIEW"]
 \`\`\`
-`
-)
+`),
+);
 ```
 
 ### 2.3 Collect All Results
@@ -381,14 +384,14 @@ for (const taskId of taskIds) {
 
 Group analyzed issues by status:
 
-| Category | Criteria |
-|----------|----------|
-| **CRITICAL** | Blocking bugs, security issues, data loss |
-| **CLOSE_IMMEDIATELY** | Resolved, duplicate, out of scope, stale |
-| **AUTO_RESPOND** | Can answer with template (version update, docs link) |
-| **NEEDS_INVESTIGATION** | Requires manual debugging or design decision |
-| **FEATURE_BACKLOG** | Feature requests for prioritization |
-| **NEEDS_INFO** | Missing details, request more info |
+| Category                | Criteria                                             |
+| ----------------------- | ---------------------------------------------------- |
+| **CRITICAL**            | Blocking bugs, security issues, data loss            |
+| **CLOSE_IMMEDIATELY**   | Resolved, duplicate, out of scope, stale             |
+| **AUTO_RESPOND**        | Can answer with template (version update, docs link) |
+| **NEEDS_INVESTIGATION** | Requires manual debugging or design decision         |
+| **FEATURE_BACKLOG**     | Feature requests for prioritization                  |
+| **NEEDS_INFO**          | Missing details, request more info                   |
 
 ### 3.2 Generate Report
 
@@ -402,14 +405,14 @@ Group analyzed issues by status:
 
 ## Summary
 
-| Category | Count |
-|----------|-------|
-| CRITICAL | N |
-| Close Immediately | N |
-| Auto-Respond | N |
-| Needs Investigation | N |
-| Feature Requests | N |
-| Needs Info | N |
+| Category            | Count |
+| ------------------- | ----- |
+| CRITICAL            | N     |
+| Close Immediately   | N     |
+| Auto-Respond        | N     |
+| Needs Investigation | N     |
+| Feature Requests    | N     |
+| Needs Info          | N     |
 
 ---
 
@@ -442,6 +445,7 @@ Group analyzed issues by status:
 ## Response Templates
 
 ### Fixed in Version X
+
 \`\`\`
 This issue was resolved in vX.Y.Z via PR #NNN.
 Please update: \`bunx ghostwire@X.Y.Z install\`
@@ -449,15 +453,18 @@ If the issue persists, please reopen with \`opencode --print-logs\` output.
 \`\`\`
 
 ### Needs More Info
+
 \`\`\`
 Thank you for reporting. To investigate, please provide:
+
 1. \`opencode --print-logs\` output
 2. Your configuration file
 3. Minimal reproduction steps
-Labeling as \`needs-info\`. Auto-closes in 7 days without response.
-\`\`\`
+   Labeling as \`needs-info\`. Auto-closes in 7 days without response.
+   \`\`\`
 
 ### Out of Scope
+
 \`\`\`
 Thank you for reaching out. This request falls outside the scope of this project.
 [Suggest alternative or explanation]
@@ -470,22 +477,22 @@ Thank you for reaching out. This request falls outside the scope of this project
 
 ## IF YOU DO ANY OF THESE, THE TRIAGE IS INVALID
 
-| Violation | Why It's Wrong | Severity |
-|-----------|----------------|----------|
-| **Using `--limit 100`** | Misses 80%+ of issues in active repos | CRITICAL |
-| **Stopping at first fetch** | GitHub paginates - you only got page 1 | CRITICAL |
-| **Not counting results** | Can't verify completeness | CRITICAL |
-| Batching issues (7 per agent) | Loses detail, harder to track | HIGH |
-| Sequential agent calls | Slow, doesn't leverage parallelism | HIGH |
-| Skipping PR correlation | Misses linked fixes for bugs | MEDIUM |
-| Generic responses | Each issue needs specific analysis | MEDIUM |
+| Violation                     | Why It's Wrong                         | Severity |
+| ----------------------------- | -------------------------------------- | -------- |
+| **Using `--limit 100`**       | Misses 80%+ of issues in active repos  | CRITICAL |
+| **Stopping at first fetch**   | GitHub paginates - you only got page 1 | CRITICAL |
+| **Not counting results**      | Can't verify completeness              | CRITICAL |
+| Batching issues (7 per agent) | Loses detail, harder to track          | HIGH     |
+| Sequential agent calls        | Slow, doesn't leverage parallelism     | HIGH     |
+| Skipping PR correlation       | Misses linked fixes for bugs           | MEDIUM   |
+| Generic responses             | Each issue needs specific analysis     | MEDIUM   |
 
 ## MANDATORY VERIFICATION BEFORE PHASE 2
 
 ```
 CHECKLIST:
 [ ] Used --limit 500 (not 100)
-[ ] Used --state all (not just open)  
+[ ] Used --state all (not just open)
 [ ] Counted issues: _____ total
 [ ] Verified: if count < 500, all issues fetched
 [ ] If count = 500, fetched additional pages

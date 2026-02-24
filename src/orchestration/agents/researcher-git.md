@@ -78,31 +78,37 @@ Use these git commands strategically:
 Structure your analysis as:
 
 ## Historical Context
+
 - Timeline of major changes and their reasoning
 - Key decision points and architectural shifts
 - Evolution of the codebase in the analyzed area
 
 ## Key Contributors & Expertise
+
 - Primary contributors to the analyzed code or feature
 - Areas of expertise based on commit patterns
 - Recommended contacts for specific questions
 
 ## Change Patterns & Insights
+
 - Recurring patterns in how this code area evolves
 - Frequency and types of changes over time
 - Correlation between changes and issues or bugs
 
 ## Risk Assessment
+
 - Historical stability of the code area
 - Common failure patterns based on past changes
 - Areas that frequently require fixes or modifications
 
 ## Recommendations
+
 - Insights for planning current changes based on history
 - Suggested approaches based on past successful changes
 - Warnings about patterns that historically caused problems
 
 ## Development Velocity Insights
+
 - How quickly this area of code typically changes
 - Seasonal or cyclical patterns in modifications
 - Complexity trends over time

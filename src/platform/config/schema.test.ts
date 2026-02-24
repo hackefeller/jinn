@@ -404,7 +404,7 @@ describe("Dark Runner agent override", () => {
     // #given
     const config = {
       agents: {
-        "executor": {
+        executor: {
           model: "openai/gpt-5.2",
           temperature: 0.2,
         },
@@ -427,7 +427,7 @@ describe("Dark Runner agent override", () => {
     // #given
     const config = {
       agents: {
-        "executor": {
+        executor: {
           prompt_append: "Additional instructions for executor",
         },
       },
@@ -449,7 +449,7 @@ describe("Dark Runner agent override", () => {
     // #given
     const config = {
       agents: {
-        "executor": {
+        executor: {
           tools: {
             read: true,
             write: false,
@@ -475,13 +475,13 @@ describe("Dark Runner agent override", () => {
     // #given
     const config = {
       agents: {
-        "operator": {
+        operator: {
           temperature: 0.1,
         },
-        "orchestrator": {
+        orchestrator: {
           temperature: 0.2,
         },
-        "planner": {
+        planner: {
           temperature: 0.3,
         },
       },

@@ -42,9 +42,7 @@ export async function loadAgentsFromManifest(): Promise<LoadedAgent[]> {
  * @returns Array of loaded agents
  * @throws Error if agent definitions are invalid or duplicate IDs found
  */
-export async function loadMarkdownAgents(
-  agentsDir?: string,
-): Promise<LoadedAgent[]> {
+export async function loadMarkdownAgents(agentsDir?: string): Promise<LoadedAgent[]> {
   // If directory provided and exists, load from filesystem (used during build/dev)
   if (agentsDir && existsSync(agentsDir)) {
     const files = readdirSync(agentsDir).filter((file) => file.endsWith(".md"));
@@ -66,10 +64,7 @@ export async function loadMarkdownAgents(
   try {
     return await loadAgentsFromManifest();
   } catch (manifestError) {
-    const errorMsg =
-      manifestError instanceof Error
-        ? manifestError.message
-        : String(manifestError);
+    const errorMsg = manifestError instanceof Error ? manifestError.message : String(manifestError);
     throw new Error(
       `Failed to load agents from embedded manifest (manifestError: ${errorMsg}). ${agentsDir ? `Directory was provided: ${agentsDir}` : "No directory provided"}`,
     );
@@ -89,9 +84,7 @@ function loadAgentFromFile(filePath: string): LoadedAgent {
   try {
     content = readFileSync(filePath, "utf-8");
   } catch (err) {
-    throw new Error(
-      `Cannot read file: ${err instanceof Error ? err.message : String(err)}`,
-    );
+    throw new Error(`Cannot read file: ${err instanceof Error ? err.message : String(err)}`);
   }
 
   // Parse frontmatter and body
@@ -135,9 +128,7 @@ function loadAgentFromFile(filePath: string): LoadedAgent {
  * @param agentsDir - Path to directory containing agent .md files
  * @returns Array of loaded agents, empty array if errors occur
  */
-export async function loadMarkdownAgentsSafe(
-  agentsDir: string,
-): Promise<LoadedAgent[]> {
+export async function loadMarkdownAgentsSafe(agentsDir: string): Promise<LoadedAgent[]> {
   try {
     return await loadMarkdownAgents(agentsDir);
   } catch (err) {

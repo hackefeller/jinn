@@ -788,7 +788,7 @@ export function writeModelConfig(): ConfigMergeResult {
       }
     }
 
-    // For fresh installs, use our defaults. 
+    // For fresh installs, use our defaults.
     // For existing configs, users can manually update if they want different models.
     const newConfig: Record<string, unknown> = {
       ...existingConfig,

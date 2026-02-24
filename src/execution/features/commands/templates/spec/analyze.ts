@@ -1,6 +1,6 @@
 /**
  * Template for ghostwire:spec:analyze command
- * 
+ *
  * Cross-artifact consistency check.
  * Replaces: speckit.analyze.md logic
  */
@@ -71,12 +71,12 @@ $RECOMMENDATIONS
 /**
  * Artifact status types
  */
-export type ArtifactStatus = 'present' | 'missing' | 'incomplete' | 'outdated';
+export type ArtifactStatus = "present" | "missing" | "incomplete" | "outdated";
 
 /**
  * Issue severity
  */
-export type IssueSeverity = 'critical' | 'warning' | 'info';
+export type IssueSeverity = "critical" | "warning" | "info";
 
 /**
  * Analysis issue
@@ -93,44 +93,51 @@ export interface AnalysisIssue {
  */
 export function generateIssuesList(issues: AnalysisIssue[]): string {
   if (issues.length === 0) {
-    return '✅ No issues found. All artifacts are consistent.';
+    return "✅ No issues found. All artifacts are consistent.";
   }
-  
-  const critical = issues.filter(i => i.severity === 'critical');
-  const warnings = issues.filter(i => i.severity === 'warning');
-  const info = issues.filter(i => i.severity === 'info');
-  
-  let result = '';
-  
+
+  const critical = issues.filter((i) => i.severity === "critical");
+  const warnings = issues.filter((i) => i.severity === "warning");
+  const info = issues.filter((i) => i.severity === "info");
+
+  let result = "";
+
   if (critical.length > 0) {
-    result += '### 🔴 Critical Issues\n\n';
-    result += critical.map(i => `- **${i.artifact}**: ${i.description}\n  - Recommendation: ${i.recommendation}`).join('\n\n');
-    result += '\n\n';
+    result += "### 🔴 Critical Issues\n\n";
+    result += critical
+      .map((i) => `- **${i.artifact}**: ${i.description}\n  - Recommendation: ${i.recommendation}`)
+      .join("\n\n");
+    result += "\n\n";
   }
-  
+
   if (warnings.length > 0) {
-    result += '### ⚠️ Warnings\n\n';
-    result += warnings.map(i => `- **${i.artifact}**: ${i.description}\n  - Recommendation: ${i.recommendation}`).join('\n\n');
-    result += '\n\n';
+    result += "### ⚠️ Warnings\n\n";
+    result += warnings
+      .map((i) => `- **${i.artifact}**: ${i.description}\n  - Recommendation: ${i.recommendation}`)
+      .join("\n\n");
+    result += "\n\n";
   }
-  
+
   if (info.length > 0) {
-    result += '### ℹ️ Information\n\n';
-    result += info.map(i => `- **${i.artifact}**: ${i.description}`).join('\n\n');
+    result += "### ℹ️ Information\n\n";
+    result += info.map((i) => `- **${i.artifact}**: ${i.description}`).join("\n\n");
   }
-  
+
   return result;
 }
 
 /**
  * Check spec-plan alignment
  */
-export function checkSpecPlanAlignment(spec: string, plan: string): { aligned: boolean; issues: string[] } {
+export function checkSpecPlanAlignment(
+  spec: string,
+  plan: string,
+): { aligned: boolean; issues: string[] } {
   const issues: string[] = [];
-  
+
   // Extract user stories from spec
   const specStories = spec.match(/### User Story \d+/g) || [];
-  
+
   // Check if plan references all stories
   for (const story of specStories) {
     const storyNum = story.match(/\d+/)?.[0];
@@ -138,47 +145,52 @@ export function checkSpecPlanAlignment(spec: string, plan: string): { aligned: b
       issues.push(`User Story ${storyNum} from spec not referenced in plan`);
     }
   }
-  
+
   // Check tech stack consistency
   const specTech = spec.match(/\*\*Language\/Version\*\*: ([^\n]+)/)?.[1];
   const planTech = plan.match(/\*\*Language\/Version\*\*: ([^\n]+)/)?.[1];
   if (specTech && planTech && specTech !== planTech) {
     issues.push(`Tech stack mismatch: spec says "${specTech}", plan says "${planTech}"`);
   }
-  
+
   return {
     aligned: issues.length === 0,
-    issues
+    issues,
   };
 }
 
 /**
  * Check plan-tasks alignment
  */
-export function checkPlanTasksAlignment(plan: string, tasks: string): { aligned: boolean; issues: string[] } {
+export function checkPlanTasksAlignment(
+  plan: string,
+  tasks: string,
+): { aligned: boolean; issues: string[] } {
   const issues: string[] = [];
-  
+
   // Extract phases from plan
   const planPhases = plan.match(/Phase \d+: ([^\n]+)/g) || [];
-  
+
   // Check if tasks follow phase structure
   const taskPhases = tasks.match(/## Phase \d+/g) || [];
-  
+
   if (planPhases.length !== taskPhases.length) {
-    issues.push(`Phase count mismatch: plan has ${planPhases.length} phases, tasks has ${taskPhases.length}`);
+    issues.push(
+      `Phase count mismatch: plan has ${planPhases.length} phases, tasks has ${taskPhases.length}`,
+    );
   }
-  
+
   // Check if all plan requirements have corresponding tasks
   const planReqs = plan.match(/- \*\*FR-\d+\*\*: ([^\n]+)/g) || [];
   for (const req of planReqs) {
-    const reqText = req.replace(/- \*\*FR-\d+\*\*:\s*/, '');
+    const reqText = req.replace(/- \*\*FR-\d+\*\*:\s*/, "");
     if (!tasks.toLowerCase().includes(reqText.toLowerCase().substring(0, 30))) {
       issues.push(`Requirement "${reqText.substring(0, 50)}..." may not have corresponding task`);
     }
   }
-  
+
   return {
     aligned: issues.length === 0,
-    issues
+    issues,
   };
 }

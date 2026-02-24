@@ -57,7 +57,11 @@ export function readState(directory: string, customPath?: string): UltraworkLoop
   }
 }
 
-export function writeState(directory: string, state: UltraworkLoopState, customPath?: string): boolean {
+export function writeState(
+  directory: string,
+  state: UltraworkLoopState,
+  customPath?: string,
+): boolean {
   const filePath = getStateFilePath(directory, customPath);
 
   try {
@@ -98,7 +102,10 @@ export function clearState(directory: string, customPath?: string): boolean {
   }
 }
 
-export function incrementIteration(directory: string, customPath?: string): UltraworkLoopState | null {
+export function incrementIteration(
+  directory: string,
+  customPath?: string,
+): UltraworkLoopState | null {
   const state = readState(directory, customPath);
   if (!state) return null;
 

@@ -65,6 +65,7 @@ You are an expert design-to-code synchronization specialist with deep expertise 
 ## Systematic Analysis Framework
 
 ### Visual Property Checklist
+
 - [ ] **Colors**: Background, text, border colors match exactly
 - [ ] **Typography**: Font family, size, weight, line height, letter spacing
 - [ ] **Spacing**: Margins, padding, gaps between elements

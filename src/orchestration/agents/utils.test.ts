@@ -8,6 +8,11 @@ import * as modelAvailability from "../../platform/opencode/model-availability";
 const TEST_DEFAULT_MODEL = "anthropic/claude-opus-4-5";
 
 describe("createAgents with model overrides", () => {
+  beforeEach(() => {
+    // Mock cache to return null so tests use systemDefaultModel as expected
+    spyOn(connectedProvidersCache, "readConnectedProvidersCache").mockReturnValue(null);
+  });
+
   test("operator with default model has thinking config", async () => {
     // #given - no overrides, using systemDefaultModel
 
@@ -23,11 +28,14 @@ describe("createAgents with model overrides", () => {
   test("operator with GPT model override has reasoningEffort, no thinking", async () => {
     // #given
     const overrides = {
-      "operator": { model: "github-copilot/gpt-5.2" },
+      operator: { model: "github-copilot/gpt-5.2" },
     };
 
     // #when
-    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({
+      agentOverrides: overrides,
+      systemDefaultModel: TEST_DEFAULT_MODEL,
+    });
 
     // #then
     expect(agents["operator"].model).toBe("github-copilot/gpt-5.2");
@@ -86,7 +94,10 @@ describe("createAgents with model overrides", () => {
     };
 
     // #when
-    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({
+      agentOverrides: overrides,
+      systemDefaultModel: TEST_DEFAULT_MODEL,
+    });
 
     // #then
     expect(agents["advisor-plan"].model).toBe("openai/gpt-5.2");
@@ -102,7 +113,10 @@ describe("createAgents with model overrides", () => {
     };
 
     // #when
-    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({
+      agentOverrides: overrides,
+      systemDefaultModel: TEST_DEFAULT_MODEL,
+    });
 
     // #then
     expect(agents["advisor-plan"].model).toBe("anthropic/claude-sonnet-4");
@@ -114,11 +128,14 @@ describe("createAgents with model overrides", () => {
   test("non-model overrides are still applied after factory rebuild", async () => {
     // #given
     const overrides = {
-      "operator": { model: "github-copilot/gpt-5.2", temperature: 0.5 },
+      operator: { model: "github-copilot/gpt-5.2", temperature: 0.5 },
     };
 
     // #when
-    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({
+      agentOverrides: overrides,
+      systemDefaultModel: TEST_DEFAULT_MODEL,
+    });
 
     // #then
     expect(agents["operator"].model).toBe("github-copilot/gpt-5.2");
@@ -450,7 +467,10 @@ describe("override.category expansion in createAgents", () => {
     };
 
     // #when
-    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({
+      agentOverrides: overrides,
+      systemDefaultModel: TEST_DEFAULT_MODEL,
+    });
 
     // #then - category properties are applied (specific values depend on config)
     expect(agents["advisor-plan"]).toBeDefined();
@@ -465,7 +485,10 @@ describe("override.category expansion in createAgents", () => {
     };
 
     // #when
-    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({
+      agentOverrides: overrides,
+      systemDefaultModel: TEST_DEFAULT_MODEL,
+    });
 
     // #then - direct variant overrides category variant
     expect(agents["advisor-plan"]).toBeDefined();
@@ -523,11 +546,14 @@ describe("override.category expansion in createAgents", () => {
   test("operator override with category expands category properties", async () => {
     // #given
     const overrides = {
-      "operator": { category: "ultrabrain" } as any,
+      operator: { category: "ultrabrain" } as any,
     };
 
     // #when
-    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({
+      agentOverrides: overrides,
+      systemDefaultModel: TEST_DEFAULT_MODEL,
+    });
 
     // #then - category properties are applied (specific values depend on config)
     expect(agents["operator"]).toBeDefined();
@@ -538,11 +564,14 @@ describe("override.category expansion in createAgents", () => {
   test("orchestrator override with category expands category properties", async () => {
     // #given
     const overrides = {
-      "orchestrator": { category: "ultrabrain" } as any,
+      orchestrator: { category: "ultrabrain" } as any,
     };
 
     // #when
-    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({
+      agentOverrides: overrides,
+      systemDefaultModel: TEST_DEFAULT_MODEL,
+    });
 
     // #then - category properties are applied (specific values depend on config)
     expect(agents["orchestrator"]).toBeDefined();
@@ -557,7 +586,10 @@ describe("override.category expansion in createAgents", () => {
     };
 
     // #when
-    const agents = await createAgents({ agentOverrides: overrides, systemDefaultModel: TEST_DEFAULT_MODEL });
+    const agents = await createAgents({
+      agentOverrides: overrides,
+      systemDefaultModel: TEST_DEFAULT_MODEL,
+    });
 
     // #then - no category-specific variant/reasoningEffort applied from non-existent category
     expect(agents["advisor-plan"]).toBeDefined();

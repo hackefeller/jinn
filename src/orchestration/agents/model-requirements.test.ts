@@ -47,11 +47,11 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     // #when - checking fallback chains
     // #then - agents have valid model configurations (specific values determined by config)
     const allAgents = Object.values(AGENT_MODEL_REQUIREMENTS);
-    
+
     for (const agent of allAgents) {
       expect(agent.fallbackChain).toBeDefined();
       expect(agent.fallbackChain.length).toBeGreaterThan(0);
-      
+
       for (const entry of agent.fallbackChain) {
         // Verify structure - models can be any valid model
         expect(entry.providers).toBeDefined();
@@ -103,11 +103,11 @@ describe("CATEGORY_MODEL_REQUIREMENTS", () => {
     // #when - checking fallback chains
     // #then - categories have valid model configurations (specific values determined by config)
     const allCategories = Object.values(CATEGORY_MODEL_REQUIREMENTS);
-    
+
     for (const category of allCategories) {
       expect(category.fallbackChain).toBeDefined();
       expect(category.fallbackChain.length).toBeGreaterThan(0);
-      
+
       for (const entry of category.fallbackChain) {
         // Verify structure - models can be any valid model
         expect(entry.providers).toBeDefined();
@@ -124,13 +124,13 @@ describe("CATEGORY_MODEL_REQUIREMENTS", () => {
     // #when - checking for variant field
     // #then - variant is optional, but if present must be a valid string
     const allCategories = Object.values(CATEGORY_MODEL_REQUIREMENTS);
-    
+
     for (const category of allCategories) {
       if (category.variant !== undefined) {
         expect(typeof category.variant).toBe("string");
         expect(category.variant.length).toBeGreaterThan(0);
       }
-      
+
       for (const entry of category.fallbackChain) {
         if (entry.variant !== undefined) {
           expect(typeof entry.variant).toBe("string");
@@ -238,12 +238,12 @@ describe("requiresModel field in categories", () => {
     // #given - all category requirements
     // #when / #then - requiresModel is optional, system works with or without it
     const allCategories = Object.values(CATEGORY_MODEL_REQUIREMENTS);
-    
+
     // All categories should have a valid fallbackChain regardless of requiresModel
     for (const category of allCategories) {
       expect(category.fallbackChain).toBeDefined();
       expect(category.fallbackChain.length).toBeGreaterThan(0);
-      
+
       // If requiresModel exists, it should be a valid model name
       if (category.requiresModel !== undefined) {
         expect(typeof category.requiresModel).toBe("string");

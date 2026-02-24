@@ -86,7 +86,10 @@ export function buildTaskDelegationPrompt(task: Task, context?: string): string 
 
   if (task.metadata) {
     const metadataStr = Object.entries(task.metadata)
-      .map(([key, value]) => `- **${key}**: ${typeof value === "string" ? value : JSON.stringify(value)}`)
+      .map(
+        ([key, value]) =>
+          `- **${key}**: ${typeof value === "string" ? value : JSON.stringify(value)}`,
+      )
       .join("\n");
 
     if (metadataStr) {
@@ -102,7 +105,7 @@ export function buildTaskDelegationPrompt(task: Task, context?: string): string 
   if (task.blockedBy && task.blockedBy.length > 0) {
     sections.push(
       `This task is blocked by: ${task.blockedBy.join(", ")}`,
-      "Ensure dependencies are completed before starting this task."
+      "Ensure dependencies are completed before starting this task.",
     );
   } else {
     sections.push("This task has no blocking dependencies. You can start immediately.");
@@ -112,7 +115,7 @@ export function buildTaskDelegationPrompt(task: Task, context?: string): string 
     sections.push(
       "",
       `This task blocks: ${task.blocks.join(", ")}`,
-      "Ensure this task is completed before dependent tasks begin."
+      "Ensure this task is completed before dependent tasks begin.",
     );
   }
 
@@ -164,7 +167,7 @@ export interface TaskDelegationResult {
  */
 export function buildTaskDelegationInstruction(
   task: Task,
-  workflowContext?: string
+  workflowContext?: string,
 ): TaskDelegationResult {
   const config = getTaskDelegationConfig(task);
   const prompt = buildTaskDelegationPrompt(task, workflowContext);
@@ -221,7 +224,7 @@ export interface TaskDelegationPlan {
 
 export function buildTaskDelegationPlan(
   tasks: Task[],
-  estimatedTotalDuration?: string
+  estimatedTotalDuration?: string,
 ): TaskDelegationPlan {
   const tasksByCategory: Record<DelegationCategory, number> = {
     "visual-engineering": 0,

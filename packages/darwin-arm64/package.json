@@ -7,16 +7,16 @@
     "type": "git",
     "url": "https://github.com/hackefeller/ghostwire"
   },
+  "bin": {
+    "ghostwire": "./bin/ghostwire"
+  },
+  "files": [
+    "bin"
+  ],
   "os": [
     "darwin"
   ],
   "cpu": [
     "arm64"
-  ],
-  "files": [
-    "bin"
-  ],
-  "bin": {
-    "ghostwire": "./bin/ghostwire"
-  }
+  ]
 }

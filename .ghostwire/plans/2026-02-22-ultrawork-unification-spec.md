@@ -19,50 +19,50 @@
 
 ### 2.1 Directory Structure
 
-| Before | After | Status |
-|--------|-------|--------|
-| `src/orchestration/hooks/ralph-loop/` | `src/orchestration/hooks/ultrawork-loop/` | ✅ Renamed |
-| `src/execution/features/boulder-state/` | `src/execution/features/ultrawork-state/` | ✅ Renamed |
+| Before                                              | After                                                   | Status     |
+| --------------------------------------------------- | ------------------------------------------------------- | ---------- |
+| `src/orchestration/hooks/ralph-loop/`               | `src/orchestration/hooks/ultrawork-loop/`               | ✅ Renamed |
+| `src/execution/features/boulder-state/`             | `src/execution/features/ultrawork-state/`               | ✅ Renamed |
 | `src/execution/features/builtin-skills/ralph-loop/` | `src/execution/features/builtin-skills/ultrawork-loop/` | ✅ Renamed |
 
 ### 2.2 Type/Interface Naming
 
-| Before | After | Status |
-|--------|-------|--------|
-| `RalphLoopHook` | `UltraworkLoopHook` | ✅ Renamed |
-| `RalphLoopState` | `UltraworkLoopState` | ✅ Renamed |
-| `RalphLoopOptions` | `UltraworkLoopOptions` | ✅ Renamed |
-| `RalphLoopConfig` | `UltraworkLoopConfig` | ✅ Renamed |
+| Before                  | After                       | Status     |
+| ----------------------- | --------------------------- | ---------- |
+| `RalphLoopHook`         | `UltraworkLoopHook`         | ✅ Renamed |
+| `RalphLoopState`        | `UltraworkLoopState`        | ✅ Renamed |
+| `RalphLoopOptions`      | `UltraworkLoopOptions`      | ✅ Renamed |
+| `RalphLoopConfig`       | `UltraworkLoopConfig`       | ✅ Renamed |
 | `RalphLoopConfigSchema` | `UltraworkLoopConfigSchema` | ✅ Renamed |
-| `BoulderState` | `UltraworkState` | ✅ Renamed |
+| `BoulderState`          | `UltraworkState`            | ✅ Renamed |
 
 ### 2.3 Function Naming
 
-| Before | After | Status |
-|--------|-------|--------|
+| Before                  | After                       | Status     |
+| ----------------------- | --------------------------- | ---------- |
 | `createRalphLoopHook()` | `createUltraworkLoopHook()` | ✅ Renamed |
-| `readBoulderState()` | `readUltraworkState()` | ✅ Renamed |
-| `writeBoulderState()` | `writeUltraworkState()` | ✅ Renamed |
-| `clearBoulderState()` | `clearUltraworkState()` | ✅ Renamed |
-| `createBoulderState()` | `createUltraworkState()` | ✅ Renamed |
-| `getBoulderFilePath()` | `getUltraworkFilePath()` | ✅ Renamed |
+| `readBoulderState()`    | `readUltraworkState()`      | ✅ Renamed |
+| `writeBoulderState()`   | `writeUltraworkState()`     | ✅ Renamed |
+| `clearBoulderState()`   | `clearUltraworkState()`     | ✅ Renamed |
+| `createBoulderState()`  | `createUltraworkState()`    | ✅ Renamed |
+| `getBoulderFilePath()`  | `getUltraworkFilePath()`    | ✅ Renamed |
 
 ### 2.4 Constants
 
-| Before | After | Status |
-|--------|-------|--------|
-| `HOOK_NAME = "ralph-loop"` | `HOOK_NAME = "ultrawork-loop"` | ✅ Updated |
+| Before                          | After                               | Status     |
+| ------------------------------- | ----------------------------------- | ---------- |
+| `HOOK_NAME = "ralph-loop"`      | `HOOK_NAME = "ultrawork-loop"`      | ✅ Updated |
 | `BOULDER_FILE = "boulder.json"` | `ULTRAWORK_FILE = "ultrawork.json"` | ✅ Updated |
-| `BOULDER_STATE_PATH` | `ULTRAWORK_STATE_PATH` | ✅ Updated |
-| `BOULDER_CONTINUATION_PROMPT` | `ULTRAWORK_CONTINUATION_PROMPT` | ✅ Updated |
-| `RALPH_LOOP_TEMPLATE` | `ULTRAWORK_LOOP_TEMPLATE` | ✅ Updated |
-| `CANCEL_RALPH_TEMPLATE` | `CANCEL_ULTRAWORK_TEMPLATE` | ✅ Updated |
+| `BOULDER_STATE_PATH`            | `ULTRAWORK_STATE_PATH`              | ✅ Updated |
+| `BOULDER_CONTINUATION_PROMPT`   | `ULTRAWORK_CONTINUATION_PROMPT`     | ✅ Updated |
+| `RALPH_LOOP_TEMPLATE`           | `ULTRAWORK_LOOP_TEMPLATE`           | ✅ Updated |
+| `CANCEL_RALPH_TEMPLATE`         | `CANCEL_ULTRAWORK_TEMPLATE`         | ✅ Updated |
 
 ### 2.5 System Directives
 
-| Before | After | Status |
-|--------|-------|--------|
-| `RALPH_LOOP: "RALPH LOOP"` | `ULTRAWORK_LOOP: "ULTRAWORK LOOP"` | ✅ Updated |
+| Before                                         | After                                              | Status     |
+| ---------------------------------------------- | -------------------------------------------------- | ---------- |
+| `RALPH_LOOP: "RALPH LOOP"`                     | `ULTRAWORK_LOOP: "ULTRAWORK LOOP"`                 | ✅ Updated |
 | `BOULDER_CONTINUATION: "BOULDER CONTINUATION"` | `ULTRAWORK_CONTINUATION: "ULTRAWORK CONTINUATION"` | ✅ Updated |
 
 ### 2.6 Configuration Schema
@@ -81,45 +81,45 @@ export const UltraworkLoopConfigSchema = z.object({
 
 ### 2.7 Commands
 
-| Before | After | Status |
-|--------|-------|--------|
-| `/ghostwire:overclock-loop` | `/ghostwire:ultrawork-loop` | ✅ Renamed |
-| `/ghostwire:ulw-overclock` | `/ghostwire:ulw-ultrawork` | ✅ Renamed |
+| Before                        | After                         | Status     |
+| ----------------------------- | ----------------------------- | ---------- |
+| `/ghostwire:overclock-loop`   | `/ghostwire:ultrawork-loop`   | ✅ Renamed |
+| `/ghostwire:ulw-overclock`    | `/ghostwire:ulw-ultrawork`    | ✅ Renamed |
 | `/ghostwire:cancel-overclock` | `/ghostwire:cancel-ultrawork` | ✅ Renamed |
 
 **Note**: No deprecated aliases maintained (per beta/unreleased status)
 
 ### 2.8 File Paths
 
-| Before | After | Status |
-|--------|-------|--------|
-| `.ghostwire/boulder.json` | `.ghostwire/ultrawork.json` | ✅ Updated |
+| Before                               | After                                | Status     |
+| ------------------------------------ | ------------------------------------ | ---------- |
+| `.ghostwire/boulder.json`            | `.ghostwire/ultrawork.json`          | ✅ Updated |
 | `.ghostwire/overclock-loop.local.md` | `.ghostwire/ultrawork-loop.local.md` | ✅ Updated |
 
 ### 2.9 User-Facing Strings
 
-| Before | After | Status |
-|--------|-------|--------|
-| "Ralph Loop Complete!" | "Ultrawork Loop Complete!" | ✅ Updated |
-| "Ralph Loop Stopped" | "Ultrawork Loop Stopped" | ✅ Updated |
+| Before                          | After                                | Status     |
+| ------------------------------- | ------------------------------------ | ---------- |
+| "Ralph Loop Complete!"          | "Ultrawork Loop Complete!"           | ✅ Updated |
+| "Ralph Loop Stopped"            | "Ultrawork Loop Stopped"             | ✅ Updated |
 | "You are starting a Ralph Loop" | "You are starting an Ultrawork Loop" | ✅ Updated |
-| "Cancel active Ralph Loop" | "Cancel active Ultrawork Loop" | ✅ Updated |
-| "Keep bouldering" | "Keep ultraworking" | ✅ Updated |
-| "BOULDER STATE:" | "ULTRAWORK STATE:" | ✅ Updated |
-| "Boulder continuation injected" | "Ultrawork continuation injected" | ✅ Updated |
-| "No active boulder" | "No active ultrawork" | ✅ Updated |
-| "Boulder complete" | "Ultrawork complete" | ✅ Updated |
+| "Cancel active Ralph Loop"      | "Cancel active Ultrawork Loop"       | ✅ Updated |
+| "Keep bouldering"               | "Keep ultraworking"                  | ✅ Updated |
+| "BOULDER STATE:"                | "ULTRAWORK STATE:"                   | ✅ Updated |
+| "Boulder continuation injected" | "Ultrawork continuation injected"    | ✅ Updated |
+| "No active boulder"             | "No active ultrawork"                | ✅ Updated |
+| "Boulder complete"              | "Ultrawork complete"                 | ✅ Updated |
 
 ### 2.10 Hook IDs
 
-| Before | After | Status |
-|--------|-------|--------|
+| Before         | After              | Status     |
+| -------------- | ------------------ | ---------- |
 | `"ralph-loop"` | `"ultrawork-loop"` | ✅ Updated |
 
 ### 2.11 Skill Names
 
-| Before | After | Status |
-|--------|-------|--------|
+| Before                        | After              | Status     |
+| ----------------------------- | ------------------ | ---------- |
 | `"ralph-loop"` (in skills.ts) | `"ultrawork-loop"` | ✅ Updated |
 
 ---
@@ -129,6 +129,7 @@ export const UltraworkLoopConfigSchema = z.object({
 **Status**: Not implemented (per beta/unreleased status)
 
 Since this package has not been released yet and is still in beta:
+
 - ✅ No deprecated aliases maintained
 - ✅ No file migration logic
 - ✅ No deprecation warnings
@@ -140,18 +141,19 @@ Since this package has not been released yet and is still in beta:
 
 ### 4.1 By Category
 
-| Category | File Count | Changes |
-|----------|------------|---------|
-| Core implementation | 10 | 150+ |
-| Tests | 8 | 200+ |
-| Documentation | 15 | 80+ |
-| Configuration | 3 | 20+ |
-| Templates | 5 | 40+ |
-| **Total** | **~60** | **~500** |
+| Category            | File Count | Changes  |
+| ------------------- | ---------- | -------- |
+| Core implementation | 10         | 150+     |
+| Tests               | 8          | 200+     |
+| Documentation       | 15         | 80+      |
+| Configuration       | 3          | 20+      |
+| Templates           | 5          | 40+      |
+| **Total**           | **~60**    | **~500** |
 
 ### 4.2 Critical Files (Updated)
 
 ✅ All updated:
+
 1. `src/orchestration/hooks/ultrawork-loop/` (renamed from ralph-loop)
 2. `src/execution/features/ultrawork-state/` (renamed from boulder-state)
 3. `src/platform/config/schema.ts`
@@ -174,6 +176,7 @@ grep -rE '\b(ralph|Ralph|RALPH)\b' src/ --include="*.ts"
 grep -rE '\bboulder\b' src/ --include="*.ts"
 grep -rE '\boverclock\b' src/ --include="*.ts"
 ```
+
 ✅ **PASS**: 0 matches in all cases
 
 ### 5.2 Build Success
@@ -192,6 +195,7 @@ bun test           # ✅ 1,869 pass, 0 fail
 ### 5.4 Functional Verification
 
 ✅ All verified:
+
 1. `/ghostwire:ultrawork-loop "test task"` - starts loop
 2. `/ghostwire:cancel-ultrawork` - cancels loop
 3. Config `ultrawork_loop: { enabled: true }` works
@@ -210,12 +214,12 @@ bun test           # ✅ 1,869 pass, 0 fail
 
 ## 7. Risks and Mitigations
 
-| Risk | Impact | Mitigation | Status |
-|------|--------|------------|--------|
-| Broken imports after directory rename | Build fails | Wave-based approach with verification | ✅ Resolved |
-| Test failures due to assertion changes | CI red | Updated tests atomically with code | ✅ Resolved |
-| User confusion during transition | Support load | Clean break (no aliases) | ✅ Accepted (beta) |
-| Missing occurrences | Inconsistent naming | Grep verification at each wave | ✅ Resolved |
+| Risk                                   | Impact              | Mitigation                            | Status             |
+| -------------------------------------- | ------------------- | ------------------------------------- | ------------------ |
+| Broken imports after directory rename  | Build fails         | Wave-based approach with verification | ✅ Resolved        |
+| Test failures due to assertion changes | CI red              | Updated tests atomically with code    | ✅ Resolved        |
+| User confusion during transition       | Support load        | Clean break (no aliases)              | ✅ Accepted (beta) |
+| Missing occurrences                    | Inconsistent naming | Grep verification at each wave        | ✅ Resolved        |
 
 ---
 

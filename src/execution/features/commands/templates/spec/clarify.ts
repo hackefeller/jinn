@@ -1,6 +1,6 @@
 /**
  * Template for ghostwire:spec:clarify command
- * 
+ *
  * Interactive Q&A to reduce ambiguity in specifications.
  * Replaces: speckit.clarify.md logic
  */
@@ -93,45 +93,49 @@ export function generateClarificationQuestion(q: ClarificationQuestion): string 
 /**
  * Extract [NEEDS CLARIFICATION] markers from spec
  */
-export function extractClarificationMarkers(specContent: string): { marker: string; context: string }[] {
+export function extractClarificationMarkers(
+  specContent: string,
+): { marker: string; context: string }[] {
   const markers: { marker: string; context: string }[] = [];
   const pattern = /\[NEEDS CLARIFICATION:\s*([^\]]+)\]/g;
   let match;
-  
+
   while ((match = pattern.exec(specContent)) !== null) {
     // Get surrounding context (100 chars before and after)
     const start = Math.max(0, match.index - 100);
     const end = Math.min(specContent.length, match.index + match[0].length + 100);
     const context = specContent.substring(start, end);
-    
+
     markers.push({
       marker: match[1].trim(),
-      context: context.replace(/\[NEEDS CLARIFICATION:[^\]]+\]/g, '[...]')
+      context: context.replace(/\[NEEDS CLARIFICATION:[^\]]+\]/g, "[...]"),
     });
   }
-  
+
   return markers;
 }
 
 /**
  * Limit markers to most critical 3
  */
-export function prioritizeMarkers(markers: { marker: string; context: string }[]): { marker: string; context: string }[] {
+export function prioritizeMarkers(
+  markers: { marker: string; context: string }[],
+): { marker: string; context: string }[] {
   // Priority: scope > security/privacy > user experience > technical details
   const priorityOrder = [
-    'scope',
-    'security',
-    'privacy',
-    'user',
-    'ux',
-    'technical',
-    'implementation'
+    "scope",
+    "security",
+    "privacy",
+    "user",
+    "ux",
+    "technical",
+    "implementation",
   ];
-  
+
   return markers
-    .map(m => ({
+    .map((m) => ({
       ...m,
-      priority: priorityOrder.findIndex(p => m.marker.toLowerCase().includes(p))
+      priority: priorityOrder.findIndex((p) => m.marker.toLowerCase().includes(p)),
     }))
     .sort((a, b) => a.priority - b.priority)
     .slice(0, 3)
@@ -143,15 +147,15 @@ export function prioritizeMarkers(markers: { marker: string; context: string }[]
  */
 export function applyClarifications(
   specContent: string,
-  answers: { question: number; answer: string; isCustom: boolean }[]
+  answers: { question: number; answer: string; isCustom: boolean }[],
 ): string {
   let updated = specContent;
-  
+
   for (const ans of answers) {
     // Find and replace the marker
     const pattern = /\[NEEDS CLARIFICATION:[^\]]+\]/;
     updated = updated.replace(pattern, ans.answer);
   }
-  
+
   return updated;
 }

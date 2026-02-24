@@ -1,7 +1,8 @@
 import type { CommandDefinition } from "../../claude-code-command-loader";
 
 export const NAME = "ghostwire:work:loop";
-export const DESCRIPTION = "Start iterative work loop until completion (ad-hoc, no plan required) [Phase: EXECUTE]";
+export const DESCRIPTION =
+  "Start iterative work loop until completion (ad-hoc, no plan required) [Phase: EXECUTE]";
 export const TEMPLATE = `<command-instruction>
 You are starting an Ultrawork Loop - a self-referential development loop that runs until task completion.
 

@@ -202,12 +202,12 @@ Run tasks in parallel while continuing work.
 delegate_task({
   agent: "researcher-codebase",
   prompt: "Find all API endpoints",
-  background: true
-})
+  background: true,
+});
 
 // Continue working...
 
-background_output({ task_id: "bg_abc123" })
+background_output({ task_id: "bg_abc123" });
 ```
 
 ### Visual Multi-Agent (Tmux)
@@ -241,9 +241,9 @@ For interactive terminal applications requiring persistent sessions.
 
 ```typescript
 // Create and manage tmux sessions
-interactive_bash({ tmux_command: "new-session -d -s dev" })
-interactive_bash({ tmux_command: "send-keys -t dev 'vim main.py' Enter" })
-interactive_bash({ tmux_command: "capture-pane -p -t dev" })
+interactive_bash({ tmux_command: "new-session -d -s dev" });
+interactive_bash({ tmux_command: "send-keys -t dev 'vim main.py' Enter" });
+interactive_bash({ tmux_command: "capture-pane -p -t dev" });
 ```
 
 ## Claude Code Compatibility Mode
@@ -292,45 +292,51 @@ Handles headless/CI environments gracefully.
 Task-specific modes activated via `delegate_task` categories:
 
 ### Quick Mode
+
 - **Category**: `quick`
 - **Purpose**: Fast, cheap tasks
 - **Default Model**: `opencode/kimi-k2.5`
 
 ### Visual Mode
+
 - **Category**: `visual`
 - **Purpose**: UI/frontend implementation
 - **Default Model**: `opencode/kimi-k2.5`
 
 ### Business Logic Mode
+
 - **Category**: `business-logic`
 - **Purpose**: Backend implementation
 - **Default Model**: Provider-specific optimal
 
 ### Exploration Mode
+
 - **Category**: `exploration`
 - **Purpose**: Codebase exploration
 - **Default Model**: `opencode/kimi-k2.5`
 
 ### Documentation Mode
+
 - **Category**: `documentation`
 - **Purpose**: Writing and docs
 - **Default Model**: Provider-specific optimal
 
 ### Testing Mode
+
 - **Category**: `testing`
 - **Purpose**: Test writing and verification
 - **Default Model**: Provider-specific optimal
 
 ## Mode Comparison
 
-| Mode | Speed | Depth | Planning | Best For |
-|------|-------|-------|----------|----------|
-| Ultrawork | Fast | Medium | Automatic | Quick tasks, prototyping |
-| planner | Slower | Deep | Explicit | Complex projects, production |
-| Search | Fast | Shallow | None | Exploration, discovery |
-| Analyze | Medium | Deep | Structured | Debugging, investigation |
-| Ralph Loop | Continuous | Variable | Self-managed | Long-running tasks |
-| Background | Parallel | Variable | User-managed | Multi-tasking |
+| Mode       | Speed      | Depth    | Planning     | Best For                     |
+| ---------- | ---------- | -------- | ------------ | ---------------------------- |
+| Ultrawork  | Fast       | Medium   | Automatic    | Quick tasks, prototyping     |
+| planner    | Slower     | Deep     | Explicit     | Complex projects, production |
+| Search     | Fast       | Shallow  | None         | Exploration, discovery       |
+| Analyze    | Medium     | Deep     | Structured   | Debugging, investigation     |
+| Ralph Loop | Continuous | Variable | Self-managed | Long-running tasks           |
+| Background | Parallel   | Variable | User-managed | Multi-tasking                |
 
 ## Switching Modes
 

@@ -2,7 +2,7 @@
 
 **Status**: Example Plan  
 **Date Created**: 2026-02-24  
-**Framework**: Task-Driven Workflow Architecture  
+**Framework**: Task-Driven Workflow Architecture
 
 ---
 
@@ -13,6 +13,7 @@ This plan demonstrates task-driven workflow for backend API implementation. Show
 ## Feature Description
 
 Add complete user authentication to an Express.js API with:
+
 - User registration endpoint
 - Login with JWT tokens
 - Password hashing and validation
@@ -164,23 +165,28 @@ Add complete user authentication to an Express.js API with:
 ## Execution Waves
 
 **Wave 1** (Foundation): Database design
+
 - task-101: Design authentication schema
 
 **Wave 2** (Parallel Implementation): Database and utilities
+
 - task-102: Create database migrations
 - task-103: Implement password hashing
 - task-104: Build JWT token management
 
 **Wave 3** (Parallel Endpoints): Auth endpoints
+
 - task-105: Create authentication endpoints
 - task-106: Implement token refresh endpoint
 - task-107: Create auth middleware
 - task-108: Add email verification (optional)
 
 **Wave 4** (Testing): Comprehensive tests
+
 - task-109: Write comprehensive tests
 
 **Wave 5** (Documentation): User documentation
+
 - task-110: Create API documentation
 
 ---
@@ -188,11 +194,13 @@ Add complete user authentication to an Express.js API with:
 ## Delegation Strategy
 
 ### Architecture & Complex Logic
+
 - **task-101** → `ultrabrain` (database design complexity)
 - **task-103** → `ultrabrain` (security-critical password handling)
 - **task-104** → `ultrabrain` (JWT security and token lifecycle)
 
 ### Implementation Tasks
+
 - **task-102** → `quick` (straightforward migrations)
 - **task-105** → `quick` (standard endpoint implementation)
 - **task-106** → `quick` (token refresh pattern)
@@ -200,6 +208,7 @@ Add complete user authentication to an Express.js API with:
 - **task-108** → `quick` (email verification flow)
 
 ### Testing & Documentation
+
 - **task-109** → `quick` (comprehensive test writing)
 - **task-110** → `writing` (API documentation)
 
@@ -208,23 +217,30 @@ Add complete user authentication to an Express.js API with:
 ## Key Features Demonstrated
 
 ### 1. Complex Dependency Graph
+
 Shows how tasks can have multiple blockers and multiple dependents:
+
 - task-109 (testing) blocks on ALL implementation tasks
 - task-110 (docs) depends only on testing completion
 
 ### 2. Mixed Complexity Levels
+
 Demonstrates intelligent delegation:
+
 - `ultrabrain` agent handles: schema design, password security, JWT implementation
 - `quick` agent handles: migrations, endpoints, middleware
 - `writing` agent handles: documentation
 
 ### 3. Parallelization Benefits
+
 - Wave 2: 3 tasks run in parallel (saves ~2 hours)
 - Wave 3: 4 tasks run in parallel (saves ~4 hours)
 - Sequential bottleneck only at Wave 4 (testing)
 
 ### 4. Optional Tasks
+
 Shows how to handle optional features:
+
 - task-108 (email verification) is optional
 - Can be skipped by removing from blocks/blockedBy
 - Or marked as `status: skipped`

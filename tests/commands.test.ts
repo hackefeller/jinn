@@ -34,9 +34,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = pluginCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = pluginCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       const failures = results.filter((r) => !r.success);
@@ -76,9 +74,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = workflowCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = workflowCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -94,9 +90,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = codeCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = codeCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -112,9 +106,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = gitCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = gitCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -130,9 +122,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = projectCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = projectCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -148,9 +138,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = utilCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = utilCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -166,9 +154,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = docsCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = docsCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -184,9 +170,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = gitCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = gitCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -202,9 +186,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = projectCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = projectCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -220,9 +202,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = utilCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = utilCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -238,9 +218,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = docsCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = docsCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -256,9 +234,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = projectCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = projectCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -274,9 +250,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = utilCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = utilCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);
@@ -292,9 +266,7 @@ describe("Plugin Commands", () => {
       ];
 
       //#when
-      const results = docCommands.map((cmd) =>
-        CommandNameSchema.safeParse(cmd),
-      );
+      const results = docCommands.map((cmd) => CommandNameSchema.safeParse(cmd));
 
       //#then
       expect(results.every((r) => r.success)).toBe(true);

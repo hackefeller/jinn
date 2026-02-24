@@ -6,14 +6,14 @@ Ghostwire transforms your AI coding assistant into a powerful team of specialize
 
 ## ✨ What Makes Ghostwire Different
 
-| Feature | Why It Matters |
-|---------|---|
-| **Multi-model orchestration** | Claude, GPT, Gemini, Grok—each excels at different tasks. Ghostwire routes work to the best tool. |
-| **Parallel background agents** | While main agent develops, cheaper models explore codebase, docs, and GitHub in the background. |
-| **LSP + AST-Grep refactoring** | No hallucinations. Surgical, deterministic code transformations validated by TypeScript. |
-| **Todo continuation** | Agent gets stuck? System auto-resumes it. Work doesn't stop until complete. |
-| **Comment intelligence** | AI-generated code stays clean. Comments only when necessary, indistinguishable from human code. |
-| **39 lifecycle hooks** | Automate workflows at every stage—pre-execution, post-tool, context recovery, keyword detection, and more. |
+| Feature                        | Why It Matters                                                                                             |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| **Multi-model orchestration**  | Claude, GPT, Gemini, Grok—each excels at different tasks. Ghostwire routes work to the best tool.          |
+| **Parallel background agents** | While main agent develops, cheaper models explore codebase, docs, and GitHub in the background.            |
+| **LSP + AST-Grep refactoring** | No hallucinations. Surgical, deterministic code transformations validated by TypeScript.                   |
+| **Todo continuation**          | Agent gets stuck? System auto-resumes it. Work doesn't stop until complete.                                |
+| **Comment intelligence**       | AI-generated code stays clean. Comments only when necessary, indistinguishable from human code.            |
+| **39 lifecycle hooks**         | Automate workflows at every stage—pre-execution, post-tool, context recovery, keyword detection, and more. |
 
 ## 🚀 Get Started in 30 Seconds
 
@@ -42,6 +42,7 @@ See [Installation Guide](docs/getting-started/installation.md) for detailed inst
 Don't want to read the docs? Just add **`ultrawork`** (or `ulw`) to your prompt.
 
 That's it. Ghostwire detects it and:
+
 - Spawns parallel background agents to map the territory
 - Routes complex tasks to domain experts automatically
 - Continues execution until your task is 100% done
@@ -57,18 +58,18 @@ Done. Coffee break. Your work is complete.
 
 ### 10 Specialized Agents
 
-| Agent | Superpower | Model |
-|-------|-----------|-------|
-| **Cipher Operator** | Main orchestrator, deep analysis | opencode/kimi-k2.5 |
-| **Seer Advisor** | Architecture decisions, debugging | opencode/kimi-k2.5 |
-| **Frontend UI/UX** | React, styling, animations | opencode/kimi-k2.5 |
+| Agent                  | Superpower                          | Model              |
+| ---------------------- | ----------------------------------- | ------------------ |
+| **Cipher Operator**    | Main orchestrator, deep analysis    | opencode/kimi-k2.5 |
+| **Seer Advisor**       | Architecture decisions, debugging   | opencode/kimi-k2.5 |
+| **Frontend UI/UX**     | React, styling, animations          | opencode/kimi-k2.5 |
 | **Archive Researcher** | Docs, open-source patterns, history | opencode/kimi-k2.5 |
-| **Scout Recon** | Lightning-fast codebase exploration | opencode/kimi-k2.5 |
-| **Security Reviewer** | Vulnerability assessment | Specialized agent |
-| **Planner** | Feature planning, task breakdown | Specialized agent |
-| **Context Analyzer** | Token management, context recovery | Specialized agent |
-| **LSP Refactorer** | Type-safe transformations | Specialized agent |
-| **Git Master** | Atomic commits, history search | Specialized agent |
+| **Scout Recon**        | Lightning-fast codebase exploration | opencode/kimi-k2.5 |
+| **Security Reviewer**  | Vulnerability assessment            | Specialized agent  |
+| **Planner**            | Feature planning, task breakdown    | Specialized agent  |
+| **Context Analyzer**   | Token management, context recovery  | Specialized agent  |
+| **LSP Refactorer**     | Type-safe transformations           | Specialized agent  |
+| **Git Master**         | Atomic commits, history search      | Specialized agent  |
 
 ### 39 Lifecycle Hooks
 
@@ -76,7 +77,7 @@ Wire into every stage of development:
 
 ```yaml
 PreToolUse: Validate input before execution
-PostToolUse: Process results intelligently  
+PostToolUse: Process results intelligently
 UserPromptSubmit: Intercept and enhance prompts
 PreAgent: Setup before agent runs
 PostAgent: Cleanup after agent completes
@@ -105,7 +106,7 @@ Full list in [Commands Reference](docs/reference/commands.md).
 
 ```
 Exa (Web Search)           → Current information, research
-Context7 (Live Docs)       → Official documentation, tutorials  
+Context7 (Live Docs)       → Official documentation, tutorials
 Grep.app (GitHub Search)   → Real-world code patterns
 ```
 
@@ -173,9 +174,9 @@ Ghostwire works out of the box. Customize as needed:
   "features": {
     "comment-checker": { "enabled": true },
     "lsp-refactoring": { "enabled": true },
-    "background-agents": { 
+    "background-agents": {
       "enabled": true,
-      "max-parallel": 4 
+      "max-parallel": 4
     }
   }
 }

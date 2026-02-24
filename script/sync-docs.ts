@@ -2,7 +2,10 @@ import { writeFileSync, readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseFrontmatter } from "../src/integration/shared/frontmatter";
-import { AGENT_MODEL_REQUIREMENTS, CATEGORY_MODEL_REQUIREMENTS } from "../src/orchestration/agents/model-requirements";
+import {
+  AGENT_MODEL_REQUIREMENTS,
+  CATEGORY_MODEL_REQUIREMENTS,
+} from "../src/orchestration/agents/model-requirements";
 import { COMMAND_DEFINITIONS } from "../src/execution/features/commands/commands";
 import YAML from "js-yaml";
 
@@ -33,9 +36,12 @@ async function syncAgents() {
     const agentEntry: any = {
       id,
       display_name: id, // Consistent with AGENT_DISPLAY_NAMES logic
-      model: metadata.models?.primary === "inherit"
-        ? (requirements?.fallbackChain?.[0]?.providers?.[0] + "/" + requirements?.fallbackChain?.[0]?.model) || "unknown"
-        : metadata.models?.primary || "unknown",
+      model:
+        metadata.models?.primary === "inherit"
+          ? requirements?.fallbackChain?.[0]?.providers?.[0] +
+              "/" +
+              requirements?.fallbackChain?.[0]?.model || "unknown"
+          : metadata.models?.primary || "unknown",
       purpose: metadata.purpose || "",
     };
 

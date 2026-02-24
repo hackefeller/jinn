@@ -8,6 +8,7 @@
 ## Problem Statement
 
 Ghostwire has duplicate component locations that create confusion:
+
 - **Commands exist in two places**: `src/plugin/commands/*.md` (21 files) AND `src/execution/features/builtin-commands/templates/*.ts`
 - **Skills exist in two places**: `src/plugin/skills/*/` (14 skills) AND `src/execution/features/builtin-skills/*/` (5 skills already migrated)
 
@@ -82,6 +83,7 @@ src/execution/features/
 ## Commands to Migrate (21 total)
 
 ### Regular Commands (16)
+
 1. `plan_review` → `PLAN_REVIEW_TEMPLATE`
 2. `changelog` → `CHANGELOG_TEMPLATE`
 3. `create-agent-skill` → `CREATE_AGENT_SKILL_TEMPLATE`
@@ -105,6 +107,7 @@ src/execution/features/
 21. `xcode-test` → `XCODE_TEST_TEMPLATE`
 
 ### Workflow Commands (5)
+
 - `workflows/brainstorm` → `WORKFLOWS_BRAINSTORM_TEMPLATE`
 - `workflows/compound` → `WORKFLOWS_COMPOUND_TEMPLATE`
 - `workflows/plan` → `WORKFLOWS_PLAN_TEMPLATE`
@@ -134,6 +137,7 @@ src/execution/features/
 ### Command Migration Pattern
 
 Each markdown command like:
+
 ```markdown
 ---
 name: plan_review
@@ -145,6 +149,7 @@ Have @agent-dhh-rails-reviewer @agent-kieran-rails-reviewer @agent-code-simplici
 ```
 
 Becomes TypeScript:
+
 ```typescript
 export const PLAN_REVIEW_TEMPLATE = `Have @agent-dhh-rails-reviewer @agent-kieran-rails-reviewer @agent-code-simplicity-reviewer review this plan in parallel.`;
 ```
@@ -154,6 +159,7 @@ With frontmatter fields mapped to command definition properties.
 ### Skill Migration Pattern
 
 Move entire directory:
+
 - `src/plugin/skills/file-todos/` → `src/execution/features/builtin-skills/file-todos/`
 - Includes: `SKILL.md`, `assets/`, `references/`
 
@@ -162,19 +168,21 @@ Update `skills.ts` import path.
 ## Dependencies
 
 ### Internal
+
 - `src/execution/features/builtin-commands/commands.ts` - Command registry
 - `src/execution/features/builtin-commands/templates/` - Template location
 - `src/execution/features/builtin-skills/skills.ts` - Skill registry
 - `src/execution/features/builtin-skills/` - Skill location
 
 ### External
+
 - Bun (package manager)
 - TypeScript
 
 ## Timeline Estimate
 
 - **Phase 1**: Migrate 21 commands (~3 hours)
-- **Phase 2**: Migrate 14 skills (~2 hours)  
+- **Phase 2**: Migrate 14 skills (~2 hours)
 - **Phase 3**: Cleanup and testing (~1 hour)
 - **Total**: ~6 hours
 

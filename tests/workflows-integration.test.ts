@@ -1,6 +1,12 @@
 import { describe, it, expect, beforeEach } from "bun:test";
-import { parsePlanFile, validateTaskDependencies } from "../src/execution/features/task-queue/plan-parser";
-import { calculateExecutionWaves, applyAutoWaves } from "../src/execution/features/task-queue/parallelization";
+import {
+  parsePlanFile,
+  validateTaskDependencies,
+} from "../src/execution/features/task-queue/plan-parser";
+import {
+  calculateExecutionWaves,
+  applyAutoWaves,
+} from "../src/execution/features/task-queue/parallelization";
 import { buildTaskDelegationPlan } from "../src/execution/features/task-queue/delegation-engine";
 import type { Task, WorkflowTaskList } from "../src/execution/features/task-queue";
 
@@ -129,21 +135,21 @@ describe("workflows:execute and workflows:status integration", () => {
     executionState.completedTasks.add("task-1");
 
     //#then task-2 and task-3 should become executable
-    const executableTasks = samplePlan.tasks.filter(t => {
+    const executableTasks = samplePlan.tasks.filter((t) => {
       if (t.status !== "pending") return false;
-      return (t.blockedBy || []).every(id => executionState.completedTasks.has(id));
+      return (t.blockedBy || []).every((id) => executionState.completedTasks.has(id));
     });
 
-    expect(executableTasks.map(t => t.id)).toContain("task-2");
-    expect(executableTasks.map(t => t.id)).toContain("task-3");
-    expect(executableTasks.map(t => t.id)).not.toContain("task-4");
+    expect(executableTasks.map((t) => t.id)).toContain("task-2");
+    expect(executableTasks.map((t) => t.id)).toContain("task-3");
+    expect(executableTasks.map((t) => t.id)).not.toContain("task-4");
   });
 
   it("should enable workflows:status to show accurate progress during execution", () => {
     //#given a partially completed workflow
     const updatedPlan: WorkflowTaskList = {
       ...samplePlan,
-      tasks: samplePlan.tasks.map(t => {
+      tasks: samplePlan.tasks.map((t) => {
         if (t.id === "task-1") return { ...t, status: "completed" };
         if (t.id === "task-2") return { ...t, status: "in_progress" };
         return t;
@@ -151,9 +157,9 @@ describe("workflows:execute and workflows:status integration", () => {
     };
 
     //#when calculating status metrics
-    const completed = updatedPlan.tasks.filter(t => t.status === "completed").length;
-    const inProgress = updatedPlan.tasks.filter(t => t.status === "in_progress").length;
-    const pending = updatedPlan.tasks.filter(t => t.status === "pending").length;
+    const completed = updatedPlan.tasks.filter((t) => t.status === "completed").length;
+    const inProgress = updatedPlan.tasks.filter((t) => t.status === "in_progress").length;
+    const pending = updatedPlan.tasks.filter((t) => t.status === "pending").length;
     const percentage = Math.round((completed / updatedPlan.tasks.length) * 100);
 
     //#then metrics should show progress
@@ -168,7 +174,7 @@ describe("workflows:execute and workflows:status integration", () => {
     const interruptedPlan: WorkflowTaskList = {
       ...samplePlan,
       executed_at: new Date().toISOString(),
-      tasks: samplePlan.tasks.map(t => {
+      tasks: samplePlan.tasks.map((t) => {
         if (t.id === "task-1") return { ...t, status: "completed" };
         return t;
       }),
@@ -176,22 +182,22 @@ describe("workflows:execute and workflows:status integration", () => {
 
     //#when resuming execution
     const tasksWithWaves = applyAutoWaves(interruptedPlan.tasks);
-    
+
     // Find tasks that are pending and all their blockers are completed
-    const executableTasks = tasksWithWaves.filter(t => {
+    const executableTasks = tasksWithWaves.filter((t) => {
       if (t.status !== "pending") return false;
-      return (t.blockedBy || []).every(id => 
-        interruptedPlan.tasks.find(x => x.id === id)?.status === "completed"
+      return (t.blockedBy || []).every(
+        (id) => interruptedPlan.tasks.find((x) => x.id === id)?.status === "completed",
       );
     });
 
     //#then execution should continue with tasks-2 and task-3 executable
     expect(executableTasks.length).toBeGreaterThan(0);
-    expect(executableTasks.map(t => t.id)).toContain("task-2");
-    expect(executableTasks.map(t => t.id)).toContain("task-3");
-    
+    expect(executableTasks.map((t) => t.id)).toContain("task-2");
+    expect(executableTasks.map((t) => t.id)).toContain("task-3");
+
     // Verify wave assignment is correct
-    const nextWave = Math.min(...executableTasks.map(t => t.wave || 1));
+    const nextWave = Math.min(...executableTasks.map((t) => t.wave || 1));
     expect(nextWave).toBe(2);
   });
 
@@ -200,38 +206,32 @@ describe("workflows:execute and workflows:status integration", () => {
     let plan = { ...samplePlan };
 
     //#when executing wave 1 (task-1)
-    plan.tasks = plan.tasks.map(t =>
-      t.id === "task-1" ? { ...t, status: "completed" } : t
-    );
+    plan.tasks = plan.tasks.map((t) => (t.id === "task-1" ? { ...t, status: "completed" } : t));
 
     //#then wave 2 tasks should become executable
-    let executableWave2 = plan.tasks.filter(t =>
-      (t.id === "task-2" || t.id === "task-3") && t.status === "pending"
+    let executableWave2 = plan.tasks.filter(
+      (t) => (t.id === "task-2" || t.id === "task-3") && t.status === "pending",
     );
     expect(executableWave2.length).toBe(2);
 
     //#when executing wave 2 (task-2, task-3)
-    plan.tasks = plan.tasks.map(t =>
-      (t.id === "task-2" || t.id === "task-3")
-        ? { ...t, status: "completed" }
-        : t
+    plan.tasks = plan.tasks.map((t) =>
+      t.id === "task-2" || t.id === "task-3" ? { ...t, status: "completed" } : t,
     );
 
     //#then wave 3 tasks should become executable
-    let executableWave3 = plan.tasks.filter(t =>
-      (t.id === "task-4" || t.id === "task-5") && t.status === "pending"
+    let executableWave3 = plan.tasks.filter(
+      (t) => (t.id === "task-4" || t.id === "task-5") && t.status === "pending",
     );
     expect(executableWave3.length).toBe(2);
 
     //#when executing wave 3 (task-4, task-5)
-    plan.tasks = plan.tasks.map(t =>
-      (t.id === "task-4" || t.id === "task-5")
-        ? { ...t, status: "completed" }
-        : t
+    plan.tasks = plan.tasks.map((t) =>
+      t.id === "task-4" || t.id === "task-5" ? { ...t, status: "completed" } : t,
     );
 
     //#then all tasks should be complete
-    const allComplete = plan.tasks.every(t => t.status === "completed");
+    const allComplete = plan.tasks.every((t) => t.status === "completed");
     expect(allComplete).toBe(true);
   });
 

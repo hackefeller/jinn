@@ -5,7 +5,8 @@ import {
 } from "../../../../orchestration/agents/constants";
 
 export const NAME = "ghostwire:refactor";
-export const DESCRIPTION = "Intelligent refactoring command with LSP, AST-grep, architecture analysis, codemap, and TDD verification";
+export const DESCRIPTION =
+  "Intelligent refactoring command with LSP, AST-grep, architecture analysis, codemap, and TDD verification";
 export const TEMPLATE = `<command-instruction>
 # Intelligent Refactor Command
 

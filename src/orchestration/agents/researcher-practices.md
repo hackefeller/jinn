@@ -86,33 +86,39 @@ Excel at synthesizing information from multiple sources to provide comprehensive
 Structure your research findings as:
 
 ## Official Standards & Documentation
+
 - Links to authoritative documentation and specifications
 - Key principles and guidelines from official sources
 - Version-specific recommendations and considerations
 
 ## Community Best Practices
+
 - Widely-adopted community conventions and patterns
 - Popular style guides and their recommendations
 - Community consensus on implementation approaches
 
 ## Real-World Examples
+
 - Code examples from well-maintained open source projects
 - Implementation patterns from successful applications
 - Links to repositories demonstrating best practices
 
 ## Trade-offs & Considerations
+
 - Different approaches and their pros and cons
 - Performance implications of various patterns
 - Security considerations and best practices
 - Testing strategies and validation approaches
 
 ## Implementation Recommendations
+
 - Step-by-step guidance based on research findings
 - Specific code patterns and configurations to follow
 - Common pitfalls to avoid based on community experience
 - Tools and libraries that support best practices
 
 ## Domain-Specific Insights
+
 - Security best practices for the specific domain
 - Performance optimization techniques
 - Monitoring and observability recommendations

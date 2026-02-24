@@ -10,27 +10,30 @@
 ## Executive Summary
 
 ### Goal
+
 Merge the functionality from `.specify/` into Ghostwire as official builtin commands, eliminating external bash scripts and creating a cohesive feature specification workflow.
 
 ### Key Decisions
 
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| Command namespace | `ghostwire:spec:*` | Universal naming, consistent with existing patterns |
-| Migration strategy | Full integration | TypeScript templates, eliminate bash scripts |
-| Bash scripts | Replace with TypeScript + agent instructions | Cross-platform, testable, maintainable |
-| Constitution | Hybrid approach | Separate file, referenced by AGENTS.md |
-| Deprecation period | None | Clean break, speckit commands deleted |
+| Decision           | Choice                                       | Rationale                                           |
+| ------------------ | -------------------------------------------- | --------------------------------------------------- |
+| Command namespace  | `ghostwire:spec:*`                           | Universal naming, consistent with existing patterns |
+| Migration strategy | Full integration                             | TypeScript templates, eliminate bash scripts        |
+| Bash scripts       | Replace with TypeScript + agent instructions | Cross-platform, testable, maintainable              |
+| Constitution       | Hybrid approach                              | Separate file, referenced by AGENTS.md              |
+| Deprecation period | None                                         | Clean break, speckit commands deleted               |
 
 ### Scope
 
 **In Scope:**
+
 - 9 new builtin commands (`ghostwire:spec:*` + `ghostwire:project:constitution`)
 - 6 TypeScript template files (converted from markdown)
 - Bash script functionality replaced with template instructions
 - Test coverage for all new commands
 
 **Out of Scope:**
+
 - Changes to existing Ghostwire workflows
 - Changes to `.ghostwire/specs/` directory structure (already migrated)
 - Backward compatibility with speckit commands
@@ -41,17 +44,17 @@ Merge the functionality from `.specify/` into Ghostwire as official builtin comm
 
 ### Command Mapping
 
-| Speckit Command | New Ghostwire Command | Template File |
-|-----------------|----------------------|---------------|
-| `speckit.specify` | `ghostwire:spec:create` | `spec/create.ts` |
-| `speckit.plan` | `ghostwire:spec:plan` | `spec/plan.ts` |
-| `speckit.tasks` | `ghostwire:spec:tasks` | `spec/tasks.ts` |
-| `speckit.implement` | `ghostwire:spec:implement` | `spec/implement.ts` |
-| `speckit.clarify` | `ghostwire:spec:clarify` | `spec/clarify.ts` |
-| `speckit.analyze` | `ghostwire:spec:analyze` | `spec/analyze.ts` |
-| `speckit.checklist` | `ghostwire:spec:checklist` | `spec/checklist.ts` |
-| `speckit.taskstoissues` | `ghostwire:spec:to-issues` | `spec/to-issues.ts` |
-| `speckit.constitution` | `ghostwire:project:constitution` | `project/constitution.ts` |
+| Speckit Command         | New Ghostwire Command            | Template File             |
+| ----------------------- | -------------------------------- | ------------------------- |
+| `speckit.specify`       | `ghostwire:spec:create`          | `spec/create.ts`          |
+| `speckit.plan`          | `ghostwire:spec:plan`            | `spec/plan.ts`            |
+| `speckit.tasks`         | `ghostwire:spec:tasks`           | `spec/tasks.ts`           |
+| `speckit.implement`     | `ghostwire:spec:implement`       | `spec/implement.ts`       |
+| `speckit.clarify`       | `ghostwire:spec:clarify`         | `spec/clarify.ts`         |
+| `speckit.analyze`       | `ghostwire:spec:analyze`         | `spec/analyze.ts`         |
+| `speckit.checklist`     | `ghostwire:spec:checklist`       | `spec/checklist.ts`       |
+| `speckit.taskstoissues` | `ghostwire:spec:to-issues`       | `spec/to-issues.ts`       |
+| `speckit.constitution`  | `ghostwire:project:constitution` | `project/constitution.ts` |
 
 ### Directory Structure
 
@@ -90,6 +93,7 @@ The constitution concept is implemented as a **hybrid approach**:
    - Stays generic and reusable across projects
 
 **Why hybrid:**
+
 - Keeps user principles separate from system docs
 - Allows project customization without modifying AGENTS.md
 - Constitution can be versioned per-project
@@ -104,6 +108,7 @@ The constitution concept is implemented as a **hybrid approach**:
 **Goal**: Create TypeScript template infrastructure without adding commands yet.
 
 **Tasks:**
+
 - [x] T001 Create `src/execution/features/builtin-commands/templates/spec/` directory
 - [x] T002 [P] Create `spec/create.ts` template (from spec-template.md)
 - [x] T003 [P] Create `spec/plan.ts` template (from plan-template.md)
@@ -120,6 +125,7 @@ The constitution concept is implemented as a **hybrid approach**:
 - [x] T014-T018 [P] Create unit tests for each template
 
 **Verification:**
+
 - [x] V001 All template files compile without errors
 - [x] V002 Unit tests pass
 - [x] V003 Templates can be imported from index.ts
@@ -131,6 +137,7 @@ The constitution concept is implemented as a **hybrid approach**:
 **Goal**: Add the 4 core specification commands (create, plan, tasks, implement).
 
 **Tasks:**
+
 - [x] T019 Add `ghostwire:spec:create` type to `types.ts`
 - [x] T020 Add `ghostwire:spec:plan` type to `types.ts`
 - [x] T021 Add `ghostwire:spec:tasks` type to `types.ts`
@@ -143,6 +150,7 @@ The constitution concept is implemented as a **hybrid approach**:
 - [x] T028-T031 [P] Create integration tests for each command
 
 **Verification:**
+
 - [x] V004 Type check passes
 - [x] V005 Build succeeds
 - [x] V006 Integration tests pass
@@ -155,6 +163,7 @@ The constitution concept is implemented as a **hybrid approach**:
 **Goal**: Add the 4 support commands (clarify, analyze, checklist, to-issues).
 
 **Tasks:**
+
 - [x] T032 Add `ghostwire:spec:clarify` type to `types.ts`
 - [x] T033 Add `ghostwire:spec:analyze` type to `types.ts`
 - [x] T034 Add `ghostwire:spec:checklist` type to `types.ts`
@@ -166,6 +175,7 @@ The constitution concept is implemented as a **hybrid approach**:
 - [x] T040-T043 [P] Create integration tests for each command
 
 **Verification:**
+
 - [x] V008 Type check passes
 - [x] V009 Build succeeds
 - [x] V010 All 8 spec commands functional
@@ -177,6 +187,7 @@ The constitution concept is implemented as a **hybrid approach**:
 **Goal**: Add the project-level constitution command and default constitution file.
 
 **Tasks:**
+
 - [x] T044 Add `ghostwire:project:constitution` type to `types.ts`
 - [x] T045 Add `ghostwire:project:constitution` command definition to `commands.ts`
 - [x] T046 Create default `.ghostwire/constitution.md` template
@@ -184,6 +195,7 @@ The constitution concept is implemented as a **hybrid approach**:
 - [x] T048 Create integration test for constitution command
 
 **Verification:**
+
 - [x] V011 Constitution command creates file correctly
 - [x] V012 AGENTS.md references constitution
 - [x] V013 All 9 commands functional
@@ -195,6 +207,7 @@ The constitution concept is implemented as a **hybrid approach**:
 **Goal**: Delete specify files and verify clean state.
 
 **Tasks:**
+
 - [x] T050 Delete `.specify/` directory entirely
 - [x] T051 Delete `.opencode/command/speckit.specify.md`
 - [x] T052 Delete `.opencode/command/speckit.plan.md`
@@ -209,6 +222,7 @@ The constitution concept is implemented as a **hybrid approach**:
 - [x] T061 Verify no speckit references remain
 
 **Verification:**
+
 - [x] V014 All tests pass (1,869)
 - [x] V015 Type check passes
 - [x] V016 Build succeeds
@@ -223,6 +237,7 @@ The constitution concept is implemented as a **hybrid approach**:
 ### Files to Create (16+)
 
 **Templates:**
+
 - `src/execution/features/builtin-commands/templates/spec/create.ts`
 - `src/execution/features/builtin-commands/templates/spec/plan.ts`
 - `src/execution/features/builtin-commands/templates/spec/tasks.ts`
@@ -236,10 +251,12 @@ The constitution concept is implemented as a **hybrid approach**:
 - `src/execution/features/builtin-commands/templates/project/index.ts`
 
 **Tests:**
+
 - `src/execution/features/builtin-commands/templates/spec/index.test.ts`
 - `src/execution/features/builtin-commands/templates/project/index.test.ts`
 
 **Default Content:**
+
 - `.ghostwire/constitution.md` (default template)
 
 ### Files to Modify (3)
@@ -268,6 +285,7 @@ The constitution concept is implemented as a **hybrid approach**:
 ### Unit Tests (Phase 1)
 
 Each template file should have corresponding unit tests:
+
 - Template structure validation
 - Variable substitution tests
 - Edge case handling
@@ -275,6 +293,7 @@ Each template file should have corresponding unit tests:
 ### Integration Tests (Phases 2-4)
 
 Each command should have integration tests:
+
 - Command registration test
 - Template loading test
 - End-to-end workflow test
@@ -290,12 +309,12 @@ Each command should have integration tests:
 
 ## Risk Mitigation
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Template conversion errors | Medium | Test each template independently before integration |
-| Command registration issues | Low | Follow existing Ghostwire patterns exactly |
-| Missing functionality from bash scripts | Medium | Thoroughly test workflow equivalence |
-| Constitution confusion | Low | Clear documentation in AGENTS.md |
+| Risk                                    | Impact | Mitigation                                          |
+| --------------------------------------- | ------ | --------------------------------------------------- |
+| Template conversion errors              | Medium | Test each template independently before integration |
+| Command registration issues             | Low    | Follow existing Ghostwire patterns exactly          |
+| Missing functionality from bash scripts | Medium | Thoroughly test workflow equivalence                |
+| Constitution confusion                  | Low    | Clear documentation in AGENTS.md                    |
 
 ---
 
@@ -317,13 +336,13 @@ Each command should have integration tests:
 
 **Total estimated time**: 7.5 hours
 
-| Phase | Duration | Cumulative |
-|-------|----------|------------|
-| Phase 1: Template Infrastructure | ~2 hours | 2h |
-| Phase 2: Core Commands | ~2 hours | 4h |
-| Phase 3: Support Commands | ~2 hours | 6h |
-| Phase 4: Constitution & Project | ~1 hour | 7h |
-| Phase 5: Cleanup | ~30 min | 7.5h |
+| Phase                            | Duration | Cumulative |
+| -------------------------------- | -------- | ---------- |
+| Phase 1: Template Infrastructure | ~2 hours | 2h         |
+| Phase 2: Core Commands           | ~2 hours | 4h         |
+| Phase 3: Support Commands        | ~2 hours | 6h         |
+| Phase 4: Constitution & Project  | ~1 hour  | 7h         |
+| Phase 5: Cleanup                 | ~30 min  | 7.5h       |
 
 ---
 

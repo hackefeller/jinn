@@ -1,14 +1,5 @@
 import { defineCommand, runMain } from "citty";
-import {
-  cyan,
-  green,
-  yellow,
-  red,
-  bold,
-  dim,
-  italic,
-  isColorSupported,
-} from "picocolors";
+import { cyan, green, yellow, red, bold, dim, italic, isColorSupported } from "picocolors";
 import { createSpinner } from "nanospinner";
 
 type CommandFactory = () => Promise<void>;
@@ -18,9 +9,7 @@ const run = async (
   opts?: { spinnerText?: string; pipeOutput?: boolean },
 ): Promise<void> => {
   const spinner =
-    opts?.spinnerText && isColorSupported
-      ? createSpinner(opts.spinnerText).start()
-      : undefined;
+    opts?.spinnerText && isColorSupported ? createSpinner(opts.spinnerText).start() : undefined;
 
   try {
     const proc = Bun.spawn({
@@ -202,11 +191,7 @@ ${green("dev-setup")}   Ensure plugin wrapper + agents manifest
   sync: async () => {
     await tasks["build"]();
     await run(
-      [
-        "cp",
-        "dist/index.js",
-        `${process.env.HOME}/.config/opencode/plugins/ghostwire.mjs`,
-      ],
+      ["cp", "dist/index.js", `${process.env.HOME}/.config/opencode/plugins/ghostwire.mjs`],
       { spinnerText: "Syncing plugin" },
     );
     console.log(green("✓ Sync complete"));

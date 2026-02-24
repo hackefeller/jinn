@@ -19,17 +19,13 @@ export function parseYamlFrontmatter(content: string): {
 
   // Must start with ---
   if (!trimmedContent.startsWith("---")) {
-    throw new Error(
-      "Markdown file must start with --- (YAML frontmatter delimiter)"
-    );
+    throw new Error("Markdown file must start with --- (YAML frontmatter delimiter)");
   }
 
   // Find the closing --- delimiter
   const endDelimiterIndex = trimmedContent.indexOf("\n---", 3);
   if (endDelimiterIndex === -1) {
-    throw new Error(
-      "Markdown file has opening --- but no closing --- for YAML frontmatter"
-    );
+    throw new Error("Markdown file has opening --- but no closing --- for YAML frontmatter");
   }
 
   // Extract frontmatter (content between delimiters, excluding the --- markers)
@@ -76,11 +72,7 @@ export function parseYaml(yamlString: string): Record<string, unknown> {
     const trimmedLine = line.trim();
 
     // Handle nested objects (like models: {primary: X, fallback: Y})
-    if (
-      nestedObjectKey &&
-      indent > nestedObjectIndent &&
-      trimmedLine.includes(":")
-    ) {
+    if (nestedObjectKey && indent > nestedObjectIndent && trimmedLine.includes(":")) {
       const [key, ...valueParts] = trimmedLine.split(":");
       const value = valueParts.join(":").trim();
       nestedObject![key.trim()] = parseValue(value);
@@ -88,11 +80,7 @@ export function parseYaml(yamlString: string): Record<string, unknown> {
     }
 
     // Close nested object if we dedent
-    if (
-      nestedObjectKey &&
-      indent <= nestedObjectIndent &&
-      trimmedLine.includes(":")
-    ) {
+    if (nestedObjectKey && indent <= nestedObjectIndent && trimmedLine.includes(":")) {
       result[nestedObjectKey] = nestedObject;
       nestedObject = null;
       nestedObjectKey = null;
@@ -177,8 +165,9 @@ function parseValue(value: string): unknown {
   }
 
   // Handle quoted strings
-  if ((value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
   ) {
     return value.slice(1, -1);
   }

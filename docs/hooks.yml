@@ -5,7 +5,7 @@ description: Map of hook directories and files with descriptions. Update when ho
 hooks:
   directories:
     # === Session & Lifecycle Management ===
-    
+
     - id: agent-usage-reminder
       description: Reminds users to use delegation agents after they perform direct work with tools like edit/write/bash. Triggers after tool execution to suggest agent-based alternatives.
 
@@ -110,19 +110,19 @@ hooks:
   files:
     # These are standalone files in src/orchestration/hooks/ (not directories)
     # They are exported from hooks/index.ts and registered in the hook system
-    
+
     - id: context-window-monitor
       description: Monitors Anthropic token usage and reminds users they have plenty of context when usage exceeds 70%. Prevents premature compaction.
-    
+
     - id: empty-task-response-detector
       description: Detects Task tool invocations that return empty responses and appends a warning about possible failure.
-    
+
     - id: session-notification
       description: Sends native OS notifications (macOS/Windows/Linux) when main session becomes idle. Supports optional sound and todo-skip logic.
-    
+
     - id: todo-continuation-enforcer
       description: Automatically continues work when session is idle with incomplete todos. Injects continuation prompt after countdown. Enforces todo completion.
-    
+
     - id: tool-output-truncator
       description: Truncates large tool outputs (grep, glob, webfetch, etc.) to default 50k tokens. Prevents context window issues from large results.
 

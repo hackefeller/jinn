@@ -1,13 +1,7 @@
 import type { CommandDefinition } from "../claude-code-command-loader/types";
 import type { SkillMcpConfig } from "../skill-mcp-manager/types";
 
-export type SkillScope =
-  | "plugin"
-  | "config"
-  | "user"
-  | "project"
-  | "opencode"
-  | "opencode-project";
+export type SkillScope = "plugin" | "config" | "user" | "project" | "opencode" | "opencode-project";
 
 export interface SkillMetadata {
   name?: string;

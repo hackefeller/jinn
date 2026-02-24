@@ -9,12 +9,12 @@
 
 ## Task Legend
 
-| Symbol | Meaning |
-|--------|---------|
-| `[x]` | **Completed** |
-| `[~]` | In progress |
-| `[ ]` | Not started |
-| `[!]` | Blocked |
+| Symbol | Meaning       |
+| ------ | ------------- |
+| `[x]`  | **Completed** |
+| `[~]`  | In progress   |
+| `[ ]`  | Not started   |
+| `[!]`  | Blocked       |
 
 ---
 
@@ -273,8 +273,8 @@
 
 ### Track 5G: Spec Files (Historical)
 
-- [x] **T091** ⚡ Update specs/044-plugin-to-builtin-migration/*.md
-- [x] **T092** ⚡ Update specs/043-agent-consolidation-spec/*.md
+- [x] **T091** ⚡ Update specs/044-plugin-to-builtin-migration/\*.md
+- [x] **T092** ⚡ Update specs/043-agent-consolidation-spec/\*.md
 
 ### Track 5H: JSON Schema
 
@@ -318,15 +318,15 @@
 
 ## Summary Statistics
 
-| Wave | Tasks | Status | Time |
-|------|-------|--------|------|
-| Wave 0 | 11 tasks + 1 verify | ✅ Complete | ~15 min |
-| Wave 1 | 21 tasks + 1 verify | ✅ Complete | ~25 min |
-| Wave 2 | 25 tasks + 2 verify | ✅ Complete | ~20 min |
-| Wave 3 | 6 tasks + 3 verify | ✅ Complete | ~10 min |
-| Wave 4 | 8 tasks + 2 verify | ✅ Complete | ~30 min |
-| Wave 5 | 22 tasks + 2 verify | ✅ Complete | ~25 min |
-| Wave 6 | 10 tasks + 1 verify | ✅ Complete | ~15 min |
+| Wave      | Tasks                     | Status      | Time           |
+| --------- | ------------------------- | ----------- | -------------- |
+| Wave 0    | 11 tasks + 1 verify       | ✅ Complete | ~15 min        |
+| Wave 1    | 21 tasks + 1 verify       | ✅ Complete | ~25 min        |
+| Wave 2    | 25 tasks + 2 verify       | ✅ Complete | ~20 min        |
+| Wave 3    | 6 tasks + 3 verify        | ✅ Complete | ~10 min        |
+| Wave 4    | 8 tasks + 2 verify        | ✅ Complete | ~30 min        |
+| Wave 5    | 22 tasks + 2 verify       | ✅ Complete | ~25 min        |
+| Wave 6    | 10 tasks + 1 verify       | ✅ Complete | ~15 min        |
 | **Total** | **103 tasks + 12 verify** | ✅ **100%** | **~2.5 hours** |
 
 ---

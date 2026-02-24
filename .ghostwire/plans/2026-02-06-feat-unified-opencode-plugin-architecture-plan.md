@@ -15,10 +15,12 @@ Successfully consolidated ghostwire and ghostwire into a single unified plugin. 
 ## Problem Statement (Resolved in v3.2.0)
 
 Previously, users needed to manage two separate plugins:
+
 1. **ghostwire**: Native OpenCode orchestration with agents, hooks, tools, MCPs
 2. **ghostwire**: Advanced agents, commands, and skills (now integrated)
 
 This creates:
+
 - Configuration fragmentation across two plugins
 - Duplicate functionality and potential conflicts
 - Complex setup for users wanting both capabilities
@@ -47,16 +49,19 @@ This creates:
 ### Component Breakdown
 
 **Layer 1: Core Orchestration** (Existing)
+
 - Location: `src/agents/`, `src/hooks/`, `src/tools/`, `src/mcp/`, `src/shared/`
 - 10 AI agents, 32 lifecycle hooks, 20+ tools
 - Entry point: `src/index.ts:672`
 
 **Layer 2: Import/Mapping** (Extend Existing)
+
 - Location: `src/features/imports/claude/`
 - Current: `mapper.ts`, `types.ts`, `mapper.test.ts`
 - Extend with conversion rules, validation, conflict resolution
 
 **Layer 3: Feature Bundles** (New)
+
 - Location: `src/features/bundles/ghostwire/`
 - Wrap imported components as first-class OpenCode features
 - Configurable enable/disable per bundle
@@ -65,38 +70,42 @@ This creates:
 
 ### Import Priority Matrix
 
-| Priority | Category | Count | Examples |
-|----------|----------|-------|----------|
-| **P0** | Agents | 7 | agent-native-reviewer, architecture-strategist, security-sentinel, performance-seer-advisor, code-simplicity-reviewer, data-integrity-guardian, deployment-verification-agent |
-| **P0** | Commands | 4 | /workflows:plan, /workflows:review, /workflows:work, /workflows:compound |
-| **P0** | Skills | 3 | frontend-design, skill-creator, create-agent-skills |
-| **P1** | Agents | 17 | data-migration-expert, pattern-recognition-specialist, dhh-rails-reviewer, etc. |
-| **P1** | Commands | 11 | /workflows:brainstorm, /deepen-plan, /plan_review, etc. |
-| **P1** | Skills | 8 | agent-native-architecture, compound-docs, dhh-rails-style, etc. |
-| **P1** | MCP | 1 | context7 |
-| **P2** | Agents | 3 | git-history-analyzer, etc. |
-| **P2** | Commands | 5 | /xcode-test, /feature-video, etc. |
-| **P2** | Skills | 3 | rclone, agent-browser, gemini-imagegen |
+| Priority | Category | Count | Examples                                                                                                                                                                      |
+| -------- | -------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **P0**   | Agents   | 7     | agent-native-reviewer, architecture-strategist, security-sentinel, performance-seer-advisor, code-simplicity-reviewer, data-integrity-guardian, deployment-verification-agent |
+| **P0**   | Commands | 4     | /workflows:plan, /workflows:review, /workflows:work, /workflows:compound                                                                                                      |
+| **P0**   | Skills   | 3     | frontend-design, skill-creator, create-agent-skills                                                                                                                           |
+| **P1**   | Agents   | 17    | data-migration-expert, pattern-recognition-specialist, dhh-rails-reviewer, etc.                                                                                               |
+| **P1**   | Commands | 11    | /workflows:brainstorm, /deepen-plan, /plan_review, etc.                                                                                                                       |
+| **P1**   | Skills   | 8     | agent-native-architecture, compound-docs, dhh-rails-style, etc.                                                                                                               |
+| **P1**   | MCP      | 1     | context7                                                                                                                                                                      |
+| **P2**   | Agents   | 3     | git-history-analyzer, etc.                                                                                                                                                    |
+| **P2**   | Commands | 5     | /xcode-test, /feature-video, etc.                                                                                                                                             |
+| **P2**   | Skills   | 3     | rclone, agent-browser, gemini-imagegen                                                                                                                                        |
 
 ### Key Implementation Decisions
 
 **Conflict Resolution Strategy:**
+
 - All imported components prefixed with namespace (`grid:`)
 - User can override via config: `namespace_overrides: { "security-sentinel": "custom" }`
 - On collision: import wins by default, log warning
 
 **Atomic vs Partial Import:**
+
 - Default: Partial import with detailed report
 - Strict mode: Atomic (fail on any error)
 - Configurable via `imports.claude.atomic: boolean`
 
 **Security Boundaries:**
+
 - MCP servers require explicit user approval before first use
 - Imported commands audited for bash tool usage
 - Agents inherit permissions from category defaults
 - Path traversal validation on all plugin paths
 
 **Lazy Loading:**
+
 - Components loaded on first use, not at startup
 - LRU cache with configurable max memory
 - Priority queue for P0 components
@@ -128,11 +137,13 @@ export const ClaudeImportConfigSchema = z.object({
 });
 
 export const FeatureBundleConfigSchema = z.object({
-  compoundEngineering: z.object({
-    enabled: z.boolean().default(true),
-    lazy_load: z.boolean().default(true),
-    cache_size: z.number().default(50),
-  }).optional(),
+  compoundEngineering: z
+    .object({
+      enabled: z.boolean().default(true),
+      lazy_load: z.boolean().default(true),
+      cache_size: z.number().default(50),
+    })
+    .optional(),
 });
 ```
 
@@ -175,6 +186,7 @@ export const FeatureBundleConfigSchema = z.object({
 **Goal:** Establish foundation and configuration
 
 **Tasks:**
+
 1. Extend `ClaudeImportConfigSchema` with new fields
 2. Create `src/features/bundles/` directory structure
 3. Add conflict resolution logic to `src/features/imports/claude/mapper.ts`
@@ -183,12 +195,14 @@ export const FeatureBundleConfigSchema = z.object({
 6. Write tests for configuration schema changes
 
 **Deliverables:**
+
 - Extended configuration with validation
 - Secure path resolution
 - Dry-run import capability
 - Test coverage >80% for new code
 
 **Success Criteria:**
+
 - Config changes pass validation
 - Security tests pass
 - No breaking changes to existing functionality
@@ -198,6 +212,7 @@ export const FeatureBundleConfigSchema = z.object({
 **Goal:** Import all P0 and P1 components
 
 **Tasks:**
+
 1. Map 7 P0 agents to OpenCode agent registry
 2. Map 4 P0 commands to OpenCode commands with skill wrappers
 3. Map 3 P0 skills to OpenCode skill system
@@ -208,12 +223,14 @@ export const FeatureBundleConfigSchema = z.object({
 8. Write golden fixtures for all P0 components
 
 **Deliverables:**
+
 - All P0 components importable and functional
 - Lazy loading framework operational
 - MCP approval workflow implemented
 - Comprehensive test fixtures
 
 **Success Criteria:**
+
 - `/workflows:plan` command executes successfully
 - All P0 agents respond to delegation
 - Import report shows 100% P0 success rate
@@ -224,6 +241,7 @@ export const FeatureBundleConfigSchema = z.object({
 **Goal:** Production readiness and hook translation
 
 **Tasks:**
+
 1. Add rich Claude hook mappings (Phase 3 hooks)
 2. Expand tool compatibility for edge cases
 3. Implement import diagnostics and troubleshooting
@@ -234,6 +252,7 @@ export const FeatureBundleConfigSchema = z.object({
 8. Security audit and penetration testing
 
 **Deliverables:**
+
 - Hook translation layer complete
 - Migration CLI tool
 - Performance benchmarks documented
@@ -241,6 +260,7 @@ export const FeatureBundleConfigSchema = z.object({
 - User documentation
 
 **Success Criteria:**
+
 - All critical hooks mapped or documented gaps
 - Migration tool successfully migrates test configs
 - Performance targets met
@@ -250,13 +270,13 @@ export const FeatureBundleConfigSchema = z.object({
 
 ### Threat Model
 
-| Threat | Severity | Mitigation |
-|--------|----------|------------|
-| Path traversal in plugin loading | Critical | Canonical path resolution, chroot-like isolation, whitelist validation |
-| Arbitrary code execution via commands | Critical | Command audit, sandboxed execution, user approval |
-| MCP server privilege escalation | Critical | Capability-based permissions, explicit approval, isolated execution |
-| Agent permission inheritance | High | Default-deny, explicit grants, least-privilege |
-| Hook interception attacks | Medium | Hook capability restrictions, audit logging |
+| Threat                                | Severity | Mitigation                                                             |
+| ------------------------------------- | -------- | ---------------------------------------------------------------------- |
+| Path traversal in plugin loading      | Critical | Canonical path resolution, chroot-like isolation, whitelist validation |
+| Arbitrary code execution via commands | Critical | Command audit, sandboxed execution, user approval                      |
+| MCP server privilege escalation       | Critical | Capability-based permissions, explicit approval, isolated execution    |
+| Agent permission inheritance          | High     | Default-deny, explicit grants, least-privilege                         |
+| Hook interception attacks             | Medium   | Hook capability restrictions, audit logging                            |
 
 ### Security Checklist
 
@@ -270,36 +290,38 @@ export const FeatureBundleConfigSchema = z.object({
 
 ## Risks and Mitigations
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Hook semantic differences cause bugs | High | Medium | Comprehensive hook compatibility matrix, adapter pattern, extensive testing |
-| Name collisions break existing workflows | Medium | High | Mandatory namespacing, override config, deprecation warnings |
-| Performance degradation on import | Medium | Medium | Lazy loading, caching, streaming import with progress |
-| Breaking changes for existing users | Medium | High | Automatic migration tool, backward compatibility layer, deprecation period |
-| MCP server compatibility issues | Low | High | Platform detection, conditional loading, graceful degradation |
-| Memory leaks in long-running sessions | Medium | Medium | LRU cache, reference counting, memory monitoring |
+| Risk                                     | Likelihood | Impact | Mitigation                                                                  |
+| ---------------------------------------- | ---------- | ------ | --------------------------------------------------------------------------- |
+| Hook semantic differences cause bugs     | High       | Medium | Comprehensive hook compatibility matrix, adapter pattern, extensive testing |
+| Name collisions break existing workflows | Medium     | High   | Mandatory namespacing, override config, deprecation warnings                |
+| Performance degradation on import        | Medium     | Medium | Lazy loading, caching, streaming import with progress                       |
+| Breaking changes for existing users      | Medium     | High   | Automatic migration tool, backward compatibility layer, deprecation period  |
+| MCP server compatibility issues          | Low        | High   | Platform detection, conditional loading, graceful degradation               |
+| Memory leaks in long-running sessions    | Medium     | Medium | LRU cache, reference counting, memory monitoring                            |
 
 ## Dependencies & Prerequisites
 
 ### Required
+
 - OpenCode SDK >= 1.0.150
 - ghostwire codebase access
 - Build and test infrastructure
 
 ### Optional
+
 - GitHub Actions for automated testing
 - Linear/GitHub Issues for tracking
 
 ## Success Metrics
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Import success rate (P0) | 100% | Automated tests |
-| Import success rate (P1) | >95% | Automated tests |
-| Startup time impact | <2s | Benchmark suite |
-| Memory overhead | <50MB | Memory profiling |
-| User migration success | >90% | Telemetry |
-| Test coverage | >85% | Coverage reports |
+| Metric                   | Target | Measurement      |
+| ------------------------ | ------ | ---------------- |
+| Import success rate (P0) | 100%   | Automated tests  |
+| Import success rate (P1) | >95%   | Automated tests  |
+| Startup time impact      | <2s    | Benchmark suite  |
+| Memory overhead          | <50MB  | Memory profiling |
+| User migration success   | >90%   | Telemetry        |
+| Test coverage            | >85%   | Coverage reports |
 
 ## Future Considerations
 
@@ -349,10 +371,11 @@ bun test src/features/imports/claude/mapper.test.ts
 ## Resolution (Completed in v3.2.0)
 
 All questions have been addressed through the complete integration:
+
 1. ✅ All components now native - no import layer needed
 2. ✅ Updates handled through ghostwire releases
 3. ✅ Components are core code - maintainable and consistent
-4. ✅ Rollback via git versioning if needed  
+4. ✅ Rollback via git versioning if needed
 5. ✅ Configuration system unified with ghostwire schema
 
 ---

@@ -2,7 +2,7 @@ version: 1
 source: docs/agents.yml
 description: Documentation reference for agent metadata. For configuration, use ghostwire.json config files.
 metadata:
-  generated: '2026-02-23'
+  generated: "2026-02-23"
   status: documentation-only
   notes:
     - This file is now DOCUMENTATION ONLY

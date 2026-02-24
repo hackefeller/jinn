@@ -83,7 +83,7 @@ export function calculateExecutionWaves(tasks: Task[]): Record<string, number> {
  * Get all tasks for a specific execution wave
  */
 export function getTasksInWave(tasks: Task[], waveNumber: number): Task[] {
-  return tasks.filter(task => task.wave === waveNumber);
+  return tasks.filter((task) => task.wave === waveNumber);
 }
 
 /**
@@ -101,7 +101,7 @@ export function getMaxWave(waveMap: Record<string, number>): number {
 export function applyAutoWaves(tasks: Task[]): Task[] {
   const waveMap = calculateExecutionWaves(tasks);
 
-  return tasks.map(task => ({
+  return tasks.map((task) => ({
     ...task,
     wave: waveMap[task.id],
   }));
@@ -114,10 +114,10 @@ export function applyAutoWaves(tasks: Task[]): Task[] {
  */
 export function applyManualWaves(
   tasks: Task[],
-  manualWaveOverrides: Record<string, number>
+  manualWaveOverrides: Record<string, number>,
 ): Task[] {
   // Apply overrides
-  const updatedTasks = tasks.map(task => ({
+  const updatedTasks = tasks.map((task) => ({
     ...task,
     wave: manualWaveOverrides[task.id] ?? task.wave,
   }));
@@ -129,13 +129,13 @@ export function applyManualWaves(
     // Check blocked tasks
     if (task.blocks) {
       for (const blockId of task.blocks) {
-        const blockedTask = updatedTasks.find(t => t.id === blockId);
+        const blockedTask = updatedTasks.find((t) => t.id === blockId);
         if (blockedTask) {
           const blockedWave = blockedTask.wave || 1;
           if (taskWave > blockedWave) {
             throw new Error(
               `Wave override violation: Task "${task.id}" (wave ${taskWave}) blocks ` +
-                `task "${blockId}" (wave ${blockedWave}), but blocker must be in earlier wave`
+                `task "${blockId}" (wave ${blockedWave}), but blocker must be in earlier wave`,
             );
           }
         }
@@ -145,13 +145,13 @@ export function applyManualWaves(
     // Check blocking tasks
     if (task.blockedBy) {
       for (const blockerId of task.blockedBy) {
-        const blockerTask = updatedTasks.find(t => t.id === blockerId);
+        const blockerTask = updatedTasks.find((t) => t.id === blockerId);
         if (blockerTask) {
           const blockerWave = blockerTask.wave || 1;
           if (blockerWave > taskWave) {
             throw new Error(
               `Wave override violation: Task "${task.id}" (wave ${taskWave}) is blocked by ` +
-                `task "${blockerId}" (wave ${blockerWave}), but dependency must be in earlier wave`
+                `task "${blockerId}" (wave ${blockerWave}), but dependency must be in earlier wave`,
             );
           }
         }
@@ -169,11 +169,11 @@ export function applyManualWaves(
 export function getTasksByWave(tasks: Task[]): Task[][] {
   if (tasks.length === 0) return [];
 
-  const maxWave = Math.max(...tasks.map(t => t.wave || 1));
+  const maxWave = Math.max(...tasks.map((t) => t.wave || 1));
   const waves: Task[][] = [];
 
   for (let wave = 1; wave <= maxWave; wave++) {
-    const waveTasks = tasks.filter(t => t.wave === wave);
+    const waveTasks = tasks.filter((t) => t.wave === wave);
     if (waveTasks.length > 0) {
       waves.push(waveTasks);
     }
@@ -188,14 +188,14 @@ export function getTasksByWave(tasks: Task[]): Task[][] {
 export function canExecuteTask(
   taskId: string,
   tasks: Task[],
-  completedTaskIds: Set<string>
+  completedTaskIds: Set<string>,
 ): boolean {
-  const task = tasks.find(t => t.id === taskId);
+  const task = tasks.find((t) => t.id === taskId);
   if (!task) return false;
 
   // Task can execute if all its blockers are completed
   if (task.blockedBy && task.blockedBy.length > 0) {
-    return task.blockedBy.every(blockerId => completedTaskIds.has(blockerId));
+    return task.blockedBy.every((blockerId) => completedTaskIds.has(blockerId));
   }
 
   return true;
@@ -207,12 +207,10 @@ export function canExecuteTask(
 export function getExecutableTasksInWave(
   tasks: Task[],
   waveNumber: number,
-  completedTaskIds: Set<string>
+  completedTaskIds: Set<string>,
 ): Task[] {
   return getTasksInWave(tasks, waveNumber).filter(
-    task =>
-      task.status === "pending" &&
-      canExecuteTask(task.id, tasks, completedTaskIds)
+    (task) => task.status === "pending" && canExecuteTask(task.id, tasks, completedTaskIds),
   );
 }
 
@@ -241,7 +239,7 @@ export function estimateExecutionDuration(tasks: Task[]): {
   waveGroups.forEach((waveTasks, waveIndex) => {
     const wave = waveIndex + 1;
     // In a wave, tasks run in parallel, so duration is the max of all tasks in that wave
-    const waveDuration = Math.max(...waveTasks.map(t => parseEffort(t.estimatedEffort)));
+    const waveDuration = Math.max(...waveTasks.map((t) => parseEffort(t.estimatedEffort)));
     perWave[wave] = `${waveDuration}m`;
     totalMinutes += waveDuration;
   });

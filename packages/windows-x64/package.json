@@ -7,16 +7,16 @@
     "type": "git",
     "url": "https://github.com/hackefeller/ghostwire"
   },
+  "bin": {
+    "ghostwire": "./bin/ghostwire.exe"
+  },
+  "files": [
+    "bin"
+  ],
   "os": [
     "win32"
   ],
   "cpu": [
     "x64"
-  ],
-  "files": [
-    "bin"
-  ],
-  "bin": {
-    "ghostwire": "./bin/ghostwire.exe"
-  }
+  ]
 }

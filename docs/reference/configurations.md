@@ -17,19 +17,19 @@ It asks about your providers (Claude, OpenAI, Gemini, etc.) and generates optima
 ```jsonc
 {
   "$schema": "https://raw.githubusercontent.com/hackefeller/ghostwire/master/assets/ghostwire.schema.json",
-  
+
   // Override specific agent models
   "agents": {
-    "advisor-plan": { "model": "opencode/kimi-k2.5" },           // Use kimi-k2.5 for debugging
+    "advisor-plan": { "model": "opencode/kimi-k2.5" }, // Use kimi-k2.5 for debugging
     "researcher-data": { "model": "opencode/kimi-k2.5" }, // Standardized model for research
-    "researcher-codebase": { "model": "opencode/kimi-k2.5" }        // Standardized model for grep
+    "researcher-codebase": { "model": "opencode/kimi-k2.5" }, // Standardized model for grep
   },
-  
+
   // Override category models (used by delegate_task)
   "categories": {
-    "quick": { "model": "opencode/kimi-k2.5" },         // Fast/cheap for trivial tasks
-    "visual-engineering": { "model": "opencode/kimi-k2.5" } // kimi-k2.5 for UI
-  }
+    "quick": { "model": "opencode/kimi-k2.5" }, // Fast/cheap for trivial tasks
+    "visual-engineering": { "model": "opencode/kimi-k2.5" }, // kimi-k2.5 for UI
+  },
 }
 ```
 
@@ -38,13 +38,14 @@ It asks about your providers (Claude, OpenAI, Gemini, etc.) and generates optima
 ## Config File Locations
 
 Config file locations (priority order):
+
 1. `.opencode/ghostwire.json` (project)
 2. User config (platform-specific):
 
-| Platform        | User Config Path                                                                                            |
-| --------------- | ----------------------------------------------------------------------------------------------------------- |
+| Platform        | User Config Path                                                                                  |
+| --------------- | ------------------------------------------------------------------------------------------------- |
 | **Windows**     | `~/.config/opencode/ghostwire.json` (preferred) or `%APPDATA%\opencode\ghostwire.json` (fallback) |
-| **macOS/Linux** | `~/.config/opencode/ghostwire.json`                                                                    |
+| **macOS/Linux** | `~/.config/opencode/ghostwire.json`                                                               |
 
 LSP tooling reads the same ghostwire config files (`ghostwire.jsonc`/`ghostwire.json`) with the same project-over-user precedence.
 
@@ -59,6 +60,7 @@ Schema autocomplete supported:
 ## JSONC Support
 
 The `ghostwire` configuration file supports JSONC (JSON with Comments):
+
 - Line comments: `// comment`
 - Block comments: `/* comment */`
 - Trailing commas: `{ "key": "value", }`
@@ -73,10 +75,10 @@ When both `ghostwire.jsonc` and `ghostwire.json` files exist, `.jsonc` takes pri
   /* Agent overrides - customize models for specific tasks */
   "agents": {
     "advisor-plan": {
-      "model": "opencode/kimi-k2.5"  // kimi-k2.5 for strategic reasoning
+      "model": "opencode/kimi-k2.5", // kimi-k2.5 for strategic reasoning
     },
     "researcher-codebase": {
-      "model": "opencode/kimi-k2.5"  // Standardized model for exploration
+      "model": "opencode/kimi-k2.5", // Standardized model for exploration
     },
   },
 }
@@ -108,6 +110,7 @@ When both `ghostwire.jsonc` and `ghostwire.json` files exist, `.jsonc` takes pri
 Ollama returns NDJSON (newline-delimited JSON) when streaming is enabled, but Claude Code SDK expects a single JSON object. This causes `JSON Parse error: Unexpected EOF` when agents attempt tool calls.
 
 **Example of the problem**:
+
 ```json
 // Ollama streaming response (NDJSON - multiple lines)
 {"message":{"tool_calls":[...]}, "done":false}
@@ -121,11 +124,11 @@ Ollama returns NDJSON (newline-delimited JSON) when streaming is enabled, but Cl
 
 Common Ollama models that work with ghostwire:
 
-| Model | Best For | Configuration |
-|-------|----------|---------------|
-| `ollama/qwen3-coder` | Code generation, build fixes | `{"model": "ollama/qwen3-coder", "stream": false}` |
+| Model                    | Best For                     | Configuration                                          |
+| ------------------------ | ---------------------------- | ------------------------------------------------------ |
+| `ollama/qwen3-coder`     | Code generation, build fixes | `{"model": "ollama/qwen3-coder", "stream": false}`     |
 | `ollama/ministral-3:14b` | Exploration, codebase search | `{"model": "ollama/ministral-3:14b", "stream": false}` |
-| `ollama/lfm2.5-thinking` | Documentation, writing | `{"model": "ollama/lfm2.5-thinking", "stream": false}` |
+| `ollama/lfm2.5-thinking` | Documentation, writing       | `{"model": "ollama/lfm2.5-thinking", "stream": false}` |
 
 ### Troubleshooting
 
@@ -168,15 +171,15 @@ Each agent supports: `model`, `temperature`, `top_p`, `prompt`, `prompt_append`,
 
 ### Additional Agent Options
 
-| Option              | Type    | Description                                                                                     |
-| ------------------- | ------- | ----------------------------------------------------------------------------------------------- |
-| `category`          | string  | Category name to inherit model and other settings from category defaults                             |
-| `variant`           | string  | Model variant (e.g., `max`, `high`, `medium`, `low`, `xhigh`)                                 |
-| `maxTokens`         | number  | Maximum tokens for response. Passed directly to OpenCode SDK.                                      |
-| `thinking`          | object  | Extended thinking configuration for Anthropic models. See [Thinking Options](#thinking-options) below. |
-| `reasoningEffort`   | string  | OpenAI reasoning effort level. Values: `low`, `medium`, `high`, `xhigh`.                         |
-| `textVerbosity`      | string  | Text verbosity level. Values: `low`, `medium`, `high`.                                        |
-| `providerOptions`    | object  | Provider-specific options passed directly to OpenCode SDK.                                      |
+| Option            | Type   | Description                                                                                            |
+| ----------------- | ------ | ------------------------------------------------------------------------------------------------------ |
+| `category`        | string | Category name to inherit model and other settings from category defaults                               |
+| `variant`         | string | Model variant (e.g., `max`, `high`, `medium`, `low`, `xhigh`)                                          |
+| `maxTokens`       | number | Maximum tokens for response. Passed directly to OpenCode SDK.                                          |
+| `thinking`        | object | Extended thinking configuration for Anthropic models. See [Thinking Options](#thinking-options) below. |
+| `reasoningEffort` | string | OpenAI reasoning effort level. Values: `low`, `medium`, `high`, `xhigh`.                               |
+| `textVerbosity`   | string | Text verbosity level. Values: `low`, `medium`, `high`.                                                 |
+| `providerOptions` | object | Provider-specific options passed directly to OpenCode SDK.                                             |
 
 #### Thinking Options (Anthropic)
 
@@ -193,10 +196,10 @@ Each agent supports: `model`, `temperature`, `top_p`, `prompt`, `prompt_append`,
 }
 ```
 
-| Option        | Type    | Default | Description                                  |
-| ------------- | ------- | ------- | -------------------------------------------- |
-| `type`        | string  | -       | `enabled` or `disabled`                      |
-| `budgetTokens`| number  | -       | Maximum budget tokens for extended thinking  |
+| Option         | Type   | Default | Description                                 |
+| -------------- | ------ | ------- | ------------------------------------------- |
+| `type`         | string | -       | `enabled` or `disabled`                     |
+| `budgetTokens` | number | -       | Maximum budget tokens for extended thinking |
 
 Use `prompt_append` to add extra instructions without replacing the default system prompt:
 
@@ -272,10 +275,7 @@ Configure advanced skills settings including custom skill sources, enabling/disa
 ```json
 {
   "skills": {
-    "sources": [
-      { "path": "./custom-skills", "recursive": true },
-      "https://example.com/skill.yaml"
-    ],
+    "sources": [{ "path": "./custom-skills", "recursive": true }, "https://example.com/skill.yaml"],
     "enable": ["my-custom-skill"],
     "disable": ["other-skill"],
     "my-skill": {
@@ -314,11 +314,11 @@ Load skills from local directories or remote URLs:
 }
 ```
 
-| Option      | Default | Description                                    |
-| ----------- | ------- | ---------------------------------------------- |
-| `path`      | -       | Local file/directory path or remote URL            |
-| `recursive`  | `false`  | Recursively load from directory                 |
-| `glob`      | -       | Glob pattern for file selection                 |
+| Option      | Default | Description                             |
+| ----------- | ------- | --------------------------------------- |
+| `path`      | -       | Local file/directory path or remote URL |
+| `recursive` | `false` | Recursively load from directory         |
+| `glob`      | -       | Glob pattern for file selection         |
 
 ### Enable/Disable Skills
 
@@ -335,19 +335,19 @@ Load skills from local directories or remote URLs:
 
 Define custom skills directly in your config:
 
-| Option           | Default | Description                                                                          |
-| ---------------- | ------- | ------------------------------------------------------------------------------------ |
-| `description`     | -       | Human-readable description of the skill                                                 |
-| `template`        | -       | Custom prompt template for the skill                                                    |
-| `from`           | -       | Source file to load template from                                                     |
-| `model`           | -       | Override model for this skill                                                         |
-| `agent`           | -       | Override agent for this skill                                                         |
-| `subtask`         | `false`  | Whether to run as a subtask                                                           |
-| `argument-hint`   | -       | Hint for how to use the skill                                                        |
-| `license`          | -       | Skill license                                                                       |
-| `compatibility`    | -       | Required ghostwire version compatibility                                           |
-| `metadata`         | -       | Additional metadata as key-value pairs                                                |
-| `allowed-tools`    | -       | Array of tools this skill is allowed to use                                            |
+| Option          | Default | Description                                 |
+| --------------- | ------- | ------------------------------------------- |
+| `description`   | -       | Human-readable description of the skill     |
+| `template`      | -       | Custom prompt template for the skill        |
+| `from`          | -       | Source file to load template from           |
+| `model`         | -       | Override model for this skill               |
+| `agent`         | -       | Override agent for this skill               |
+| `subtask`       | `false` | Whether to run as a subtask                 |
+| `argument-hint` | -       | Hint for how to use the skill               |
+| `license`       | -       | Skill license                               |
+| `compatibility` | -       | Required ghostwire version compatibility    |
+| `metadata`      | -       | Additional metadata as key-value pairs      |
+| `allowed-tools` | -       | Array of tools this skill is allowed to use |
 
 **Example: Custom skill**
 
@@ -368,10 +368,10 @@ Define custom skills directly in your config:
 
 Choose between two browser automation providers:
 
-| Provider | Interface | Features | Installation |
-|----------|-----------|----------|--------------|
-| **playwright** (default) | MCP tools | Playwright MCP server with structured tool calls | Auto-installed via npx |
-| **agent-browser** | Bash CLI | Vercel's CLI with session management, parallel browsers | Requires `bun add -g agent-browser` |
+| Provider                 | Interface | Features                                                | Installation                        |
+| ------------------------ | --------- | ------------------------------------------------------- | ----------------------------------- |
+| **playwright** (default) | MCP tools | Playwright MCP server with structured tool calls        | Auto-installed via npx              |
+| **agent-browser**        | Bash CLI  | Vercel's CLI with session management, parallel browsers | Requires `bun add -g agent-browser` |
 
 **Switch providers** via `browser_automation_engine` in `ghostwire.json`:
 
@@ -390,18 +390,21 @@ Uses the official Playwright MCP server (`@playwright/mcp`). Browser automation 
 ### agent-browser
 
 Uses [Vercel's agent-browser CLI](https://github.com/vercel-labs/agent-browser). Key advantages:
+
 - **Session management**: Run multiple isolated browser instances with `--session` flag
 - **Persistent profiles**: Keep browser state across restarts with `--profile`
 - **Snapshot-based workflow**: Get element refs via `snapshot -i`, interact with `@e1`, `@e2`, etc.
 - **CLI-first**: All commands via Bash - great for scripting
 
 **Installation required**:
+
 ```bash
 bun add -g agent-browser
 agent-browser install  # Download Chromium
 ```
 
 **Example workflow**:
+
 ```bash
 agent-browser open https://example.com
 agent-browser snapshot -i  # Get interactive elements with refs
@@ -429,23 +432,23 @@ Run background subagents in separate tmux panes for **visual multi-agent executi
 }
 ```
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `enabled` | `false` | Enable tmux subagent pane spawning. Only works when running inside an existing tmux session. |
-| `layout` | `main-vertical` | Tmux layout for agent panes. See [Layout Options](#layout-options) below. |
-| `main_pane_size` | `60` | Main pane size as percentage (20-80). |
-| `main_pane_min_width` | `120` | Minimum width for main pane in columns. |
-| `agent_pane_min_width` | `40` | Minimum width for each agent pane in columns. |
+| Option                 | Default         | Description                                                                                  |
+| ---------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `enabled`              | `false`         | Enable tmux subagent pane spawning. Only works when running inside an existing tmux session. |
+| `layout`               | `main-vertical` | Tmux layout for agent panes. See [Layout Options](#layout-options) below.                    |
+| `main_pane_size`       | `60`            | Main pane size as percentage (20-80).                                                        |
+| `main_pane_min_width`  | `120`           | Minimum width for main pane in columns.                                                      |
+| `agent_pane_min_width` | `40`            | Minimum width for each agent pane in columns.                                                |
 
 ### Layout Options
 
-| Layout | Description |
-|--------|-------------|
-| `main-vertical` | Main pane left, agent panes stacked on right (default) |
-| `main-horizontal` | Main pane top, agent panes stacked bottom |
-| `tiled` | All panes in equal-sized grid |
-| `even-horizontal` | All panes in horizontal row |
-| `even-vertical` | All panes in vertical stack |
+| Layout            | Description                                            |
+| ----------------- | ------------------------------------------------------ |
+| `main-vertical`   | Main pane left, agent panes stacked on right (default) |
+| `main-horizontal` | Main pane top, agent panes stacked bottom              |
+| `tiled`           | All panes in equal-sized grid                          |
+| `even-horizontal` | All panes in horizontal row                            |
+| `even-vertical`   | All panes in vertical stack                            |
 
 ### Requirements
 
@@ -456,6 +459,7 @@ Run background subagents in separate tmux panes for **visual multi-agent executi
 ### How It Works
 
 When `tmux.enabled` is `true` and you're inside a tmux session:
+
 - Background agents (via `delegate_task(run_in_background=true)`) spawn in new tmux panes
 - Each pane shows the subagent's real-time output
 - Panes are automatically closed when the subagent completes
@@ -466,6 +470,7 @@ When `tmux.enabled` is `true` and you're inside a tmux session:
 To enable tmux subagent panes, OpenCode must run in **server mode** with the `--port` flag. This starts an HTTP server that subagent panes connect to via `opencode attach`.
 
 **Basic setup**:
+
 ```bash
 # Start tmux session
 tmux new -s dev
@@ -486,7 +491,7 @@ function oc
     set base_name (basename (pwd))
     set path_hash (echo (pwd) | md5 | cut -c1-4)
     set session_name "$base_name-$path_hash"
-    
+
     # Find available port starting from 4096
     function __oc_find_port
         set port 4096
@@ -499,10 +504,10 @@ function oc
         end
         echo 4096
     end
-    
+
     set oc_port (__oc_find_port)
     set -x OPENCODE_PORT $oc_port
-    
+
     if set -q TMUX
         # Already inside tmux - just run with port
         opencode --port $oc_port $argv
@@ -516,7 +521,7 @@ function oc
             tmux new-session -s "$session_name" -c (pwd) "$oc_cmd"
         end
     end
-    
+
     functions -e __oc_find_port
 end
 ```
@@ -529,7 +534,7 @@ oc() {
     local base_name=$(basename "$PWD")
     local path_hash=$(echo "$PWD" | md5sum | cut -c1-4)
     local session_name="${base_name}-${path_hash}"
-    
+
     # Find available port
     local port=4096
     while [ $port -lt 5096 ]; do
@@ -538,9 +543,9 @@ oc() {
         fi
         port=$((port + 1))
     done
-    
+
     export OPENCODE_PORT=$port
-    
+
     if [ -n "$TMUX" ]; then
         opencode --port $port "$@"
     else
@@ -565,8 +570,8 @@ oc() {
 
 **Environment variables**:
 
-| Variable | Description |
-|----------|-------------|
+| Variable        | Description                                                       |
+| --------------- | ----------------------------------------------------------------- |
 | `OPENCODE_PORT` | Default port for the HTTP server (used if `--port` not specified) |
 
 ### Server Mode Reference
@@ -581,9 +586,9 @@ opencode serve --port 4096
 opencode --port 4096
 ```
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--port` | `4096` | Port for HTTP server |
+| Flag         | Default     | Description           |
+| ------------ | ----------- | --------------------- |
+| `--port`     | `4096`      | Port for HTTP server  |
 | `--hostname` | `127.0.0.1` | Hostname to listen on |
 
 For more details, see the [OpenCode Server documentation](https://opencode.ai/docs/server/).
@@ -601,9 +606,9 @@ Configure git-master skill behavior:
 }
 ```
 
-| Option                   | Default | Description                                                                      |
-| ------------------------ | ------- | -------------------------------------------------------------------------------- |
-| `commit_footer`          | `true`  | Adds "Ultraworked with Cipher Operator" footer to commit messages.                      |
+| Option                   | Default | Description                                                                          |
+| ------------------------ | ------- | ------------------------------------------------------------------------------------ |
+| `commit_footer`          | `true`  | Adds "Ultraworked with Cipher Operator" footer to commit messages.                   |
 | `include_co_authored_by` | `true`  | Adds `Co-authored-by: Cipher Operator <clio-agent@ghostwire.ai>` trailer to commits. |
 
 ## Cipher Operator Agent
@@ -672,11 +677,11 @@ You can also customize Cipher Operator agents like other agents:
 }
 ```
 
-| Option                    | Default | Description                                                                                                                            |
-| ------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `disabled`                | `false` | When `true`, disables all Cipher Operator orchestration and restores original build/plan as primary.                                          |
-| `default_builder_enabled` | `false` | When `true`, enables OpenCode-Builder agent (same as OpenCode build, renamed due to SDK limitations). Disabled by default.             |
-| `planner_enabled`         | `true`  | When `true`, enables planner agent with work-planner methodology. Enabled by default.                                     |
+| Option                    | Default | Description                                                                                                                  |
+| ------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `disabled`                | `false` | When `true`, disables all Cipher Operator orchestration and restores original build/plan as primary.                         |
+| `default_builder_enabled` | `false` | When `true`, enables OpenCode-Builder agent (same as OpenCode build, renamed due to SDK limitations). Disabled by default.   |
+| `planner_enabled`         | `true`  | When `true`, enables planner agent with work-planner methodology. Enabled by default.                                        |
 | `replace_plan`            | `true`  | When `true`, demotes default planner agent to subagent mode. Set to `false` to keep both planner and default plan available. |
 
 ## Background Tasks
@@ -698,16 +703,17 @@ Configure concurrency limits for background agent tasks. This controls how many 
 }
 ```
 
-| Option                | Default | Description                                                                                                             |
-| --------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `defaultConcurrency`  | -       | Default maximum concurrent background tasks for all providers/models                                                    |
-| `staleTimeoutMs`      | `180000` | Stale timeout in milliseconds - interrupt tasks with no activity for this duration (minimum: 60000 = 1 minute)             |
-| `providerConcurrency` | -       | Per-provider concurrency limits. Keys are provider names (e.g., `opencode`)                        |
-| `modelConcurrency`    | -       | Per-model concurrency limits. Keys are full model names (e.g., `opencode/kimi-k2.5`). Overrides provider limits. |
+| Option                | Default  | Description                                                                                                      |
+| --------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+| `defaultConcurrency`  | -        | Default maximum concurrent background tasks for all providers/models                                             |
+| `staleTimeoutMs`      | `180000` | Stale timeout in milliseconds - interrupt tasks with no activity for this duration (minimum: 60000 = 1 minute)   |
+| `providerConcurrency` | -        | Per-provider concurrency limits. Keys are provider names (e.g., `opencode`)                                      |
+| `modelConcurrency`    | -        | Per-model concurrency limits. Keys are full model names (e.g., `opencode/kimi-k2.5`). Overrides provider limits. |
 
 **Priority Order**: `modelConcurrency` > `providerConcurrency` > `defaultConcurrency`
 
 **Use Cases**:
+
 - Limit expensive models (e.g., Opus) to prevent cost spikes
 - Allow more concurrent tasks for fast/cheap models (e.g., Gemini Flash)
 - Respect provider rate limits by setting provider-level caps
@@ -720,15 +726,15 @@ Categories enable domain-specific task delegation via the `delegate_task` tool. 
 
 All 7 categories come with optimal model defaults, but **you must configure them to use those defaults**:
 
-| Category             | Built-in Default Model             | Description                                                          |
-| -------------------- | ---------------------------------- | -------------------------------------------------------------------- |
-| `visual-engineering` | `opencode/kimi-k2.5`      | Frontend, UI/UX, design, styling, animation                          |
-| `ultrabrain`         | `opencode/kimi-k2.5`     | Deep logical reasoning, complex architecture decisions               |
-| `artistry`           | `opencode/kimi-k2.5`| Highly creative/artistic tasks, novel ideas                          |
-| `quick`              | `opencode/kimi-k2.5`       | Trivial tasks - single file changes, typo fixes, simple modifications|
-| `unspecified-low`    | `opencode/kimi-k2.5`      | Tasks that don't fit other categories, low effort required           |
-| `unspecified-high`   | `opencode/kimi-k2.5`  | Tasks that don't fit other categories, high effort required          |
-| `writing`            | `opencode/kimi-k2.5`    | Documentation, prose, technical writing                              |
+| Category             | Built-in Default Model | Description                                                           |
+| -------------------- | ---------------------- | --------------------------------------------------------------------- |
+| `visual-engineering` | `opencode/kimi-k2.5`   | Frontend, UI/UX, design, styling, animation                           |
+| `ultrabrain`         | `opencode/kimi-k2.5`   | Deep logical reasoning, complex architecture decisions                |
+| `artistry`           | `opencode/kimi-k2.5`   | Highly creative/artistic tasks, novel ideas                           |
+| `quick`              | `opencode/kimi-k2.5`   | Trivial tasks - single file changes, typo fixes, simple modifications |
+| `unspecified-low`    | `opencode/kimi-k2.5`   | Tasks that don't fit other categories, low effort required            |
+| `unspecified-high`   | `opencode/kimi-k2.5`   | Tasks that don't fit other categories, high effort required           |
+| `writing`            | `opencode/kimi-k2.5`   | Documentation, prose, technical writing                               |
 
 ### ⚠️ Critical: Model Resolution Priority
 
@@ -759,25 +765,25 @@ All 7 categories come with optimal model defaults, but **you must configure them
 ```json
 {
   "categories": {
-    "visual-engineering": { 
+    "visual-engineering": {
       "model": "opencode/kimi-k2.5"
     },
-    "ultrabrain": { 
+    "ultrabrain": {
       "model": "opencode/kimi-k2.5"
     },
-    "artistry": { 
+    "artistry": {
       "model": "opencode/kimi-k2.5"
     },
-    "quick": { 
-      "model": "opencode/kimi-k2.5"  // Fast for trivial tasks
+    "quick": {
+      "model": "opencode/kimi-k2.5" // Fast for trivial tasks
     },
-    "unspecified-low": { 
+    "unspecified-low": {
       "model": "opencode/kimi-k2.5"
     },
-    "unspecified-high": { 
+    "unspecified-high": {
       "model": "opencode/kimi-k2.5"
     },
-    "writing": { 
+    "writing": {
       "model": "opencode/kimi-k2.5"
     }
   }
@@ -790,11 +796,14 @@ All 7 categories come with optimal model defaults, but **you must configure them
 
 ```javascript
 // Via delegate_task tool
-delegate_task(category="visual-engineering", prompt="Create a responsive dashboard component")
-delegate_task(category="ultrabrain", prompt="Design the payment processing flow")
+delegate_task(
+  (category = "visual-engineering"),
+  (prompt = "Create a responsive dashboard component"),
+);
+delegate_task((category = "ultrabrain"), (prompt = "Design the payment processing flow"));
 
 // Or target a specific agent directly (bypasses categories)
-delegate_task(agent="advisor-plan", prompt="Review this architecture")
+delegate_task((agent = "advisor-plan"), (prompt = "Review this architecture"));
 ```
 
 ### Custom Categories
@@ -821,10 +830,10 @@ Each category supports: `model`, `temperature`, `top_p`, `maxTokens`, `thinking`
 
 ### Additional Category Options
 
-| Option             | Type    | Default | Description                                                                                         |
-| ------------------ | ------- | ------- | --------------------------------------------------------------------------------------------------- |
-| `description`       | string  | -       | Human-readable description of the category's purpose. Shown in delegate_task prompt.                     |
-| `is_unstable_agent`| boolean | `false`  | Mark agent as unstable - forces background mode for monitoring. Auto-enabled for gemini models. |
+| Option              | Type    | Default | Description                                                                                     |
+| ------------------- | ------- | ------- | ----------------------------------------------------------------------------------------------- |
+| `description`       | string  | -       | Human-readable description of the category's purpose. Shown in delegate_task prompt.            |
+| `is_unstable_agent` | boolean | `false` | Mark agent as unstable - forces background mode for monitoring. Auto-enabled for gemini models. |
 
 ## Model Resolution System
 
@@ -835,6 +844,7 @@ At runtime, Ghostwire uses a 3-step resolution process to determine which model 
 **Problem**: Users have different provider configurations. The system needs to select the best available model for each task at runtime.
 
 **Solution**: A simple 3-step resolution flow:
+
 1. **Step 1: User Override** — If you specify a model in `ghostwire.json`, use exactly that
 2. **Step 2: Provider Fallback** — Try each provider in the requirement's priority order until one is available
 3. **Step 3: System Default** — Fall back to OpenCode's configured default model
@@ -882,32 +892,32 @@ At runtime, Ghostwire uses a 3-step resolution process to determine which model 
 
 Each agent has a defined provider priority chain. The system tries providers in order until it finds an available model:
 
-| Agent | Model (no prefix) | Provider Priority Chain |
-|-------|-------------------|-------------------------|
-| **operator** | `kimi-k2.5` | opencode |
-| **advisor-plan** | `kimi-k2.5` | opencode |
-| **researcher-data** | `kimi-k2.5` | opencode |
-| **researcher-codebase** | `kimi-k2.5` | opencode |
-| **analyzer-media** | `kimi-k2.5` | opencode |
-| **planner** | `kimi-k2.5` | opencode |
-| **advisor-strategy** | `kimi-k2.5` | opencode |
-| **validator-audit** | `kimi-k2.5` | opencode |
-| **orchestrator** | `kimi-k2.5` | opencode |
+| Agent                   | Model (no prefix) | Provider Priority Chain |
+| ----------------------- | ----------------- | ----------------------- |
+| **operator**            | `kimi-k2.5`       | opencode                |
+| **advisor-plan**        | `kimi-k2.5`       | opencode                |
+| **researcher-data**     | `kimi-k2.5`       | opencode                |
+| **researcher-codebase** | `kimi-k2.5`       | opencode                |
+| **analyzer-media**      | `kimi-k2.5`       | opencode                |
+| **planner**             | `kimi-k2.5`       | opencode                |
+| **advisor-strategy**    | `kimi-k2.5`       | opencode                |
+| **validator-audit**     | `kimi-k2.5`       | opencode                |
+| **orchestrator**        | `kimi-k2.5`       | opencode                |
 
 ### Category Provider Chains
 
 Categories follow the same resolution logic:
 
-| Category | Model (no prefix) | Provider Priority Chain |
-|----------|-------------------|-------------------------|
-| **visual-engineering** | `kimi-k2.5` | opencode |
-| **ultrabrain** | `kimi-k2.5` | opencode |
-| **deep** | `kimi-k2.5` | opencode |
-| **artistry** | `kimi-k2.5` | opencode |
-| **quick** | `kimi-k2.5` | opencode |
-| **unspecified-low** | `kimi-k2.5` | opencode |
-| **unspecified-high** | `kimi-k2.5` | opencode |
-| **writing** | `kimi-k2.5` | opencode |
+| Category               | Model (no prefix) | Provider Priority Chain |
+| ---------------------- | ----------------- | ----------------------- |
+| **visual-engineering** | `kimi-k2.5`       | opencode                |
+| **ultrabrain**         | `kimi-k2.5`       | opencode                |
+| **deep**               | `kimi-k2.5`       | opencode                |
+| **artistry**           | `kimi-k2.5`       | opencode                |
+| **quick**              | `kimi-k2.5`       | opencode                |
+| **unspecified-low**    | `kimi-k2.5`       | opencode                |
+| **unspecified-high**   | `kimi-k2.5`       | opencode                |
+| **writing**            | `kimi-k2.5`       | opencode                |
 
 ### Checking Your Configuration
 
@@ -918,6 +928,7 @@ bunx ghostwire doctor --verbose
 ```
 
 The "Model Resolution" check shows:
+
 - Each agent/category's model requirement
 - Provider fallback chain
 - User overrides (if configured)
@@ -987,8 +998,8 @@ Configure grid-comment-checker hook behavior. The comment checker warns when exc
 }
 ```
 
-| Option        | Default | Description                                                                |
-| ------------- | ------- | -------------------------------------------------------------------------- |
+| Option          | Default | Description                                                                    |
+| --------------- | ------- | ------------------------------------------------------------------------------ |
 | `custom_prompt` | -       | Custom warning message to replace the default. Use `{{comments}}` placeholder. |
 
 ## Notification
@@ -1003,8 +1014,8 @@ Configure notification behavior for background task completion.
 }
 ```
 
-| Option         | Default | Description                                                                                   |
-| -------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| Option         | Default | Description                                                                                                  |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
 | `force_enable` | `false` | Force enable grid-session-notification even if external notification plugins are detected. Default: `false`. |
 
 ## Void Runner Tasks & Swarm
@@ -1030,19 +1041,19 @@ Configure Void Runner Tasks and Swarm systems for advanced task management and m
 
 ### Tasks Configuration
 
-| Option               | Default            | Description                                                               |
-| -------------------- | ------------------ | ------------------------------------------------------------------------- |
-| `enabled`            | `false`            | Enable Cipher Operator Tasks system                                               |
-| `storage_path`       | `.ghostwire/tasks`  | Storage path for tasks (relative to project root)                           |
-| `claude_code_compat` | `false`            | Enable Claude Code path compatibility mode                                   |
+| Option               | Default            | Description                                       |
+| -------------------- | ------------------ | ------------------------------------------------- |
+| `enabled`            | `false`            | Enable Cipher Operator Tasks system               |
+| `storage_path`       | `.ghostwire/tasks` | Storage path for tasks (relative to project root) |
+| `claude_code_compat` | `false`            | Enable Claude Code path compatibility mode        |
 
 ### Swarm Configuration
 
-| Option         | Default            | Description                                                    |
-| -------------- | ------------------ | -------------------------------------------------------------- |
-| `enabled`      | `false`            | Enable Cipher Operator Swarm system for multi-agent orchestration        |
-| `storage_path` | `.ghostwire/teams`  | Storage path for teams (relative to project root)                |
-| `ui_mode`      | `toast`            | UI mode: `toast` (notifications), `tmux` (panes), or `both`     |
+| Option         | Default            | Description                                                       |
+| -------------- | ------------------ | ----------------------------------------------------------------- |
+| `enabled`      | `false`            | Enable Cipher Operator Swarm system for multi-agent orchestration |
+| `storage_path` | `.ghostwire/teams` | Storage path for teams (relative to project root)                 |
+| `ui_mode`      | `toast`            | UI mode: `toast` (notifications), `tmux` (panes), or `both`       |
 
 ## MCPs
 
@@ -1085,14 +1096,14 @@ Add LSP servers via the `lsp` option in `~/.config/opencode/ghostwire.json` or `
 
 Each server supports: `command`, `extensions`, `priority`, `env`, `initialization`, `disabled`.
 
-| Option         | Type     | Default | Description                                                            |
-| -------------- | -------- | ------- | ---------------------------------------------------------------------- |
-| `command`       | array    | -       | Command to start the LSP server (executable + args)                          |
-| `extensions`    | array    | -       | File extensions this server handles (e.g., `[".ts", ".tsx"]`)               |
-| `priority`      | number   | -       | Server priority when multiple servers match a file                               |
-| `env`           | object   | -       | Environment variables for the LSP server (key-value pairs)                     |
-| `initialization`| object   | -       | Custom initialization options passed to the LSP server                        |
-| `disabled`      | boolean  | `false`  | Whether to disable this LSP server                                         |
+| Option           | Type    | Default | Description                                                   |
+| ---------------- | ------- | ------- | ------------------------------------------------------------- |
+| `command`        | array   | -       | Command to start the LSP server (executable + args)           |
+| `extensions`     | array   | -       | File extensions this server handles (e.g., `[".ts", ".tsx"]`) |
+| `priority`       | number  | -       | Server priority when multiple servers match a file            |
+| `env`            | object  | -       | Environment variables for the LSP server (key-value pairs)    |
+| `initialization` | object  | -       | Custom initialization options passed to the LSP server        |
+| `disabled`       | boolean | `false` | Whether to disable this LSP server                            |
 
 **Example with advanced options:**
 
@@ -1153,12 +1164,12 @@ Opt-in experimental features that may change or be removed in future versions. U
 }
 ```
 
-| Option                      | Default | Description                                                                                                                                                                                   |
-| --------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncate_all_tool_outputs` | `false` | Truncates ALL tool outputs instead of just whitelisted tools (Grep, Glob, LSP, AST-grep). Tool output truncator is enabled by default - disable via `disabled_hooks`.                         |
-| `aggressive_truncation`     | `false` | When token limit is exceeded, aggressively truncates tool outputs to fit within limits. More aggressive than the default truncation behavior. Falls back to summarize/revert if insufficient. |
-| `auto_resume`               | `false` | Automatically resumes session after successful recovery from thinking block errors or thinking disabled violations. Extracts last user message and continues.                             |
-| `dynamic_context_pruning`    | See below | Dynamic context pruning configuration for managing context window usage automatically. See [Dynamic Context Pruning](#dynamic-context-pruning) below.                              |
+| Option                      | Default   | Description                                                                                                                                                                                   |
+| --------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncate_all_tool_outputs` | `false`   | Truncates ALL tool outputs instead of just whitelisted tools (Grep, Glob, LSP, AST-grep). Tool output truncator is enabled by default - disable via `disabled_hooks`.                         |
+| `aggressive_truncation`     | `false`   | When token limit is exceeded, aggressively truncates tool outputs to fit within limits. More aggressive than the default truncation behavior. Falls back to summarize/revert if insufficient. |
+| `auto_resume`               | `false`   | Automatically resumes session after successful recovery from thinking block errors or thinking disabled violations. Extracts last user message and continues.                                 |
+| `dynamic_context_pruning`   | See below | Dynamic context pruning configuration for managing context window usage automatically. See [Dynamic Context Pruning](#dynamic-context-pruning) below.                                         |
 
 ### Dynamic Context Pruning
 
@@ -1174,7 +1185,15 @@ Dynamic context pruning automatically manages context window by intelligently pr
         "enabled": true,
         "turns": 3
       },
-      "protected_tools": ["task", "todowrite", "todoread", "lsp_rename", "session_read", "session_write", "session_search"],
+      "protected_tools": [
+        "task",
+        "todowrite",
+        "todoread",
+        "lsp_rename",
+        "session_read",
+        "session_write",
+        "session_search"
+      ],
       "strategies": {
         "deduplication": {
           "enabled": true
@@ -1193,18 +1212,18 @@ Dynamic context pruning automatically manages context window by intelligently pr
 }
 ```
 
-| Option            | Default | Description                                                                               |
-| ----------------- | ------- | ----------------------------------------------------------------------------------------- |
-| `enabled`         | `false`  | Enable dynamic context pruning                                                               |
-| `notification`     | `detailed` | Notification level: `off`, `minimal`, or `detailed`                                        |
-| `turn_protection` | See below | Turn protection settings - prevent pruning recent tool outputs                                 |
+| Option            | Default    | Description                                                    |
+| ----------------- | ---------- | -------------------------------------------------------------- |
+| `enabled`         | `false`    | Enable dynamic context pruning                                 |
+| `notification`    | `detailed` | Notification level: `off`, `minimal`, or `detailed`            |
+| `turn_protection` | See below  | Turn protection settings - prevent pruning recent tool outputs |
 
 #### Turn Protection
 
-| Option    | Default | Description                                                  |
-| --------- | ------- | ------------------------------------------------------------ |
-| `enabled` | `true`  | Enable turn protection                                         |
-| `turns`   | `3`     | Number of recent turns to protect from pruning (1-10)           |
+| Option    | Default | Description                                           |
+| --------- | ------- | ----------------------------------------------------- |
+| `enabled` | `true`  | Enable turn protection                                |
+| `turns`   | `3`     | Number of recent turns to protect from pruning (1-10) |
 
 #### Protected Tools
 
@@ -1216,13 +1235,13 @@ Tools that should never be pruned (default):
 
 #### Pruning Strategies
 
-| Strategy            | Option       | Default | Description                                                                  |
-| ------------------- | ------------ | ------- | ---------------------------------------------------------------------------- |
-| **deduplication**   | `enabled`    | `true`  | Remove duplicate tool calls (same tool + same args)                              |
-| **supersede_writes**| `enabled`    | `true`  | Prune write inputs when file subsequently read                                   |
-|                     | `aggressive` | `false` | Aggressive mode: prune any write if ANY subsequent read                         |
-| **purge_errors**   | `enabled`    | `true`  | Prune errored tool inputs after N turns                                        |
-|                     | `turns`      | `5`     | Number of turns before pruning errors (1-20)                                    |
+| Strategy             | Option       | Default | Description                                             |
+| -------------------- | ------------ | ------- | ------------------------------------------------------- |
+| **deduplication**    | `enabled`    | `true`  | Remove duplicate tool calls (same tool + same args)     |
+| **supersede_writes** | `enabled`    | `true`  | Prune write inputs when file subsequently read          |
+|                      | `aggressive` | `false` | Aggressive mode: prune any write if ANY subsequent read |
+| **purge_errors**     | `enabled`    | `true`  | Prune errored tool inputs after N turns                 |
+|                      | `turns`      | `5`     | Number of turns before pruning errors (1-20)            |
 
 **Warning**: These features are experimental and may cause unexpected behavior. Enable only if you understand the implications.
 

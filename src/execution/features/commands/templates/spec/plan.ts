@@ -1,6 +1,6 @@
 /**
  * Template for ghostwire:spec:plan command
- * 
+ *
  * Creates an implementation plan from a feature specification.
  * Replaces: .specify/templates/plan-template.md + speckit.plan.md logic
  */
@@ -111,11 +111,11 @@ export function extractResearchTopics(techContext: string): string[] {
   const topics: string[] = [];
   const unknownPattern = /NEEDS CLARIFICATION:\s*([^\n]+)/gi;
   let match;
-  
+
   while ((match = unknownPattern.exec(techContext)) !== null) {
     topics.push(match[1].trim());
   }
-  
+
   return topics;
 }
 
@@ -125,28 +125,28 @@ export function extractResearchTopics(techContext: string): string[] {
  */
 export function validateConstitutionGates(
   constitution: string,
-  plan: string
+  plan: string,
 ): { passed: boolean; violations: string[] } {
   const violations: string[] = [];
-  
+
   // Extract principles from constitution
   const principlePattern = /###\s+([^.]+)\n+([^#]+)/g;
   let match;
-  
+
   while ((match = principlePattern.exec(constitution)) !== null) {
     const principle = match[1].trim();
     const description = match[2].trim();
-    
+
     // Check if plan violates this principle
     // This is a simplified check - real implementation would be more sophisticated
-    if (description.includes('test') && !plan.toLowerCase().includes('test')) {
+    if (description.includes("test") && !plan.toLowerCase().includes("test")) {
       violations.push(`Missing test coverage for principle: ${principle}`);
     }
   }
-  
+
   return {
     passed: violations.length === 0,
-    violations
+    violations,
   };
 }
 
@@ -189,5 +189,5 @@ api/
 
 ios/ or android/
 └── [platform-specific structure]
-\`\`\``
+\`\`\``,
 };

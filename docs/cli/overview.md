@@ -18,13 +18,13 @@ npx ghostwire
 
 ## 2. Available Commands
 
-| Command | Description |
-|---------|-------------|
-| `install` | Interactive Setup Wizard |
-| `doctor` | Environment diagnostics and health checks |
-| `run` | OpenCode session runner |
-| `auth` | Google Antigravity authentication management |
-| `version` | Display version information |
+| Command   | Description                                  |
+| --------- | -------------------------------------------- |
+| `install` | Interactive Setup Wizard                     |
+| `doctor`  | Environment diagnostics and health checks    |
+| `run`     | OpenCode session runner                      |
+| `auth`    | Google Antigravity authentication management |
+| `version` | Display version information                  |
 
 ---
 
@@ -47,10 +47,10 @@ bunx ghostwire install
 
 ### Options
 
-| Option | Description |
-|--------|-------------|
-| `--no-tui` | Run in non-interactive mode without TUI (for CI/CD environments) |
-| `--verbose` | Display detailed logs |
+| Option      | Description                                                      |
+| ----------- | ---------------------------------------------------------------- |
+| `--no-tui`  | Run in non-interactive mode without TUI (for CI/CD environments) |
+| `--verbose` | Display detailed logs                                            |
 
 ---
 
@@ -66,22 +66,22 @@ bunx ghostwire doctor
 
 ### Diagnostic Categories
 
-| Category | Check Items |
-|----------|-------------|
-| **Installation** | OpenCode version (>= 1.0.150), plugin registration status |
-| **Configuration** | Configuration file validity, JSONC parsing |
-| **Authentication** | Anthropic, OpenAI, Google API key validity |
-| **Dependencies** | Bun, Node.js, Git installation status |
-| **Tools** | LSP server status, MCP server status |
-| **Updates** | Latest version check |
+| Category           | Check Items                                               |
+| ------------------ | --------------------------------------------------------- |
+| **Installation**   | OpenCode version (>= 1.0.150), plugin registration status |
+| **Configuration**  | Configuration file validity, JSONC parsing                |
+| **Authentication** | Anthropic, OpenAI, Google API key validity                |
+| **Dependencies**   | Bun, Node.js, Git installation status                     |
+| **Tools**          | LSP server status, MCP server status                      |
+| **Updates**        | Latest version check                                      |
 
 ### Options
 
-| Option | Description |
-|--------|-------------|
+| Option              | Description                                                      |
+| ------------------- | ---------------------------------------------------------------- |
 | `--category <name>` | Check specific category only (e.g., `--category authentication`) |
-| `--json` | Output results in JSON format |
-| `--verbose` | Include detailed information |
+| `--json`            | Output results in JSON format                                    |
+| `--verbose`         | Include detailed information                                     |
 
 ### Example Output
 
@@ -127,10 +127,10 @@ bunx ghostwire run [prompt]
 
 ### Options
 
-| Option | Description |
-|--------|-------------|
+| Option                 | Description                                       |
+| ---------------------- | ------------------------------------------------- |
 | `--enforce-completion` | Keep session active until all TODOs are completed |
-| `--timeout <seconds>` | Set maximum execution time |
+| `--timeout <seconds>`  | Set maximum execution time                        |
 
 ---
 
@@ -156,11 +156,11 @@ bunx ghostwire mcp oauth status [server-name]
 
 ### Options
 
-| Option | Description |
-|--------|-------------|
-| `--server-url <url>` | MCP server URL (required for login) |
-| `--client-id <id>` | OAuth client ID (optional if server supports Dynamic Client Registration) |
-| `--scopes <scopes>` | Comma-separated OAuth scopes |
+| Option               | Description                                                               |
+| -------------------- | ------------------------------------------------------------------------- |
+| `--server-url <url>` | MCP server URL (required for login)                                       |
+| `--client-id <id>`   | OAuth client ID (optional if server supports Dynamic Client Registration) |
+| `--scopes <scopes>`  | Comma-separated OAuth scopes                                              |
 
 ### Token Storage
 
@@ -205,7 +205,7 @@ Configuration files support **JSONC (JSON with Comments)** format. You can use c
     "disabled": false,
     "planner_enabled": true,
   },
-  
+
   /* Category customization */
   "categories": {
     "visual-engineering": {
@@ -282,25 +282,25 @@ src/cli/
 1. Create `src/cli/doctor/checks/my-check.ts`:
 
 ```typescript
-import type { DoctorCheck } from "../types"
+import type { DoctorCheck } from "../types";
 
 export const myCheck: DoctorCheck = {
   name: "my-check",
   category: "environment",
   check: async () => {
     // Check logic
-    const isOk = await someValidation()
-    
+    const isOk = await someValidation();
+
     return {
       status: isOk ? "pass" : "fail",
       message: isOk ? "Everything looks good" : "Something is wrong",
-    }
+    };
   },
-}
+};
 ```
 
 2. Register in `src/cli/doctor/checks/index.ts`:
 
 ```typescript
-export { myCheck } from "./my-check"
+export { myCheck } from "./my-check";
 ```

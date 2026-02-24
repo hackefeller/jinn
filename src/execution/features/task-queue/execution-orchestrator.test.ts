@@ -501,7 +501,7 @@ describe("execution-orchestrator", () => {
 
     const state = initializeExecutionState("workflow-1", tasks);
     markTaskCompleted("task-1", state);
-    
+
     // Simulate 2 minutes duration
     state.startedAt = new Date(Date.now() - 120000);
     state.completedAt = new Date();
