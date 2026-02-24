@@ -1,4 +1,5 @@
-export const GIT_SMART_COMMIT_TEMPLATE = `# Git:Smart-Commit Command
+export const GIT_SMART_COMMIT_TEMPLATE = `<command-instruction>
+# Git:Smart-Commit Command
 
 Generate well-structured commits that follow project conventions and tell a clear story.
 
@@ -34,9 +35,15 @@ Uses Conventional Commits standard:
 - References related issues
 - Notes breaking changes when applicable
 - Provides commit history coherence
+</command-instruction>
+
+<commit-context>
+$ARGUMENTS
+</commit-context>
 `;
 
-export const GIT_BRANCH_TEMPLATE = `# Git:Branch Command
+export const GIT_BRANCH_TEMPLATE = `<command-instruction>
+# Git:Branch Command
 
 Create and manage feature branches following project naming conventions.
 
@@ -68,9 +75,15 @@ Examples:
 - Track remote branches
 - List branches with filtering
 - Cleanup stale branches
+</command-instruction>
+
+<branch-context>
+$ARGUMENTS
+</branch-context>
 `;
 
-export const GIT_MERGE_TEMPLATE = `# Git:Merge Command
+export const GIT_MERGE_TEMPLATE = `<command-instruction>
+# Git:Merge Command
 
 Merge branches safely with conflict resolution and validation.
 
@@ -96,9 +109,15 @@ Merge branches safely with conflict resolution and validation.
 - Run tests before merge
 - Preserve commit history
 - Rollback on validation failure
+</command-instruction>
+
+<merge-context>
+$ARGUMENTS
+</merge-context>
 `;
 
-export const GIT_CLEANUP_TEMPLATE = `# Git:Cleanup Command
+export const GIT_CLEANUP_TEMPLATE = `<command-instruction>
+# Git:Cleanup Command
 
 Remove stale branches and optimize repository state.
 
@@ -124,4 +143,9 @@ Remove stale branches and optimize repository state.
 - Verify branches are merged before deletion
 - Preserve main/master and release branches
 - Maintain branch history for reference
+</command-instruction>
+
+<cleanup-options>
+$ARGUMENTS
+</cleanup-options>
 `;

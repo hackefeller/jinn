@@ -1,13 +1,20 @@
 import type { CommandDefinition } from "../claude-code-command-loader";
 
 export type CommandName =
-  | "ghostwire:init-deep"
-  | "ghostwire:ultrawork-loop"
-  | "ghostwire:cancel-ultrawork"
-  | "ghostwire:ulw-ultrawork"
+  // Project commands
+  | "ghostwire:project:init"
+  | "ghostwire:project:map"
+  | "ghostwire:project:build"
+  | "ghostwire:project:deploy"
+  | "ghostwire:project:test"
+  | "ghostwire:project:constitution"
+  // Work loop commands
+  | "ghostwire:work:loop"
+  | "ghostwire:work:cancel"
   | "ghostwire:refactor"
-  | "ghostwire:jack-in-work"
-  | "ghostwire:stop-continuation"
+  // Workflow execution commands
+  | "ghostwire:workflows:execute"
+  | "ghostwire:workflows:stop"
   | "ghostwire:workflows:plan"
   | "ghostwire:workflows:create"
   | "ghostwire:workflows:status"
@@ -20,10 +27,6 @@ export type CommandName =
   | "ghostwire:git:branch"
   | "ghostwire:git:merge"
   | "ghostwire:git:cleanup"
-  | "ghostwire:project:init"
-  | "ghostwire:project:build"
-  | "ghostwire:project:deploy"
-  | "ghostwire:project:test"
   | "ghostwire:util:clean"
   | "ghostwire:util:backup"
   | "ghostwire:util:restore"
@@ -38,13 +41,10 @@ export type CommandName =
   | "ghostwire:changelog"
   | "ghostwire:create-agent-skill"
   | "ghostwire:deepen-plan"
-  | "ghostwire:deploy-docs"
-  | "ghostwire:feature-video"
   | "ghostwire:generate-command"
   | "ghostwire:heal-skill"
   | "ghostwire:lfg"
   | "ghostwire:quiz-me"
-  | "ghostwire:release-docs"
   | "ghostwire:report-bug"
   | "ghostwire:reproduce-bug"
   | "ghostwire:resolve-parallel"
@@ -52,7 +52,6 @@ export type CommandName =
   | "ghostwire:resolve-todo-parallel"
   | "ghostwire:sync-tutorials"
   | "ghostwire:teach-me"
-  | "ghostwire:test-browser"
   | "ghostwire:triage"
   | "ghostwire:xcode-test"
   // Plugin workflow commands
@@ -68,9 +67,7 @@ export type CommandName =
   | "ghostwire:spec:clarify"
   | "ghostwire:spec:analyze"
   | "ghostwire:spec:checklist"
-  | "ghostwire:spec:to-issues"
-  // Project commands
-  | "ghostwire:project:constitution";
+  | "ghostwire:spec:to-issues";
 
 export interface CommandConfig {
   disabled_commands?: CommandName[];

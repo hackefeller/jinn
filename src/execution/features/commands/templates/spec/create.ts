@@ -5,12 +5,13 @@
  * Replaces: .specify/templates/spec-template.md + speckit.specify.md logic
  */
 
-export const SPEC_CREATE_TEMPLATE = `## Feature Specification: $FEATURE_NAME
+export const SPEC_CREATE_TEMPLATE = `<command-instruction>
+## Feature Specification: $FEATURE_NAME
 
 **Feature Branch**: \`[$FEATURE_NUM-$FEATURE_SHORT_NAME]\`  
 **Created**: $TIMESTAMP  
 **Status**: Draft  
-**Input**: User description: "$ARGUMENTS"
+**Input**: User description: "<feature-description>$ARGUMENTS</feature-description>"
 
 ---
 
@@ -87,6 +88,7 @@ $ASSUMPTIONS
 ---
 
 **Next**: Run \`/ghostwire:spec:plan\` to create implementation plan
+</command-instruction>
 `;
 
 /**

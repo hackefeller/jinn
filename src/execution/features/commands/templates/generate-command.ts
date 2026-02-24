@@ -1,6 +1,12 @@
-export const GENERATE_COMMAND_TEMPLATE = `# Create a Custom Claude Code Command
+export const GENERATE_COMMAND_TEMPLATE = `<command-instruction>
+# Create a Custom Claude Code Command
 
 Create a new slash command in \`.claude/commands/\` for the requested task.
+</command-instruction>
+
+<command-goal>
+$ARGUMENTS
+</command-goal>
 
 ## Goal
 
@@ -158,4 +164,5 @@ Details about what to do.
 
 - [ ] Expected outcome 1
 - [ ] Expected outcome 2
-\`\`\``;
+\`\`\`
+</command-goal>`;

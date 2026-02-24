@@ -5,7 +5,8 @@
  * Replaces: .specify/templates/plan-template.md + speckit.plan.md logic
  */
 
-export const SPEC_PLAN_TEMPLATE = `# Implementation Plan: $FEATURE_NAME
+export const SPEC_PLAN_TEMPLATE = `<command-instruction>
+# Implementation Plan: $FEATURE_NAME
 
 **Branch**: \`[$FEATURE_NUM-$FEATURE_SHORT_NAME]\` | **Date**: $TIMESTAMP | **Spec**: [.ghostwire/specs/$BRANCH_NAME/spec.md](../spec.md)
 **Input**: Feature specification from \`/ghostwire/specs/$BRANCH_NAME/spec.md\`
@@ -99,6 +100,7 @@ $SOURCE_STRUCTURE
 ---
 
 **Next**: Run \`/ghostwire:spec:tasks\` to create executable task list
+</command-instruction>
 `;
 
 /**

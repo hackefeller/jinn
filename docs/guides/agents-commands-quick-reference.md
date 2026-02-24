@@ -181,7 +181,8 @@ Ghostwire includes **50+ built-in commands** organized by category.
 
 | Command | Purpose | Agents |
 |---------|---------|--------|
-| `/ghostwire:init-deep` | Initialize with deep analysis | researcher-codebase |
+| `/ghostwire:project:map` | Map project structure & generate AGENTS.md | researcher-codebase |
+| `/ghostwire:init-deep` | (deprecated, use project:map) | researcher-codebase |
 | `/ghostwire:overclock-loop` | Run task completion loop | operator, orchestrator |
 | `/ghostwire:ulw-overclock` | Ultra-work mode | operator, orchestrator |
 | `/ghostwire:jack-in-work` | Jump into work mode | operator, orchestrator |

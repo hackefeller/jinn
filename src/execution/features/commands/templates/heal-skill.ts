@@ -1,4 +1,5 @@
-export const HEAL_SKILL_TEMPLATE = `<objective>
+export const HEAL_SKILL_TEMPLATE = `<command-instruction>
+<objective>
 Update a skill's SKILL.md and related files based on corrections discovered during execution.
 
 Analyze the conversation to detect which skill is running, reflect on what went wrong, propose specific fixes, get user approval, then apply changes with optional commit.
@@ -7,6 +8,11 @@ Analyze the conversation to detect which skill is running, reflect on what went 
 <context>
 Skill detection: !\`ls -1 ./skills/*/SKILL.md | head -5\`
 </context>
+</command-instruction>
+
+<skill-heal-request>
+$ARGUMENTS
+</skill-heal-request>
 
 <quick_start>
 <workflow>

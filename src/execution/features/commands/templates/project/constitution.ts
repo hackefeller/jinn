@@ -5,7 +5,8 @@
  * Replaces: speckit.constitution.md + constitution-template.md
  */
 
-export const PROJECT_CONSTITUTION_TEMPLATE = `---
+export const PROJECT_CONSTITUTION_TEMPLATE = `<command-instruction>
+---
 description: "Project constitution with core principles and governance rules"
 ---
 
@@ -70,6 +71,7 @@ To amend this constitution:
 ---
 
 **Note**: This constitution supersedes all other practices. All PRs/reviews must verify compliance.
+</command-instruction>
 `;
 
 /**

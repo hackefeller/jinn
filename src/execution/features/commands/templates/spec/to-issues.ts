@@ -5,7 +5,8 @@
  * Replaces: speckit.taskstoissues.md
  */
 
-export const SPEC_TO_ISSUES_TEMPLATE = `## Convert Tasks to GitHub Issues: $FEATURE_NAME
+export const SPEC_TO_ISSUES_TEMPLATE = `<command-instruction>
+## Convert Tasks to GitHub Issues: $FEATURE_NAME
 
 **Branch**: \`$BRANCH_NAME\` | **Tasks**: [.ghostwire/specs/$BRANCH_NAME/tasks.md](../tasks.md)
 
@@ -63,6 +64,7 @@ Recommended labels:
 ---
 
 **Command**: Execute the GitHub CLI commands above to create all issues
+</command-instruction>
 `;
 
 /**

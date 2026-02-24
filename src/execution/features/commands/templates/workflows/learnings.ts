@@ -1,4 +1,5 @@
-export const WORKFLOWS_LEARNINGS_TEMPLATE = `# /learnings
+export const WORKFLOWS_LEARNINGS_TEMPLATE = `<command-instruction>
+# /learnings
 
 Coordinate multiple subagents working in parallel to document a recently solved problem.
 
@@ -69,7 +70,7 @@ Based on problem type detected, automatically invoke applicable agents:
 - **security_issue** → \`security-sentinel\`
 - **database_issue** → \`data-integrity-guardian\`
 - **test_failure** → \`cora-test-reviewer\`
-- Any code-heavy issue → \`kieran-rails-reviewer\` + \`code-simplicity-reviewer\`
+- Any code-heavy issue → \`reviewer-rails\` + \`reviewer-simplicity\`
 
 ## What It Captures
 
@@ -127,8 +128,8 @@ Primary Subagent Results:
 
 Specialized Agent Reviews (Auto-Triggered):
   ✓ performance-seer-advisor: Validated query optimization approach
-  ✓ kieran-rails-reviewer: Code examples meet Rails standards
-  ✓ code-simplicity-reviewer: Solution is appropriately minimal
+  ✓ reviewer-rails: Code examples meet Rails standards
+  ✓ reviewer-simplicity: Solution is appropriately minimal
   ✓ every-style-editor: Documentation style verified
 
 File created:
@@ -180,22 +181,22 @@ Based on problem type, these agents can enhance documentation:
 
 ### Code Quality & Review
 
-- **kieran-rails-reviewer**: Reviews code examples for Rails best practices
-- **code-simplicity-reviewer**: Ensures solution code is minimal and clear
-- **pattern-recognition-specialist**: Identifies anti-patterns or repeating issues
+- **reviewer-rails**: Reviews code examples for Rails best practices
+- **reviewer-simplicity**: Ensures solution code is minimal and clear
+- **analyzer-patterns**: Identifies anti-patterns or repeating issues
 
 ### Specific Domain Experts
 
-- **performance-seer-advisor**: Analyzes performance_issue category solutions
+- **oracle-performance**: Analyzes performance_issue category solutions
 - **security-sentinel**: Reviews security_issue solutions for vulnerabilities
-- **cora-test-reviewer**: Creates test cases for prevention strategies
-- **data-integrity-guardian**: Reviews database_issue migrations and queries
+- **cora-test-reviewer**: (skill, not agent) Creates test cases for prevention strategies
+- **guardian-data**: Reviews database_issue migrations and queries
 
 ### Enhancement & Documentation
 
-- **best-practices-researcher**: Enriches solution with industry best practices
+- **researcher-practices**: Enriches solution with industry best practices
 - **every-style-editor**: Reviews documentation style and clarity
-- **framework-docs-researcher**: Links to Rails/gem documentation references
+- **researcher-docs**: Links to Rails/gem documentation references
 
 ### When to Invoke
 
@@ -205,4 +206,6 @@ Based on problem type, these agents can enhance documentation:
 ## Related Commands
 
 - \`/research [topic]\` - Deep investigation (searches docs/learnings/ for patterns)
-- \`/workflows:plan\` - Planning workflow (references documented solutions)`;
+- \`/workflows:plan\` - Planning workflow (references documented solutions)
+</command-instruction>
+`;

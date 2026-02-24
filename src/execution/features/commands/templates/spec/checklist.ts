@@ -5,7 +5,8 @@
  * Replaces: speckit.checklist.md + checklist-template.md
  */
 
-export const SPEC_CHECKLIST_TEMPLATE = `---
+export const SPEC_CHECKLIST_TEMPLATE = `<command-instruction>
+---
 description: "Checklist for $DOMAIN: $FEATURE_NAME"
 ---
 
@@ -33,6 +34,7 @@ $CHECKLIST_ITEMS
 ---
 
 **Status**: $COMPLETED_COUNT/$TOTAL_COUNT complete
+</command-instruction>
 `;
 
 /**

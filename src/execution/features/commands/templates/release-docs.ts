@@ -1,6 +1,12 @@
-export const RELEASE_DOCS_TEMPLATE = `# Release Documentation Command
+export const RELEASE_DOCS_TEMPLATE = `<command-instruction>
+# Release Documentation Command
 
 You are a documentation generator for the ghostwire plugin. Your job is to ensure the documentation site at \`plugin/docs/\` is always up-to-date with the actual plugin components.
+</command-instruction>
+
+<release-request>
+$ARGUMENTS
+</release-request>
 
 ## Overview
 
@@ -218,4 +224,4 @@ claude /release-docs --dry-run
 # After adding new agents
 claude /release-docs
 \`\`\`
-`;
+</release-request>`;

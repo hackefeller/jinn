@@ -1,4 +1,5 @@
-export const WORKFLOWS_REVIEW_TEMPLATE = `
+export const WORKFLOWS_REVIEW_TEMPLATE = `<command-instruction>
+
 # Review Command
 
 <command_purpose> Perform exhaustive code reviews using multi-agent analysis, ultra-thinking, and Git worktrees for deep local inspection. </command_purpose>
@@ -20,7 +21,7 @@ export const WORKFLOWS_REVIEW_TEMPLATE = `
 
 ### 1. Determine Review Target & Setup (ALWAYS FIRST)
 
-<review_target> #$ARGUMENTS </review_target>
+<review_target> #<review-request>$ARGUMENTS</review-request> </review_target>
 
 <thinking>
 First, I need to determine the review target type and set up the code for analysis.
@@ -49,19 +50,19 @@ Ensure that the code is ready for analysis (either in worktree or on current bra
 
 Run ALL or most of these agents at the same time:
 
-1. Task kieran-rails-reviewer(PR content)
-2. Task dhh-rails-reviewer(PR title)
-3. If turbo is used: Task rails-turbo-expert(PR content)
-4. Task git-history-analyzer(PR content)
-5. Task dependency-detective(PR content)
-6. Task pattern-recognition-specialist(PR content)
-7. Task architecture-strategist(PR content)
-8. Task code-philosopher(PR content)
+1. Task reviewer-rails(PR content)
+2. Task advisor-dhh(PR title)
+3. If turbo is used: Use skill "rails-turbo-expert" (not an agent)
+4. Task researcher-git(PR content)
+5. Task expert-migrations(PR content)
+6. Task analyzer-patterns(PR content)
+7. Task advisor-architecture(PR content)
+8. Task reviewer-simplicity(PR content)
 9. Task security-sentinel(PR content)
-10. Task performance-seer-advisor(PR content)
-11. Task devops-harmony-analyst(PR content)
-12. Task data-integrity-guardian(PR content)
-13. Task agent-native-reviewer(PR content) - Verify new features are agent-accessible
+10. Task oracle-performance(PR content)
+11. Task validator-deployment(PR content)
+12. Task guardian-data(PR content)
+13. Task advisor-architecture(PR content) - Verify new features are agent-accessible
 
 </parallel_tasks>
 
@@ -73,8 +74,8 @@ These agents are run ONLY when the PR matches specific criteria. Check the PR fi
 
 **If PR contains database migrations (db/migrate/\*.rb files) or data backfills:**
 
-14. Task data-migration-expert(PR content) - Validates ID mappings match production, checks for swapped values, verifies rollback safety
-15. Task deployment-verification-agent(PR content) - Creates Go/No-Go deployment checklist with SQL verification queries
+14. Task expert-migrations(PR content) - Validates ID mappings match production, checks for swapped values, verifies rollback safety
+15. Task validator-deployment(PR content) - Creates Go/No-Go deployment checklist with SQL verification queries
 
 **When to run migration agents:**
 
@@ -86,8 +87,8 @@ These agents are run ONLY when the PR matches specific criteria. Check the PR fi
 
 **What these agents check:**
 
-- \`data-migration-expert\`: Verifies hard-coded mappings match production reality (prevents swapped IDs), checks for orphaned associations, validates dual-write patterns
-- \`deployment-verification-agent\`: Produces executable pre/post-deploy checklists with SQL queries, rollback procedures, and monitoring plans
+- \`expert-migrations\`: Verifies hard-coded mappings match production reality (prevents swapped IDs), checks for orphaned associations, validates dual-write patterns
+- \`validator-deployment\`: Produces executable pre/post-deploy checklists with SQL queries, rollback procedures, and monitoring plans
 
 </conditional_agents>
 
@@ -184,7 +185,7 @@ Complete system context map with component interactions
 
 ### 4. Simplification and Minimalism Review
 
-Run the Task code-simplicity-reviewer() to see if we can simplify the code.
+Run the Task reviewer-simplicity() to see if we can simplify the code.
 
 ### 5. Findings Synthesis and Todo Creation Using file-todos Skill
 
@@ -358,11 +359,11 @@ After creating all todo files, present comprehensive summary:
 
 ### Review Agents Used:
 
-- kieran-rails-reviewer
+- reviewer-rails
 - security-sentinel
-- performance-seer-advisor
-- architecture-strategist
-- agent-native-reviewer
+- oracle-performance
+- advisor-architecture
+- reviewer-security
 - [other agents]
 
 ### Next Steps:
@@ -511,4 +512,5 @@ Any **🔴 P1 (CRITICAL)** findings must be addressed before merging the PR. Pre
 \`\`\`
 
 \`\`\`
+</command-instruction>
 `;

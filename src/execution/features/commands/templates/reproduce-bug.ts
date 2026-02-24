@@ -1,6 +1,12 @@
-export const REPRODUCE_BUG_TEMPLATE = `# Reproduce Bug Command
+export const REPRODUCE_BUG_TEMPLATE = `<command-instruction>
+# Reproduce Bug Command
 
 Look at github issue #$ARGUMENTS and read the issue description and comments.
+</command-instruction>
+
+<issue-number>
+$ARGUMENTS
+</issue-number>
 
 ## Phase 1: Log Investigation
 
@@ -91,4 +97,4 @@ Add a comment to the issue with:
 3. **Screenshots** - Visual evidence of the bug (upload captured screenshots)
 4. **Relevant Code** - File paths and line numbers
 5. **Suggested Fix** - If you have one
-`;
+</issue-number>`;

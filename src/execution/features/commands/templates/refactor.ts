@@ -1,4 +1,12 @@
-export const REFACTOR_TEMPLATE = `# Intelligent Refactor Command
+import {
+  AGENT_PLANNER,
+  AGENT_RESEARCHER_CODEBASE,
+  AGENT_ADVISOR_PLAN,
+  AGENT_RESEARCHER_DATA,
+} from "../../../../orchestration/agents/constants";
+
+export const REFACTOR_TEMPLATE = `<command-instruction>
+# Intelligent Refactor Command
 
 ## Usage
 \`\`\`
@@ -80,7 +88,7 @@ Should I proceed with [recommendation], or would you prefer differently?
 
 \`\`\`
 TodoWrite([
-  {"id": "phase-1", "content": "PHASE 1: Codebase Analysis - launch parallel scoutRecon agents", "status": "pending", "priority": "high"},
+  {"id": "phase-1", "content": "PHASE 1: Codebase Analysis - launch parallel researcher-codebase agents", "status": "pending", "priority": "high"},
   {"id": "phase-2", "content": "PHASE 2: Build Codemap - map dependencies and impact zones", "status": "pending", "priority": "high"},
   {"id": "phase-3", "content": "PHASE 3: Test Assessment - analyze test coverage and verification strategy", "status": "pending", "priority": "high"},
   {"id": "phase-4", "content": "PHASE 4: Plan Generation - invoke Plan agent for detailed refactoring plan", "status": "pending", "priority": "high"},
@@ -102,7 +110,7 @@ Fire ALL of these simultaneously using \`call_grid_agent\`:
 \`\`\`
 // Agent 1: Find the refactoring target
 call_grid_agent(
-  subagent_type="researcher-codebase",
+  subagent_type="${AGENT_RESEARCHER_CODEBASE}",
   run_in_background=true,
   prompt="Find all occurrences and definitions of [TARGET]. 
   Report: file paths, line numbers, usage patterns."
@@ -110,7 +118,7 @@ call_grid_agent(
 
 // Agent 2: Find related code
 call_grid_agent(
-  subagent_type="researcher-codebase", 
+  subagent_type="${AGENT_RESEARCHER_CODEBASE}", 
   run_in_background=true,
   prompt="Find all code that imports, uses, or depends on [TARGET].
   Report: dependency chains, import graphs."
@@ -118,7 +126,7 @@ call_grid_agent(
 
 // Agent 3: Find similar patterns
 call_grid_agent(
-  subagent_type="researcher-codebase",
+  subagent_type="${AGENT_RESEARCHER_CODEBASE}",
   run_in_background=true,
   prompt="Find similar code patterns to [TARGET] in the codebase.
   Report: analogous implementations, established conventions."
@@ -126,7 +134,7 @@ call_grid_agent(
 
 // Agent 4: Find tests
 call_grid_agent(
-  subagent_type="researcher-codebase",
+  subagent_type="${AGENT_RESEARCHER_CODEBASE}",
   run_in_background=true,
   prompt="Find all test files related to [TARGET].
   Report: test file paths, test case names, coverage indicators."
@@ -134,7 +142,7 @@ call_grid_agent(
 
 // Agent 5: Architecture context
 call_grid_agent(
-  subagent_type="researcher-codebase",
+  subagent_type="${AGENT_RESEARCHER_CODEBASE}",
   run_in_background=true,
   prompt="Find architectural patterns and module organization around [TARGET].
   Report: module boundaries, layer structure, design patterns in use."
@@ -275,7 +283,7 @@ ls -la *_test.go
 \`\`\`
 // Find all tests related to target
 call_grid_agent(
-  subagent_type="researcher-codebase",
+  subagent_type="${AGENT_RESEARCHER_CODEBASE}",
   run_in_background=false,  // Need this synchronously
   prompt="Analyze test coverage for [TARGET]:
   1. Which test files cover this code?
@@ -346,7 +354,7 @@ After each refactoring step:
 
 \`\`\`
 Task(
-  subagent_type="plan",
+  subagent_type="${AGENT_PLANNER}",
   prompt="Create a detailed refactoring plan:
 
   ## Refactoring Goal
@@ -465,7 +473,7 @@ If ANY verification fails:
 4. **OPTIONS**:
    - Fix the issue and retry
    - Skip this step (if optional)
-   - Consult seerAdvisor agent for help
+   - Consult advisor-plan agent for help
    - Ask user for guidance
 
 **NEVER proceed to next step with broken tests.**
@@ -612,8 +620,9 @@ When you encounter deprecated methods/APIs during refactoring:
 ---
 
 **Remember: Refactoring without tests is reckless. Refactoring without understanding is destructive. This command ensures you do neither.**
+</command-instruction>
 
-<user-request>
+<refactoring-target>
 $ARGUMENTS
-</user-request>
+</refactoring-target>
 `;

@@ -1,14 +1,16 @@
-export const WORKFLOWS_BRAINSTORM_TEMPLATE = `# Brainstorm a Feature or Improvement
+export const WORKFLOWS_BRAINSTORM_TEMPLATE = `<command-instruction>
+# Brainstorm a Feature or Improvement
 
 **Note: The current year is 2026.** Use this when dating brainstorm documents.
 
 Brainstorming helps answer **WHAT** to build through collaborative dialogue. It precedes \`/workflows:plan\`, which answers **HOW** to build it.
 
 **Process knowledge:** Load the \`brainstorming\` skill for detailed question techniques, approach exploration patterns, and YAGNI principles.
+</command-instruction>
 
-## Feature Description
-
-<feature_description> #$ARGUMENTS </feature_description>
+<feature-description>
+$ARGUMENTS
+</feature-description>
 
 **If the feature description above is empty, ask the user:** "What would you like to scout-recon? Please describe the feature, problem, or improvement you're thinking about."
 
@@ -36,7 +38,7 @@ Use **AskUserQuestion tool** to suggest: "Your requirements seem detailed enough
 
 Run a quick repo scan to understand existing patterns:
 
-- Task repo-research-analyst("Understand existing patterns related to: <feature_description>")
+- Task researcher-repo("Understand existing patterns related to: <feature_description>")
 
 Focus on: similar features, established patterns, CLAUDE.md guidance.
 
@@ -110,4 +112,5 @@ Next: Run \`/workflows:plan\` when ready to implement.
 - **Apply YAGNI** - Prefer simpler approaches
 - **Keep outputs concise** - 200-300 words per section max
 
-NEVER CODE! Just scout-recon and document decisions.`;
+NEVER CODE! Just scout-recon and document decisions.
+</feature-description>`;

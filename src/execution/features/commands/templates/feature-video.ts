@@ -1,4 +1,5 @@
-export const FEATURE_VIDEO_TEMPLATE = `# Feature Video Walkthrough
+export const FEATURE_VIDEO_TEMPLATE = `<command-instruction>
+# Feature Video Walkthrough
 
 <command_purpose>Record a video walkthrough demonstrating a feature, upload it, and add it to the PR description.</command_purpose>
 
@@ -6,9 +7,9 @@ export const FEATURE_VIDEO_TEMPLATE = `# Feature Video Walkthrough
 
 <role>Developer Relations Engineer creating feature demo videos</role>
 
-This command creates professional video walkthroughs of features for PR documentation:
+This command creates professional video walkthroughs of features for PR browser interactions using agent documentation:
 
-- Records browser interactions using agent-browser CLI
+- Records-browser CLI
 - Demonstrates the complete user flow
 - Uploads the video for easy sharing
 - Updates the PR description with an embedded video
@@ -22,6 +23,11 @@ This command creates professional video walkthroughs of features for PR document
 - \`ffmpeg\` installed (for video conversion)
 - \`rclone\` configured (optional, for cloud upload - see rclone skill)
 </requirements>
+</command-instruction>
+
+<video-request>
+$ARGUMENTS
+</video-request>
 
 ## Setup
 
@@ -354,4 +360,5 @@ Present completion summary:
 - **Keep it short**: 10-30 seconds is ideal for PR demos
 - **Focus on the change**: Don't include unrelated UI
 - **Show before/after**: If fixing a bug, show the broken state first (if possible)
-- **Annotate if needed**: Add text overlays for complex features`;
+- **Annotate if needed**: Add text overlays for complex features
+</video-request>`;

@@ -1,4 +1,5 @@
-export const TEST_BROWSER_TEMPLATE = `# Browser Test Command
+export const TEST_BROWSER_TEMPLATE = `<command-instruction>
+# Browser Test Command
 
 <command_purpose>Run end-to-end browser tests on pages affected by a PR or branch changes using agent-browser CLI.</command_purpose>
 
@@ -28,6 +29,11 @@ This command tests affected pages in a real browser, catching issues that unit t
 - agent-browser CLI installed (see Setup below)
 - Git repository with changes to test
 </requirements>
+</command-instruction>
+
+<test-target>
+$ARGUMENTS
+</test-target>
 
 ## Setup
 
@@ -76,8 +82,6 @@ Store the choice and use \`--headed\` flag when user selects "Headed".
 </ask_browser_mode>
 
 ### 2. Determine Test Scope
-
-<test_target> $ARGUMENTS </test_target>
 
 <determine_scope>
 
@@ -353,4 +357,5 @@ agent-browser --headed click @e1       # Click in visible browser
 # Wait
 agent-browser wait @e1             # Wait for element
 agent-browser wait 2000            # Wait milliseconds
-\`\`\``;
+\`\`\`
+</test-target>`;

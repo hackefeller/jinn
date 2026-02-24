@@ -1,4 +1,5 @@
-export const RESOLVE_PR_PARALLEL_TEMPLATE = `# Resolve All PR Comments
+export const RESOLVE_PR_PARALLEL_TEMPLATE = `<command-instruction>
+# Resolve All PR Comments
 
 Resolve all PR comments using parallel processing.
 
@@ -8,6 +9,11 @@ Claude Code automatically detects and understands your git context:
 - Associated PR context
 - All PR comments and review threads
 - Can work with any PR by specifying the PR number, or ask it.
+</command-instruction>
+
+<pr-number>
+$ARGUMENTS
+</pr-number>
 
 ## Workflow
 
@@ -43,4 +49,4 @@ Always run all in parallel subagents/Tasks for each Todo item.
 - Push to remote
 
 Last, check bin/get-pr-comments PR_NUMBER again to see if all comments are resolved. They should be, if not, repeat the process from 1.
-`;
+</pr-number>`;

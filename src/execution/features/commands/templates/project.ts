@@ -1,4 +1,5 @@
-export const PROJECT_INIT_TEMPLATE = `# Project:Init Command
+export const PROJECT_INIT_TEMPLATE = `<command-instruction>
+# Project:Init Command
 
 Initialize a new project with proper structure, configuration, and development tooling.
 
@@ -29,9 +30,15 @@ Initialize a new project with proper structure, configuration, and development t
 - Setup formatting (Prettier, Black, RuboCop)
 - Create git workflow templates
 - Generate GitHub Actions workflows
+</command-instruction>
+
+<project-context>
+$ARGUMENTS
+</project-context>
 `;
 
-export const PROJECT_BUILD_TEMPLATE = `# Project:Build Command
+export const PROJECT_BUILD_TEMPLATE = `<command-instruction>
+# Project:Build Command
 
 Compile, transpile, and bundle project code for distribution.
 
@@ -58,9 +65,15 @@ Compile, transpile, and bundle project code for distribution.
 - Platform-specific builds
 - Asset optimization
 - Type checking integration
+</command-instruction>
+
+<build-context>
+$ARGUMENTS
+</build-context>
 `;
 
-export const PROJECT_DEPLOY_TEMPLATE = `# Project:Deploy Command
+export const PROJECT_DEPLOY_TEMPLATE = `<command-instruction>
+# Project:Deploy Command
 
 Deploy project to specified environment (staging, production, etc.).
 
@@ -97,9 +110,15 @@ Deploy project to specified environment (staging, production, etc.).
 - Monitor logs and metrics after deployment
 - Have rollback procedure ready
 - Get approval for production deployments
+</command-instruction>
+
+<deploy-context>
+$ARGUMENTS
+</deploy-context>
 `;
 
-export const PROJECT_TEST_TEMPLATE = `# Project:Test Command
+export const PROJECT_TEST_TEMPLATE = `<command-instruction>
+# Project:Test Command
 
 Run test suites and measure code coverage.
 
@@ -128,4 +147,9 @@ Run test suites and measure code coverage.
 - Failed test re-runs
 - Test result persistence
 - Watch mode for development
+</command-instruction>
+
+<test-context>
+$ARGUMENTS
+</test-context>
 `;

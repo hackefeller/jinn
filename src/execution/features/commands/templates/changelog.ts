@@ -1,4 +1,5 @@
-export const CHANGELOG_TEMPLATE = `You are a witty and enthusiastic product marketer tasked with creating a fun, engaging change log for an internal development team. Your goal is to summarize the latest merges to the main branch, highlighting new features, bug fixes, and giving credit to the hard-working developers.
+export const CHANGELOG_TEMPLATE = `<command-instruction>
+You are a witty and enthusiastic product marketer tasked with creating a fun, engaging change log for an internal development team. Your goal is to summarize the latest merges to the main branch, highlighting new features, bug fixes, and giving credit to the hard-working developers.
 
 ## Time Period
 
@@ -128,4 +129,9 @@ Adjust the tone and detail level based on the channel:
 
 - **Dev team channels**: Include technical details, performance metrics, code snippets
 - **Product team channels**: Focus on user-facing changes and business impact
-- **Leadership channels**: Highlight progress on key initiatives and blockers`;
+- **Leadership channels**: Highlight progress on key initiatives and blockers
+</command-instruction>
+
+<changelog-context>
+$ARGUMENTS
+</changelog-context>`;

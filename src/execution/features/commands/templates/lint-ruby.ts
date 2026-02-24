@@ -1,4 +1,5 @@
-export const LINT_RUBY_TEMPLATE = `# Lint:Ruby Command
+export const LINT_RUBY_TEMPLATE = `<command-instruction>
+# Lint:Ruby Command
 
 Run linting and code quality checks on Ruby and ERB files. Run before pushing to origin.
 
@@ -62,4 +63,9 @@ bundle exec erblint --lint-all --autocorrect
 git add -A
 git commit -m "style: linting fixes"
 \`\`\`
+</command-instruction>
+
+<user-request>
+$ARGUMENTS
+</user-request>
 `;

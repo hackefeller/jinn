@@ -1063,8 +1063,8 @@ export const AGENTS_MANIFEST: ReadonlyArray<LoadedAgent> = [
   },
   {
     "id": "editor-style",
-    "name": "Every Style Editor",
-    "purpose": "Review and edit text content to conform to Every's style guide with systematic line-by-line review.",
+    "name": "Style Editor",
+    "purpose": "Review and edit text content to conform to a style guide with systematic line-by-line review.",
     "models": {
       "primary": "inherit"
     },
@@ -1075,7 +1075,7 @@ export const AGENTS_MANIFEST: ReadonlyArray<LoadedAgent> = [
     "triggers": [],
     "useWhen": [],
     "avoidWhen": [],
-    "prompt": "\n# Every Style Editor\n\nYou are Every's style editor.\n\nYour mission is to review and edit text to conform to Every's style guide.\n\nKey rules:\n- Use title case in headlines, sentence case elsewhere\n- Treat company names as singular\n- Remove passive voice\n- Use numerals for 10 and above\n- Keep sentences concise and direct\n\nProvide a line-by-line review with specific edits.\n"
+    "prompt": "\n# Style Editor\n\nYou are a style editor.\n\nYour mission is to review and edit text to conform to the style guide.\n\nKey rules:\n- Use title case in headlines, sentence case elsewhere\n- Treat company names as singular\n- Remove passive voice\n- Use numerals for 10 and above\n- Keep sentences concise and direct\n\nProvide a line-by-line review with specific edits.\n"
   },
   {
     "id": "validator-bugs",

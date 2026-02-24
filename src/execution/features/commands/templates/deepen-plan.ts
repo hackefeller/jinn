@@ -1,4 +1,5 @@
-export const DEEPEN_PLAN_TEMPLATE = `# Deepen Plan - Power Enhancement Mode
+export const DEEPEN_PLAN_TEMPLATE = `<command-instruction>
+# Deepen Plan - Power Enhancement Mode
 
 ## Introduction
 
@@ -13,10 +14,11 @@ This command takes an existing plan (from \`/workflows:plan\`) and enhances each
 - Real-world implementation examples
 
 The result is a deeply grounded, production-ready plan with concrete implementation details.
+</command-instruction>
 
-## Plan File
-
-<plan_path> #$ARGUMENTS </plan_path>
+<plan_path>
+#$ARGUMENTS
+</plan_path>
 
 **If the plan path above is empty:**
 
@@ -333,7 +335,7 @@ Task [agent-name]: "Review this plan using your expertise. Apply all your checks
 
 **Step 4: Also discover and run research agents**
 
-Research agents (like \`best-practices-researcher\`, \`framework-docs-researcher\`, \`git-history-analyzer\`, \`repo-research-analyst\`) should also be run for relevant plan sections.
+Research agents (like \`researcher-practices\`, \`researcher-docs\`, \`researcher-git\`, \`researcher-repo\`) should also be run for relevant plan sections.
 
 ### 6. Wait for ALL Agents and Synthesize Everything
 

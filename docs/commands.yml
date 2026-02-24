@@ -13,9 +13,6 @@ commands:
   - name: ghostwire:ultrawork-loop
     description: Start self-referential development loop until completion
     category: ultrawork-loop
-  - name: ghostwire:ulw-ultrawork
-    description: Start ultrawork loop - continues until completion with ultrawork mode
-    category: ulw-ultrawork
   - name: ghostwire:cancel-ultrawork
     description: Cancel active Ralph Loop
     category: cancel-ultrawork

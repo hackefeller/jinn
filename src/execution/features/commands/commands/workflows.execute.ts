@@ -1,4 +1,9 @@
-export const START_WORK_TEMPLATE = `You are starting a operator work session.
+import type { CommandDefinition } from "../../claude-code-command-loader";
+
+export const NAME = "ghostwire:workflows:execute";
+export const DESCRIPTION = "Execute planned tasks from workflow plan (task-driven, with subagent delegation) [Phase: EXECUTE]";
+export const TEMPLATE = `<command-instruction>
+You are starting a operator work session.
 
 ## WHAT TO DO
 
@@ -69,4 +74,22 @@ Reading plan and beginning execution...
 - The session_id is injected by the hook - use it directly
 - Always update ultrawork.json BEFORE starting work
 - Read the FULL plan file before delegating any tasks
-- Follow operator delegation protocols and orchestrator handoff checklist (7-section format with safety checks)`;
+- Follow operator delegation protocols and orchestrator handoff checklist (7-section format with safety checks)
+</command-instruction>
+
+<session-context>
+Session ID: $SESSION_ID
+Timestamp: $TIMESTAMP
+</session-context>
+
+<user-request>
+$ARGUMENTS
+</user-request>`;
+export const ARGUMENT_HINT = "[plan-name]";
+
+export const COMMAND: CommandDefinition = {
+  name: NAME,
+  description: DESCRIPTION,
+  template: TEMPLATE,
+  argumentHint: ARGUMENT_HINT,
+};

@@ -5,7 +5,8 @@
  * Replaces: speckit.implement.md logic
  */
 
-export const SPEC_IMPLEMENT_TEMPLATE = `## Implementation: $FEATURE_NAME
+export const SPEC_IMPLEMENT_TEMPLATE = `<command-instruction>
+## Implementation: $FEATURE_NAME
 
 **Branch**: \`$BRANCH_NAME\` | **Plan**: [.ghostwire/specs/$BRANCH_NAME/plan.md](../plan.md) | **Tasks**: [.ghostwire/specs/$BRANCH_NAME/tasks.md](../tasks.md)
 
@@ -69,6 +70,7 @@ $PROGRESS_TABLE
 ---
 
 **Next**: Run \`/ghostwire:spec:analyze\` to validate consistency across all artifacts
+</command-instruction>
 `;
 
 /**

@@ -1,6 +1,12 @@
-export const REPORT_BUG_TEMPLATE = `# Report a Compounding Engineering Plugin Bug
+export const REPORT_BUG_TEMPLATE = `<command-instruction>
+# Report a Compounding Engineering Plugin Bug
 
 Report bugs encountered while using the ghostwire plugin. This command gathers structured information and creates a GitHub issue for the maintainer.
+</command-instruction>
+
+<bug-report>
+$ARGUMENTS
+</bug-report>
 
 ## Step 1: Gather Bug Information
 
@@ -153,4 +159,4 @@ This command does NOT collect:
 - File paths beyond basic OS info
 
 Only technical information about the bug is included in the report.
-`;
+</bug-report>`;

@@ -5,7 +5,8 @@
  * Replaces: .specify/templates/tasks-template.md + speckit.tasks.md logic
  */
 
-export const SPEC_TASKS_TEMPLATE = `---
+export const SPEC_TASKS_TEMPLATE = `<command-instruction>
+---
 description: "Task list for $FEATURE_NAME implementation"
 ---
 
@@ -143,6 +144,7 @@ With multiple developers:
 ---
 
 **Next**: Run \`/ghostwire:spec:implement\` to execute all tasks
+</command-instruction>
 `;
 
 /**

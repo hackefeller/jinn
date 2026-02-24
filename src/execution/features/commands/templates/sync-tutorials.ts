@@ -1,4 +1,10 @@
-export const SYNC_TUTORIALS_TEMPLATE = `Commit and push your tutorials to the GitHub repository for backup and mobile reading.
+export const SYNC_TUTORIALS_TEMPLATE = `<command-instruction>
+Commit and push your tutorials to the GitHub repository for backup and mobile reading.
+</command-instruction>
+
+<sync-request>
+$ARGUMENTS
+</sync-request>
 
 ## Instructions
 
@@ -21,4 +27,5 @@ export const SYNC_TUTORIALS_TEMPLATE = `Commit and push your tutorials to the Gi
 - The tutorials repo is at: \`~/ghostwire-tutorials/\`
 - Always use \`--private\` when creating the GitHub repo
 - This is your personal learning journey - keep it backed up!
-- Legacy data at \`~/coding-tutor-tutorials/\` is not auto-migrated.`;
+- Legacy data at \`~/coding-tutor-tutorials/\` is not auto-migrated.
+</sync-request>`;

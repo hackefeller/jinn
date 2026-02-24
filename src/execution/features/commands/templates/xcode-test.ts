@@ -1,4 +1,5 @@
-export const XCODE_TEST_TEMPLATE = `# Xcode Test Command
+export const XCODE_TEST_TEMPLATE = `<command-instruction>
+# Xcode Test Command
 
 <command_purpose>Build, install, and test iOS apps on the simulator using XcodeBuildMCP. Captures screenshots, logs, and verifies app behavior.</command_purpose>
 
@@ -22,6 +23,11 @@ This command tests iOS/macOS apps by:
 - Valid Xcode project or workspace
 - At least one iOS Simulator available
 </requirements>
+</command-instruction>
+
+<xcode-scheme>
+$ARGUMENTS
+</xcode-scheme>
 
 ## Main Tasks
 
@@ -351,4 +357,5 @@ When reviewing PRs that touch iOS code, the \`/workflows:review\` command can sp
 
 \`\`\`
 Task general-purpose("Run /xcode-test for scheme [name]. Build, install on simulator, test key screens, check for crashes.")
-\`\`\``;
+\`\`\`
+</xcode-scheme>`;

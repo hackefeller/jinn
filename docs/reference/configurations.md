@@ -969,11 +969,11 @@ Disable specific built-in commands via `disabled_commands` in `~/.config/opencod
 
 ```json
 {
-  "disabled_commands": ["init-deep", "jack-in-work"]
+  "disabled_commands": ["project:map", "jack-in-work"]
 }
 ```
 
-Available commands: `init-deep`, `jack-in-work`
+Available commands: `project:map`, `init-deep` (deprecated), `jack-in-work`
 
 ## Comment Checker
 

@@ -1,6 +1,12 @@
-export const DEPLOY_DOCS_TEMPLATE = `# Deploy Documentation Command
+export const DEPLOY_DOCS_TEMPLATE = `<command-instruction>
+# Deploy Documentation Command
 
 Validate the documentation site and prepare it for GitHub Pages deployment.
+</command-instruction>
+
+<deploy-request>
+$ARGUMENTS
+</deploy-request>
 
 ## Step 1: Validate Documentation
 
@@ -104,4 +110,5 @@ Provide a summary:
 - [ ] Push to main branch
 - [ ] Verify GitHub Pages workflow exists
 - [ ] Check deployment at https://everyinc.github.io/every-marketplace/
-\`\`\``;
+\`\`\`
+</deploy-request>`;

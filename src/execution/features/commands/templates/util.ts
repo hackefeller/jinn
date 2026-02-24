@@ -1,4 +1,5 @@
-export const UTIL_CLEAN_TEMPLATE = `# Util:Clean Command
+export const UTIL_CLEAN_TEMPLATE = `<command-instruction>
+# Util:Clean Command
 
 Remove build artifacts, caches, temporary files, and other non-essential files.
 
@@ -26,9 +27,15 @@ Remove build artifacts, caches, temporary files, and other non-essential files.
 - Never delete source code or git history
 - Option to dry-run before actual deletion
 - Backup option for deleted files
+</command-instruction>
+
+<clean-context>
+$ARGUMENTS
+</clean-context>
 `;
 
-export const UTIL_BACKUP_TEMPLATE = `# Util:Backup Command
+export const UTIL_BACKUP_TEMPLATE = `<command-instruction>
+# Util:Backup Command
 
 Create backups of project state and important files.
 
@@ -54,9 +61,15 @@ Create backups of project state and important files.
 - Manifest with contents list
 - Hash for integrity verification
 - Restore instructions
+</command-instruction>
+
+<backup-context>
+$ARGUMENTS
+</backup-context>
 `;
 
-export const UTIL_RESTORE_TEMPLATE = `# Util:Restore Command
+export const UTIL_RESTORE_TEMPLATE = `<command-instruction>
+# Util:Restore Command
 
 Restore project from backup or specific point in time.
 
@@ -82,9 +95,15 @@ Restore project from backup or specific point in time.
 - Verify restore integrity
 - Provide rollback option
 - Log all restore operations
+</command-instruction>
+
+<restore-context>
+$ARGUMENTS
+</restore-context>
 `;
 
-export const UTIL_DOCTOR_TEMPLATE = `# Util:Doctor Command
+export const UTIL_DOCTOR_TEMPLATE = `<command-instruction>
+# Util:Doctor Command
 
 Diagnose project health and identify configuration issues.
 
@@ -114,4 +133,9 @@ Diagnose project health and identify configuration issues.
 - Detailed report of issues found
 - Suggested fixes
 - Commands to run for automatic fixes
+</command-instruction>
+
+<doctor-context>
+$ARGUMENTS
+</doctor-context>
 `;

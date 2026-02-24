@@ -5,7 +5,8 @@
  * Replaces: speckit.analyze.md logic
  */
 
-export const SPEC_ANALYZE_TEMPLATE = `## Analysis: $FEATURE_NAME
+export const SPEC_ANALYZE_TEMPLATE = `<command-instruction>
+## Analysis: $FEATURE_NAME
 
 **Branch**: \`$BRANCH_NAME\` | **Artifacts**: .ghostwire/specs/$BRANCH_NAME/
 
@@ -64,6 +65,7 @@ $RECOMMENDATIONS
 ---
 
 **Next**: Address critical issues, then run \`/ghostwire:spec:implement\` if ready
+</command-instruction>
 `;
 
 /**

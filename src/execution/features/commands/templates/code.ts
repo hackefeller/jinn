@@ -1,4 +1,5 @@
-export const CODE_REFACTOR_TEMPLATE = `# Code:Refactor Command
+export const CODE_REFACTOR_TEMPLATE = `<command-instruction>
+# Code:Refactor Command
 
 Systematically refactor code while maintaining functionality and improving clarity, performance, or maintainability.
 
@@ -13,9 +14,9 @@ Systematically refactor code while maintaining functionality and improving clari
 
 ## Key Agents & Tasks
 
-- Use \`kieran-typescript-reviewer\` or \`kieran-python-reviewer\` for language-specific reviews
-- Use \`code-simplicity-reviewer\` to ensure simplifications don't over-engineer
-- Use \`pattern-recognition-specialist\` to identify and apply consistent patterns
+- Use \`reviewer-typescript\` or \`reviewer-python\` for language-specific reviews
+- Use \`reviewer-simplicity\` to ensure simplifications don't over-engineer
+- Use \`analyzer-patterns\` to identify and apply consistent patterns
 - Run comprehensive test suites before/after refactoring
 
 ## Refactoring Types
@@ -26,9 +27,15 @@ Systematically refactor code while maintaining functionality and improving clari
 - **Move** - Reorganize code for better structure
 - **Simplify** - Remove duplication and complexity
 - **Performance** - Optimize without changing behavior
+</command-instruction>
+
+<refactoring-target>
+$ARGUMENTS
+</refactoring-target>
 `;
 
-export const CODE_REVIEW_TEMPLATE = `# Code:Review Command
+export const CODE_REVIEW_TEMPLATE = `<command-instruction>
+# Code:Review Command
 
 Conduct comprehensive code reviews leveraging multiple specialist agents.
 
@@ -43,13 +50,13 @@ Conduct comprehensive code reviews leveraging multiple specialist agents.
 
 ## Key Agents & Tasks
 
-- Use \`kieran-rails-reviewer\` for Ruby/Rails code
-- Use \`kieran-python-reviewer\` for Python code
-- Use \`kieran-typescript-reviewer\` for TypeScript/JavaScript
-- Use \`dhh-rails-reviewer\` for architectural opinions
+- Use \`reviewer-rails\` for Ruby/Rails code
+- Use \`reviewer-python\` for Python code
+- Use \`reviewer-typescript\` for TypeScript/JavaScript
+- Use \`reviewer-rails-dh\` for architectural opinions
 - Use \`security-sentinel\` for security issues
-- Use \`performance-seerAdvisor\` for optimization
-- Use \`code-simplicity-reviewer\` for YAGNI violations
+- Use \`performance-advisor-plan\` for optimization
+- Use \`reviewer-simplicity\` for YAGNI violations
 
 ## Output
 
@@ -57,9 +64,15 @@ Conduct comprehensive code reviews leveraging multiple specialist agents.
 - Priority-ordered issues
 - Actionable suggestions
 - References to relevant patterns or best practices
+</command-instruction>
+
+<code-context>
+$ARGUMENTS
+</code-context>
 `;
 
-export const CODE_OPTIMIZE_TEMPLATE = `# Code:Optimize Command
+export const CODE_OPTIMIZE_TEMPLATE = `<command-instruction>
+# Code:Optimize Command
 
 Improve performance, reduce bundle size, or enhance runtime efficiency.
 
@@ -74,7 +87,7 @@ Improve performance, reduce bundle size, or enhance runtime efficiency.
 
 ## Key Agents & Tasks
 
-- Use \`performance-seerAdvisor\` for systematic optimization
+- Use \`performance-advisor-plan\` for systematic optimization
 - Measure performance before and after optimizations
 - Profile code to identify actual bottlenecks
 - Prioritize high-impact optimizations
@@ -86,9 +99,15 @@ Improve performance, reduce bundle size, or enhance runtime efficiency.
 - Run full test suite
 - Check production-like environment behavior
 - Monitor for regressions
+</command-instruction>
+
+<optimization-target>
+$ARGUMENTS
+</optimization-target>
 `;
 
-export const CODE_FORMAT_TEMPLATE = `# Code:Format Command
+export const CODE_FORMAT_TEMPLATE = `<command-instruction>
+# Code:Format Command
 
 Apply consistent formatting and style standards across codebase.
 
@@ -112,4 +131,9 @@ Apply consistent formatting and style standards across codebase.
 - Formatting changes should be separate from functional changes
 - Always get team consensus on formatting rules before bulk formatting
 - Don't mix formatting with functional changes
+</command-instruction>
+
+<format-scope>
+$ARGUMENTS
+</format-scope>
 `;

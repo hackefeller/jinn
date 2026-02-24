@@ -198,13 +198,19 @@ export const HookNameSchema = z.enum([
 ]);
 
 export const CommandNameSchema = z.enum([
-  "ghostwire:init-deep",
-  "ghostwire:jack-in-work",
-  "ghostwire:ultrawork-loop",
-  "ghostwire:cancel-ultrawork",
-  "ghostwire:ulw-ultrawork",
+  // Ghostwire project commands
+  "ghostwire:project:init",
+  "ghostwire:project:map",
+  "ghostwire:project:build",
+  "ghostwire:project:deploy",
+  "ghostwire:project:test",
+  // Work loop commands
+  "ghostwire:work:loop",
+  "ghostwire:work:cancel",
   "ghostwire:refactor",
-  "ghostwire:stop-continuation",
+  // Workflow execution commands
+  "ghostwire:workflows:execute",
+  "ghostwire:workflows:stop",
   // Ghostwire workflows commands
   "ghostwire:workflows:plan",
   "ghostwire:workflows:create",
@@ -220,11 +226,6 @@ export const CommandNameSchema = z.enum([
   "ghostwire:git:branch",
   "ghostwire:git:merge",
   "ghostwire:git:cleanup",
-  // Ghostwire project commands
-  "ghostwire:project:init",
-  "ghostwire:project:build",
-  "ghostwire:project:deploy",
-  "ghostwire:project:test",
   // Ghostwire utility commands
   "ghostwire:util:clean",
   "ghostwire:util:backup",
@@ -241,13 +242,10 @@ export const CommandNameSchema = z.enum([
   "ghostwire:changelog",
   "ghostwire:create-agent-skill",
   "ghostwire:deepen-plan",
-  "ghostwire:deploy-docs",
-  "ghostwire:feature-video",
   "ghostwire:generate-command",
   "ghostwire:heal-skill",
   "ghostwire:lfg",
   "ghostwire:quiz-me",
-  "ghostwire:release-docs",
   "ghostwire:report-bug",
   "ghostwire:reproduce-bug",
   "ghostwire:resolve-parallel",
@@ -255,7 +253,6 @@ export const CommandNameSchema = z.enum([
   "ghostwire:resolve-todo-parallel",
   "ghostwire:sync-tutorials",
   "ghostwire:teach-me",
-  "ghostwire:test-browser",
   "ghostwire:triage",
   "ghostwire:xcode-test",
   // Plugin workflow commands
@@ -263,6 +260,17 @@ export const CommandNameSchema = z.enum([
   "ghostwire:workflows:learnings",
   "ghostwire:workflows:review",
   "ghostwire:workflows:work",
+  // Spec commands (from specify integration)
+  "ghostwire:spec:create",
+  "ghostwire:spec:plan",
+  "ghostwire:spec:tasks",
+  "ghostwire:spec:implement",
+  "ghostwire:spec:clarify",
+  "ghostwire:spec:analyze",
+  "ghostwire:spec:checklist",
+  "ghostwire:spec:to-issues",
+  // Project commands
+  "ghostwire:project:constitution",
 ]);
 
 export const AgentOverrideConfigSchema = z.object({

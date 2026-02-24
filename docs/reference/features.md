@@ -133,21 +133,24 @@ Commands are slash-triggered workflows that execute predefined templates.
 
 | Command | Description |
 |---------|-------------|
-| `/init-deep` | Initialize hierarchical AGENTS.md knowledge base |
+| `/project:map` | Map project structure and generate hierarchical AGENTS.md knowledge base |
+| `/init-deep` | (deprecated, use /project:map) |
 | `/overclock-loop` | Start self-referential development loop until completion |
 | `/ulw-overclock` | Start ultrawork loop - continues with ultrawork mode |
 | `/cancel-overclock` | Cancel active Ralph Loop |
 | `/refactor` | Intelligent refactoring with LSP, AST-grep, architecture analysis, and TDD verification |
 | `/jack-in-work` | Start Cipher Operator work session from planner plan |
 
-### Command: /init-deep
+### Command: /project:map
 
-**Purpose**: Generate hierarchical AGENTS.md files throughout your project
+**Purpose**: Map project structure and generate hierarchical AGENTS.md files throughout your project
 
 **Usage**:
 ```
-/init-deep [--create-new] [--max-depth=N]
+/project:map [--create-new] [--max-depth=N]
 ```
+
+**Aliases**: `/init-deep` (deprecated, use /project:map)
 
 Creates directory-specific context files that agents automatically read:
 ```

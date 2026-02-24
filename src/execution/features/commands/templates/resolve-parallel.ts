@@ -1,6 +1,12 @@
-export const RESOLVE_PARALLEL_TEMPLATE = `# Resolve All TODO Comments
+export const RESOLVE_PARALLEL_TEMPLATE = `<command-instruction>
+# Resolve All TODO Comments
 
 Resolve all TODO comments using parallel processing.
+</command-instruction>
+
+<todo-items>
+$ARGUMENTS
+</todo-items>
 
 ## Workflow
 
@@ -28,4 +34,4 @@ Always run all in parallel subagents/Tasks for each Todo item.
 
 - Commit changes
 - Push to remote
-`;
+</todo-items>`;

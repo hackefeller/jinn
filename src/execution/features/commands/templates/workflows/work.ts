@@ -1,4 +1,4 @@
-export const WORKFLOWS_WORK_TEMPLATE = `
+export const WORKFLOWS_WORK_TEMPLATE = `<command-instruction>
 # Work Plan Execution Command
 
 Execute a work plan efficiently while maintaining quality and finishing features.
@@ -171,8 +171,8 @@ This command takes a work document (plan, specification, or todo file) and execu
 2. **Consider Reviewer Agents** (Optional)
 
    Use for complex, risky, or large changes:
-   - **code-simplicity-reviewer**: Check for unnecessary complexity
-   - **kieran-rails-reviewer**: Verify Rails conventions (Rails projects)
+   - **reviewer-simplicity**: Check for unnecessary complexity
+   - **reviewer-rails**: Verify Rails conventions (Rails projects)
    - **performance-seer-advisor**: Check for performance issues
    - **security-sentinel**: Scan for security vulnerabilities
    - **cora-test-reviewer**: Review test quality (Rails projects with comprehensive test coverage)
@@ -180,8 +180,8 @@ This command takes a work document (plan, specification, or todo file) and execu
    Run reviewers in parallel with Task tool:
 
    \`\`\`
-   Task(code-simplicity-reviewer): "Review changes for simplicity"
-   Task(kieran-rails-reviewer): "Check Rails conventions"
+   Task(reviewer-simplicity): "Review changes for simplicity"
+   Task(reviewer-rails): "Check Rails conventions"
    \`\`\`
 
    Present findings to user and address critical issues.
@@ -359,4 +359,6 @@ For most features: tests + linting + following patterns is sufficient.
 - **Forgetting TodoWrite** - Track progress or lose track of what's done
 - **80% done syndrome** - Finish the feature, don't move on early
 - **Over-reviewing simple changes** - Save reviewer agents for complex work
+</input_document>
+</command-instruction>
 `;

@@ -1,4 +1,5 @@
-export const ULTRAWORK_LOOP_TEMPLATE = `You are starting an Ultrawork Loop - a self-referential development loop that runs until task completion.
+export const WORK_LOOP_TEMPLATE = `<command-instruction>
+You are starting an Ultrawork Loop - a self-referential development loop that runs until task completion.
 
 ## How Ultrawork Loop Works
 
@@ -19,20 +20,27 @@ export const ULTRAWORK_LOOP_TEMPLATE = `You are starting an Ultrawork Loop - a s
 
 1. **Completion**: Output your completion promise tag when fully complete
 2. **Max Iterations**: Loop stops automatically at limit
-3. **Cancel**: User runs \`/cancel-ultrawork\` command
+3. **Cancel**: User runs \`/ghostwire:work:cancel\` command
 
 ## Your Task
 
 Parse the arguments below and begin working on the task. The format is:
 \`"task description" [--completion-promise=TEXT] [--max-iterations=N]\`
 
-Default completion promise is "DONE" and default max iterations is 100.`;
+Default completion promise is "DONE" and default max iterations is 100.
+</command-instruction>
 
-export const CANCEL_ULTRAWORK_TEMPLATE = `Cancel the currently active Ultrawork Loop.
+<user-task>
+$ARGUMENTS
+</user-task>`;
+
+export const WORK_CANCEL_TEMPLATE = `<command-instruction>
+Cancel the currently active Ultrawork Loop.
 
 This will:
 1. Stop the loop from continuing
 2. Clear the loop state file
 3. Allow the session to end normally
 
-Check if a loop is active and cancel it. Inform the user of the result.`;
+Check if a loop is active and cancel it. Inform the user of the result.
+</command-instruction>`;

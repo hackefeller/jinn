@@ -5,7 +5,8 @@
  * Replaces: speckit.clarify.md logic
  */
 
-export const SPEC_CLARIFY_TEMPLATE = `## Clarification: $FEATURE_NAME
+export const SPEC_CLARIFY_TEMPLATE = `<command-instruction>
+## Clarification: $FEATURE_NAME
 
 **Branch**: \`$BRANCH_NAME\` | **Spec**: [.ghostwire/specs/$BRANCH_NAME/spec.md](../spec.md)  
 **Status**: $CLARIFICATION_STATUS
@@ -48,6 +49,7 @@ Once you provide answers:
 ---
 
 **Next**: Answer the questions above, then run \`/ghostwire:spec:clarify\` again to apply changes
+</command-instruction>
 `;
 
 /**

@@ -48,3 +48,5 @@ export {
   createStopContinuationGuardHook,
   type StopContinuationGuard,
 } from "./stop-continuation-guard";
+export { createWorkflowsExecuteHook } from "./workflows-execute";
+export { createWorkflowsStatusHook } from "./workflows-status";

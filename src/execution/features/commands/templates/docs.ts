@@ -1,4 +1,5 @@
-export const DOCS_DEPLOY_DOCS_TEMPLATE = `# Docs:Deploy-Docs Command
+export const DOCS_DEPLOY_DOCS_TEMPLATE = `<command-instruction>
+# Docs:Deploy-Docs Command
 
 Build and deploy documentation to live hosting platform.
 
@@ -28,9 +29,15 @@ Build and deploy documentation to live hosting platform.
 - **Netlify** - Continuous deployment
 - **AWS S3/CloudFront** - Custom hosting
 - **Self-Hosted** - Custom server
+</command-instruction>
+
+<docs-context>
+$ARGUMENTS
+</docs-context>
 `;
 
-export const DOCS_RELEASE_DOCS_TEMPLATE = `# Docs:Release-Docs Command
+export const DOCS_RELEASE_DOCS_TEMPLATE = `<command-instruction>
+# Docs:Release-Docs Command
 
 Create versioned documentation release for new software version.
 
@@ -53,9 +60,15 @@ Create versioned documentation release for new software version.
 - Changelog generation
 - Migration guide generation
 - SEO optimization for versioned content
+</command-instruction>
+
+<release-context>
+$ARGUMENTS
+</release-context>
 `;
 
-export const DOCS_FEATURE_VIDEO_TEMPLATE = `# Docs:Feature-Video Command
+export const DOCS_FEATURE_VIDEO_TEMPLATE = `<command-instruction>
+# Docs:Feature-Video Command
 
 Create demonstration video for new feature or capability.
 
@@ -85,9 +98,15 @@ Create demonstration video for new feature or capability.
 - **Docs Site** - Embedded in documentation
 - **Social Media** - Short clips for marketing
 - **Internal** - Private videos for team
+</command-instruction>
+
+<video-context>
+$ARGUMENTS
+</video-context>
 `;
 
-export const DOCS_TEST_BROWSER_TEMPLATE = `# Docs:Test-Browser Command
+export const DOCS_TEST_BROWSER_TEMPLATE = `<command-instruction>
+# Docs:Test-Browser Command
 
 Test documentation in actual browser environment for functionality and rendering.
 
@@ -117,4 +136,9 @@ Test documentation in actual browser environment for functionality and rendering
 - **Integration** - Test links between docs and external sites
 - **Accessibility** - Screen reader compatibility, keyboard navigation
 - **SEO** - Meta tags, structured data
+</command-instruction>
+
+<test-context>
+$ARGUMENTS
+</test-context>
 `;
