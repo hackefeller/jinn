@@ -212,15 +212,6 @@ export const CommandNameSchema = z.enum([
   "ghostwire:workflows:learnings",
   "ghostwire:workflows:review",
   "ghostwire:workflows:work",
-  // Spec commands (from specify integration)
-  "ghostwire:spec:create",
-  "ghostwire:spec:plan",
-  "ghostwire:spec:tasks",
-  "ghostwire:spec:implement",
-  "ghostwire:spec:clarify",
-  "ghostwire:spec:analyze",
-  "ghostwire:spec:checklist",
-  "ghostwire:spec:to-issues",
   // Project commands
   "ghostwire:project:constitution",
 ]);

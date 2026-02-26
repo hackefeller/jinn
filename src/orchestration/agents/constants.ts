@@ -160,16 +160,6 @@ export const COMMAND_TEST_BROWSER = "ghostwire:test-browser";
 export const COMMAND_TRIAGE = "ghostwire:triage";
 export const COMMAND_XCODE_TEST = "ghostwire:xcode-test";
 
-// Spec commands
-export const COMMAND_SPEC_CREATE = "ghostwire:spec:create";
-export const COMMAND_SPEC_PLAN = "ghostwire:spec:plan";
-export const COMMAND_SPEC_TASKS = "ghostwire:spec:tasks";
-export const COMMAND_SPEC_IMPLEMENT = "ghostwire:spec:implement";
-export const COMMAND_SPEC_CLARIFY = "ghostwire:spec:clarify";
-export const COMMAND_SPEC_ANALYZE = "ghostwire:spec:analyze";
-export const COMMAND_SPEC_CHECKLIST = "ghostwire:spec:checklist";
-export const COMMAND_SPEC_TO_ISSUES = "ghostwire:spec:to-issues";
-
 // Project extended commands
 export const COMMAND_PROJECT_MAP = "ghostwire:project:map";
 export const COMMAND_PROJECT_CONSTITUTION = "ghostwire:project:constitution";
@@ -236,15 +226,6 @@ export const VALID_COMMAND_NAMES = [
   COMMAND_TEST_BROWSER,
   COMMAND_TRIAGE,
   COMMAND_XCODE_TEST,
-  // Spec commands
-  COMMAND_SPEC_CREATE,
-  COMMAND_SPEC_PLAN,
-  COMMAND_SPEC_TASKS,
-  COMMAND_SPEC_IMPLEMENT,
-  COMMAND_SPEC_CLARIFY,
-  COMMAND_SPEC_ANALYZE,
-  COMMAND_SPEC_CHECKLIST,
-  COMMAND_SPEC_TO_ISSUES,
   // Project extended
   COMMAND_PROJECT_MAP,
   COMMAND_PROJECT_CONSTITUTION,
