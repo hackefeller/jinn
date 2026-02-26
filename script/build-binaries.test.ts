@@ -22,7 +22,7 @@ describe("build-binaries", () => {
 
       // when
       const hasAllBaselineTargets = EXPECTED_BASELINE_TARGETS.every((baseline) =>
-        targets.includes(baseline)
+        targets.includes(baseline),
       );
 
       // then
@@ -51,7 +51,8 @@ describe("build-binaries", () => {
     it("has correct binary names for baseline platforms", async () => {
       // given
       const module = await import("./build-binaries.ts");
-      const platforms = (module as { PLATFORMS: { dir: string; target: string; binary: string }[] }).PLATFORMS;
+      const platforms = (module as { PLATFORMS: { dir: string; target: string; binary: string }[] })
+        .PLATFORMS;
 
       // when
       const windowsBaseline = platforms.find((p) => p.target === "bun-windows-x64-baseline");
@@ -65,7 +66,8 @@ describe("build-binaries", () => {
     it("has descriptions mentioning no AVX2 for baseline platforms", async () => {
       // given
       const module = await import("./build-binaries.ts");
-      const platforms = (module as { PLATFORMS: { target: string; description: string }[] }).PLATFORMS;
+      const platforms = (module as { PLATFORMS: { target: string; description: string }[] })
+        .PLATFORMS;
 
       // when
       const baselinePlatforms = platforms.filter((p) => p.target.includes("baseline"));

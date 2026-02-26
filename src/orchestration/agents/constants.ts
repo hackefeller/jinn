@@ -81,7 +81,7 @@ export const VALID_CATEGORIES = [
   CATEGORY_WRITING,
 ] as const;
 
-export type ValidCategory = typeof VALID_CATEGORIES[number];
+export type ValidCategory = (typeof VALID_CATEGORIES)[number];
 
 /**
  * Validate that a category is valid
@@ -132,7 +132,7 @@ export const VALID_AGENT_IDS = [
   AGENT_RESOLVER_PR,
 ] as const;
 
-export type ValidAgentId = typeof VALID_AGENT_IDS[number];
+export type ValidAgentId = (typeof VALID_AGENT_IDS)[number];
 
 /**
  * Validate that an agent ID is valid
@@ -186,12 +186,7 @@ export const COMMAND_DOCS_FEATURE_VIDEO = "ghostwire:docs:feature-video";
 export const COMMAND_DOCS_TEST_BROWSER = "ghostwire:docs:test-browser";
 
 // Other commands
-export const COMMAND_INIT_DEEP = "ghostwire:init-deep";
-export const COMMAND_ULTRAWORK_LOOP = "ghostwire:ultrawork-loop";
-export const COMMAND_CANCEL_ULTRAWORK = "ghostwire:cancel-ultrawork";
 export const COMMAND_REFACTOR = "ghostwire:refactor";
-export const COMMAND_JACK_IN_WORK = "ghostwire:jack-in-work";
-export const COMMAND_STOP_CONTINUATION = "ghostwire:stop-continuation";
 export const COMMAND_LINT_RUBY = "ghostwire:lint:ruby";
 export const COMMAND_PLAN_REVIEW = "ghostwire:plan-review";
 export const COMMAND_CHANGELOG = "ghostwire:changelog";
@@ -268,12 +263,7 @@ export const VALID_COMMAND_NAMES = [
   COMMAND_DOCS_RELEASE_DOCS,
   COMMAND_DOCS_FEATURE_VIDEO,
   COMMAND_DOCS_TEST_BROWSER,
-  COMMAND_INIT_DEEP,
-  COMMAND_ULTRAWORK_LOOP,
-  COMMAND_CANCEL_ULTRAWORK,
   COMMAND_REFACTOR,
-  COMMAND_JACK_IN_WORK,
-  COMMAND_STOP_CONTINUATION,
   COMMAND_LINT_RUBY,
   COMMAND_PLAN_REVIEW,
   COMMAND_CHANGELOG,
@@ -317,7 +307,7 @@ export const VALID_COMMAND_NAMES = [
   COMMAND_WORK_CANCEL,
 ] as const;
 
-export type ValidCommandName = typeof VALID_COMMAND_NAMES[number];
+export type ValidCommandName = (typeof VALID_COMMAND_NAMES)[number];
 
 /**
  * Validate that a command name is valid
@@ -376,7 +366,7 @@ export const VALID_SKILL_NAMES = [
   SKILL_SKILL_CREATOR,
 ] as const;
 
-export type ValidSkillName = typeof VALID_SKILL_NAMES[number];
+export type ValidSkillName = (typeof VALID_SKILL_NAMES)[number];
 
 /**
  * Validate that a skill name is valid

@@ -11,7 +11,7 @@ Ghostwire currently has a **dual agent system** that creates confusion and maint
 
 1. **Code-defined agents** (TypeScript files in `src/orchestration/agents/*.ts`)
    - 38 agents with factory functions
-   - Loaded via `createBuiltinAgents()` 
+   - Loaded via `createBuiltinAgents()`
    - Named using pattern: `reviewer-security`, `validator-bugs`, `oracle-performance`
 
 2. **Plugin markdown agents** (YAML frontmatter in `src/plugin/agents/*.md`)
@@ -20,6 +20,7 @@ Ghostwire currently has a **dual agent system** that creates confusion and maint
    - Named using different pattern: `security-sentinel`, `bug-reproduction-validator`, `performance-oracle`
 
 Both systems are loaded and merged in `config-composer.ts`, causing:
+
 - **Duplicate agent definitions** with inconsistent names
 - **Unclear which agent to use** (code or markdown version)
 - **Maintenance complexity** when updating agent prompts or behavior
@@ -120,6 +121,7 @@ ghostwire/
 ### Code-Defined Agents (38 total)
 
 Recent additions (9 new agents, already in code):
+
 1. `reviewer-security` - Security code review (NEW)
 2. `validator-bugs` - Bug reproduction validation (NEW)
 3. `guardian-data` - Data integrity review (NEW)
@@ -136,15 +138,15 @@ Plus 40 existing agents in `src/orchestration/agents/*.ts`
 
 These agents exist in BOTH code and plugin markdown forms:
 
-| Code Name | Plugin Name | Location |
-|-----------|------------|----------|
-| `reviewer-security` | `security-sentinel` | code-only (NEW) / plugin |
-| `validator-bugs` | `bug-reproduction-validator` | code-only (NEW) / plugin |
-| `oracle-performance` | `performance-oracle` | code-only (NEW) / plugin |
-| `reviewer-races` | `julik-frontend-races-reviewer` | code-only (NEW) / plugin |
-| `analyzer-patterns` | `pattern-recognition-specialist` | code-only (NEW) / plugin |
-| `researcher-repo` | `repo-research-analyst` | code-only (NEW) / plugin |
-| [16 more agents with different naming] | - | - |
+| Code Name                              | Plugin Name                      | Location                 |
+| -------------------------------------- | -------------------------------- | ------------------------ |
+| `reviewer-security`                    | `security-sentinel`              | code-only (NEW) / plugin |
+| `validator-bugs`                       | `bug-reproduction-validator`     | code-only (NEW) / plugin |
+| `oracle-performance`                   | `performance-oracle`             | code-only (NEW) / plugin |
+| `reviewer-races`                       | `julik-frontend-races-reviewer`  | code-only (NEW) / plugin |
+| `analyzer-patterns`                    | `pattern-recognition-specialist` | code-only (NEW) / plugin |
+| `researcher-repo`                      | `repo-research-analyst`          | code-only (NEW) / plugin |
+| [16 more agents with different naming] | -                                | -                        |
 
 ## Functional Requirements
 
@@ -166,7 +168,6 @@ tags:
   - code-review
   - vulnerability
 ---
-
 # Security Code Reviewer
 
 [Agent description and prompt]

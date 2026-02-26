@@ -5,6 +5,7 @@ import {
   createSessionRecoveryHook,
   createSessionNotification,
   createCommentCheckerHooks,
+  createDeterministicEditGuardHook,
   createToolOutputTruncatorHook,
   createDirectoryAgentsInjectorHook,
   createDirectoryReadmeInjectorHook,
@@ -168,6 +169,9 @@ const GhostwirePlugin: Plugin = async (ctx) => {
   const commentChecker = isHookEnabled("comment-checker")
     ? createCommentCheckerHooks(pluginConfig.comment_checker)
     : null;
+  const deterministicEditGuard = isHookEnabled("deterministic-edit-guard")
+    ? createDeterministicEditGuardHook(ctx)
+    : null;
   const toolOutputTruncator = isHookEnabled("tool-output-truncator")
     ? createToolOutputTruncatorHook(ctx, {
         experimental: pluginConfig.experimental,
@@ -262,9 +266,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
 
   const startWork = isHookEnabled("start-work") ? createStartWorkHook(ctx) : null;
 
-  const plannerMdOnly = isHookEnabled("planner-md-only")
-    ? createPlannerMdOnlyHook(ctx)
-    : null;
+  const plannerMdOnly = isHookEnabled("planner-md-only") ? createPlannerMdOnlyHook(ctx) : null;
 
   const cipherJuniorNotepad = isHookEnabled("executor-notepad")
     ? createExecutorNotepadHook(ctx)
@@ -405,7 +407,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
   });
 
   const commands = discoverCommandsSync();
-  
+
   // Create builtin agents with configuration
   // Don't pass ctx.directory - let it use PLUGIN_ROOT to load from embedded manifest
   // This ensures agents are always available regardless of what directory is being worked on
@@ -595,9 +597,10 @@ const GhostwirePlugin: Plugin = async (ctx) => {
       await runHook("event", "todo-continuation-enforcer", () =>
         todoContinuationEnforcer?.handler(input),
       );
-      await runHook("event", "context-window-monitor", () =>
-        contextWindowMonitor?.event(input),
+      await runHook("event", "deterministic-edit-guard", () =>
+        deterministicEditGuard?.event?.(input as { event: { type: string; properties?: Record<string, unknown> } }),
       );
+      await runHook("event", "context-window-monitor", () => contextWindowMonitor?.event(input));
       await runHook("event", "directory-agents-injector", () =>
         directoryAgentsInjector?.event(input),
       );
@@ -610,16 +613,12 @@ const GhostwirePlugin: Plugin = async (ctx) => {
         anthropicContextWindowLimitRecovery?.event(input),
       );
       await runHook("event", "agent-usage-reminder", () => agentUsageReminder?.event(input));
-      await runHook("event", "category-skill-reminder", () =>
-        categorySkillReminder?.event(input),
-      );
+      await runHook("event", "category-skill-reminder", () => categorySkillReminder?.event(input));
       await runHook("event", "interactive-bash-session", () =>
         interactiveBashSession?.event(input),
       );
       await runHook("event", "ultrawork-loop", () => ultraworkLoop?.event(input));
-      await runHook("event", "stop-continuation-guard", () =>
-        stopContinuationGuard?.event(input),
-      );
+      await runHook("event", "stop-continuation-guard", () => stopContinuationGuard?.event(input));
       await runHook("event", "orchestrator", () => nexusHook?.handler(input));
 
       const { event } = input;
@@ -715,6 +714,9 @@ const GhostwirePlugin: Plugin = async (ctx) => {
       await runHook("tool.execute.before", "non-interactive-env", () =>
         nonInteractiveEnv?.["tool.execute.before"](input, output),
       );
+      await runHook("tool.execute.before", "deterministic-edit-guard", () =>
+        deterministicEditGuard?.["tool.execute.before"]?.(input, output),
+      );
       await runHook("tool.execute.before", "comment-checker", () =>
         commentChecker?.["tool.execute.before"](input, output),
       );
@@ -757,9 +759,8 @@ const GhostwirePlugin: Plugin = async (ctx) => {
         const command = args?.command?.replace(/^\//, "").toLowerCase();
         const sessionID = input.sessionID || getMainSessionID();
 
-        if ((command === "ultrawork-loop" || command === "ghostwire:ultrawork-loop" ||
-             command === "work:loop" || command === "ghostwire:work:loop") && sessionID) {
-          const rawArgs = args?.command?.replace(/^\/?(ultrawork-loop|work:loop)\s*/i, "") || "";
+        if ((command === "ghostwire:work:loop" || command === "work:loop") && sessionID) {
+          const rawArgs = args?.command?.replace(/^\/?(ghostwire:)?work:loop\s*/i, "") || "";
           const taskMatch = rawArgs.match(/^["'](.+?)["']/);
           const prompt =
             taskMatch?.[1] ||
@@ -773,7 +774,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
             maxIterations: maxIterMatch ? parseInt(maxIterMatch[1], 10) : undefined,
             completionPromise: promiseMatch?.[1],
           });
-        } else if ((command === "ghostwire:cancel-ultrawork" || command === "ghostwire:work:cancel") && sessionID) {
+        } else if (command === "ghostwire:work:cancel" && sessionID) {
           ultraworkLoop.cancelLoop(sessionID);
         }
       }
@@ -783,7 +784,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
         const command = args?.command?.replace(/^\//, "").toLowerCase();
         const sessionID = input.sessionID || getMainSessionID();
 
-        if ((command === "ghostwire:stop-continuation" || command === "ghostwire:workflows:stop") && sessionID) {
+        if (command === "ghostwire:workflows:stop" && sessionID) {
           stopContinuationGuard?.stop(sessionID);
           todoContinuationEnforcer?.cancelAllCountdowns();
           ultraworkLoop?.cancelLoop(sessionID);
@@ -808,6 +809,9 @@ const GhostwirePlugin: Plugin = async (ctx) => {
       );
       await runHook("tool.execute.after", "context-window-monitor", () =>
         contextWindowMonitor?.["tool.execute.after"](input, output),
+      );
+      await runHook("tool.execute.after", "deterministic-edit-guard", () =>
+        deterministicEditGuard?.["tool.execute.after"]?.(input, output),
       );
       await runHook("tool.execute.after", "comment-checker", () =>
         commentChecker?.["tool.execute.after"](input, output),

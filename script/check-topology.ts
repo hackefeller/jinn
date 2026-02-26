@@ -71,7 +71,10 @@ function hasForbiddenSharedPath(modulePath: string): boolean {
   return FORBIDDEN_SHARED_PATH_SEGMENTS.some((segment) => modulePath.includes(segment));
 }
 
-function getLineAndColumn(sourceFile: ts.SourceFile, node: ts.Node): { line: number; column: number } {
+function getLineAndColumn(
+  sourceFile: ts.SourceFile,
+  node: ts.Node,
+): { line: number; column: number } {
   const { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
   return { line: line + 1, column: character + 1 };
 }
@@ -96,7 +99,10 @@ function checkFile(filePath: string): Violation[] {
       }
 
       if (isSharedBarrelImport(modulePath) && node.importClause) {
-        if (node.importClause.namedBindings && ts.isNamespaceImport(node.importClause.namedBindings)) {
+        if (
+          node.importClause.namedBindings &&
+          ts.isNamespaceImport(node.importClause.namedBindings)
+        ) {
           const pos = getLineAndColumn(sourceFile, node.importClause.namedBindings);
           violations.push({
             file: relative(REPO_ROOT, filePath),

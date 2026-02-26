@@ -305,7 +305,9 @@ Prompts MUST be in English.`;
       subagent_type: tool.schema
         .string()
         .optional()
-        .describe("Agent name (e.g., 'advisor-plan', 'researcher-codebase'). Mutually exclusive with category."),
+        .describe(
+          "Agent name (e.g., 'advisor-plan', 'researcher-codebase'). Mutually exclusive with category.",
+        ),
       session_id: tool.schema.string().optional().describe("Existing Task session to continue"),
       command: tool.schema.string().optional().describe("The command that triggered this task"),
     },

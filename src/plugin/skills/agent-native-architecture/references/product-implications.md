@@ -25,7 +25,7 @@ User: "Organize my downloads"
 Agent: [Does it immediately, no configuration needed]
 ```
 
-**Discoverable depth:** Users find they can do more as they scout-recon
+**Discoverable depth:** Users find they can do more as they researcher-codebase
 
 ```
 User: "Organize my downloads by project"

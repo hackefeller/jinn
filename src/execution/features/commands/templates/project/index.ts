@@ -7,5 +7,5 @@ export {
   DEFAULT_CONSTITUTION,
   validateAgainstConstitution,
   getConstitutionPath,
-  type ConstitutionPrinciples
-} from './constitution';
+  type ConstitutionPrinciples,
+} from "./constitution";

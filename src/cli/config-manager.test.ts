@@ -279,8 +279,12 @@ describe("generateOmoConfig - model fallback system", () => {
     );
     // #then should have agents with valid model strings
     expect(result.agents).toBeDefined();
-    expect(typeof (result.agents as Record<string, { model: string }>)["operator"].model).toBe("string");
-    expect((result.agents as Record<string, { model: string }>)["operator"].model.length).toBeGreaterThan(0);
+    expect(typeof (result.agents as Record<string, { model: string }>)["operator"].model).toBe(
+      "string",
+    );
+    expect(
+      (result.agents as Record<string, { model: string }>)["operator"].model.length,
+    ).toBeGreaterThan(0);
   });
 
   test("generates valid config structure when OpenCode Zen subscription", () => {
@@ -363,7 +367,8 @@ describe("generateOmoConfig - model fallback system", () => {
     const result = generateOmoConfig(config);
 
     // #then researcher-data should have valid model
-    const researcherModel = (result.agents as Record<string, { model: string }>)["researcher-data"].model;
+    const researcherModel = (result.agents as Record<string, { model: string }>)["researcher-data"]
+      .model;
     expect(typeof researcherModel).toBe("string");
     expect(researcherModel.length).toBeGreaterThan(0);
     // #then operator should have valid model
@@ -395,7 +400,8 @@ describe("generateOmoConfig - model fallback system", () => {
     expect(typeof advisorModel).toBe("string");
     expect(advisorModel.length).toBeGreaterThan(0);
 
-    const analyzerModel = (result.agents as Record<string, { model: string }>)["analyzer-media"].model;
+    const analyzerModel = (result.agents as Record<string, { model: string }>)["analyzer-media"]
+      .model;
     expect(typeof analyzerModel).toBe("string");
     expect(analyzerModel.length).toBeGreaterThan(0);
   });

@@ -5,10 +5,10 @@
  */
 export const AGENT_DISPLAY_NAMES: Record<string, string> = {
   // Phase 1 - Orchestration
-  "operator": "operator",
-  "orchestrator": "orchestrator",
-  "planner": "planner",
-  "executor": "executor",
+  operator: "operator",
+  orchestrator: "orchestrator",
+  planner: "planner",
+  executor: "executor",
   // Phase 2 - Code Review
   "reviewer-rails": "reviewer-rails",
   "reviewer-python": "reviewer-python",

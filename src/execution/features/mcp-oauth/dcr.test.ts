@@ -6,9 +6,7 @@ import {
   type DcrFetch,
 } from "./dcr";
 
-function createStorage(
-  initial: ClientCredentials | null,
-): ClientRegistrationStorage & {
+function createStorage(initial: ClientCredentials | null): ClientRegistrationStorage & {
   getLastKey: () => string | null;
   getLastSet: () => ClientCredentials | null;
 } {

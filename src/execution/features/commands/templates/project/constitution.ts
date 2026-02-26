@@ -1,6 +1,6 @@
 /**
  * Template for ghostwire:project:constitution command
- * 
+ *
  * Creates or updates project constitution with core principles.
  * Replaces: speckit.constitution.md + constitution-template.md
  */
@@ -79,7 +79,7 @@ To amend this constitution:
  */
 export const DEFAULT_CONSTITUTION = `# Project Constitution
 
-**Version**: 1.0.0 | **Ratified**: ${new Date().toISOString().split('T')[0]}
+**Version**: 1.0.0 | **Ratified**: ${new Date().toISOString().split("T")[0]}
 
 ---
 
@@ -179,37 +179,33 @@ export interface ConstitutionPrinciples {
  */
 export function validateAgainstConstitution(
   constitution: string,
-  projectFiles: string[]
+  projectFiles: string[],
 ): { compliant: boolean; violations: string[] } {
   const violations: string[] = [];
-  
+
   // Check for test files if test-first principle exists
-  if (constitution.includes('Test-First') || constitution.includes('TDD')) {
-    const hasTests = projectFiles.some(f => 
-      f.includes('.test.') || 
-      f.includes('.spec.') || 
-      f.includes('/tests/')
+  if (constitution.includes("Test-First") || constitution.includes("TDD")) {
+    const hasTests = projectFiles.some(
+      (f) => f.includes(".test.") || f.includes(".spec.") || f.includes("/tests/"),
     );
     if (!hasTests) {
-      violations.push('No test files found - violates Test-First principle');
+      violations.push("No test files found - violates Test-First principle");
     }
   }
-  
+
   // Check for CLI exposure if CLI principle exists
-  if (constitution.includes('CLI Interface')) {
-    const hasCli = projectFiles.some(f => 
-      f.includes('cli.') || 
-      f.includes('command.') ||
-      f.includes('/cli/')
+  if (constitution.includes("CLI Interface")) {
+    const hasCli = projectFiles.some(
+      (f) => f.includes("cli.") || f.includes("command.") || f.includes("/cli/"),
     );
     if (!hasCli) {
-      violations.push('No CLI interface found - violates CLI Interface principle');
+      violations.push("No CLI interface found - violates CLI Interface principle");
     }
   }
-  
+
   return {
     compliant: violations.length === 0,
-    violations
+    violations,
   };
 }
 

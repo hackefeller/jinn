@@ -46,18 +46,18 @@ features:
   - id: commands
     path: src/execution/features/commands
     description: |
-       Provides built-in slash commands that wrap prompt templates for common development workflows.
-       Defines 34+ built-in commands organized by category:
-       - Initialization: init-deep
-       - Loops: ultrawork-loop, cancel-ultrawork
-       - Refactoring: refactor, ghostwire:code:*
-       - Git operations: ghostwire:git:*
-       - Project management: ghostwire:project:*
-       - Utilities: ghostwire:util:*
-       - Documentation: ghostwire:docs:*
-       Each command wraps a prompt template with specialized AI instructions.
-       Includes argument hints for user guidance.
-       Can be selectively disabled via configuration.
+      Provides built-in slash commands that wrap prompt templates for common development workflows.
+      Defines 34+ built-in commands organized by category:
+      - Initialization: init-deep
+      - Loops: ultrawork-loop, cancel-ultrawork
+      - Refactoring: refactor, ghostwire:code:*
+      - Git operations: ghostwire:git:*
+      - Project management: ghostwire:project:*
+      - Utilities: ghostwire:util:*
+      - Documentation: ghostwire:docs:*
+      Each command wraps a prompt template with specialized AI instructions.
+      Includes argument hints for user guidance.
+      Can be selectively disabled via configuration.
 
   - id: skills
     path: src/execution/features/skills

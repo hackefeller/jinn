@@ -9,10 +9,7 @@ function escapeRegExp(value: string) {
 describe("GLITCH_AUDITOR_SYSTEM_PROMPT policy requirements", () => {
   test("should treat SYSTEM DIRECTIVE as ignorable/stripped", () => {
     // #given
-    const prompt = readFileSync(
-      join(__dirname, "validator-audit.md"),
-      "utf-8",
-    );
+    const prompt = readFileSync(join(__dirname, "validator-audit.md"), "utf-8");
 
     // #when / #then
     // Should mention that system directives are ignored
@@ -23,10 +20,7 @@ describe("GLITCH_AUDITOR_SYSTEM_PROMPT policy requirements", () => {
 
   test("should extract paths containing .ghostwire/plans/ and ending in .md", () => {
     // #given
-    const prompt = readFileSync(
-      join(__dirname, "validator-audit.md"),
-      "utf-8",
-    );
+    const prompt = readFileSync(join(__dirname, "validator-audit.md"), "utf-8");
 
     // #when / #then
     expect(prompt).toContain(".ghostwire/plans/");
@@ -37,10 +31,7 @@ describe("GLITCH_AUDITOR_SYSTEM_PROMPT policy requirements", () => {
 
   test("should NOT teach that 'Please review' is INVALID (conversational wrapper allowed)", () => {
     // #given
-    const prompt = readFileSync(
-      join(__dirname, "validator-audit.md"),
-      "utf-8",
-    );
+    const prompt = readFileSync(join(__dirname, "validator-audit.md"), "utf-8");
 
     // #when / #then
     // In RED phase, this will FAIL because current prompt explicitly lists this as INVALID
@@ -54,10 +45,7 @@ describe("GLITCH_AUDITOR_SYSTEM_PROMPT policy requirements", () => {
 
   test("should handle ambiguity (2+ paths) and 'no path found' rejection", () => {
     // #given
-    const prompt = readFileSync(
-      join(__dirname, "validator-audit.md"),
-      "utf-8",
-    );
+    const prompt = readFileSync(join(__dirname, "validator-audit.md"), "utf-8");
 
     // #when / #then
     // Should mention what happens when multiple paths are found

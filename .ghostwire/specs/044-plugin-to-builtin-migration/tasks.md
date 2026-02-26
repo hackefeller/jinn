@@ -2,7 +2,7 @@
 
 **Input**: Design documents from `/specs/044-plugin-to-builtin-migration/`  
 **Prerequisites**: plan.md (required), spec.md (required), data-model.md, research.md  
-**Branch**: `044-plugin-to-builtin-migration`  
+**Branch**: `044-plugin-to-builtin-migration`
 
 **Organization**: This is a pure migration task with no separate user stories. Tasks are organized into logical phases: Setup, Commands, Skills, Registration, and Cleanup.
 
@@ -209,16 +209,19 @@ Setup (T001-T004)
 ### Parallel Opportunities
 
 **Within Phase 2-3 (Commands)**:
+
 - All command migrations marked [P] can run in parallel
 - Suggested: 5 developers × 5 commands each = 3 rounds of 5 tasks
 - Example: Developer 1 does T005-T009, Developer 2 does T010-T014, etc.
 
 **Within Phase 5 (Skills)**:
+
 - All skill migrations marked [P] can run in parallel
 - Suggested: 4 developers × 3 skills each = 1 round (some developers get 4)
 - Example: Developer 1 does T036-T039, Developer 2 does T040-T043, etc.
 
 **Command vs Skills**:
+
 - After Setup complete: Commands and Skills migration can run in parallel
 - Different developers can work on commands while others work on skills
 - Phases 2-5 can overlap (Setup → Commands Phase 4 while Skills Phase 5 ongoing)

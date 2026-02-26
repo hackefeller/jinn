@@ -1,6 +1,6 @@
 /**
  * Template for ghostwire:spec:to-issues command
- * 
+ *
  * Converts tasks to GitHub issues.
  * Replaces: speckit.taskstoissues.md
  */
@@ -87,55 +87,56 @@ export function generateGhCommand(
   title: string,
   body: string,
   labels: string[],
-  milestone?: string
+  milestone?: string,
 ): string {
-  const labelsStr = labels.map(l => `-f labels[]=${l}`).join(' ');
-  const milestoneStr = milestone ? `-f milestone=${milestone}` : '';
-  
+  const labelsStr = labels.map((l) => `-f labels[]=${l}`).join(" ");
+  const milestoneStr = milestone ? `-f milestone=${milestone}` : "";
+
   // Escape special characters in title and body
   const escapedTitle = title.replace(/"/g, '\\"');
-  const escapedBody = body.replace(/"/g, '\\"').replace(/\n/g, '\\n');
-  
+  const escapedBody = body.replace(/"/g, '\\"').replace(/\n/g, "\\n");
+
   return `gh api repos/${repo}/issues -f title="${escapedTitle}" -f body="${escapedBody}" ${labelsStr} ${milestoneStr}`;
 }
 
 /**
  * Extract tasks from tasks.md
  */
-export function extractTasks(tasksContent: string): { 
-  phase: string; 
-  tasks: { id: string; description: string; story?: string }[] 
+export function extractTasks(tasksContent: string): {
+  phase: string;
+  tasks: { id: string; description: string; story?: string }[];
 }[] {
-  const phases: { phase: string; tasks: { id: string; description: string; story?: string }[] }[] = [];
-  
+  const phases: { phase: string; tasks: { id: string; description: string; story?: string }[] }[] =
+    [];
+
   // Match phase headers and their tasks
   const phasePattern = /## Phase (\d+): ([^\n]+)[\s\S]*?(?=## Phase \d+|$)/g;
   let match;
-  
+
   while ((match = phasePattern.exec(tasksContent)) !== null) {
     const phaseNum = match[1];
     const phaseName = match[2].trim();
     const phaseContent = match[0];
-    
+
     // Extract tasks from this phase
     const taskPattern = /- \[ \] (T\d+)(?: \[P\])?(?: \[(US\d+)\])? (.+)/g;
     const tasks: { id: string; description: string; story?: string }[] = [];
     let taskMatch;
-    
+
     while ((taskMatch = taskPattern.exec(phaseContent)) !== null) {
       tasks.push({
         id: taskMatch[1],
         description: taskMatch[3].trim(),
-        story: taskMatch[2]
+        story: taskMatch[2],
       });
     }
-    
+
     phases.push({
       phase: `${phaseNum}: ${phaseName}`,
-      tasks
+      tasks,
     });
   }
-  
+
   return phases;
 }
 
@@ -143,9 +144,10 @@ export function extractTasks(tasksContent: string): {
  * Generate issue creation plan
  */
 export function generateIssueCreationPlan(tasks: TaskToIssue[]): string {
-  return tasks.map(t => {
-    const storyLabel = t.story ? ` [${t.story}]` : '';
-    return `### ${t.taskId}${storyLabel}: ${t.description.substring(0, 60)}...
+  return tasks
+    .map((t) => {
+      const storyLabel = t.story ? ` [${t.story}]` : "";
+      return `### ${t.taskId}${storyLabel}: ${t.description.substring(0, 60)}...
 
 **Phase**: ${t.phase}  
 **Priority**: ${t.priority}
@@ -153,7 +155,8 @@ export function generateIssueCreationPlan(tasks: TaskToIssue[]): string {
 \`\`\`bash
 ${t.ghCommand}
 \`\`\``;
-  }).join('\n\n');
+    })
+    .join("\n\n");
 }
 
 /**
@@ -162,7 +165,7 @@ ${t.ghCommand}
 export function generateUserStorySummary(
   storyNum: number,
   title: string,
-  taskCount: number
+  taskCount: number,
 ): string {
   return `| User Story ${storyNum}: ${title} | ${taskCount} | 0 |`;
 }

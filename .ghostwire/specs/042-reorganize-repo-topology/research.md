@@ -14,18 +14,21 @@ phase: 0
 
 **Decision**: Create reusable `scripts/update-imports.sh` bash script using `find` + `sed` patterns
 
-**Rationale**: 
+**Rationale**:
+
 - Systematic approach reduces manual errors
 - Script can be reused for each phase
 - Changes logged for review
 - Easily reversible with `git diff`
 
 **Alternatives Considered**:
+
 - Manual grep+replace: Too error-prone, easy to miss edge cases
 - AST-based rewriting (ts-morph): Over-engineered for simple string updates
 - IDE refactor tools: Not reproducible in CI/batch context
 
 **Implementation**:
+
 ```bash
 #!/usr/bin/env bash
 # scripts/update-imports.sh <old-path> <new-path> <target-dir>
@@ -52,12 +55,14 @@ done
 **Decision**: Use `git mv src/agents/ src/orchestration/agents/` for all moves. Git preserves history by default for directory moves.
 
 **Rationale**:
+
 - `git mv` is the standard git way to move files/directories
 - Preserves commit history (git blame still shows original commits)
 - No special -M% tracking needed (git detects renames automatically)
 - Clean history for `git log --follow`
 
 **Alternatives Considered**:
+
 - Manual `rm` + `add`: Loses history (git sees delete + new file)
 - `git mv` with `-M60%`: Unnecessary (default detection is 50%, sufficient for directories)
 - `cp` + `git add`: Duplicates code, loses history
@@ -71,6 +76,7 @@ done
 **Question**: What's the clearest way to conceptually describe the 5 domains?
 
 **Decision**: Responsibility-based layering:
+
 - **Orchestration** = What orchestrates (agents + hooks)
 - **Execution** = What executes (features + tools)
 - **Integration** = What integrates (shared + mcp)
@@ -78,17 +84,20 @@ done
 - **CLI** = User interface (unchanged)
 
 **Rationale**:
+
 - Mirrors common software architecture (presentation, business, data, infrastructure)
 - Each domain has a single responsibility
 - Easy to explain: "Find orchestration code in orchestration/ domain"
 - Matches OpenCode's conceptual model (agents orchestrate → features execute)
 
 **Alternatives Considered**:
+
 - Feature-based domains (email, auth, etc.): Doesn't fit monorepo plugin architecture
 - Layer-based (frontend, backend): Not applicable for CLI tool
 - Type-based (current): Problem we're solving
 
 **Benefits**:
+
 - Developers understand intent immediately from directory name
 - Reduces "where do I add X?" confusion
 - Supports future modular compilation (each domain could be separate build)
@@ -102,19 +111,22 @@ done
 **Decision**: Yes. Each domain needs `index.ts` exporting from subdirectories.
 
 **Rationale**:
+
 - Aligns with existing convention (AGENTS.md: "Barrel pattern via index.ts")
 - Provides single entry point for domain (e.g., `import { Orchestrator } from '../orchestration'`)
 - Simplifies root imports (use `/orchestration`, not `/orchestration/agents` or `/orchestration/hooks`)
 - Enables future tree-shaking and dead code elimination
 
 **Example**:
+
 ```typescript
 // src/orchestration/index.ts
-export * from './agents/index.js'
-export * from './hooks/index.js'
+export * from "./agents/index.js";
+export * from "./hooks/index.js";
 ```
 
 **Alternatives Considered**:
+
 - No barrel files: Requires specific imports like `from '../orchestration/agents/foo'` (verbose)
 - Single root barrel only: Doesn't encapsulate domain internals
 
@@ -127,6 +139,7 @@ export * from './hooks/index.js'
 **Decision**: Update all 4 YAML files (agents.yml, hooks.yml, tools.yml, features.yml) to reflect new paths
 
 **Current Format**:
+
 ```yaml
 # agents.yml
 agents:
@@ -136,6 +149,7 @@ agents:
 ```
 
 **New Format**:
+
 ```yaml
 # agents.yml
 agents:
@@ -145,6 +159,7 @@ agents:
 ```
 
 **Rationale**:
+
 - AGENTS.md: "Agent metadata lives in agents.yml" (single source of truth)
 - Tools/scripts may depend on these paths
 - Documents new structure for future contributors
@@ -156,17 +171,20 @@ agents:
 **Question**: What's the minimal validation needed after each phase?
 
 **Decision**: Three validation gates (in order):
+
 1. `bun run typecheck` (catches import errors immediately)
 2. `bun run build` (ensures ESM output is valid)
 3. `bun test` (spot-check: at least one test from moved files)
 
 **Rationale**:
+
 - Typecheck is fastest (syntax/import errors)
 - Build validates ESM output + d.ts generation
 - Tests confirm no runtime regressions
 - Together = confidence that phase is solid
 
 **Alternatives Considered**:
+
 - Just `bun test`: Too slow (unnecessary for import-only changes)
 - Just `bun run build`: Might miss import errors not caught by TypeScript
 - Complex dependency analysis: Over-complicated
@@ -182,6 +200,7 @@ agents:
 **Decision**: One commit per domain = one `git reset --soft HEAD~1` to rollback
 
 **Rationale**:
+
 - Small, focused commits are easier to revert
 - If Phase 2 fails, Phase 1 is already safe (separate commit)
 - `git reset --soft` preserves code changes (allows re-attempt)
@@ -225,6 +244,7 @@ Researched patterns from successful TypeScript monorepos (Angular, NestJS, Nx):
 ## Ready for Phase 1
 
 All unknowns resolved. Ready to proceed with:
+
 1. Create `scripts/update-imports.sh`
 2. Begin Phase 1: Move orchestration domain
 3. Validate with typecheck → build → tests

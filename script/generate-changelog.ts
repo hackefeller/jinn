@@ -18,14 +18,10 @@ async function generateChangelog(previousTag: string): Promise<string[]> {
   const notes: string[] = [];
 
   try {
-    const log =
-      await $`git log ${previousTag}..HEAD --oneline --format="%h %s"`.text();
+    const log = await $`git log ${previousTag}..HEAD --oneline --format="%h %s"`.text();
     const commits = log
       .split("\n")
-      .filter(
-        (line) =>
-          line && !line.match(/^\w+ (ignore:|test:|chore:|ci:|release:)/i),
-      );
+      .filter((line) => line && !line.match(/^\w+ (ignore:|test:|chore:|ci:|release:)/i));
 
     if (commits.length > 0) {
       for (const commit of commits) {

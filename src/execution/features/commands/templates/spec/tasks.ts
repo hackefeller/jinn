@@ -1,6 +1,6 @@
 /**
  * Template for ghostwire:spec:tasks command
- * 
+ *
  * Generates an actionable, dependency-ordered tasks.md from design artifacts.
  * Replaces: .specify/templates/tasks-template.md + speckit.tasks.md logic
  */
@@ -154,12 +154,12 @@ export function formatTask(
   id: number,
   description: string,
   isParallel: boolean = false,
-  story?: string
+  story?: string,
 ): string {
-  const idStr = `T${id.toString().padStart(3, '0')}`;
-  const parallelMarker = isParallel ? ' [P]' : '';
-  const storyMarker = story ? ` [${story}]` : '';
-  
+  const idStr = `T${id.toString().padStart(3, "0")}`;
+  const parallelMarker = isParallel ? " [P]" : "";
+  const storyMarker = story ? ` [${story}]` : "";
+
   return `- [ ] ${idStr}${parallelMarker}${storyMarker} ${description}`;
 }
 
@@ -172,10 +172,10 @@ export function generateUserStoryPhase(
   priority: string,
   goal: string,
   testDescription: string,
-  tasks: string[]
+  tasks: string[],
 ): string {
   const phaseNum = storyNum + 2; // Phase 1 = Setup, Phase 2 = Foundational
-  
+
   return `## Phase ${phaseNum}: User Story ${storyNum} - ${title} (Priority: ${priority}) 🎯 MVP
 
 **Goal**: ${goal}
@@ -186,11 +186,11 @@ export function generateUserStoryPhase(
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-${tasks.filter(t => t.includes('[test]')).join('\n')}
+${tasks.filter((t) => t.includes("[test]")).join("\n")}
 
 ### Implementation for User Story ${storyNum}
 
-${tasks.filter(t => !t.includes('[test]')).join('\n')}
+${tasks.filter((t) => !t.includes("[test]")).join("\n")}
 
 **Checkpoint**: At this point, User Story ${storyNum} should be fully functional and testable independently
 `;
@@ -212,43 +212,44 @@ export interface UserStory {
 
 export function extractUserStories(specContent: string): UserStory[] {
   const stories: UserStory[] = [];
-  
+
   // Pattern to match user story sections
-  const storyPattern = /### User Story (\d+) - ([^\n]+) \(Priority: (P\d+)\)[\s\S]*?(?=### User Story \d+|$)/g;
+  const storyPattern =
+    /### User Story (\d+) - ([^\n]+) \(Priority: (P\d+)\)[\s\S]*?(?=### User Story \d+|$)/g;
   let match;
-  
+
   while ((match = storyPattern.exec(specContent)) !== null) {
     const content = match[0];
-    
+
     stories.push({
       number: parseInt(match[1], 10),
       title: match[2].trim(),
       priority: match[3],
-      description: extractField(content, 'description'),
-      testDescription: extractField(content, 'Independent Test'),
-      given: extractListItems(content, 'Given'),
-      when: extractListItems(content, 'When'),
-      then: extractListItems(content, 'Then')
+      description: extractField(content, "description"),
+      testDescription: extractField(content, "Independent Test"),
+      given: extractListItems(content, "Given"),
+      when: extractListItems(content, "When"),
+      then: extractListItems(content, "Then"),
     });
   }
-  
+
   return stories;
 }
 
 function extractField(content: string, fieldName: string): string {
   const pattern = new RegExp(`\\*\\*${fieldName}\\*\\*: ([^\\n]+)`);
   const match = content.match(pattern);
-  return match ? match[1].trim() : '';
+  return match ? match[1].trim() : "";
 }
 
 function extractListItems(content: string, keyword: string): string[] {
   const items: string[] = [];
-  const pattern = new RegExp(`\\*\\*${keyword}\\*\\* ([^,]+)`, 'g');
+  const pattern = new RegExp(`\\*\\*${keyword}\\*\\* ([^,]+)`, "g");
   let match;
-  
+
   while ((match = pattern.exec(content)) !== null) {
     items.push(match[1].trim());
   }
-  
+
   return items;
 }

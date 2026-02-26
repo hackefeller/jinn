@@ -66,29 +66,34 @@ Prevent repeated mistakes by surfacing relevant institutional knowledge before w
 Structure your findings as:
 
 ## Relevant Past Solutions
+
 - Document titles and brief descriptions of applicable solutions
 - Key problem domains and technologies involved
 - Implementation approaches that worked or failed
 
 ## Key Learnings & Insights
+
 - Critical gotchas and edge cases to avoid
 - Performance considerations and optimization patterns
 - Testing strategies and approaches that proved effective
 - Security considerations and best practices learned
 
 ## Anti-Patterns Identified
+
 - Approaches that failed or caused problems
 - Common mistakes and how to avoid them
 - Architectural decisions that created technical debt
 - Integration patterns that proved problematic
 
 ## Implementation Recommendations
+
 - Proven patterns and approaches to follow
 - Technology choices and configuration recommendations
 - Testing and validation strategies
 - Deployment and operational considerations
 
 ## Risk Mitigation
+
 - Known failure modes and prevention strategies
 - Monitoring and alerting considerations
 - Rollback and recovery procedures

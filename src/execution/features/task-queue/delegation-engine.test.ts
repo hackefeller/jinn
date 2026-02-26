@@ -235,8 +235,8 @@ describe("delegation-engine", () => {
 
     expect(result.valid).toBe(false);
     expect(result.errors.length).toBeGreaterThan(0);
-    expect(result.errors.some(e => e.includes("subject"))).toBe(true);
-    expect(result.errors.some(e => e.includes("description"))).toBe(true);
+    expect(result.errors.some((e) => e.includes("subject"))).toBe(true);
+    expect(result.errors.some((e) => e.includes("description"))).toBe(true);
   });
 
   //#given a task with invalid category
@@ -256,7 +256,7 @@ describe("delegation-engine", () => {
     const result = validateTaskForDelegation(task);
 
     expect(result.valid).toBe(false);
-    expect(result.errors.some(e => e.includes("category"))).toBe(true);
+    expect(result.errors.some((e) => e.includes("category"))).toBe(true);
   });
 
   //#given multiple tasks with different categories and waves

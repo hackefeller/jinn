@@ -11,11 +11,9 @@ type TokenDataLike = {
 };
 
 export interface LoginDeps {
-  createProvider?: (options: {
-    serverUrl: string;
-    clientId?: string;
-    scopes?: string[];
-  }) => { login: () => Promise<TokenDataLike> };
+  createProvider?: (options: { serverUrl: string; clientId?: string; scopes?: string[] }) => {
+    login: () => Promise<TokenDataLike>;
+  };
 }
 
 export async function login(

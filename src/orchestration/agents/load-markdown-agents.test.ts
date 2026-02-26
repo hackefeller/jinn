@@ -41,7 +41,7 @@ function cleanupFixtures(): void {
       path.join(TEST_AGENT_DIR, "full-agent.md"),
       path.join(TEST_AGENT_DIR, "reviewer-security.md"),
     ];
-    
+
     // Remove all files first
     for (const file of files) {
       try {
@@ -62,7 +62,7 @@ function cleanupFixtures(): void {
     } catch {
       // Directory may not exist
     }
-    
+
     try {
       rmdirSync(TEST_AGENT_DIR);
       rmdirSync(FIXTURES_DIR);
@@ -99,7 +99,7 @@ models:
 
 # Test Agent
 
-This is a test agent.`
+This is a test agent.`,
     );
 
     // #when
@@ -128,7 +128,7 @@ temperature: 0.2
 
 # Test Agent
 
-Content`
+Content`,
     );
 
     // #when
@@ -166,7 +166,7 @@ cost: HIGH
 
 # Full Agent
 
-Content`
+Content`,
     );
 
     // #when
@@ -199,7 +199,7 @@ models:
 
 # Agent One
 
-Content`
+Content`,
     );
 
     createFixtureAgent(
@@ -214,15 +214,13 @@ models:
 
 # Agent Two
 
-Content`
+Content`,
     );
 
     // #when & #then
     try {
       await loadMarkdownAgents(TEST_AGENT_DIR);
-      expect.unreachable(
-        "Should throw error for duplicate agent IDs"
-      );
+      expect.unreachable("Should throw error for duplicate agent IDs");
     } catch (err) {
       expect(err).toBeDefined();
       expect((err as Error).message).toContain("duplicate");
@@ -241,15 +239,13 @@ name: Test Agent
 
 # Test Agent
 
-Content`
+Content`,
     );
 
     // #when & #then
     try {
       await loadMarkdownAgents(TEST_AGENT_DIR);
-      expect.unreachable(
-        "Should throw error for missing required fields"
-      );
+      expect.unreachable("Should throw error for missing required fields");
     } catch (err) {
       expect(err).toBeDefined();
       expect((err as Error).message).toContain("Metadata validation failed");
@@ -271,7 +267,7 @@ models:
 
 # Test Agent
 
-This is test content.`
+This is test content.`,
     );
 
     // #when
@@ -301,15 +297,13 @@ This is not valid YAML---
 
 # Invalid Agent
 
-Content`
+Content`,
     );
 
     // #when & #then
     try {
       await loadMarkdownAgents(TEST_AGENT_DIR);
-      expect.unreachable(
-        "Should throw error for malformed YAML"
-      );
+      expect.unreachable("Should throw error for malformed YAML");
     } catch (err) {
       expect(err).toBeDefined();
       expect((err as Error).message).toContain("YAML");
@@ -331,7 +325,7 @@ models:
 
 # Security Code Reviewer
 
-Content`
+Content`,
     );
 
     // #when

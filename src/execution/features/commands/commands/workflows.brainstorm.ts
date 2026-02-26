@@ -1,7 +1,7 @@
 import type { CommandDefinition } from "../../claude-code-command-loader";
 
 export const NAME = "ghostwire:workflows:brainstorm";
-export const DESCRIPTION = "Scout Recon requirements and approaches through collaborative dialogue";
+export const DESCRIPTION = "Explore requirements and approaches through collaborative dialogue";
 export const TEMPLATE = `<command-instruction>
 # Brainstorm a Feature or Improvement
 
@@ -16,7 +16,7 @@ Brainstorming helps answer **WHAT** to build through collaborative dialogue. It 
 $ARGUMENTS
 </feature-description>
 
-**If the feature description above is empty, ask the user:** "What would you like to scout-recon? Please describe the feature, problem, or improvement you're thinking about."
+**If the feature description above is empty, ask the user:** "What would you like to brainstorm? Please describe the feature, problem, or improvement you're thinking about."
 
 Do not proceed until you have a feature description from the user.
 
@@ -34,7 +34,7 @@ Evaluate whether brainstorming is needed based on the feature description.
 - Constrained, well-defined scope
 
 **If requirements are already clear:**
-Use **AskUserQuestion tool** to suggest: "Your requirements seem detailed enough to proceed directly to planning. Should I run \`/workflows:plan\` instead, or would you like to scout-recon the idea further?"
+Use **AskUserQuestion tool** to suggest: "Your requirements seem detailed enough to proceed directly to planning. Should I run \`/workflows:plan\` instead, or would you like to brainstorm the idea further?"
 
 ### Phase 1: Understand the Idea
 
@@ -59,7 +59,7 @@ Use the **AskUserQuestion tool** to ask questions **one at a time**.
 
 **Exit condition:** Continue until the idea is clear OR user says "proceed"
 
-### Phase 2: Scout Recon Approaches
+### Phase 2: Explore Approaches
 
 Propose **2-3 concrete approaches** based on research and conversation.
 
@@ -116,7 +116,7 @@ Next: Run \`/workflows:plan\` when ready to implement.
 - **Apply YAGNI** - Prefer simpler approaches
 - **Keep outputs concise** - 200-300 words per section max
 
-NEVER CODE! Just scout-recon and document decisions.
+NEVER CODE! Just brainstorm and document decisions.
 </feature-description>`;
 export const ARGUMENT_HINT = "[feature description]";
 

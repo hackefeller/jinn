@@ -35,6 +35,7 @@ git restore src/
 ### Phase 1: Reorganize Orchestration Domain
 
 **Test Scenario 1**: Directory moves preserve git history
+
 ```bash
 # After moving src/agents → src/orchestration/agents
 git log --oneline --follow src/orchestration/agents/zen-planner.ts | head -5
@@ -43,6 +44,7 @@ git log --oneline --follow src/orchestration/agents/zen-planner.ts | head -5
 ```
 
 **Test Scenario 2**: TypeScript compiles without errors
+
 ```bash
 bun run typecheck
 
@@ -52,6 +54,7 @@ bun run typecheck
 ```
 
 **Test Scenario 3**: Build succeeds and generates ESM + d.ts
+
 ```bash
 bun run build
 
@@ -62,6 +65,7 @@ bun run build
 ```
 
 **Test Scenario 4**: Existing tests pass
+
 ```bash
 bun test src/orchestration/agents/*.test.ts
 
@@ -70,6 +74,7 @@ bun test src/orchestration/agents/*.test.ts
 ```
 
 **Test Scenario 5**: Root imports work
+
 ```bash
 # Test in REPL or temporary test file:
 # import * as Orchestration from './src/orchestration/index.js'
@@ -91,6 +96,7 @@ rm test-import.mjs
 ### Phase 2: Reorganize Execution Domain
 
 **Test Scenario 1**: Cross-domain imports work (Orchestration → Execution)
+
 ```bash
 # Example: Orchestrator hook calls execution tools
 # src/orchestration/hooks/nexus-orchestrator.ts imports from src/execution/tools
@@ -101,9 +107,10 @@ bun run typecheck
 ```
 
 **Test Scenario 2**: Barrel files export correctly
+
 ```typescript
 // Test in temporary file:
-import * as Execution from './src/execution/index.js'
+import * as Execution from "./src/execution/index.js";
 
 // Expected exports:
 // - Execution.Feature (from features)
@@ -112,6 +119,7 @@ import * as Execution from './src/execution/index.js'
 ```
 
 **Test Scenario 3**: Build output maintains structure
+
 ```bash
 bun run build
 
@@ -126,6 +134,7 @@ find dist/execution -name "*.js" | wc -l
 ### Phase 3: Reorganize Integration Domain
 
 **Test Scenario 1**: No circular dependencies detected
+
 ```bash
 npx madge --circular dist/
 
@@ -134,14 +143,15 @@ npx madge --circular dist/
 ```
 
 **Test Scenario 2**: Shared utilities accessible to orchestration + execution
+
 ```typescript
 // Test imports from different domains:
 
 // src/orchestration/hooks/foo.ts
-import { Logger } from '../../integration/shared/logger'
+import { Logger } from "../../integration/shared/logger";
 
 // src/execution/tools/bar.ts
-import { Logger } from '../../integration/shared/logger'
+import { Logger } from "../../integration/shared/logger";
 
 // Both should work after Phase 3
 ```
@@ -151,20 +161,22 @@ import { Logger } from '../../integration/shared/logger'
 ### Phase 4: Reorganize Platform Domain
 
 **Test Scenario 1**: Config schema still loads
-```typescript
-import { loadConfig } from './src/platform/config/loader'
 
-const config = await loadConfig()
+```typescript
+import { loadConfig } from "./src/platform/config/loader";
+
+const config = await loadConfig();
 // Expected: Config object with all expected properties
 ```
 
 **Test Scenario 2**: All domains can read config
+
 ```typescript
 // src/orchestration/hooks/setup.ts
-import { Config } from '../../platform/config'
+import { Config } from "../../platform/config";
 
 // src/execution/features/background-agent/manager.ts
-import { Config } from '../../../platform/config'
+import { Config } from "../../../platform/config";
 
 // Both should resolve without errors
 ```
@@ -174,6 +186,7 @@ import { Config } from '../../../platform/config'
 ### Phase 5: Documentation & Full Test Suite
 
 **Test Scenario 1**: All 100+ tests pass
+
 ```bash
 bun test
 
@@ -183,6 +196,7 @@ bun test
 ```
 
 **Test Scenario 2**: AGENTS.md structure reflects new layout
+
 ```bash
 # Check that AGENTS.md documents:
 # - src/orchestration/ (was src/agents + src/hooks)
@@ -195,6 +209,7 @@ grep -A 10 "## STRUCTURE" docs/AGENTS.md
 ```
 
 **Test Scenario 3**: YAML files updated
+
 ```bash
 # Check that agents.yml paths use new locations:
 grep "src/orchestration" agents.yml
@@ -207,6 +222,7 @@ grep "src/orchestration" agents.yml
 ### Phase 6: Create & Merge PR
 
 **Test Scenario 1**: GitHub Actions CI passes
+
 ```bash
 # Push to branch 042-reorganize-repo-topology
 # Create PR to dev branch
@@ -220,6 +236,7 @@ grep "src/orchestration" agents.yml
 ```
 
 **Test Scenario 2**: Code review confirms structure
+
 ```bash
 # Review PR comments:
 # - New directory structure is clearer
@@ -245,6 +262,7 @@ git reset --hard HEAD~1
 ```
 
 **Example**: Phase 2 fails due to missed imports
+
 ```bash
 # Roll back Phase 2
 git reset --hard HEAD~1  # Undo "refactor: reorganize execution domain"
@@ -269,6 +287,7 @@ git reset --hard HEAD~1  # Undo "refactor: reorganize execution domain"
 - [ ] Phase 6: PR created, CI passes, merged to `dev`
 
 **Final Validation**:
+
 ```bash
 # After merge to dev, verify:
 bun run build       # Build succeeds

@@ -36,27 +36,27 @@ All agents MUST include YAML frontmatter between `---` delimiters with the follo
 
 ```yaml
 ---
-id: reviewer-security                                    # [REQUIRED] Kebab-case identifier, unique within agents/
-name: Security Code Reviewer                            # [REQUIRED] Display name (human-readable)
-purpose: Review code for security vulnerabilities       # [REQUIRED] One-line purpose statement
-models:                                                  # [REQUIRED] Model configuration
-  primary: claude-opus-4.5                              # [REQUIRED] Primary LLM to use
-  fallback: gpt-5.2                                     # [OPTIONAL] Fallback model if primary unavailable
-temperature: 0.1                                         # [OPTIONAL] LLM temperature (0.0-2.0, default: 0.1)
-tags:                                                    # [OPTIONAL] Searchable tags (array of strings)
+id: reviewer-security # [REQUIRED] Kebab-case identifier, unique within agents/
+name: Security Code Reviewer # [REQUIRED] Display name (human-readable)
+purpose: Review code for security vulnerabilities # [REQUIRED] One-line purpose statement
+models: # [REQUIRED] Model configuration
+  primary: claude-opus-4.5 # [REQUIRED] Primary LLM to use
+  fallback: gpt-5.2 # [OPTIONAL] Fallback model if primary unavailable
+temperature: 0.1 # [OPTIONAL] LLM temperature (0.0-2.0, default: 0.1)
+tags: # [OPTIONAL] Searchable tags (array of strings)
   - security
   - code-review
   - vulnerability
-category: review                                         # [OPTIONAL] Agent category (review, research, design, docs, workflow)
-cost: HIGH                                               # [OPTIONAL] Relative cost (LOW, MEDIUM, HIGH)
-triggers:                                                # [OPTIONAL] When to use this agent
+category: review # [OPTIONAL] Agent category (review, research, design, docs, workflow)
+cost: HIGH # [OPTIONAL] Relative cost (LOW, MEDIUM, HIGH)
+triggers: # [OPTIONAL] When to use this agent
   - domain: Security auditing
     trigger: When performing security audits on code
-useWhen:                                                 # [OPTIONAL] Recommended use cases (array of strings)
+useWhen: # [OPTIONAL] Recommended use cases (array of strings)
   - Auditing code for security vulnerabilities
   - Performing security reviews before deployment
   - Analyzing third-party dependencies
-avoidWhen:                                               # [OPTIONAL] NOT recommended for (array of strings)
+avoidWhen: # [OPTIONAL] NOT recommended for (array of strings)
   - Quick performance optimizations
   - Rapid prototyping tasks
   - Non-security code reviews
@@ -87,12 +87,14 @@ Your role is to conduct thorough security reviews of code submissions, identifyi
 ## System Prompt
 
 You are an expert security code reviewer with deep knowledge of:
+
 - Common security vulnerabilities (OWASP Top 10)
 - Secure coding practices
 - Threat modeling
 - Risk assessment
 
 When reviewing code:
+
 1. Analyze for injection vulnerabilities (SQL, Command, Template)
 2. Check authentication and authorization logic
 3. Verify cryptographic implementations
@@ -117,25 +119,25 @@ When reviewing code:
 
 ### Required Fields
 
-| Field | Type | Example | Rules |
-|-------|------|---------|-------|
-| `id` | string | `reviewer-security` | Kebab-case, 2-30 chars, unique, alphanumeric + hyphens |
-| `name` | string | `Security Code Reviewer` | Max 100 chars, no trailing whitespace |
-| `purpose` | string | `Review code for security...` | Max 200 chars, one-line description |
-| `models.primary` | string | `claude-opus-4.5` | Valid OpenAI/Anthropic/Google model ID |
+| Field            | Type   | Example                       | Rules                                                  |
+| ---------------- | ------ | ----------------------------- | ------------------------------------------------------ |
+| `id`             | string | `reviewer-security`           | Kebab-case, 2-30 chars, unique, alphanumeric + hyphens |
+| `name`           | string | `Security Code Reviewer`      | Max 100 chars, no trailing whitespace                  |
+| `purpose`        | string | `Review code for security...` | Max 200 chars, one-line description                    |
+| `models.primary` | string | `claude-opus-4.5`             | Valid OpenAI/Anthropic/Google model ID                 |
 
 ### Optional Fields
 
-| Field | Type | Default | Rules |
-|-------|------|---------|-------|
-| `models.fallback` | string | null | Valid alternative model ID |
-| `temperature` | number | 0.1 | Range: 0.0 - 2.0 |
-| `tags` | array | [] | Max 10 tags, kebab-case strings |
-| `category` | string | null | One of: review, research, design, docs, workflow |
-| `cost` | string | MEDIUM | One of: LOW, MEDIUM, HIGH |
-| `triggers` | object | null | Object with `domain` (string) and `trigger` (string) properties |
-| `useWhen` | array | [] | Array of use case strings |
-| `avoidWhen` | array | [] | Array of avoid case strings |
+| Field             | Type   | Default | Rules                                                           |
+| ----------------- | ------ | ------- | --------------------------------------------------------------- |
+| `models.fallback` | string | null    | Valid alternative model ID                                      |
+| `temperature`     | number | 0.1     | Range: 0.0 - 2.0                                                |
+| `tags`            | array  | []      | Max 10 tags, kebab-case strings                                 |
+| `category`        | string | null    | One of: review, research, design, docs, workflow                |
+| `cost`            | string | MEDIUM  | One of: LOW, MEDIUM, HIGH                                       |
+| `triggers`        | object | null    | Object with `domain` (string) and `trigger` (string) properties |
+| `useWhen`         | array  | []      | Array of use case strings                                       |
+| `avoidWhen`       | array  | []      | Array of avoid case strings                                     |
 
 ---
 
@@ -293,6 +295,7 @@ You are an expert security code reviewer...
 5. Validate against schema
 
 **Pseudocode**:
+
 ```
 content = readFile(path)
 parts = content.split('---')
@@ -327,6 +330,7 @@ Agents defined as TypeScript factories in `src/orchestration/agents/*.ts` are mi
 6. Delete original TypeScript file
 
 **Field Mapping**:
+
 ```
 TypeScript AgentPromptMetadata  →  YAML Frontmatter
 ──────────────────────────────────────────────────────
@@ -353,21 +357,21 @@ The `loadMarkdownAgents()` function must return an object compatible with the ex
 
 ```typescript
 interface LoadedAgent {
-  id: string
-  name: string
-  purpose: string
+  id: string;
+  name: string;
+  purpose: string;
   models: {
-    primary: string
-    fallback?: string
-  }
-  temperature: number
-  tags?: string[]
-  category?: string
-  cost?: 'LOW' | 'MEDIUM' | 'HIGH'
-  triggers?: Array<{ domain: string; trigger: string }>
-  useWhen?: string[]
-  avoidWhen?: string[]
-  prompt: string  // Full markdown content (frontmatter + body)
+    primary: string;
+    fallback?: string;
+  };
+  temperature: number;
+  tags?: string[];
+  category?: string;
+  cost?: "LOW" | "MEDIUM" | "HIGH";
+  triggers?: Array<{ domain: string; trigger: string }>;
+  useWhen?: string[];
+  avoidWhen?: string[];
+  prompt: string; // Full markdown content (frontmatter + body)
 }
 ```
 
@@ -401,12 +405,14 @@ src/plugin/agents/
 ### Agent References
 
 Existing code that references agents by ID will continue to work:
+
 - `agents.get('reviewer-security')` ✅ Works (matches markdown agent id)
 - `agents.get('security-sentinel')` ❌ Won't work (old plugin name)
 
 ### Migration Path
 
 For users with custom agents using old plugin agent names:
+
 1. Plugin agents with different names are aliases/duplicates
 2. Preferred: Migrate custom references to kebab-case names
 3. Alternative: Create aliases in config if backwards compatibility critical
@@ -444,6 +450,6 @@ For users with custom agents using old plugin agent names:
 
 ## Document History
 
-| Date | Change | Author |
-|------|--------|--------|
+| Date       | Change                       | Author         |
+| ---------- | ---------------------------- | -------------- |
 | 2026-02-20 | Initial formal specification | OpenCode Agent |

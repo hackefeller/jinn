@@ -8,20 +8,25 @@ Plan: `.opencode/plans/branch-workflow-consolidation-main-only.md`
 ## Execution Summary
 
 ### Phase 1: Local Cleanup ✅
+
 - Deleted local `master` branch (which was created during initial planning)
 
 ### Phase 2-4: File Updates ✅
+
 **Workflows (2 files)**
+
 - .github/workflows/ci.yml: Updated to `branches: [main]`, removed master/dev checks
 - .github/workflows/cla.yml: Updated CLA trigger branch to "main"
 
 **Issue Templates (3 files)**
+
 - .github/ISSUE_TEMPLATE/bug_report.yml
 - .github/ISSUE_TEMPLATE/feature_request.yml
 - .github/ISSUE_TEMPLATE/general.yml
-All updated: `blob/dev/` → `blob/main/`
+  All updated: `blob/dev/` → `blob/main/`
 
 **Documentation (4 files)**
+
 - AGENTS.md: Updated PR target instruction to reference `main`
 - README.md: Updated both installation links to reference `main`
 - docs/getting-started/installation.md: Updated both refs to `main`
@@ -30,6 +35,7 @@ All updated: `blob/dev/` → `blob/main/`
 **Total: 9 files updated**
 
 ### Phase 5: Remote Cleanup ✅
+
 - Deleted remote `dev` branch via `git push origin --delete dev`
 - Deleted local `dev` branch via `git branch -d dev`
 
@@ -37,7 +43,7 @@ All updated: `blob/dev/` → `blob/main/`
 
 ✅ Branches: No dev or master branches remain
 ✅ Workflows: Both CI and CLA target `main` only
-✅ References: Zero dev/master refs found (except external links like ankane/*, ollama/*)
+✅ References: Zero dev/master refs found (except external links like ankane/_, ollama/_)
 ✅ Documentation: All internal refs updated to `main`
 ✅ Git: All changes committed with atomic commits
 
@@ -50,6 +56,7 @@ All updated: `blob/dev/` → `blob/main/`
 ## Final Branch State
 
 Local branches:
+
 - main (active)
 - 042-reorganize-repo-topology
 - 043-agent-consolidation-spec
@@ -58,10 +65,11 @@ Local branches:
 - refactor/repo-topology
 
 Remote branches:
+
 - origin/main (default)
 - origin/043-agent-consolidation-spec
 - origin/backup-before-filter-20260222
-- origin/refactor/* branches
+- origin/refactor/\* branches
 - origin/042-reorganize-repo-topology
 
 ## Next Steps

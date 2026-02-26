@@ -52,9 +52,9 @@ describe("workflows:status hook integration", () => {
     ];
 
     //#when calculating progress
-    const completed = tasks.filter(t => t.status === "completed").length;
-    const inProgress = tasks.filter(t => t.status === "in_progress").length;
-    const pending = tasks.filter(t => t.status === "pending").length;
+    const completed = tasks.filter((t) => t.status === "completed").length;
+    const inProgress = tasks.filter((t) => t.status === "in_progress").length;
+    const pending = tasks.filter((t) => t.status === "pending").length;
     const percentage = (completed / tasks.length) * 100;
 
     //#then metrics should be accurate
@@ -116,7 +116,7 @@ describe("workflows:status hook integration", () => {
     ];
 
     //#when calculating remaining effort
-    const remainingTasks = tasks.filter(t => t.status !== "completed");
+    const remainingTasks = tasks.filter((t) => t.status !== "completed");
     const remainingEffort = remainingTasks.reduce((sum, t) => {
       if (!t.estimatedEffort) return sum;
       const match = t.estimatedEffort.match(/(\d+)([mh])/);
@@ -143,8 +143,8 @@ describe("workflows:status hook integration", () => {
 
     //#when checking current wave
     const currentWave = 2;
-    const tasksInWave = tasksWithWaves.filter(t => t.wave === currentWave);
-    const completedInWave = tasksInWave.filter(t => t.status === "completed").length;
+    const tasksInWave = tasksWithWaves.filter((t) => t.wave === currentWave);
+    const completedInWave = tasksInWave.filter((t) => t.status === "completed").length;
 
     //#then current wave info should be accurate
     expect(tasksInWave.length).toBe(2);
@@ -192,9 +192,9 @@ Pending: ${metrics.pending}
     ];
 
     //#when checking executability
-    const executableTasks = allTasks.filter(t => {
+    const executableTasks = allTasks.filter((t) => {
       if (t.status !== "pending") return false;
-      return t.blockedBy.every(id => completedTasks.has(id));
+      return t.blockedBy.every((id) => completedTasks.has(id));
     });
 
     //#then only tasks with met dependencies should be executable
@@ -211,9 +211,8 @@ Pending: ${metrics.pending}
       completed: 5,
       inProgress: 0,
     };
-    const action1 = allComplete.completed === allComplete.total
-      ? "complete-workflow"
-      : "continue-execution";
+    const action1 =
+      allComplete.completed === allComplete.total ? "complete-workflow" : "continue-execution";
     expect(action1).toBe("complete-workflow");
 
     // Case 2: In progress
@@ -222,9 +221,7 @@ Pending: ${metrics.pending}
       completed: 2,
       inProgress: 2,
     };
-    const action2 = inProgress.inProgress > 0
-      ? "wait-for-completion"
-      : "continue-execution";
+    const action2 = inProgress.inProgress > 0 ? "wait-for-completion" : "continue-execution";
     expect(action2).toBe("wait-for-completion");
 
     // Case 3: Pending only
@@ -233,9 +230,8 @@ Pending: ${metrics.pending}
       completed: 0,
       inProgress: 0,
     };
-    const action3 = allPending.completed === allPending.total
-      ? "complete-workflow"
-      : "continue-execution";
+    const action3 =
+      allPending.completed === allPending.total ? "complete-workflow" : "continue-execution";
     expect(action3).toBe("continue-execution");
   });
 
@@ -245,7 +241,14 @@ Pending: ${metrics.pending}
       plan_id: "plan-123",
       plan_name: "New Plan",
       tasks: [
-        { id: "task-1", subject: "Task", description: "Desc", status: "pending", blocks: [], blockedBy: [] },
+        {
+          id: "task-1",
+          subject: "Task",
+          description: "Desc",
+          status: "pending",
+          blocks: [],
+          blockedBy: [],
+        },
       ],
       created_at: new Date().toISOString(),
       executed_at: undefined,

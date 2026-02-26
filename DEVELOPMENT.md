@@ -7,7 +7,7 @@ Ghostwire uses a **self-contained, location-independent plugin architecture**:
 ### How It Works
 
 1. **Build-time manifest generation** (`script/build-agents-manifest.ts`)
-   - Scans `src/orchestration/agents/` for markdown agent definitions  
+   - Scans `src/orchestration/agents/` for markdown agent definitions
    - Extracts all metadata and prompts
    - Generates `src/execution/features/agents-manifest.ts` with embedded agent data (181KB, 38 agents)
 
@@ -37,6 +37,7 @@ ls -la ~/.config/opencode/plugins/ghostwire.mjs
 ### Local Development Loop
 
 **Terminal 1: Watch mode**
+
 ```bash
 cd ~/Developer/ghostwire
 bun run dev
@@ -44,6 +45,7 @@ bun run dev
 ```
 
 **Terminal 2: Use OpenCode**
+
 ```bash
 # Open any project
 cd ~/your-project
@@ -83,24 +85,26 @@ bun run sync
 
 ## Scripts
 
-| Command | Purpose |
-|---------|---------|
-| `bun run dev` | Watch + rebuild to dist/ (for local testing) |
-| `bun run dev:full` | Full build: plugin + types + schema + CLI |
-| `bun run build` | Build without types/schema/CLI |
-| `bun run sync` | Build + copy dist/index.js to ~/.config/opencode/plugins/ghostwire.mjs |
-| `bun run typecheck` | Type check only |
-| `bun test` | Run all tests (1929 tests) |
+| Command             | Purpose                                                                |
+| ------------------- | ---------------------------------------------------------------------- |
+| `bun run dev`       | Watch + rebuild to dist/ (for local testing)                           |
+| `bun run dev:full`  | Full build: plugin + types + schema + CLI                              |
+| `bun run build`     | Build without types/schema/CLI                                         |
+| `bun run sync`      | Build + copy dist/index.js to ~/.config/opencode/plugins/ghostwire.mjs |
+| `bun run typecheck` | Type check only                                                        |
+| `bun test`          | Run all tests (1929 tests)                                             |
 
 ## How Agents Are Loaded
 
 ### In Development
+
 1. `bun run dev` → generates manifest → builds to `dist/`
 2. OpenCode loads `~/.config/opencode/plugins/ghostwire.mjs`
 3. Plugin imports from `/Users/charlesponti/Developer/ghostwire/dist/index.js`
 4. Bundle includes manifest → agents load from manifest (no filesystem access)
 
 ### In Production (after npm publish)
+
 1. Plugin installed via npm
 2. Agents load from embedded manifest
 3. No filesystem dependencies - works anywhere
@@ -111,11 +115,12 @@ bun run sync
 ✅ **Self-contained** - No runtime filesystem dependencies  
 ✅ **Dev-friendly** - Still syncs with local source during development  
 ✅ **Production-ready** - Can be published to npm  
-✅ **Type-safe** - Full TypeScript support  
+✅ **Type-safe** - Full TypeScript support
 
 ## Troubleshooting
 
 ### Plugin not loading in OpenCode
+
 ```bash
 # Verify wrapper exists
 cat ~/.config/opencode/plugins/ghostwire.mjs
@@ -129,6 +134,7 @@ bun run build && bun run sync
 ```
 
 ### Manifest out of sync
+
 ```bash
 # Regenerate manifest if you add new agents
 bun run script/build-agents-manifest.ts
@@ -136,6 +142,7 @@ bun run dev:full
 ```
 
 ### Type errors
+
 ```bash
 bun run typecheck
 # Fix errors, then rebuild

@@ -135,7 +135,7 @@ export function createPlannerMdOnlyHook(ctx: PluginInput) {
         throw new Error(
           `[${HOOK_NAME}] ${getAgentDisplayName("planner")} can only write/edit .md files inside .ghostwire/ directory. ` +
             `Attempted to modify: ${filePath}. ` +
-            `${getAgentDisplayName("planner")} is a READ-ONLY planner. Use /ghostwire:jack-in-work to execute the plan. ` +
+            `${getAgentDisplayName("planner")} is a READ-ONLY planner. Use /ghostwire:workflows:execute to execute the plan. ` +
             `APOLOGIZE TO THE USER, REMIND OF YOUR PLAN WRITING PROCESSES, TELL USER WHAT YOU WILL GOING TO DO AS THE PROCESS, WRITE THE PLAN`,
         );
       }

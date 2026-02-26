@@ -62,9 +62,7 @@ mock.module("./action-executor", () => ({
 }));
 
 mock.module("../../../integration/shared/tmux", () => {
-  const { isInsideTmux, getCurrentPaneId } = require(
-    "../../../integration/shared/tmux/tmux-utils",
-  );
+  const { isInsideTmux, getCurrentPaneId } = require("../../../integration/shared/tmux/tmux-utils");
   const {
     POLL_INTERVAL_BACKGROUND_MS,
     SESSION_TIMEOUT_MS,

@@ -604,7 +604,14 @@ describe("operator-task", () => {
       const mockClient = {
         app: { agents: async () => ({ data: [] }) },
         config: { get: async () => ({ data: { model: SYSTEM_DEFAULT_MODEL } }) },
-        model: { list: async () => ({ data: [{ provider: "opencode", id: "kimi-k2.5" }, { provider: "anthropic", id: "claude-opus-4-5" }] }) },
+        model: {
+          list: async () => ({
+            data: [
+              { provider: "opencode", id: "kimi-k2.5" },
+              { provider: "anthropic", id: "claude-opus-4-5" },
+            ],
+          }),
+        },
         session: {
           create: async () => ({ data: { id: "test-session" } }),
           prompt: async () => ({ data: {} }),
@@ -657,7 +664,14 @@ describe("operator-task", () => {
         const mockClient = {
           app: { agents: async () => ({ data: [] }) },
           config: { get: async () => ({ data: { model: SYSTEM_DEFAULT_MODEL } }) },
-          model: { list: async () => ({ data: [{ provider: "opencode", id: "kimi-k2.5" }, { provider: "anthropic", id: "claude-opus-4-5" }] }) },
+          model: {
+            list: async () => ({
+              data: [
+                { provider: "opencode", id: "kimi-k2.5" },
+                { provider: "anthropic", id: "claude-opus-4-5" },
+              ],
+            }),
+          },
           session: {
             get: async () => ({ data: { directory: "/project" } }),
             create: async () => ({ data: { id: "ses_sync_default_variant" } }),

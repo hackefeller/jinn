@@ -160,26 +160,26 @@ After`;
   });
 
   describe("isExcludedCommand", () => {
-    it("should exclude ghostwire:ultrawork-loop", () => {
-      // #given ghostwire:ultrawork-loop command
+    it("should exclude ghostwire:work:loop", () => {
+      // #given ghostwire:work:loop command
       // #when checking exclusion
       // #then should be excluded
-      expect(isExcludedCommand("ghostwire:ultrawork-loop")).toBe(true);
+      expect(isExcludedCommand("ghostwire:work:loop")).toBe(true);
     });
 
-    it("should exclude ghostwire:cancel-ultrawork", () => {
-      // #given ghostwire:cancel-ultrawork command
+    it("should exclude ghostwire:work:cancel", () => {
+      // #given ghostwire:work:cancel command
       // #when checking exclusion
       // #then should be excluded
-      expect(isExcludedCommand("ghostwire:cancel-ultrawork")).toBe(true);
+      expect(isExcludedCommand("ghostwire:work:cancel")).toBe(true);
     });
 
     it("should be case-insensitive for exclusion", () => {
       // #given uppercase variants
       // #when checking exclusion
       // #then should still be excluded
-      expect(isExcludedCommand("GHOSTWIRE:ULTRAWORK-LOOP")).toBe(true);
-      expect(isExcludedCommand("GHOSTWIRE:CANCEL-ULTRAWORK")).toBe(true);
+      expect(isExcludedCommand("GHOSTWIRE:WORK:LOOP")).toBe(true);
+      expect(isExcludedCommand("GHOSTWIRE:WORK:CANCEL")).toBe(true);
     });
 
     it("should not exclude regular commands", () => {
@@ -231,7 +231,7 @@ After`;
 
     it("should NOT detect excluded commands (with ghostwire: prefix)", () => {
       // #given excluded command with ghostwire: prefix
-      const text = "/ghostwire:ultrawork-loop do something";
+      const text = "/ghostwire:work:loop do something";
 
       // #when detecting
       const result = detectSlashCommand(text);

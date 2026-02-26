@@ -349,7 +349,12 @@ export function buildUltraworkSection(
   }
 
   if (agents.length > 0) {
-    const ultraworkAgentPriority = ["researcher-codebase", "researcher-data", "plan", "advisor-plan"];
+    const ultraworkAgentPriority = [
+      "researcher-codebase",
+      "researcher-data",
+      "plan",
+      "advisor-plan",
+    ];
     const sortedAgents = [...agents].sort((a, b) => {
       const aIdx = ultraworkAgentPriority.indexOf(a.name);
       const bIdx = ultraworkAgentPriority.indexOf(b.name);
@@ -362,7 +367,10 @@ export function buildUltraworkSection(
     lines.push("**Agents** (for specialized consultation/exploration):");
     for (const agent of sortedAgents) {
       const shortDesc = agent.description.split(".")[0] || agent.description;
-      const suffix = agent.name === "researcher-codebase" || agent.name === "researcher-data" ? " (multiple)" : "";
+      const suffix =
+        agent.name === "researcher-codebase" || agent.name === "researcher-data"
+          ? " (multiple)"
+          : "";
       lines.push(`- \`${agent.name}${suffix}\`: ${shortDesc}`);
     }
   }

@@ -1,6 +1,4 @@
-import {
-  AGENT_RESEARCHER_CODEBASE,
-} from "../../../../orchestration/agents/constants";
+import { AGENT_RESEARCHER_CODEBASE } from "../../../../orchestration/agents/constants";
 
 export const PROJECT_MAP_TEMPLATE = `<command-instruction>
 # /init-deep

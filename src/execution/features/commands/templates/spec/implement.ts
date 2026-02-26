@@ -1,6 +1,6 @@
 /**
  * Template for ghostwire:spec:implement command
- * 
+ *
  * Executes the implementation plan by processing all tasks from tasks.md.
  * Replaces: speckit.implement.md logic
  */
@@ -76,36 +76,44 @@ $PROGRESS_TABLE
 /**
  * Checklist status table generator
  */
-export function generateChecklistStatusTable(checklists: { name: string; total: number; completed: number }[]): string {
-  const rows = checklists.map(c => {
-    const status = c.completed === c.total ? '✓ PASS' : '✗ FAIL';
+export function generateChecklistStatusTable(
+  checklists: { name: string; total: number; completed: number }[],
+): string {
+  const rows = checklists.map((c) => {
+    const status = c.completed === c.total ? "✓ PASS" : "✗ FAIL";
     const incomplete = c.total - c.completed;
     return `| ${c.name} | ${c.total} | ${c.completed} | ${incomplete} | ${status} |`;
   });
 
   return `| Checklist | Total | Completed | Incomplete | Status |
 |-----------|-------|-----------|------------|--------|
-${rows.join('\n')}`;
+${rows.join("\n")}`;
 }
 
 /**
  * Progress table generator
  */
-export function generateProgressTable(tasks: { id: string; description: string; status: 'pending' | 'in-progress' | 'completed' | 'failed' }[]): string {
-  const rows = tasks.map(t => {
+export function generateProgressTable(
+  tasks: {
+    id: string;
+    description: string;
+    status: "pending" | "in-progress" | "completed" | "failed";
+  }[],
+): string {
+  const rows = tasks.map((t) => {
     const statusIcon = {
-      'pending': '○',
-      'in-progress': '~',
-      'completed': '✓',
-      'failed': '✗'
+      pending: "○",
+      "in-progress": "~",
+      completed: "✓",
+      failed: "✗",
     }[t.status];
-    
+
     return `| ${t.id} | ${t.description.substring(0, 50)}... | ${statusIcon} ${t.status} |`;
   });
 
   return `| Task ID | Description | Status |
 |---------|-------------|--------|
-${rows.join('\n')}`;
+${rows.join("\n")}`;
 }
 
 /**
@@ -148,15 +156,15 @@ export const PHASE_EXECUTION_RULES = `
 export function prioritizeTasks(tasks: string[]): { sequential: string[]; parallel: string[] } {
   const sequential: string[] = [];
   const parallel: string[] = [];
-  
+
   for (const task of tasks) {
-    if (task.includes('[P]') || task.includes('[p]')) {
+    if (task.includes("[P]") || task.includes("[p]")) {
       parallel.push(task);
     } else {
       sequential.push(task);
     }
   }
-  
+
   return { sequential, parallel };
 }
 
@@ -164,15 +172,15 @@ export function prioritizeTasks(tasks: string[]): { sequential: string[]; parall
  * Ignore file patterns by technology
  */
 export const IGNORE_PATTERNS: Record<string, string[]> = {
-  node: ['node_modules/', 'dist/', 'build/', '*.log', '.env*', '.DS_Store'],
-  python: ['__pycache__/', '*.pyc', '.venv/', 'venv/', 'dist/', '*.egg-info/', '.DS_Store'],
-  java: ['target/', '*.class', '*.jar', '.gradle/', 'build/', '.DS_Store'],
-  dotnet: ['bin/', 'obj/', '*.user', '*.suo', 'packages/', '.DS_Store'],
-  go: ['*.exe', '*.test', 'vendor/', '*.out', '.DS_Store'],
-  ruby: ['.bundle/', 'log/', 'tmp/', '*.gem', 'vendor/bundle/', '.DS_Store'],
-  php: ['vendor/', '*.log', '*.cache', '*.env', '.DS_Store'],
-  rust: ['target/', 'debug/', 'release/', '*.rs.bk', '.DS_Store'],
-  universal: ['.DS_Store', 'Thumbs.db', '*.tmp', '*.swp', '.vscode/', '.idea/']
+  node: ["node_modules/", "dist/", "build/", "*.log", ".env*", ".DS_Store"],
+  python: ["__pycache__/", "*.pyc", ".venv/", "venv/", "dist/", "*.egg-info/", ".DS_Store"],
+  java: ["target/", "*.class", "*.jar", ".gradle/", "build/", ".DS_Store"],
+  dotnet: ["bin/", "obj/", "*.user", "*.suo", "packages/", ".DS_Store"],
+  go: ["*.exe", "*.test", "vendor/", "*.out", ".DS_Store"],
+  ruby: [".bundle/", "log/", "tmp/", "*.gem", "vendor/bundle/", ".DS_Store"],
+  php: ["vendor/", "*.log", "*.cache", "*.env", ".DS_Store"],
+  rust: ["target/", "debug/", "release/", "*.rs.bk", ".DS_Store"],
+  universal: [".DS_Store", "Thumbs.db", "*.tmp", "*.swp", ".vscode/", ".idea/"],
 };
 
 /**
@@ -180,15 +188,16 @@ export const IGNORE_PATTERNS: Record<string, string[]> = {
  */
 export function detectTechnology(files: string[]): string[] {
   const techs: string[] = [];
-  
-  if (files.some(f => f.includes('package.json'))) techs.push('node');
-  if (files.some(f => f.includes('requirements.txt') || f.includes('setup.py'))) techs.push('python');
-  if (files.some(f => f.includes('pom.xml') || f.includes('build.gradle'))) techs.push('java');
-  if (files.some(f => f.includes('.csproj') || f.includes('.sln'))) techs.push('dotnet');
-  if (files.some(f => f.includes('go.mod'))) techs.push('go');
-  if (files.some(f => f.includes('Gemfile'))) techs.push('ruby');
-  if (files.some(f => f.includes('composer.json'))) techs.push('php');
-  if (files.some(f => f.includes('Cargo.toml'))) techs.push('rust');
-  
-  return techs.length > 0 ? techs : ['universal'];
+
+  if (files.some((f) => f.includes("package.json"))) techs.push("node");
+  if (files.some((f) => f.includes("requirements.txt") || f.includes("setup.py")))
+    techs.push("python");
+  if (files.some((f) => f.includes("pom.xml") || f.includes("build.gradle"))) techs.push("java");
+  if (files.some((f) => f.includes(".csproj") || f.includes(".sln"))) techs.push("dotnet");
+  if (files.some((f) => f.includes("go.mod"))) techs.push("go");
+  if (files.some((f) => f.includes("Gemfile"))) techs.push("ruby");
+  if (files.some((f) => f.includes("composer.json"))) techs.push("php");
+  if (files.some((f) => f.includes("Cargo.toml"))) techs.push("rust");
+
+  return techs.length > 0 ? techs : ["universal"];
 }

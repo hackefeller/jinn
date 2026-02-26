@@ -68,7 +68,10 @@ export interface UltraworkLoopHook {
 
 const DEFAULT_API_TIMEOUT = 3000;
 
-export function createUltraworkLoopHook(ctx: PluginInput, options?: UltraworkLoopOptions): UltraworkLoopHook {
+export function createUltraworkLoopHook(
+  ctx: PluginInput,
+  options?: UltraworkLoopOptions,
+): UltraworkLoopHook {
   const sessions = new Map<string, SessionState>();
   const config = options?.config;
   const stateDir = config?.state_dir;

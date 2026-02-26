@@ -23,7 +23,7 @@ Consolidate ghostwire's dual agent system (49 code-defined TypeScript agents + 2
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 ### Project Principles (from AGENTS.md)
 
@@ -63,12 +63,12 @@ Consolidate ghostwire's dual agent system (49 code-defined TypeScript agents + 2
 
 ### Complexity Justification
 
-| Aspect | Justification |
-|--------|---------------|
+| Aspect              | Justification                                                |
+| ------------------- | ------------------------------------------------------------ |
 | Complexity increase | None - this reduces complexity by consolidating dual systems |
-| Type safety | Maintained via Zod validation of YAML frontmatter |
-| Performance | Loading time < 500ms (same as current file-based loading) |
-| Breaking changes | None - using same agent IDs, maintaining interface |
+| Type safety         | Maintained via Zod validation of YAML frontmatter            |
+| Performance         | Loading time < 500ms (same as current file-based loading)    |
+| Breaking changes    | None - using same agent IDs, maintaining interface           |
 
 ## Project Structure
 
@@ -125,11 +125,11 @@ src/execution/features/claude-code-plugin-loader/
 
 > No violations - this consolidation REDUCES complexity by eliminating dual agent systems
 
-| Aspect | Status | Notes |
-|--------|--------|-------|
-| Dual agent system | RESOLVED | Consolidating 49 code agents + 29 plugin agents into single markdown format |
-| Naming inconsistency | RESOLVED | Using code-defined naming convention (kebab-case: reviewer-security) |
-| Type safety | MAINTAINED | Zod validation for YAML frontmatter |
-| Backwards compatibility | MAINTAINED | Using same agent IDs, preserving agent interface |
-| Performance | IMPROVED | Single loading mechanism instead of dual system |
-| Test coverage | MAINTAINED | All 594 existing tests continue to pass |
+| Aspect                  | Status     | Notes                                                                       |
+| ----------------------- | ---------- | --------------------------------------------------------------------------- |
+| Dual agent system       | RESOLVED   | Consolidating 49 code agents + 29 plugin agents into single markdown format |
+| Naming inconsistency    | RESOLVED   | Using code-defined naming convention (kebab-case: reviewer-security)        |
+| Type safety             | MAINTAINED | Zod validation for YAML frontmatter                                         |
+| Backwards compatibility | MAINTAINED | Using same agent IDs, preserving agent interface                            |
+| Performance             | IMPROVED   | Single loading mechanism instead of dual system                             |
+| Test coverage           | MAINTAINED | All 594 existing tests continue to pass                                     |

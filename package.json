@@ -2,9 +2,25 @@
   "name": "ghostwire",
   "version": "3.1.10",
   "description": "The Best AI Agent Harness - Batteries-Included OpenCode Plugin with Multi-Model Orchestration, Parallel Background Agents, and Crafted LSP/AST Tools",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "type": "module",
+  "keywords": [
+    "agents",
+    "ai",
+    "researcher-data",
+    "llm",
+    "opencode",
+    "plugin",
+    "advisor-plan"
+  ],
+  "homepage": "https://github.com/hackefeller/ghostwire#readme",
+  "bugs": {
+    "url": "https://github.com/hackefeller/ghostwire/issues"
+  },
+  "license": "SUL-1.0",
+  "author": "YeonGyu-Kim",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hackefeller/ghostwire.git"
+  },
   "bin": {
     "ghostwire": "./bin/ghostwire.js"
   },
@@ -13,6 +29,9 @@
     "bin",
     "postinstall.mjs"
   ],
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -39,25 +58,6 @@
     "prepublishOnly": "bun run task.ts build",
     "validate:agent-references": "bun script/validate-agent-references.ts"
   },
-  "keywords": [
-    "opencode",
-    "plugin",
-    "seer-advisor",
-    "archive-researcher",
-    "agents",
-    "ai",
-    "llm"
-  ],
-  "author": "YeonGyu-Kim",
-  "license": "SUL-1.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hackefeller/ghostwire.git"
-  },
-  "bugs": {
-    "url": "https://github.com/hackefeller/ghostwire/issues"
-  },
-  "homepage": "https://github.com/hackefeller/ghostwire#readme",
   "dependencies": {
     "@ast-grep/cli": "^0.40.0",
     "@ast-grep/napi": "^0.40.0",
@@ -80,9 +80,11 @@
     "@types/js-yaml": "^4.0.9",
     "@types/picomatch": "^3.0.2",
     "bun-types": "latest",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "nanospinner": "^1.2.2",
     "oxfmt": "^0.35.0",
     "oxlint": "^1.50.0",
-    "nanospinner": "^1.2.2",
     "typescript": "^5.7.3"
   },
   "optionalDependencies": {

@@ -2,7 +2,7 @@
 /**
  * Ensures the global plugin wrapper exists for local development
  * Creates ~/.config/opencode/plugins/ghostwire.mjs if it doesn't exist
- * 
+ *
  * This allows the dev environment to work without manual setup
  */
 

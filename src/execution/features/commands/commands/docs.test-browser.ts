@@ -39,7 +39,8 @@ Test documentation in actual browser environment for functionality and rendering
 $ARGUMENTS
 </test-context>
 `;
-export const ARGUMENT_HINT = "[--browsers=chrome,firefox,safari] [--test-types=visual,functional,accessibility]";
+export const ARGUMENT_HINT =
+  "[--browsers=chrome,firefox,safari] [--test-types=visual,functional,accessibility]";
 
 export const COMMAND: CommandDefinition = {
   name: NAME,

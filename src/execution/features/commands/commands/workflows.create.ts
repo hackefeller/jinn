@@ -1,7 +1,8 @@
 import type { CommandDefinition } from "../../claude-code-command-loader";
 
 export const NAME = "ghostwire:workflows:create";
-export const DESCRIPTION = "Break down workflow plan into atomic tasks with delegation metadata [Phase: BREAKDOWN]";
+export const DESCRIPTION =
+  "Break down workflow plan into atomic tasks with delegation metadata [Phase: BREAKDOWN]";
 export const TEMPLATE = `<command-instruction>
 # Workflows:Create Command
 

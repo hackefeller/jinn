@@ -1,7 +1,8 @@
 import type { CommandDefinition } from "../../claude-code-command-loader";
 
 export const NAME = "ghostwire:project:map";
-export const DESCRIPTION = "Map project structure and generate hierarchical AGENTS.md knowledge base";
+export const DESCRIPTION =
+  "Map project structure and generate hierarchical AGENTS.md knowledge base";
 export const TEMPLATE = `<command-instruction>
 # /init-deep
 

@@ -9,6 +9,7 @@
 ### I. Library-First Architecture
 
 Every feature starts as a standalone library.
+
 - Libraries must be self-contained and independently testable
 - Clear purpose required - no organizational-only libraries
 - Prefer composition over inheritance
@@ -16,6 +17,7 @@ Every feature starts as a standalone library.
 ### II. CLI Interface
 
 Every library exposes functionality via CLI.
+
 - Text in/out protocol: stdin/args → stdout, errors → stderr
 - Support JSON + human-readable formats
 - Document all commands with examples
@@ -23,6 +25,7 @@ Every library exposes functionality via CLI.
 ### III. Test-First Development (NON-NEGOTIABLE)
 
 TDD is mandatory.
+
 - Tests written → User approved → Tests fail → Then implement
 - Red-Green-Refactor cycle strictly enforced
 - No code without corresponding tests
@@ -30,6 +33,7 @@ TDD is mandatory.
 ### IV. Integration Testing
 
 Focus on integration tests for:
+
 - New library contract tests
 - Contract changes
 - Inter-service communication
@@ -38,6 +42,7 @@ Focus on integration tests for:
 ### V. Observability
 
 Text I/O ensures debuggability.
+
 - Structured logging required
 - Metrics for critical paths
 - Error tracking and alerting

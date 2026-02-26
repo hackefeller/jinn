@@ -11,22 +11,25 @@
 ### Alternatives Considered
 
 **Option A: Keep plugin system as-is**
+
 - Rejected: Maintains dual system, ongoing confusion
 
 **Option B: Reverse migration (builtin → plugin)**
+
 - Rejected: Would require significant refactoring of command loader
 
 **Option C: Hybrid (migrate to builtin)**
+
 - Selected: Aligns with existing pattern, removes namespace, simplifies loading
 
 ## Command Loading Architecture
 
 ### Current State
 
-| Location | Loader | Namespace | Format |
-|----------|--------|-----------|--------|
-| `src/plugin/commands/*.md` | `claude-code-plugin-loader` | `ghostwire:` | Markdown |
-| `src/execution/features/builtin-commands/templates/*.ts` | Direct import | None | TypeScript |
+| Location                                                 | Loader                      | Namespace    | Format     |
+| -------------------------------------------------------- | --------------------------- | ------------ | ---------- |
+| `src/plugin/commands/*.md`                               | `claude-code-plugin-loader` | `ghostwire:` | Markdown   |
+| `src/execution/features/builtin-commands/templates/*.ts` | Direct import               | None         | TypeScript |
 
 ### Migration Impact
 
@@ -38,10 +41,10 @@
 
 ### Current State
 
-| Location | Loader | Format |
-|----------|--------|--------|
-| `src/plugin/skills/*/SKILL.md` | `claude-code-plugin-loader` | Markdown |
-| `src/execution/features/builtin-skills/*/SKILL.md` | Direct import | Markdown |
+| Location                                           | Loader                      | Format   |
+| -------------------------------------------------- | --------------------------- | -------- |
+| `src/plugin/skills/*/SKILL.md`                     | `claude-code-plugin-loader` | Markdown |
+| `src/execution/features/builtin-skills/*/SKILL.md` | Direct import               | Markdown |
 
 ### Migration Impact
 
@@ -58,8 +61,8 @@
 
 ## Risk Assessment
 
-| Risk | Mitigation |
-|------|------------|
-| Breaking command execution | Test each command after migration |
-| Skill loader path changes | Verify loader finds skills at new location |
-| Namespace conflicts | Ensure no name collisions with existing commands |
+| Risk                       | Mitigation                                       |
+| -------------------------- | ------------------------------------------------ |
+| Breaking command execution | Test each command after migration                |
+| Skill loader path changes  | Verify loader finds skills at new location       |
+| Namespace conflicts        | Ensure no name collisions with existing commands |

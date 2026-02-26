@@ -18,7 +18,7 @@ describe("resolveAgentVariant", () => {
     // #given
     const config = {
       agents: {
-        "operator": { variant: "low" },
+        operator: { variant: "low" },
       },
     } as GhostwireConfig;
 
@@ -33,7 +33,7 @@ describe("resolveAgentVariant", () => {
     // #given
     const config = {
       agents: {
-        "operator": { category: "ultrabrain" },
+        operator: { category: "ultrabrain" },
       },
       categories: {
         ultrabrain: { model: "openai/gpt-5.2", variant: "xhigh" },
@@ -53,7 +53,7 @@ describe("applyAgentVariant", () => {
     // #given
     const config = {
       agents: {
-        "operator": { variant: "low" },
+        operator: { variant: "low" },
       },
     } as GhostwireConfig;
     const message: { variant?: string } = {};
@@ -69,7 +69,7 @@ describe("applyAgentVariant", () => {
     // #given
     const config = {
       agents: {
-        "operator": { variant: "low" },
+        operator: { variant: "low" },
       },
     } as GhostwireConfig;
     const message = { variant: "max" };

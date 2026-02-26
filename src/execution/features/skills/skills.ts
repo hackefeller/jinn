@@ -385,8 +385,7 @@ Install: \`bun add -g agent-browser && agent-browser install\`. Run \`agent-brow
 
 const frontendUiUxSkill: Skill = {
   name: "frontend-ui-ux",
-  description:
-    "Designer-turned-developer who crafts stunning UI/UX even without design mockups",
+  description: "Designer-turned-developer who crafts stunning UI/UX even without design mockups",
   template: `# Role: Designer-Turned-Developer
 
 You are a designer who learned to code. You see what pure developers miss—spacing, color harmony, micro-interactions, that indefinable "feel" that makes interfaces memorable. Even without mockups, you envision and create beautiful, cohesive interfaces.
@@ -1792,20 +1791,11 @@ export interface CreateSkillsOptions {
   browserProvider?: BrowserAutomationProvider;
 }
 
-export function createSkills(
-  options: CreateSkillsOptions = {},
-): Skill[] {
+export function createSkills(options: CreateSkillsOptions = {}): Skill[] {
   const { browserProvider = "playwright" } = options;
 
-  const browserSkill =
-    browserProvider === "agent-browser" ? agentBrowserSkill : playwrightSkill;
+  const browserSkill = browserProvider === "agent-browser" ? agentBrowserSkill : playwrightSkill;
   const skills = loadSkillDirectories();
 
-  return [
-    browserSkill,
-    frontendUiUxSkill,
-    gitMasterSkill,
-    devBrowserSkill,
-    ...skills,
-  ];
+  return [browserSkill, frontendUiUxSkill, gitMasterSkill, devBrowserSkill, ...skills];
 }

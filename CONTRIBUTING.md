@@ -31,6 +31,7 @@ Be respectful, inclusive, and constructive. We're all here to make better tools 
 **English is the primary language for all communications in this repository.**
 
 This includes:
+
 - Issues and bug reports
 - Pull requests and code reviews
 - Documentation and comments
@@ -45,6 +46,7 @@ This includes:
 ### Need Help with English?
 
 If English isn't your first language, don't worry! We value your contributions regardless of perfect grammar. You can:
+
 - Use translation tools to help compose messages
 - Ask for help from other community members
 - Focus on clear, simple communication rather than perfect prose
@@ -76,25 +78,24 @@ bun run build
 After making changes, you can test your local build in OpenCode:
 
 1. **Build the project**:
+
    ```bash
    bun run build
    ```
 
 2. **Update your OpenCode config** (`~/.config/opencode/opencode.json` or `opencode.jsonc`):
+
    ```json
    {
-     "plugin": [
-       "file:///absolute/path/to/ghostwire/dist/index.js"
-     ]
+     "plugin": ["file:///absolute/path/to/ghostwire/dist/index.js"]
    }
    ```
-   
+
    For example, if your project is at `/Users/yourname/projects/ghostwire`:
+
    ```json
    {
-     "plugin": [
-       "file:///Users/yourname/projects/ghostwire/dist/index.js"
-     ]
+     "plugin": ["file:///Users/yourname/projects/ghostwire/dist/index.js"]
    }
    ```
 
@@ -128,17 +129,20 @@ ghostwire/
 Ghostwire is an OpenCode plugin with a CLI wrapper providing orchestration (zen-planner/grid-sync), built-in agents, tools, skills, MCP integration, and a partial Claude plugin import layer.
 
 **Primary Entry Points:**
+
 - Plugin entry: `src/index.ts`
 - Config load/merge: `src/plugin-config.ts`
 - Config schema: `src/config/schema.ts`
 - CLI: `src/cli/`
 
 **Config Files (Runtime):**
+
 - Project: `.opencode/ghostwire.json` or `.opencode/ghostwire.jsonc`
 - User: `~/.config/opencode/ghostwire.json` or `~/.config/opencode/ghostwire.jsonc`
 - OpenCode core: `~/.config/opencode/opencode.json`
 
 **Core Runtime Systems:**
+
 - Orchestration: `src/orchestration/hooks/grid-sync/index.ts`
 - Background agents: `src/features/background-agent/manager.ts`
 - Agents: `src/agents/` + registry wiring in `src/index.ts`
@@ -174,17 +178,18 @@ bun run build:schema
 
 ### Code Style & Conventions
 
-| Convention | Rule |
-|------------|------|
-| Package Manager | **Bun only** (`bun run`, `bun build`, `bunx`) |
-| Types | Use `bun-types`, not `@types/node` |
-| Directory Naming | kebab-case (`ast-grep/`, `grid-claude-code-hooks/`) |
-| File Operations | Never use bash commands (mkdir/touch/rm) for file creation in code |
-| Tool Structure | Each tool: `index.ts`, `types.ts`, `constants.ts`, `tools.ts`, `utils.ts` |
-| Hook Pattern | `createXXXHook(input: PluginInput)` function naming |
-| Exports | Barrel pattern (`export * from "./module"` in index.ts) |
+| Convention       | Rule                                                                      |
+| ---------------- | ------------------------------------------------------------------------- |
+| Package Manager  | **Bun only** (`bun run`, `bun build`, `bunx`)                             |
+| Types            | Use `bun-types`, not `@types/node`                                        |
+| Directory Naming | kebab-case (`ast-grep/`, `grid-claude-code-hooks/`)                       |
+| File Operations  | Never use bash commands (mkdir/touch/rm) for file creation in code        |
+| Tool Structure   | Each tool: `index.ts`, `types.ts`, `constants.ts`, `tools.ts`, `utils.ts` |
+| Hook Pattern     | `createXXXHook(input: PluginInput)` function naming                       |
+| Exports          | Barrel pattern (`export * from "./module"` in index.ts)                   |
 
 **Anti-Patterns (Do Not Do)**:
+
 - Using npm/yarn instead of bun
 - Using `@types/node` instead of `bun-types`
 - Suppressing TypeScript errors with `as any`, `@ts-ignore`, `@ts-expect-error`

@@ -62,11 +62,11 @@ rmdir src/plugin/skills
 
 After migration, commands are accessible without namespace:
 
-| Before | After |
-|--------|-------|
+| Before                   | After          |
+| ------------------------ | -------------- |
 | `/ghostwire:plan_review` | `/plan_review` |
-| `/ghostwire:changelog` | `/changelog` |
-| `/ghostwire:triage` | `/triage` |
+| `/ghostwire:changelog`   | `/changelog`   |
+| `/ghostwire:triage`      | `/triage`      |
 
 ## Skills Reference
 

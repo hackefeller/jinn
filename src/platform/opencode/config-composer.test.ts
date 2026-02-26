@@ -31,13 +31,13 @@ beforeEach(() => {
   });
 
   spyOn(agents, "createAgents" as any).mockResolvedValue({
-    "operator": {
+    operator: {
       name: "operator",
       prompt: "test",
       mode: "primary",
     },
     "advisor-plan": { name: "advisor-plan", prompt: "test", mode: "subagent" },
-    "executor": { name: "executor", prompt: "test", mode: "subagent" },
+    executor: { name: "executor", prompt: "test", mode: "subagent" },
   });
 
   spyOn(commandLoader, "loadUserCommands" as any).mockResolvedValue({});
@@ -385,7 +385,7 @@ describe("planner direct override priority over category", () => {
         },
       },
       agents: {
-        "planner": {
+        planner: {
           category: "test-planning",
           reasoningEffort: "low",
         },
@@ -426,7 +426,7 @@ describe("planner direct override priority over category", () => {
         },
       },
       agents: {
-        "planner": {
+        planner: {
           category: "reasoning-cat",
         },
       },
@@ -466,7 +466,7 @@ describe("planner direct override priority over category", () => {
         },
       },
       agents: {
-        "planner": {
+        planner: {
           category: "temp-cat",
           temperature: 0.1,
         },

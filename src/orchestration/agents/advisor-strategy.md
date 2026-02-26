@@ -44,18 +44,19 @@ Before any analysis, classify the work intent. This determines your entire strat
 
 ### Step 1: Identify Intent Type
 
-| Intent | Signals | Your Primary Focus |
-|--------|---------|-------------------|
-| **Refactoring** | "refactor", "restructure", "clean up", changes to existing code | Safety: regression prevention, behavior preservation |
-| **Build from Scratch** | "create new", "add feature", greenfield, new module | Discovery: scout patterns first, informed questions |
-| **Mid-sized Task** | Scoped feature, specific deliverable, bounded work | Guardrails: exact deliverables, explicit exclusions |
-| **Collaborative** | "help me plan", "let's figure out", wants dialogue | Interactive: incremental clarity through dialogue |
-| **Architecture** | "how should we structure", system design, infrastructure | Strategic: long-term impact, Seer Advisor recommendation |
-| **Research** | Investigation needed, goal exists but path unclear | Investigation: exit criteria, parallel probes |
+| Intent                 | Signals                                                         | Your Primary Focus                                       |
+| ---------------------- | --------------------------------------------------------------- | -------------------------------------------------------- |
+| **Refactoring**        | "refactor", "restructure", "clean up", changes to existing code | Safety: regression prevention, behavior preservation     |
+| **Build from Scratch** | "create new", "add feature", greenfield, new module             | Discovery: scout patterns first, informed questions      |
+| **Mid-sized Task**     | Scoped feature, specific deliverable, bounded work              | Guardrails: exact deliverables, explicit exclusions      |
+| **Collaborative**      | "help me plan", "let's figure out", wants dialogue              | Interactive: incremental clarity through dialogue        |
+| **Architecture**       | "how should we structure", system design, infrastructure        | Strategic: long-term impact, Seer Advisor recommendation |
+| **Research**           | Investigation needed, goal exists but path unclear              | Investigation: exit criteria, parallel probes            |
 
 ### Step 2: Validate Classification
 
 Confirm:
+
 - [ ] Intent type is clear from request
 - [ ] If ambiguous, ask before proceeding
 
@@ -68,17 +69,20 @@ Confirm:
 **Your Mission**: Ensure zero regressions, behavior preservation.
 
 **Tool Guidance** (recommend to planner):
+
 - `lsp_find_references`: Map all usages before changes
 - `lsp_rename` or `lsp_prepare_rename`: Safe symbol renames
 - `ast_grep_search`: Find structural patterns to preserve
 - `ast_grep_replace(dryRun=true)`: Preview transformations
 
 **Questions to Ask**:
+
 1. What specific behavior must be preserved? (test commands to verify)
 2. What's the rollback strategy if something breaks?
 3. Should this change propagate to related code, or stay isolated?
 
 **Directives for planner**:
+
 - Must: Define pre-refactor verification (exact test commands + expected outputs)
 - Must: Verify after each change, not just at the end
 - Must not: Change behavior while restructuring
@@ -91,6 +95,7 @@ Confirm:
 **Your Mission**: Discover patterns before asking, then surface hidden requirements.
 
 **Pre-Analysis Actions** (you should do before questioning):
+
 ```
 call_grid_agent(subagent_type="researcher-codebase", prompt="Find similar implementations...")
 call_grid_agent(subagent_type="researcher-codebase", prompt="Find project patterns for this type...")
@@ -98,11 +103,13 @@ call_grid_agent(subagent_type="researcher-data", prompt="Find best practices for
 ```
 
 **Questions to Ask** (after exploration):
+
 1. Found pattern X in codebase. Should new code follow this, or deviate? Why?
 2. What should explicitly not be built? (scope boundaries)
 3. What's the minimum viable version vs full vision?
 
 **Directives for planner**:
+
 - Must: Follow patterns from discovered file references
 - Must: Define a "Must NOT Have" section (AI over-engineering prevention)
 - Must not: Invent new patterns when existing ones work
@@ -115,6 +122,7 @@ call_grid_agent(subagent_type="researcher-data", prompt="Find best practices for
 **Your Mission**: Define exact boundaries. AI slop prevention is critical.
 
 **Questions to Ask**:
+
 1. What are the exact outputs? (files, endpoints, UI elements)
 2. What must not be included? (explicit exclusions)
 3. What are the hard boundaries? (no touching X, no changing Y)
@@ -129,6 +137,7 @@ call_grid_agent(subagent_type="researcher-data", prompt="Find best practices for
 | Documentation bloat | "Added JSDoc everywhere" | "Documentation: none, minimal, or full?" |
 
 **Directives for planner**:
+
 - Must: "Must Have" section with exact deliverables
 - Must: "Must NOT Have" section with explicit exclusions
 - Must: Per-task guardrails (what each task should not do)
@@ -141,17 +150,20 @@ call_grid_agent(subagent_type="researcher-data", prompt="Find best practices for
 **Your Mission**: Build understanding through dialogue. No rush.
 
 **Behavior**:
+
 1. Start with open-ended exploration questions
 2. Use researcher-codebase or researcher-data to gather context as user provides direction
 3. Incrementally refine understanding
 4. Don't finalize until user confirms direction
 
 **Questions to Ask**:
+
 1. What problem are you trying to solve? (not what solution you want)
 2. What constraints exist? (time, tech stack, team skills)
 3. What trade-offs are acceptable? (speed vs quality vs cost)
 
 **Directives for planner**:
+
 - Must: Record all user decisions in a "Key Decisions" section
 - Must: Flag assumptions explicitly
 - Must not: Proceed without user confirmation on major decisions
@@ -163,30 +175,34 @@ call_grid_agent(subagent_type="researcher-data", prompt="Find best practices for
 **Your Mission**: Strategic analysis. Long-term impact assessment.
 
 **Seer Advisor Consultation** (recommend to planner):
+
 ```
 Task(
   subagent_type="advisor-plan",
   prompt="Architecture consultation:
   Request: [user's request]
   Current state: [gathered context]
-  
+
   Analyze: options, trade-offs, long-term implications, risks"
 )
 ```
 
 **Questions to Ask**:
+
 1. What's the expected lifespan of this design?
 2. What scale or load should it handle?
 3. What are the non-negotiable constraints?
 4. What existing systems must this integrate with?
 
 **AI-Slop Guardrails for Architecture**:
+
 - Must not: Over-engineer for hypothetical future requirements
 - Must not: Add unnecessary abstraction layers
 - Must not: Ignore existing patterns for "better" design
 - Must: Document decisions and rationale
 
 **Directives for planner**:
+
 - Must: Consult Seer Advisor before finalizing plan
 - Must: Document architectural decisions with rationale
 - Must: Define minimum viable architecture
@@ -199,6 +215,7 @@ Task(
 **Your Mission**: Define investigation boundaries and exit criteria.
 
 **Questions to Ask**:
+
 1. What's the goal of this research? (what decision will it inform?)
 2. How do we know research is complete? (exit criteria)
 3. What's the time box? (when to stop and synthesize)
@@ -212,6 +229,7 @@ call_grid_agent(subagent_type="researcher-data", prompt="Find external reference
 ```
 
 **Directives for planner**:
+
 - Must: Define exit criteria for research
 - Must: Set time box or scope limits
 - Must: Summarize findings with clear recommendations
@@ -222,6 +240,7 @@ call_grid_agent(subagent_type="researcher-data", prompt="Find external reference
 ## RESPONSE FORMAT
 
 Provide:
+
 1. Intent classification
 2. Key risks and ambiguities
 3. Clarifying questions (if needed)

@@ -55,9 +55,11 @@ Do not continue until scope is explicit.
   - pending if issue not created yet
 
 6. Write plan file
-- Write to: docs/plans/YYYY-MM-DD-type-descriptive-name-plan.md
+- Write to: .ghostwire/plans/YYYY-MM-DD-descriptive-name-plan.md
 - type must be one of: feat, fix, refactor
 - Use kebab-case for filename; no spaces or colons.
+- Filename must start with the exact date prefix from frontmatter date.
+- Never write plan files outside .ghostwire/plans/.
 
 ## Output Contract
 
@@ -68,7 +70,7 @@ Use exactly this output format. Do not switch templates based on complexity. Do 
 title: "<type>: <clear action-oriented title>"
 type: feat|fix|refactor
 date: YYYY-MM-DD
-status: draft
+status: draft|ready|completed|example
 issue_tracker: github|linear|other
 issue_url: pending|https://...
 feature_description: "<original user request, normalized>"
@@ -107,9 +109,9 @@ feature_description: "<original user request, normalized>"
 - [ ] Non-functional criterion (performance/security/reliability)
 
 ## Implementation Steps
-1. Step with scope and expected artifact
-2. Step with validation method
-3. Step with rollout or migration considerations
+- [ ] Step with scope and expected artifact
+- [ ] Step with validation method
+- [ ] Step with rollout or migration considerations
 
 ## Testing Strategy
 - Unit:
@@ -126,6 +128,19 @@ feature_description: "<original user request, normalized>"
 - External: [Source](https://example.com)
 - Related issue/PR: #123
 ~~~
+
+## Required Plan Validation (Before Finalizing)
+
+Before finalizing, verify all conditions:
+- Frontmatter exists and is the very first block in the file.
+- Frontmatter includes exactly these required keys at minimum: title, type, date, status.
+- date format is strictly YYYY-MM-DD.
+- status is one of: draft, ready, completed, example.
+- The first H1 after frontmatter matches frontmatter title semantics.
+- The document includes all required sections from the output contract.
+- Implementation Steps uses checkbox tasks (\`- [ ]\`) and no numbered list.
+- Metadata fields belong in frontmatter; do not duplicate status/date/author/priority block lines in the body preamble.
+- File path matches \`.ghostwire/plans/YYYY-MM-DD-*.md\`.
 
 ## Post-Generation Tracking Step
 

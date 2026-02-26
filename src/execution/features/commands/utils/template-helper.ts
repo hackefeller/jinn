@@ -1,6 +1,6 @@
 /**
  * Template Helper Utilities
- * 
+ *
  * Provides tagged template functions that validate agent/category/skill references
  * against constants.ts at build time, preventing drift between templates and sources of truth.
  */
@@ -69,28 +69,36 @@ function validateTemplate(template: string, fileName: string): void {
   // Validate agent IDs
   for (const agent of subagentTypes) {
     if (!isValidAgentId(agent)) {
-      errors.push(`Invalid subagent_type="${agent}" in ${fileName}. Valid: ${VALID_AGENT_IDS.join(", ")}`);
+      errors.push(
+        `Invalid subagent_type="${agent}" in ${fileName}. Valid: ${VALID_AGENT_IDS.join(", ")}`,
+      );
     }
   }
 
   // Validate categories
   for (const cat of categories) {
     if (!VALID_CATEGORIES.includes(cat as any)) {
-      errors.push(`Invalid category="${cat}" in ${fileName}. Valid: ${VALID_CATEGORIES.join(", ")}`);
+      errors.push(
+        `Invalid category="${cat}" in ${fileName}. Valid: ${VALID_CATEGORIES.join(", ")}`,
+      );
     }
   }
 
   // Validate command names
   for (const cmd of commands) {
     if (!isValidCommandName(cmd)) {
-      errors.push(`Invalid command="${cmd}" in ${fileName}. Valid: ${VALID_COMMAND_NAMES.join(", ")}`);
+      errors.push(
+        `Invalid command="${cmd}" in ${fileName}. Valid: ${VALID_COMMAND_NAMES.join(", ")}`,
+      );
     }
   }
 
   // Validate skill names
   for (const skill of skills) {
     if (!isValidSkillName(skill)) {
-      errors.push(`Invalid skill="${skill}" in ${fileName}. Valid: ${VALID_SKILL_NAMES.join(", ")}`);
+      errors.push(
+        `Invalid skill="${skill}" in ${fileName}. Valid: ${VALID_SKILL_NAMES.join(", ")}`,
+      );
     }
   }
 
@@ -101,17 +109,17 @@ function validateTemplate(template: string, fileName: string): void {
 
 /**
  * Tagged template function for command templates
- * 
+ *
  * Usage:
  * ```typescript
  * import { AGENT_PLANNER } from "../../../orchestration/agents/constants";
  * import { commandTemplate } from "../utils/template-helper";
- * 
+ *
  * export const TEMPLATE = commandTemplate`
  *   Use subagent_type="${AGENT_PLANNER}" for planning
  * `;
  * ```
- * 
+ *
  * This will:
  * 1. Validate all agent/category/skill references at build time
  * 2. Throw descriptive errors if invalid references found
@@ -131,7 +139,7 @@ export function commandTemplate(
   if (process.env.NODE_ENV !== "production") {
     // We can't easily get the file name here, so we just validate the content
     const { subagentTypes, categories, commands, skills } = extractReferences(result);
-    
+
     const errors: string[] = [];
 
     for (const agent of subagentTypes) {

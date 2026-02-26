@@ -20,7 +20,7 @@ Migrate 21 plugin commands from markdown to TypeScript templates and 14 plugin s
 
 ## Constitution Check
 
-*No constitution gates apply to this migration task.*
+_No constitution gates apply to this migration task._
 
 ## Project Structure
 
@@ -144,23 +144,25 @@ specs/044-plugin-to-builtin-migration/
 ## Dependencies
 
 ### Internal
+
 - `src/execution/features/builtin-commands/commands.ts`
 - `src/execution/features/builtin-skills/skills.ts`
 - `src/plugin/commands/` (source)
 - `src/plugin/skills/` (source)
 
 ### External
+
 - Bun (package manager)
 
 ## Timeline Estimate
 
-| Phase | Tasks | Estimated Time |
-|-------|-------|----------------|
-| Commands | 26 files | ~3 hours |
-| Skills | 14 directories | ~2 hours |
-| Registration | 3 files | ~30 min |
-| Testing/Cleanup | Verification | ~30 min |
-| **Total** | 49 items | **~6 hours** |
+| Phase           | Tasks          | Estimated Time |
+| --------------- | -------------- | -------------- |
+| Commands        | 26 files       | ~3 hours       |
+| Skills          | 14 directories | ~2 hours       |
+| Registration    | 3 files        | ~30 min        |
+| Testing/Cleanup | Verification   | ~30 min        |
+| **Total**       | 49 items       | **~6 hours**   |
 
 ## Success Criteria
 

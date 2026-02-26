@@ -1,9 +1,5 @@
 import type { Task } from "./types";
-import {
-  getTasksByWave,
-  getExecutableTasksInWave,
-  canExecuteTask,
-} from "./parallelization";
+import { getTasksByWave, getExecutableTasksInWave, canExecuteTask } from "./parallelization";
 import {
   buildTaskDelegationInstruction,
   validateTaskForDelegation,
@@ -41,11 +37,8 @@ export interface TaskExecutionResult {
 /**
  * Initialize execution state for a workflow
  */
-export function initializeExecutionState(
-  workflowId: string,
-  tasks: Task[]
-): ExecutionState {
-  const maxWave = Math.max(...tasks.map(t => t.wave || 1), 1);
+export function initializeExecutionState(workflowId: string, tasks: Task[]): ExecutionState {
+  const maxWave = Math.max(...tasks.map((t) => t.wave || 1), 1);
 
   return {
     workflowId,
@@ -63,15 +56,8 @@ export function initializeExecutionState(
 /**
  * Get the next set of tasks to execute (current wave, executable, not yet started)
  */
-export function getNextTasksToExecute(
-  tasks: Task[],
-  state: ExecutionState
-): Task[] {
-  return getExecutableTasksInWave(
-    tasks,
-    state.currentWave,
-    state.completedTaskIds
-  );
+export function getNextTasksToExecute(tasks: Task[], state: ExecutionState): Task[] {
+  return getExecutableTasksInWave(tasks, state.currentWave, state.completedTaskIds);
 }
 
 /**
@@ -88,10 +74,7 @@ export function advanceToNextWave(state: ExecutionState): boolean {
 /**
  * Mark a task as completed
  */
-export function markTaskCompleted(
-  taskId: string,
-  state: ExecutionState
-): void {
+export function markTaskCompleted(taskId: string, state: ExecutionState): void {
   state.completedTaskIds.add(taskId);
   state.completedTasks++;
 }
@@ -99,10 +82,7 @@ export function markTaskCompleted(
 /**
  * Mark a task as failed
  */
-export function markTaskFailed(
-  taskId: string,
-  state: ExecutionState
-): void {
+export function markTaskFailed(taskId: string, state: ExecutionState): void {
   state.failedTaskIds.add(taskId);
   state.failedTasks++;
 }
@@ -122,7 +102,7 @@ export function isExecutionComplete(state: ExecutionState): boolean {
  */
 export function shouldHaltExecution(
   state: ExecutionState,
-  failureThreshold: number = 0.5
+  failureThreshold: number = 0.5,
 ): boolean {
   const failureRate = state.failedTasks / state.totalTasks;
   return failureRate >= failureThreshold;
@@ -143,21 +123,13 @@ export interface ExecutionSummary {
 }
 
 export function getExecutionSummary(state: ExecutionState): ExecutionSummary {
-  const pendingTasks =
-    state.totalTasks - state.completedTasks - state.failedTasks;
-  const successRate =
-    state.totalTasks > 0
-      ? (state.completedTasks / state.totalTasks) * 100
-      : 0;
+  const pendingTasks = state.totalTasks - state.completedTasks - state.failedTasks;
+  const successRate = state.totalTasks > 0 ? (state.completedTasks / state.totalTasks) * 100 : 0;
 
-  let status: "in_progress" | "completed" | "halted" | "failed" =
-    "in_progress";
+  let status: "in_progress" | "completed" | "halted" | "failed" = "in_progress";
   if (state.completedTasks === state.totalTasks) {
     status = "completed";
-  } else if (
-    state.failedTasks > 0 &&
-    pendingTasks === 0
-  ) {
+  } else if (state.failedTasks > 0 && pendingTasks === 0) {
     status = "failed";
   } else if (shouldHaltExecution(state)) {
     status = "halted";
@@ -168,10 +140,7 @@ export function getExecutionSummary(state: ExecutionState): ExecutionSummary {
     const ms = state.completedAt.getTime() - state.startedAt.getTime();
     const minutes = Math.floor(ms / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
-    duration =
-      minutes > 0
-        ? `${minutes}m ${seconds}s`
-        : `${seconds}s`;
+    duration = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
   }
 
   return {
@@ -200,11 +169,11 @@ export interface ExecutionPlan {
 export function buildExecutionPlan(
   workflowId: string,
   tasks: Task[],
-  workflowContext?: string
+  workflowContext?: string,
 ): ExecutionPlan {
   const validationErrors: string[] = [];
   const waveTaskMap: Record<number, TaskDelegationResult[]> = {};
-  const maxWave = Math.max(...tasks.map(t => t.wave || 1), 1);
+  const maxWave = Math.max(...tasks.map((t) => t.wave || 1), 1);
 
   // Validate all tasks
   for (const task of tasks) {
@@ -230,8 +199,8 @@ export function buildExecutionPlan(
     const waveTasks = getTasksByWave(tasks);
     if (wave <= waveTasks.length) {
       waveTaskMap[wave] = waveTasks[wave - 1]
-        .map(task => buildTaskDelegationInstruction(task, workflowContext))
-        .filter(instruction => !instruction.error);
+        .map((task) => buildTaskDelegationInstruction(task, workflowContext))
+        .filter((instruction) => !instruction.error);
     }
   }
 
@@ -257,7 +226,7 @@ export function formatExecutionPlan(plan: ExecutionPlan): string {
 
   if (plan.validationErrors.length > 0) {
     lines.push("### ⚠️ Validation Errors");
-    plan.validationErrors.forEach(error => {
+    plan.validationErrors.forEach((error) => {
       lines.push(`- ${error}`);
     });
     lines.push("");
@@ -269,12 +238,9 @@ export function formatExecutionPlan(plan: ExecutionPlan): string {
 
     for (const task of tasks) {
       const categoryStr = task.category || "unspecified";
-      const skillStr =
-        task.skills.length > 0 ? ` [${task.skills.join(", ")}]` : "";
+      const skillStr = task.skills.length > 0 ? ` [${task.skills.join(", ")}]` : "";
       const durationStr = task.estimatedDuration ? ` (${task.estimatedDuration})` : "";
-      lines.push(
-        `- **${task.taskId}**: ${categoryStr}${skillStr}${durationStr}`
-      );
+      lines.push(`- **${task.taskId}**: ${categoryStr}${skillStr}${durationStr}`);
     }
     lines.push("");
   }

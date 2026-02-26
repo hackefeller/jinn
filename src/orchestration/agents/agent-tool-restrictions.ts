@@ -30,7 +30,7 @@ const AGENT_RESTRICTIONS: Record<string, Record<string, boolean>> = {
     read: true,
   },
 
-  "executor": {
+  executor: {
     task: false,
     delegate_task: false,
   },
