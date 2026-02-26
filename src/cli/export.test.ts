@@ -63,6 +63,7 @@ describe("export CLI", () => {
     const outputPath = join(tempDir, ".github", "copilot-instructions.md");
     const scopedPath = join(tempDir, ".github", "instructions", "typescript.instructions.md");
     const hookPath = join(tempDir, ".github", "hooks", "ghostwire-guardrails.json");
+    const hookScriptPath = join(tempDir, ".github", "hooks", "agent-cli-audit.js");
     const manifestPath = join(tempDir, ".ghostwire", "export-manifest.json");
     const agentsDir = join(tempDir, ".github", "agents");
     const promptsDir = join(tempDir, ".github", "prompts");
@@ -72,6 +73,7 @@ describe("export CLI", () => {
     expect(existsSync(outputPath)).toBe(true);
     expect(existsSync(scopedPath)).toBe(true);
     expect(existsSync(hookPath)).toBe(true);
+    expect(existsSync(hookScriptPath)).toBe(true);
     expect(existsSync(manifestPath)).toBe(false);
     expect(countFilesRecursive(agentsDir)).toBe(2);
     expect(countFilesRecursive(promptsDir)).toBeGreaterThan(30);

@@ -23,7 +23,7 @@ ghostwire export --target <copilot|codex|all> [--groups <csv>] [--strict] [--man
 - `.github/prompts/*.prompt.md`
 - `.github/skills/*/SKILL.md`
 - `.github/agents/*.agent.md`
-- `.github/hooks/*.json`
+- `.github/hooks/*`
 
 Current full-parity inventory (from source-of-truth manifests/templates) includes:
 

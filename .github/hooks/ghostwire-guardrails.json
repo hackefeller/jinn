@@ -3,17 +3,17 @@
   "hooks": {
     "sessionStart": [
       {
-        "command": "echo ghostwire-session-start"
+        "command": "node ./bin/agent-cli-audit.js sessionStart"
       }
     ],
     "preToolUse": [
       {
-        "command": "echo ghostwire-pre-tool"
+        "command": "node ./bin/agent-cli-audit.js preToolUse"
       }
     ],
     "postToolUse": [
       {
-        "command": "echo ghostwire-post-tool"
+        "command": "node ./bin/agent-cli-audit.js postToolUse"
       }
     ]
   }

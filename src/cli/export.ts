@@ -185,7 +185,7 @@ function buildCopilotRootInstructions(model: ExportModel): string {
     `- .github/prompts/*.prompt.md`,
     `- .github/skills/*/SKILL.md`,
     `- .github/agents/*.agent.md`,
-    `- .github/hooks/*.json`,
+    `- .github/hooks/*`,
     ``,
   ].join("\n");
 }
@@ -313,6 +313,9 @@ function buildCopilotAgentArtifacts(model: ExportModel): { artifacts: ExportArti
 }
 
 function buildCopilotHookArtifacts(): ExportArtifact[] {
+  const hookScriptPath = new URL("../../bin/agent-cli-audit.js", import.meta.url).pathname;
+  const hookScriptContent = readFileSync(hookScriptPath, "utf-8");
+
   return [
     {
       target: "copilot",
@@ -321,14 +324,19 @@ function buildCopilotHookArtifacts(): ExportArtifact[] {
         {
           version: 1,
           hooks: {
-            sessionStart: [{ command: "echo ghostwire-session-start" }],
-            preToolUse: [{ command: "echo ghostwire-pre-tool" }],
-            postToolUse: [{ command: "echo ghostwire-post-tool" }],
+            sessionStart: [{ command: "node .github/hooks/agent-cli-audit.js sessionStart" }],
+            preToolUse: [{ command: "node .github/hooks/agent-cli-audit.js preToolUse" }],
+            postToolUse: [{ command: "node .github/hooks/agent-cli-audit.js postToolUse" }],
           },
         },
         null,
         2,
       ),
+    },
+    {
+      target: "copilot",
+      path: ".github/hooks/agent-cli-audit.js",
+      content: hookScriptContent,
     },
   ];
 }
