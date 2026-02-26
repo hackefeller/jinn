@@ -25,15 +25,15 @@ Do not continue until scope is explicit.
 
 2. Run mandatory local research
 - Run in parallel:
-  - Task researcher-repo(feature_description)
-  - Task researcher-learnings(feature_description)
+  - Task profile.researcher_repo(feature_description)
+  - Task profile.researcher_learnings(feature_description)
 - Extract file-level evidence with line references where possible.
 - Capture conventions from CLAUDE.md and any relevant project governance docs.
 
 3. Run mandatory external research
 - Run in parallel:
-  - Task researcher-practices(feature_description)
-  - Task researcher-docs(feature_description)
+  - Task profile.researcher_practices(feature_description)
+  - Task profile.researcher_docs(feature_description)
 - Focus on current authoritative sources and implementation caveats.
 - Record at least 2 external references when applicable.
 
