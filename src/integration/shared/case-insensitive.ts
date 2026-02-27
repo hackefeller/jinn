@@ -1,6 +1,6 @@
 /**
  * Case-insensitive lookup and comparison utilities for agent/config names.
- * Used throughout the codebase to allow "Seer Advisor", "advisor-plan", "ORACLE" to work the same.
+ * Used throughout the codebase to allow "Advisor Plan", "advisor-plan", "ORACLE" to work the same.
  */
 
 /**

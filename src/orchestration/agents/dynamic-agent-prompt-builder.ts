@@ -112,7 +112,7 @@ export function buildToolSelectionTable(
 
   rows.push("");
   rows.push(
-    "**Default flow**: researcher-codebase/researcher-data (background) + tools → seerAdvisor (if required)",
+    "**Default flow**: researcher-codebase/researcher-data (background) + tools → advisorPlan (if required)",
   );
 
   return rows.join("\n");
@@ -264,29 +264,29 @@ delegate_task(category="...", load_skills=[], prompt="...")  // Empty load_skill
 }
 
 export function buildAdvisorPlanSection(agents: AvailableAgent[]): string {
-  const seerAgent = agents.find((a) => a.name === "advisor-plan");
-  if (!seerAgent) return "";
+  const advisorAgent = agents.find((a) => a.name === "advisor-plan");
+  if (!advisorAgent) return "";
 
-  const useWhen = seerAgent.metadata.useWhen || [];
-  const avoidWhen = seerAgent.metadata.avoidWhen || [];
+  const useWhen = advisorAgent.metadata.useWhen || [];
+  const avoidWhen = advisorAgent.metadata.avoidWhen || [];
 
   return `<Oracle_Usage>
-## Seer Advisor — Read-Only High-IQ Consultant
+## Advisor Plan — Read-Only High-IQ Consultant
 
-Seer Advisor is a read-only, expensive, high-quality reasoning model for debugging and architecture. Consultation only.
+Advisor Plan is a read-only, expensive, high-quality reasoning model for debugging and architecture. Consultation only.
 
 ### WHEN to Consult:
 
 | Trigger | Action |
 |---------|--------|
-${useWhen.map((w) => `| ${w} | Seer Advisor FIRST, then implement |`).join("\n")}
+${useWhen.map((w) => `| ${w} | Advisor Plan FIRST, then implement |`).join("\n")}
 
 ### WHEN NOT to Consult:
 
 ${avoidWhen.map((w) => `- ${w}`).join("\n")}
 
 ### Usage Pattern:
-Briefly announce "Consulting Seer Advisor for [reason]" before invocation.
+Briefly announce "Consulting Advisor Plan for [reason]" before invocation.
 
 **Exception**: This is the ONLY case where you announce before acting. For all other work, start immediately without status updates.
 </Oracle_Usage>`;

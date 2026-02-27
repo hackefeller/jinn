@@ -110,7 +110,7 @@ After making changes, you can test your local build in OpenCode:
 ```
 ghostwire/
 ├── src/
-│   ├── agents/        # AI agents (OmO, seer-advisor, archive-researcher, scout-recon, etc.)
+│   ├── agents/        # AI agents (OmO, advisor-plan, archive-researcher, scout-recon, etc.)
 │   ├── hooks/         # 21 lifecycle hooks
 │   ├── tools/         # LSP (11), AST-Grep, Grep, Glob, etc.
 │   ├── mcp/           # MCP server integrations (context7, grep_app)

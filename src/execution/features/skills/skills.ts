@@ -1,5 +1,7 @@
 import type { Skill } from "./types";
 import type { BrowserAutomationProvider } from "../../../platform/config/schema";
+import type { SkillMcpConfig } from "../skill-mcp-manager/types";
+import { SKILLS_MANIFEST } from "./skills-manifest";
 import { parseFrontmatter } from "../../../integration/shared/frontmatter";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -10,6 +12,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 interface SkillFrontmatter {
   name: string;
   description: string;
+  allowedTools?: string[];
+  mcpConfig?: SkillMcpConfig;
 }
 
 function loadSkillFromDir(dirName: string): Skill | null {
@@ -32,6 +36,8 @@ function loadSkillFromDir(dirName: string): Skill | null {
       name: skillName,
       description: description,
       template: body.trim(),
+      ...(frontmatter.allowedTools ? { allowedTools: frontmatter.allowedTools } : {}),
+      ...(frontmatter.mcpConfig ? { mcpConfig: frontmatter.mcpConfig } : {}),
     };
   } catch (error) {
     console.error(`Failed to load skill from ${dirName}:`, error);
@@ -40,23 +46,11 @@ function loadSkillFromDir(dirName: string): Skill | null {
 }
 
 function loadSkillDirectories(): Skill[] {
-  const skillDirs = [
-    "andrew-kane-gem-writer",
-    "brainstorming",
-    "coding-tutor",
-    "learnings",
-    "create-agent-skills",
-    "dhh-rails-style",
-    "dspy-ruby",
-    "every-style-editor",
-    "file-todos",
-    "frontend-design",
-    "gemini-imagegen",
-    "git-worktree",
-    "ultrawork-loop",
-    "rclone",
-    "skill-creator",
-  ];
+  const skillDirs = readdirSync(__dirname, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .filter((dirName) => existsSync(join(__dirname, dirName, "SKILL.md")))
+    .sort((left, right) => left.localeCompare(right));
 
   const skills: Skill[] = [];
 
@@ -68,6 +62,10 @@ function loadSkillDirectories(): Skill[] {
   }
 
   return skills;
+}
+
+function loadSkillsFromManifest(): Skill[] {
+  return SKILLS_MANIFEST.slice();
 }
 
 const playwrightSkill: Skill = {
@@ -1794,8 +1792,28 @@ export interface CreateSkillsOptions {
 export function createSkills(options: CreateSkillsOptions = {}): Skill[] {
   const { browserProvider = "playwright" } = options;
 
-  const browserSkill = browserProvider === "agent-browser" ? agentBrowserSkill : playwrightSkill;
-  const skills = loadSkillDirectories();
+  const discoveredSkills = loadSkillDirectories();
+  const sourceSkills = discoveredSkills.length > 0 ? discoveredSkills : loadSkillsFromManifest();
+  const sourceByName = new Map(sourceSkills.map((skill) => [skill.name, skill] as const));
 
-  return [browserSkill, frontendUiUxSkill, gitMasterSkill, devBrowserSkill, ...skills];
+  const browserSkillName = browserProvider === "agent-browser" ? "agent-browser" : "playwright";
+  const browserSkill =
+    sourceByName.get(browserSkillName) ??
+    (browserProvider === "agent-browser" ? agentBrowserSkill : playwrightSkill);
+
+  const frontendSkill = sourceByName.get("frontend-ui-ux") ?? frontendUiUxSkill;
+  const gitSkill = sourceByName.get("git-master") ?? gitMasterSkill;
+  const developerBrowserSkill = sourceByName.get("dev-browser") ?? devBrowserSkill;
+
+  const reservedSkillNames = new Set([
+    "playwright",
+    "agent-browser",
+    "frontend-ui-ux",
+    "git-master",
+    "dev-browser",
+  ]);
+
+  const remainingSkills = sourceSkills.filter((skill) => !reservedSkillNames.has(skill.name));
+
+  return [browserSkill, frontendSkill, gitSkill, developerBrowserSkill, ...remainingSkills];
 }

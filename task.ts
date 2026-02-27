@@ -44,6 +44,8 @@ ${green("clean")}       Remove ${italic("dist")} artifacts
 ${green("sync")}        Build + copy plugin to OpenCode path
 ${green("schema")}      Regenerate JSON schema
 ${green("agents")}      Regenerate agents manifest
+${green("commands")}    Regenerate commands manifest
+${green("skills")}      Regenerate skills manifest
 ${green("binaries")}    Build platform-specific binaries
 ${green("docs")}        Sync documentation
 ${green("topology")}    Check repository topology
@@ -58,6 +60,12 @@ ${green("dev-setup")}   Ensure plugin wrapper + agents manifest
     });
     await run(["bun", "run", "src/script/build-agents-manifest.ts"], {
       spinnerText: "Generating agents manifest",
+    });
+    await run(["bun", "run", "src/script/build-commands-manifest.ts"], {
+      spinnerText: "Generating commands manifest",
+    });
+    await run(["bun", "run", "src/script/build-skills-manifest.ts"], {
+      spinnerText: "Generating skills manifest",
     });
     await run(["bun", "run", "src/script/build-schema.ts"], {
       spinnerText: "Regenerating schema",
@@ -145,6 +153,12 @@ ${green("dev-setup")}   Ensure plugin wrapper + agents manifest
     await run(["bun", "run", "src/script/build-schema.ts"], {
       spinnerText: "Regenerating schema",
     });
+    await run(["bun", "run", "src/script/build-commands-manifest.ts"], {
+      spinnerText: "Regenerating commands manifest",
+    });
+    await run(["bun", "run", "src/script/build-skills-manifest.ts"], {
+      spinnerText: "Regenerating skills manifest",
+    });
     console.log(green("✓ Fast build complete"));
   },
 
@@ -212,6 +226,18 @@ ${green("dev-setup")}   Ensure plugin wrapper + agents manifest
     });
   },
 
+  commands: async () => {
+    await run(["bun", "run", "src/script/build-commands-manifest.ts"], {
+      spinnerText: "Regenerating commands manifest",
+    });
+  },
+
+  skills: async () => {
+    await run(["bun", "run", "src/script/build-skills-manifest.ts"], {
+      spinnerText: "Regenerating skills manifest",
+    });
+  },
+
   binaries: async () => {
     await run(["bun", "run", "src/script/build-binaries.ts"], {
       spinnerText: "Building platform binaries",
@@ -232,6 +258,8 @@ ${green("dev-setup")}   Ensure plugin wrapper + agents manifest
 
   "dev-setup": async () => {
     await tasks["agents"]();
+    await tasks["commands"]();
+    await tasks["skills"]();
     await run(["bun", "run", "src/script/ensure-plugin-wrapper.ts"], {
       spinnerText: "Ensuring plugin wrapper exists",
     });

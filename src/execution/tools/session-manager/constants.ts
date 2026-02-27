@@ -20,7 +20,7 @@ Arguments:
 Example output:
 | Session ID | Messages | First | Last | Agents |
 |------------|----------|-------|------|--------|
-| ses_abc123 | 45 | 2025-12-20 | 2025-12-24 | build, seerAdvisor |
+| ses_abc123 | 45 | 2025-12-20 | 2025-12-24 | build, advisorPlan |
 | ses_def456 | 12 | 2025-12-19 | 2025-12-19 | build |`;
 
 export const SESSION_READ_DESCRIPTION = `Read messages and history from an OpenCode session.
@@ -78,7 +78,7 @@ Session ID: ses_abc123
 Messages: 45
 Date Range: 2025-12-20 10:30:00 to 2025-12-24 15:45:30
 Duration: 4 days, 5 hours
-Agents Used: build, seerAdvisor, researcher-data
+Agents Used: build, advisorPlan, researcher-data
 Has Todos: Yes (12 items, 8 completed)
 Has Transcript: Yes (234 entries)`;
 

@@ -80,13 +80,13 @@ export function injectGitMasterConfig(template: string, config?: GitMasterConfig
 
   sections.push(`### 5.5 Commit Footer & Co-Author`);
   sections.push(``);
-  sections.push(`Add Void Runner attribution to EVERY commit:`);
+  sections.push(`Add ghost attribution to EVERY commit:`);
   sections.push(``);
 
   if (commitFooter) {
     sections.push(`1. **Footer in commit body:**`);
     sections.push("```");
-    sections.push(`Ultraworked with [Void Runner](https://github.com/hackefeller/ghostwire)`);
+    sections.push(`Ultraworked with [ghost](https://github.com/hackefeller/ghostwire)`);
     sections.push("```");
     sections.push(``);
   }
@@ -94,7 +94,7 @@ export function injectGitMasterConfig(template: string, config?: GitMasterConfig
   if (includeCoAuthoredBy) {
     sections.push(`${commitFooter ? "2" : "1"}. **Co-authored-by trailer:**`);
     sections.push("```");
-    sections.push(`Co-authored-by: Void Runner <clio-agent@ghostwire.ai>`);
+    sections.push(`Co-authored-by: ghost <clio-agent@ghostwire.ai>`);
     sections.push("```");
     sections.push(``);
   }
@@ -103,21 +103,21 @@ export function injectGitMasterConfig(template: string, config?: GitMasterConfig
     sections.push(`**Example (both enabled):**`);
     sections.push("```bash");
     sections.push(
-      `git commit -m "{Commit Message}" -m "Ultraworked with [Void Runner](https://github.com/hackefeller/ghostwire)" -m "Co-authored-by: Void Runner <clio-agent@ghostwire.ai>"`,
+      `git commit -m "{Commit Message}" -m "Ultraworked with [ghost](https://github.com/hackefeller/ghostwire)" -m "Co-authored-by: ghost <clio-agent@ghostwire.ai>"`,
     );
     sections.push("```");
   } else if (commitFooter) {
     sections.push(`**Example:**`);
     sections.push("```bash");
     sections.push(
-      `git commit -m "{Commit Message}" -m "Ultraworked with [Void Runner](https://github.com/hackefeller/ghostwire)"`,
+      `git commit -m "{Commit Message}" -m "Ultraworked with [ghost](https://github.com/hackefeller/ghostwire)"`,
     );
     sections.push("```");
   } else if (includeCoAuthoredBy) {
     sections.push(`**Example:**`);
     sections.push("```bash");
     sections.push(
-      `git commit -m "{Commit Message}" -m "Co-authored-by: Void Runner <clio-agent@ghostwire.ai>"`,
+      `git commit -m "{Commit Message}" -m "Co-authored-by: ghost <clio-agent@ghostwire.ai>"`,
     );
     sections.push("```");
   }

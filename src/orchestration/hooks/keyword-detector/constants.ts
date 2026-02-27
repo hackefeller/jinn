@@ -183,7 +183,7 @@ ${ULTRAWORK_PLANNER_SECTION}
 1. **THINK DEEPLY** - What is the user's TRUE intent? What problem are they REALLY trying to solve?
 2. **EXPLORE THOROUGHLY** - Fire researcher-codebase/researcher-data agents to gather ALL relevant context
 3. **CONSULT SPECIALISTS** - For hard/complex tasks, DO NOT struggle alone. Delegate:
-   - **Seer Advisor**: Conventional problems - architecture, debugging, complex logic
+   - **Advisor Plan**: Conventional problems - architecture, debugging, complex logic
    - **Artistry**: Non-conventional problems - different approach needed, unusual constraints
 4. **ASK THE USER** - If ambiguity remains after exploration, ASK. Don't guess.
 
@@ -236,7 +236,7 @@ delegate_task(category="artistry", prompt="...")    // non-conventional: needs d
 **IF YOU ENCOUNTER A BLOCKER:**
 1. **DO NOT** give up
 2. **DO NOT** deliver a compromised version
-3. **DO** consult specialists (seerAdvisor for conventional, artistry for non-conventional)
+- **DO** consult specialists (advisorPlan for conventional, artistry for non-conventional)
 4. **DO** ask the user for guidance
 5. **DO** researcher-codebase alternative approaches
 
@@ -498,7 +498,7 @@ CONTEXT GATHERING (parallel):
 - Direct tools: Grep, AST-grep, LSP for targeted searches
 
 IF COMPLEX - DO NOT STRUGGLE ALONE. Consult specialists:
-- **Seer Advisor**: Conventional problems (architecture, debugging, complex logic)
+- **Advisor Plan**: Conventional problems (architecture, debugging, complex logic)
 - **Artistry**: Non-conventional problems (different approach needed)
 
 SYNTHESIZE findings before proceeding.`,

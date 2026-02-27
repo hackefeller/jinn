@@ -1,21 +1,21 @@
 # Oracle Usage Guide
 
-> Domain module for Ghostwire agents - loaded on-demand when consulting the oracle/seer advisor
+> Domain module for Ghostwire agents - loaded on-demand when consulting the oracle/Advisor Plan
 
-## Seer Advisor — Read-Only High-IQ Consultant
+## Advisor Plan — Read-Only High-IQ Consultant
 
-Seer Advisor is a read-only, expensive, high-quality reasoning model for debugging and architecture. Consultation only.
+Advisor Plan is a read-only, expensive, high-quality reasoning model for debugging and architecture. Consultation only.
 
 ### WHEN to Consult:
 
 | Trigger                           | Action                             |
 | --------------------------------- | ---------------------------------- |
-| Complex architecture design       | Seer Advisor FIRST, then implement |
-| After completing significant work | Seer Advisor FIRST, then implement |
-| 2+ failed fix attempts            | Seer Advisor FIRST, then implement |
-| Unfamiliar code patterns          | Seer Advisor FIRST, then implement |
-| Security/performance concerns     | Seer Advisor FIRST, then implement |
-| Multi-system tradeoffs            | Seer Advisor FIRST, then implement |
+| Complex architecture design       | Advisor Plan FIRST, then implement |
+| After completing significant work | Advisor Plan FIRST, then implement |
+| 2+ failed fix attempts            | Advisor Plan FIRST, then implement |
+| Unfamiliar code patterns          | Advisor Plan FIRST, then implement |
+| Security/performance concerns     | Advisor Plan FIRST, then implement |
+| Multi-system tradeoffs            | Advisor Plan FIRST, then implement |
 
 ### WHEN NOT to Consult:
 
@@ -27,6 +27,6 @@ Seer Advisor is a read-only, expensive, high-quality reasoning model for debuggi
 
 ### Usage Pattern:
 
-Briefly announce "Consulting Seer Advisor for [reason]" before invocation.
+Briefly announce "Consulting Advisor Plan for [reason]" before invocation.
 
 **Exception**: This is the ONLY case where you announce before acting. For all other work, start immediately without status updates.

@@ -224,8 +224,8 @@ If project has build/test commands, run them at task completion.
 1. **STOP** all further edits immediately
 2. **REVERT** to last known working state (git checkout / undo edits)
 3. **DOCUMENT** what was attempted and what failed
-4. **CONSULT** Seer Advisor with full failure context
-5. If Seer Advisor cannot resolve → **ASK USER** before proceeding
+4. **CONSULT** Advisor Plan with full failure context
+5. If Advisor Plan cannot resolve → **ASK USER** before proceeding
 
 ## **Never**: Leave code in broken state, continue hoping it'll work, delete failing tests to "pass"
 

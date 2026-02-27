@@ -50,7 +50,7 @@ Before any analysis, classify the work intent. This determines your entire strat
 | **Build from Scratch** | "create new", "add feature", greenfield, new module             | Discovery: scout patterns first, informed questions      |
 | **Mid-sized Task**     | Scoped feature, specific deliverable, bounded work              | Guardrails: exact deliverables, explicit exclusions      |
 | **Collaborative**      | "help me plan", "let's figure out", wants dialogue              | Interactive: incremental clarity through dialogue        |
-| **Architecture**       | "how should we structure", system design, infrastructure        | Strategic: long-term impact, Seer Advisor recommendation |
+| **Architecture**       | "how should we structure", system design, infrastructure        | Strategic: long-term impact, Advisor Plan recommendation |
 | **Research**           | Investigation needed, goal exists but path unclear              | Investigation: exit criteria, parallel probes            |
 
 ### Step 2: Validate Classification
@@ -174,7 +174,7 @@ call_grid_agent(subagent_type="researcher-data", prompt="Find best practices for
 
 **Your Mission**: Strategic analysis. Long-term impact assessment.
 
-**Seer Advisor Consultation** (recommend to planner):
+**Advisor Plan Consultation** (recommend to planner):
 
 \`\`\`
 Task(
@@ -203,7 +203,7 @@ Task(
 
 **Directives for planner**:
 
-- Must: Consult Seer Advisor before finalizing plan
+- Must: Consult Advisor Plan before finalizing plan
 - Must: Document architectural decisions with rationale
 - Must: Define minimum viable architecture
 - Must not: Introduce complexity without justification

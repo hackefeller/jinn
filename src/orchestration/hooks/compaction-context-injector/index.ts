@@ -49,13 +49,13 @@ When summarizing this session, you MUST include the following sections in your s
 - Anti-patterns identified during the session
 
 ## 7. Agent Verification State (Critical for Reviewers)
-- **Current Agent**: What agent is running (glitchAuditor, seerAdvisor, etc.)
+- **Current Agent**: What agent is running (glitchAuditor, advisorPlan, etc.)
 - **Verification Progress**: Files already verified/validated
 - **Pending Verifications**: Files still needing verification
 - **Previous Rejections**: If reviewer agent, what was rejected and why
 - **Acceptance Status**: Current state of review process
 
-This section is CRITICAL for reviewer agents (glitchAuditor, seerAdvisor) to maintain continuity.
+This section is CRITICAL for reviewer agents (glitchAuditor, advisorPlan) to maintain continuity.
 
 This context is critical for maintaining continuity after compaction.
 `;

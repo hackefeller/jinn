@@ -64,14 +64,10 @@ export function createAutoUpdateCheckerHook(
   const { showStartupToast = true, isOperatorEnabled = false, autoUpdate = true } = options;
 
   const getToastMessage = (isUpdate: boolean, latestVersion?: string): string => {
-    if (isOperatorEnabled) {
-      return isUpdate
-        ? `Void Runner is steering OpenCode.\nv${latestVersion} available. Restart to apply.`
-        : `Void Runner is steering OpenCode.`;
-    }
-    return isUpdate
-      ? `OpenCode is now on Steroids. oMoMoMoMo...\nv${latestVersion} available. Restart OpenCode to apply.`
-      : `OpenCode is now on Steroids. oMoMoMoMo...`;
+    const updateText = isUpdate ? `v${latestVersion} available. Restart to apply.` : "";
+    return isOperatorEnabled
+      ? `ghost is steering OpenCode.\nv${updateText}`
+      : `OpenCode is now on Steroids. ${isUpdate ? `\nv${updateText}` : ""}`;
   };
 
   let hasChecked = false;
@@ -328,7 +324,7 @@ async function showLocalDevToast(
 ): Promise<void> {
   const displayVersion = version ?? "dev";
   const message = isOperatorEnabled
-    ? "Void Runner running in local development mode."
+    ? "ghost running in local development mode."
     : "Running in local development mode. oMoMoMo...";
   await showSpinnerToast(ctx, `${displayVersion} (dev)`, message);
   log(`[grid-auto-update-checker] Local dev toast shown: v${displayVersion}`);

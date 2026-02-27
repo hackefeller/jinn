@@ -49,14 +49,15 @@
     "sync": "bun run task.ts sync",
     "schema": "bun run task.ts schema",
     "agents": "bun run task.ts agents",
+    "commands": "bun run task.ts commands",
+    "skills": "bun run task.ts skills",
     "binaries": "bun run task.ts binaries",
     "docs": "bun run task.ts docs",
     "topology": "bun run task.ts topology",
     "dev-setup": "bun run task.ts dev-setup",
     "help": "bun run task.ts help",
     "postinstall": "node postinstall.mjs",
-    "prepublishOnly": "bun run task.ts build",
-    "validate:agent-references": "bun src/script/validate-agent-references.ts"
+    "prepublishOnly": "bun run task.ts build"
   },
   "dependencies": {
     "@ast-grep/cli": "^0.40.0",

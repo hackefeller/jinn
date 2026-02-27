@@ -9,7 +9,7 @@ Ghostwire uses a **self-contained, location-independent plugin architecture**:
 1. **Build-time manifest generation**
    - Scans `agents` directory for markdown agent definitions
    - Extracts all metadata and prompts
-   - Generates `src/execution/features/agents-manifest.ts` with embedded agent data (181KB, 38 agents)
+   - Generates `src/execution/features/agents-manifest.ts` with embedded agent data.
 
 2. **Smart loading** in `src/orchestration/agents/load-markdown-agents.ts`
    - Primary: Load from embedded manifest (no filesystem needed)
@@ -27,7 +27,6 @@ Ghostwire uses a **self-contained, location-independent plugin architecture**:
 ```bash
 # Build the project and create the global plugin wrapper
 cd ~/Developer/ghostwire
-bun run build
 bun run sync
 
 # Verify the global plugin exists

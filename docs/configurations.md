@@ -1018,9 +1018,9 @@ Configure notification behavior for background task completion.
 | -------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
 | `force_enable` | `false` | Force enable grid-session-notification even if external notification plugins are detected. Default: `false`. |
 
-## Void Runner Tasks & Swarm
+## ghost Tasks & Swarm
 
-Configure Void Runner Tasks and Swarm systems for advanced task management and multi-agent orchestration.
+Configure ghost Tasks and Swarm systems for advanced task management and multi-agent orchestration.
 
 ```json
 {

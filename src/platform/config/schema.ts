@@ -1,5 +1,8 @@
 import { z } from "zod";
 import { AnyMcpNameSchema, McpNameSchema } from "../../integration/mcp/types";
+import { COMMAND_NAME_VALUES } from "../../execution/features/commands/command-name-values";
+import { SKILL_NAME_VALUES } from "../../execution/features/skills/skills-manifest";
+import type { CommandName } from "../../execution/features/commands/command-name-values";
 
 const PermissionValue = z.enum(["ask", "allow", "deny"]);
 
@@ -13,102 +16,20 @@ const AgentPermissionSchema = z.object({
   external_directory: PermissionValue.optional(),
 });
 
-export const AgentNameSchema = z.enum([
-  "do",
-  "research",
-]);
+export const AgentNameSchema = z.enum(["do", "research"]);
 
-export const SkillNameSchema = z.enum([
-  // Built-in skills
-  "playwright",
-  "agent-browser",
-  "frontend-ui-ux",
-  "git-master",
-  // Compound development skills
-  "grid:typescript-expert",
-  "grid:python-expert",
-  "grid:ruby-expert",
-  "grid:go-expert",
-  "grid:rust-expert",
-  "grid:react-expert",
-  "grid:vue-expert",
-  "grid:next-expert",
-  "grid:node-expert",
-  "grid:database-expert",
-  "grid:api-design-expert",
-  "grid:testing-expert",
-  "grid:security-expert",
-  "grid:performance-expert",
-  "grid:refactoring-expert",
-  "grid:documentation-code",
-  "grid:dependency-management",
-  "grid:architecture-design",
-  "grid:code-review",
-  "grid:cli-development",
-  "grid:web-scraping",
-  "grid:integration-expertise",
-  "grid:monorepo-management",
-  "grid:type-system-expert",
-  "grid:algorithm-expert",
-  // Compound design skills
-  "grid:frontend-design",
-  "grid:figma-expertise",
-  "grid:design-system",
-  "grid:accessibility-expert",
-  "grid:responsive-design",
-  "grid:animation-expertise",
-  "grid:color-typography",
-  "grid:interaction-design",
-  "grid:visual-design",
-  "grid:dark-mode-design",
-  "grid:design-documentation",
-  "grid:user-research",
-  "grid:branding-expertise",
-  "grid:icon-design",
-  "grid:illustration-expertise",
-  "grid:css-expertise",
-  "grid:tailwind-mastery",
-  "grid:component-design",
-  // Compound devops skills
-  "grid:docker-expertise",
-  "grid:kubernetes-expert",
-  "grid:ci-cd-expert",
-  "grid:terraform-expertise",
-  "grid:aws-expert",
-  "grid:gcp-expertise",
-  "grid:monitoring-expert",
-  "grid:security-infrastructure",
-  "grid:database-ops",
-  "grid:networking-devops",
-  "grid:scaling-expertise",
-  "grid:disaster-recovery",
-  // Compound documentation skills
-  "grid:api-documentation",
-  "grid:technical-writing",
-  "grid:readme-expertise",
-  "grid:tutorial-creation",
-  "grid:changelog-expertise",
-  "grid:documentation-site",
-  "grid:architecture-documentation",
-  "grid:video-documentation",
-  "grid:contributing-guides",
-  "grid:knowledge-base",
-  // Compound analysis skills
-  "grid:code-analysis",
-  "grid:performance-analysis",
-  "grid:security-analysis",
-  "grid:git-analysis",
-  "grid:dependency-analysis",
-  "grid:data-analysis",
-  "grid:trend-analysis",
-  "grid:cost-analysis",
-]);
+const VALID_SKILL_NAMES_SET = new Set<string>(SKILL_NAME_VALUES);
 
-export const OverridableAgentNameSchema = z.enum([
-  "build",
-  "do",
-  "research",
-]);
+export type SkillName = (typeof SKILL_NAME_VALUES)[number];
+
+export const SkillNameSchema = z.custom<SkillName>(
+  (value) => typeof value === "string" && VALID_SKILL_NAMES_SET.has(value),
+  {
+    message: `Invalid skill name. Expected one of: ${SKILL_NAME_VALUES.join(", ")}`,
+  },
+);
+
+export const OverridableAgentNameSchema = z.enum(["build", "do", "research"]);
 
 export const HookNameSchema = z.enum([
   "todo-continuation-enforcer",
@@ -148,72 +69,14 @@ export const HookNameSchema = z.enum([
   "orchestrator",
 ]);
 
-export const CommandNameSchema = z.enum([
-  // Ghostwire project commands
-  "ghostwire:project:init",
-  "ghostwire:project:map",
-  "ghostwire:project:build",
-  "ghostwire:project:deploy",
-  "ghostwire:project:test",
-  // Work loop commands
-  "ghostwire:work:loop",
-  "ghostwire:work:cancel",
-  "ghostwire:refactor",
-  // Workflow execution commands
-  "ghostwire:workflows:execute",
-  "ghostwire:workflows:stop",
-  // Ghostwire workflows commands
-  "ghostwire:workflows:plan",
-  "ghostwire:workflows:create",
-  "ghostwire:workflows:status",
-  "ghostwire:workflows:complete",
-  // Ghostwire code commands
-  "ghostwire:code:refactor",
-  "ghostwire:code:review",
-  "ghostwire:code:optimize",
-  "ghostwire:code:format",
-  // Ghostwire git commands
-  "ghostwire:git:smart-commit",
-  "ghostwire:git:branch",
-  "ghostwire:git:merge",
-  "ghostwire:git:cleanup",
-  // Ghostwire utility commands
-  "ghostwire:util:clean",
-  "ghostwire:util:backup",
-  "ghostwire:util:restore",
-  "ghostwire:util:doctor",
-  // Ghostwire documentation commands
-  "ghostwire:docs:deploy-docs",
-  "ghostwire:docs:release-docs",
-  "ghostwire:docs:feature-video",
-  "ghostwire:docs:test-browser",
-  "ghostwire:lint:ruby",
-  // Plugin commands (non-workflow)
-  "ghostwire:plan-review",
-  "ghostwire:changelog",
-  "ghostwire:create-agent-skill",
-  "ghostwire:deepen-plan",
-  "ghostwire:generate-command",
-  "ghostwire:heal-skill",
-  "ghostwire:lfg",
-  "ghostwire:quiz-me",
-  "ghostwire:report-bug",
-  "ghostwire:reproduce-bug",
-  "ghostwire:resolve-parallel",
-  "ghostwire:resolve-pr-parallel",
-  "ghostwire:resolve-todo-parallel",
-  "ghostwire:sync-tutorials",
-  "ghostwire:teach-me",
-  "ghostwire:triage",
-  "ghostwire:xcode-test",
-  // Plugin workflow commands
-  "ghostwire:workflows:brainstorm",
-  "ghostwire:workflows:learnings",
-  "ghostwire:workflows:review",
-  "ghostwire:workflows:work",
-  // Project commands
-  "ghostwire:project:constitution",
-]);
+const VALID_COMMAND_NAMES_SET = new Set<string>(COMMAND_NAME_VALUES);
+
+export const CommandNameSchema = z.custom<CommandName>(
+  (value) => typeof value === "string" && VALID_COMMAND_NAMES_SET.has(value),
+  {
+    message: `Invalid command name. Expected one of: ${COMMAND_NAME_VALUES.join(", ")}`,
+  },
+);
 
 export const AgentOverrideConfigSchema = z.object({
   /** @deprecated Use `category` instead. Model is inherited from category defaults. */
@@ -253,11 +116,13 @@ export const AgentOverrideConfigSchema = z.object({
   providerOptions: z.record(z.string(), z.unknown()).optional(),
 });
 
-export const AgentOverridesSchema = z.object({
-  build: AgentOverrideConfigSchema.optional(),
-  do: AgentOverrideConfigSchema.optional(),
-  research: AgentOverrideConfigSchema.optional(),
-}).strict();
+export const AgentOverridesSchema = z
+  .object({
+    build: AgentOverrideConfigSchema.optional(),
+    do: AgentOverrideConfigSchema.optional(),
+    research: AgentOverrideConfigSchema.optional(),
+  })
+  .strict();
 
 export const ClaudeCodeConfigSchema = z.object({
   mcp: z.boolean().optional(),
@@ -458,9 +323,9 @@ export const NotificationConfigSchema = z.object({
 });
 
 export const GitMasterConfigSchema = z.object({
-  /** Add "Ultraworked with Void Runner" footer to commit messages (default: true) */
+  /** Add "Ultraworked with ghost" footer to commit messages (default: true) */
   commit_footer: z.boolean().default(true),
-  /** Add "Co-authored-by: Void Runner" trailer to commit messages (default: true) */
+  /** Add "Co-authored-by: ghost" trailer to commit messages (default: true) */
   include_co_authored_by: z.boolean().default(true),
 });
 
@@ -497,7 +362,7 @@ export const TmuxConfigSchema = z.object({
 });
 
 export const TaskQueueConfigSchema = z.object({
-  /** Enable Void Runner Tasks system (default: false) */
+  /** Enable ghost Tasks system (default: false) */
   enabled: z.boolean().default(false),
   /** Storage path for tasks (default: .ghostwire/tasks) */
   storage_path: z.string().default(".ghostwire/tasks"),
@@ -506,7 +371,7 @@ export const TaskQueueConfigSchema = z.object({
 });
 
 export const AgentSwarmConfigSchema = z.object({
-  /** Enable Void Runner Swarm system (default: false) */
+  /** Enable ghost Swarm system (default: false) */
   enabled: z.boolean().default(false),
   /** Storage path for teams (default: .ghostwire/teams) */
   storage_path: z.string().default(".ghostwire/teams"),
@@ -557,8 +422,7 @@ export type AgentOverrides = z.infer<typeof AgentOverridesSchema>;
 export type BackgroundTaskConfig = z.infer<typeof BackgroundTaskConfigSchema>;
 export type AgentName = z.infer<typeof AgentNameSchema>;
 export type HookName = z.infer<typeof HookNameSchema>;
-export type CommandName = z.infer<typeof CommandNameSchema>;
-export type SkillName = z.infer<typeof SkillNameSchema>;
+export type { CommandName };
 export type OperatorConfig = z.infer<typeof OperatorConfigSchema>;
 export type CommentCheckerConfig = z.infer<typeof CommentCheckerConfigSchema>;
 export type ExperimentalConfig = z.infer<typeof ExperimentalConfigSchema>;

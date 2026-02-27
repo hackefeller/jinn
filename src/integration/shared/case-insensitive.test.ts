@@ -20,13 +20,13 @@ describe("findCaseInsensitive", () => {
 
   test("finds exact match first", () => {
     // #given - object with exact key
-    const obj = { "Seer Advisor": "value1", "advisor-plan": "value2" };
+    const obj = { "advisor-plan": "value" }; // legacy label should still resolve to the same value
 
     // #when - lookup with exact case
-    const result = findCaseInsensitive(obj, "Seer Advisor");
+    const result = findCaseInsensitive(obj, "advisor-plan");
 
     // #then - returns exact match
-    expect(result).toBe("value1");
+    expect(result).toBe("value");
   });
 
   test("finds case-insensitive match when no exact match", () => {

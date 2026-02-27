@@ -183,7 +183,7 @@ describe("resolveMultipleSkillsAsync", () => {
     expect(result.notFound).toEqual([]);
     const gitMasterContent = result.resolved.get("git-master");
     expect(gitMasterContent).not.toContain("Ultraworked with");
-    expect(gitMasterContent).not.toContain("Co-authored-by: Void Runner");
+    expect(gitMasterContent).not.toContain("Co-authored-by: ghost");
   });
 
   it("should inject watermark when enabled (default)", async () => {
@@ -202,8 +202,8 @@ describe("resolveMultipleSkillsAsync", () => {
     // #then: watermark section is injected
     expect(result.resolved.size).toBe(1);
     const gitMasterContent = result.resolved.get("git-master");
-    expect(gitMasterContent).toContain("Ultraworked with [Void Runner]");
-    expect(gitMasterContent).toContain("Co-authored-by: Void Runner");
+    expect(gitMasterContent).toContain("Ultraworked with [ghost]");
+    expect(gitMasterContent).toContain("Co-authored-by: ghost");
   });
 
   it("should inject only footer when co-author is disabled", async () => {
@@ -221,8 +221,8 @@ describe("resolveMultipleSkillsAsync", () => {
 
     // #then: only footer is injected
     const gitMasterContent = result.resolved.get("git-master");
-    expect(gitMasterContent).toContain("Ultraworked with [Void Runner]");
-    expect(gitMasterContent).not.toContain("Co-authored-by: Void Runner");
+    expect(gitMasterContent).toContain("Ultraworked with [ghost]");
+    expect(gitMasterContent).not.toContain("Co-authored-by: ghost");
   });
 
   it("should inject watermark by default when no config provided", async () => {
@@ -235,8 +235,8 @@ describe("resolveMultipleSkillsAsync", () => {
     // #then: watermark is injected (default is ON)
     expect(result.resolved.size).toBe(1);
     const gitMasterContent = result.resolved.get("git-master");
-    expect(gitMasterContent).toContain("Ultraworked with [Void Runner]");
-    expect(gitMasterContent).toContain("Co-authored-by: Void Runner");
+    expect(gitMasterContent).toContain("Ultraworked with [ghost]");
+    expect(gitMasterContent).toContain("Co-authored-by: ghost");
   });
 
   it("should inject only co-author when footer is disabled", async () => {
@@ -254,8 +254,8 @@ describe("resolveMultipleSkillsAsync", () => {
 
     // #then: only co-author is injected
     const gitMasterContent = result.resolved.get("git-master");
-    expect(gitMasterContent).not.toContain("Ultraworked with [Void Runner]");
-    expect(gitMasterContent).toContain("Co-authored-by: Void Runner");
+    expect(gitMasterContent).not.toContain("Ultraworked with [ghost]");
+    expect(gitMasterContent).toContain("Co-authored-by: ghost");
   });
 
   it("should handle empty array", async () => {

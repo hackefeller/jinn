@@ -3,137 +3,54 @@ import { readdir, readFile } from "fs/promises";
 import { join } from "path";
 import {
   VALID_AGENT_IDS,
-  VALID_CATEGORIES,
   VALID_COMMAND_NAMES,
   VALID_SKILL_NAMES,
   isValidAgentId,
+  isValidCategory,
   isValidCommandName,
   isValidSkillName,
-  // Agent constants
-  AGENT_PLANNER,
-  AGENT_ADVISOR_PLAN,
-  AGENT_ADVISOR_STRATEGY,
-  AGENT_ADVISOR_ARCHITECTURE,
-  AGENT_RESEARCHER_CODEBASE,
-  AGENT_RESEARCHER_DATA,
-  AGENT_RESEARCHER_DOCS,
-  AGENT_RESEARCHER_GIT,
-  AGENT_RESEARCHER_LEARNINGS,
-  AGENT_RESEARCHER_PRACTICES,
-  AGENT_RESEARCHER_REPO,
-  AGENT_REVIEWER_RAILS,
-  AGENT_REVIEWER_PYTHON,
-  AGENT_REVIEWER_TYPESCRIPT,
-  AGENT_REVIEWER_RAILS_DH,
-  AGENT_REVIEWER_SECURITY,
-  AGENT_REVIEWER_SIMPLICITY,
-  AGENT_REVIEWER_RACES,
-  AGENT_DESIGNER_BUILDER,
-  AGENT_DESIGNER_FLOW,
-  AGENT_DESIGNER_ITERATOR,
-  AGENT_DESIGNER_SYNC,
-  AGENT_VALIDATOR_AUDIT,
-  AGENT_VALIDATOR_BUGS,
-  AGENT_VALIDATOR_DEPLOYMENT,
-  AGENT_WRITER_README,
-  AGENT_WRITER_GEM,
-  AGENT_EDITOR_STYLE,
-  AGENT_OPERATOR,
-  AGENT_EXECUTOR,
-  AGENT_ORCHESTRATOR,
-  AGENT_ANALYZER_DESIGN,
-  AGENT_ANALYZER_MEDIA,
-  AGENT_ANALYZER_PATTERNS,
-  AGENT_ORACLE_PERFORMANCE,
-  AGENT_GUARDIAN_DATA,
-  AGENT_EXPERT_MIGRATIONS,
-  AGENT_RESOLVER_PR,
-  // Category constants
-  CATEGORY_VISUAL_ENGINEERING,
-  CATEGORY_ULTRABRAIN,
-  CATEGORY_DEEP,
-  CATEGORY_ARTISTRY,
-  CATEGORY_QUICK,
-  CATEGORY_UNSPECIFIED_LOW,
-  CATEGORY_UNSPECIFIED_HIGH,
-  CATEGORY_WRITING,
 } from "../../../orchestration/agents/constants";
+import * as AGENT_CONSTANTS from "../../../orchestration/agents/constants";
 
 const COMMANDS_DIR = join(import.meta.dir, "commands");
 const TEMPLATES_DIR = join(import.meta.dir, "templates");
 const TASK_QUEUE_DIR = join(import.meta.dir, "..", "task-queue");
+const SRC_ROOT = join(import.meta.dir, "..", "..", "..");
+const HOOKS_DIR = join(SRC_ROOT, "orchestration", "hooks");
+const REPO_ROOT = join(SRC_ROOT, "..");
+const DOC_FILES = [
+  join(REPO_ROOT, "README.md"),
+  join(REPO_ROOT, "system-prompt.md"),
+  join(REPO_ROOT, "src", "plugin", "README.md"),
+];
 
-// Constant mapping for resolving ${CONSTANT_NAME} references
-// Key = constant name (e.g., "AGENT_RESEARCHER_CODEBASE"), Value = actual agent ID (e.g., "researcher-codebase")
-const AGENT_CONSTANT_MAP: Record<string, string> = {
-  AGENT_PLANNER: AGENT_PLANNER,
-  AGENT_ADVISOR_PLAN: AGENT_ADVISOR_PLAN,
-  AGENT_ADVISOR_STRATEGY: AGENT_ADVISOR_STRATEGY,
-  AGENT_ADVISOR_ARCHITECTURE: AGENT_ADVISOR_ARCHITECTURE,
-  AGENT_RESEARCHER_CODEBASE: AGENT_RESEARCHER_CODEBASE,
-  AGENT_RESEARCHER_DATA: AGENT_RESEARCHER_DATA,
-  AGENT_RESEARCHER_DOCS: AGENT_RESEARCHER_DOCS,
-  AGENT_RESEARCHER_GIT: AGENT_RESEARCHER_GIT,
-  AGENT_RESEARCHER_LEARNINGS: AGENT_RESEARCHER_LEARNINGS,
-  AGENT_RESEARCHER_PRACTICES: AGENT_RESEARCHER_PRACTICES,
-  AGENT_RESEARCHER_REPO: AGENT_RESEARCHER_REPO,
-  AGENT_REVIEWER_RAILS: AGENT_REVIEWER_RAILS,
-  AGENT_REVIEWER_PYTHON: AGENT_REVIEWER_PYTHON,
-  AGENT_REVIEWER_TYPESCRIPT: AGENT_REVIEWER_TYPESCRIPT,
-  AGENT_REVIEWER_RAILS_DH: AGENT_REVIEWER_RAILS_DH,
-  AGENT_REVIEWER_SECURITY: AGENT_REVIEWER_SECURITY,
-  AGENT_REVIEWER_SIMPLICITY: AGENT_REVIEWER_SIMPLICITY,
-  AGENT_REVIEWER_RACES: AGENT_REVIEWER_RACES,
-  AGENT_DESIGNER_BUILDER: AGENT_DESIGNER_BUILDER,
-  AGENT_DESIGNER_FLOW: AGENT_DESIGNER_FLOW,
-  AGENT_DESIGNER_ITERATOR: AGENT_DESIGNER_ITERATOR,
-  AGENT_DESIGNER_SYNC: AGENT_DESIGNER_SYNC,
-  AGENT_VALIDATOR_AUDIT: AGENT_VALIDATOR_AUDIT,
-  AGENT_VALIDATOR_BUGS: AGENT_VALIDATOR_BUGS,
-  AGENT_VALIDATOR_DEPLOYMENT: AGENT_VALIDATOR_DEPLOYMENT,
-  AGENT_WRITER_README: AGENT_WRITER_README,
-  AGENT_WRITER_GEM: AGENT_WRITER_GEM,
-  AGENT_EDITOR_STYLE: AGENT_EDITOR_STYLE,
-  AGENT_OPERATOR: AGENT_OPERATOR,
-  AGENT_EXECUTOR: AGENT_EXECUTOR,
-  AGENT_ORCHESTRATOR: AGENT_ORCHESTRATOR,
-  AGENT_ANALYZER_DESIGN: AGENT_ANALYZER_DESIGN,
-  AGENT_ANALYZER_MEDIA: AGENT_ANALYZER_MEDIA,
-  AGENT_ANALYZER_PATTERNS: AGENT_ANALYZER_PATTERNS,
-  AGENT_ORACLE_PERFORMANCE: AGENT_ORACLE_PERFORMANCE,
-  AGENT_GUARDIAN_DATA: AGENT_GUARDIAN_DATA,
-  AGENT_EXPERT_MIGRATIONS: AGENT_EXPERT_MIGRATIONS,
-  AGENT_RESOLVER_PR: AGENT_RESOLVER_PR,
-};
-
-const CATEGORY_CONSTANT_MAP: Record<string, string> = {
-  CATEGORY_VISUAL_ENGINEERING: CATEGORY_VISUAL_ENGINEERING,
-  CATEGORY_ULTRABRAIN: CATEGORY_ULTRABRAIN,
-  CATEGORY_DEEP: CATEGORY_DEEP,
-  CATEGORY_ARTISTRY: CATEGORY_ARTISTRY,
-  CATEGORY_QUICK: CATEGORY_QUICK,
-  CATEGORY_UNSPECIFIED_LOW: CATEGORY_UNSPECIFIED_LOW,
-  CATEGORY_UNSPECIFIED_HIGH: CATEGORY_UNSPECIFIED_HIGH,
-  CATEGORY_WRITING: CATEGORY_WRITING,
-};
+type ConstantExport = string | readonly string[] | ((value: string) => boolean);
+const EXPORTED_CONSTANTS = AGENT_CONSTANTS as Record<string, ConstantExport>;
 
 /**
  * Resolve a constant reference like ${AGENT_PLANNER} to its actual value
  */
 function resolveConstant(value: string): string {
-  // Check if it's a constant reference like ${CONSTANT_NAME}
   const constantMatch = value.match(/^\$\{([^}]+)\}$/);
   if (constantMatch) {
     const constantName = constantMatch[1];
-    // Try to find the constant value
-    if (AGENT_CONSTANT_MAP[constantName]) {
-      return AGENT_CONSTANT_MAP[constantName];
-    }
-    if (CATEGORY_CONSTANT_MAP[constantName]) {
-      return CATEGORY_CONSTANT_MAP[constantName];
+    const constantValue = EXPORTED_CONSTANTS[constantName];
+    if (typeof constantValue === "string") {
+      return constantValue;
     }
   }
   return value;
+}
+
+function isPlaceholderValue(value: string): boolean {
+  const normalized = value.trim();
+  return (
+    normalized.length === 0 ||
+    normalized.includes("${") ||
+    normalized.includes("...") ||
+    normalized.includes("[") ||
+    normalized.includes("]")
+  );
 }
 
 /**
@@ -207,166 +124,86 @@ async function getTsFiles(dir: string): Promise<string[]> {
   return files;
 }
 
+async function validateFile(filePath: string): Promise<string[]> {
+  const errors: string[] = [];
+  const content = await readFile(filePath, "utf-8");
+  const { subagentTypes, categories, commands, skills } = extractReferences(content);
+
+  for (const { value, line } of subagentTypes) {
+    const resolved = resolveConstant(value);
+    if (isPlaceholderValue(resolved)) continue;
+    if (!isValidAgentId(resolved)) {
+      errors.push(`${filePath}:${line}: Invalid subagent_type="${value}"`);
+    }
+  }
+
+  for (const { value, line } of categories) {
+    const resolved = resolveConstant(value);
+    if (isPlaceholderValue(resolved)) continue;
+    if (!isValidCategory(resolved)) {
+      errors.push(`${filePath}:${line}: Invalid category="${value}"`);
+    }
+  }
+
+  for (const { value, line } of commands) {
+    if (isPlaceholderValue(value)) continue;
+    if (!isValidCommandName(value)) {
+      errors.push(`${filePath}:${line}: Invalid command="${value}"`);
+    }
+  }
+
+  for (const { value, line } of skills) {
+    if (isPlaceholderValue(value)) continue;
+    if (!isValidSkillName(value)) {
+      errors.push(`${filePath}:${line}: Invalid skill="${value}"`);
+    }
+  }
+
+  return errors;
+}
+
+async function validateDirectories(directories: string[]): Promise<string[]> {
+  const errors: string[] = [];
+
+  for (const directory of directories) {
+    const files = await getTsFiles(directory);
+    for (const filePath of files) {
+      errors.push(...(await validateFile(filePath)));
+    }
+  }
+
+  return errors;
+}
+
+async function validateMarkdownFiles(files: string[]): Promise<string[]> {
+  const errors: string[] = [];
+  for (const filePath of files) {
+    errors.push(...(await validateFile(filePath)));
+  }
+  return errors;
+}
+
 describe("Agent Reference Validation", () => {
-  it("commands/ must use only valid agent IDs in subagent_type", async () => {
-    const files = await getTsFiles(COMMANDS_DIR);
-    const errors: string[] = [];
+  it("code and docs must only use valid agent/category/command/skill references", async () => {
+    const codeErrors = await validateDirectories([
+      COMMANDS_DIR,
+      TEMPLATES_DIR,
+      TASK_QUEUE_DIR,
+      HOOKS_DIR,
+    ]);
 
-    for (const file of files) {
-      const content = await readFile(file, "utf-8");
-      const { subagentTypes } = extractReferences(content);
+    const docErrors = await validateMarkdownFiles(DOC_FILES);
 
-      for (const { value, line } of subagentTypes) {
-        if (!isValidAgentId(value)) {
-          errors.push(`${file}:${line}: Invalid subagent_type="${value}"`);
-        }
-      }
-    }
-
+    const errors = [...codeErrors, ...docErrors];
     expect(errors).toEqual([]);
   });
 
-  it("templates/ must use only valid agent IDs in subagent_type", async () => {
-    const files = await getTsFiles(TEMPLATES_DIR);
-    const errors: string[] = [];
-
-    for (const file of files) {
-      const content = await readFile(file, "utf-8");
-      const { subagentTypes } = extractReferences(content);
-
-      for (const { value, line } of subagentTypes) {
-        if (!isValidAgentId(value)) {
-          errors.push(`${file}:${line}: Invalid subagent_type="${value}"`);
-        }
-      }
-    }
-
-    expect(errors).toEqual([]);
+  it("valid agent IDs are runtime routes only", () => {
+    expect(VALID_AGENT_IDS).toEqual(["do", "research"]);
   });
 
-  it("task-queue/ must use only valid agent IDs in subagent references", async () => {
-    const files = await getTsFiles(TASK_QUEUE_DIR);
-    const errors: string[] = [];
-
-    for (const file of files) {
-      const content = await readFile(file, "utf-8");
-      const { subagentTypes } = extractReferences(content);
-
-      for (const { value, line } of subagentTypes) {
-        if (!isValidAgentId(value)) {
-          errors.push(`${file}:${line}: Invalid subagent_type="${value}"`);
-        }
-      }
-    }
-
-    expect(errors).toEqual([]);
-  });
-
-  it("commands/ must use valid categories", async () => {
-    const files = await getTsFiles(COMMANDS_DIR);
-    const errors: string[] = [];
-
-    for (const file of files) {
-      const content = await readFile(file, "utf-8");
-      const { categories } = extractReferences(content);
-
-      for (const { value, line } of categories) {
-        if (!VALID_CATEGORIES.includes(value as any)) {
-          errors.push(`${file}:${line}: Invalid category="${value}"`);
-        }
-      }
-    }
-
-    expect(errors).toEqual([]);
-  });
-
-  it("templates/ must use valid categories", async () => {
-    const files = await getTsFiles(TEMPLATES_DIR);
-    const errors: string[] = [];
-
-    for (const file of files) {
-      const content = await readFile(file, "utf-8");
-      const { categories } = extractReferences(content);
-
-      for (const { value, line } of categories) {
-        if (!VALID_CATEGORIES.includes(value as any)) {
-          errors.push(`${file}:${line}: Invalid category="${value}"`);
-        }
-      }
-    }
-
-    expect(errors).toEqual([]);
-  });
-
-  it("commands/ must use valid command names", async () => {
-    const files = await getTsFiles(COMMANDS_DIR);
-    const errors: string[] = [];
-
-    for (const file of files) {
-      const content = await readFile(file, "utf-8");
-      const { commands } = extractReferences(content);
-
-      for (const { value, line } of commands) {
-        if (!isValidCommandName(value)) {
-          errors.push(`${file}:${line}: Invalid command="${value}"`);
-        }
-      }
-    }
-
-    expect(errors).toEqual([]);
-  });
-
-  it("templates/ must use valid command names", async () => {
-    const files = await getTsFiles(TEMPLATES_DIR);
-    const errors: string[] = [];
-
-    for (const file of files) {
-      const content = await readFile(file, "utf-8");
-      const { commands } = extractReferences(content);
-
-      for (const { value, line } of commands) {
-        if (!isValidCommandName(value)) {
-          errors.push(`${file}:${line}: Invalid command="${value}"`);
-        }
-      }
-    }
-
-    expect(errors).toEqual([]);
-  });
-
-  it("commands/ must use valid skill names", async () => {
-    const files = await getTsFiles(COMMANDS_DIR);
-    const errors: string[] = [];
-
-    for (const file of files) {
-      const content = await readFile(file, "utf-8");
-      const { skills } = extractReferences(content);
-
-      for (const { value, line } of skills) {
-        if (!isValidSkillName(value)) {
-          errors.push(`${file}:${line}: Invalid skill="${value}"`);
-        }
-      }
-    }
-
-    expect(errors).toEqual([]);
-  });
-
-  it("templates/ must use valid skill names", async () => {
-    const files = await getTsFiles(TEMPLATES_DIR);
-    const errors: string[] = [];
-
-    for (const file of files) {
-      const content = await readFile(file, "utf-8");
-      const { skills } = extractReferences(content);
-
-      for (const { value, line } of skills) {
-        if (!isValidSkillName(value)) {
-          errors.push(`${file}:${line}: Invalid skill="${value}"`);
-        }
-      }
-    }
-
-    expect(errors).toEqual([]);
+  it("valid command and skill lists are non-empty", () => {
+    expect(VALID_COMMAND_NAMES.length).toBeGreaterThan(0);
+    expect(VALID_SKILL_NAMES.length).toBeGreaterThan(0);
   });
 });

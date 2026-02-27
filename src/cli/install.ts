@@ -40,7 +40,7 @@ function formatConfigSummary(config: InstallConfig): string {
   lines.push(color.bold(color.white("Configuration Summary")));
   lines.push("");
 
-  lines.push(formatProvider("OpenAI/ChatGPT", config.hasOpenAI, "GPT-5.2 for Seer Advisor"));
+  lines.push(formatProvider("OpenAI/ChatGPT", config.hasOpenAI, "GPT-5.2 for Advisor Plan"));
   lines.push(formatProvider("Gemini", config.hasGemini));
   lines.push(formatProvider("GitHub Copilot", config.hasCopilot, "fallback"));
   lines.push(formatProvider("OpenCode Zen", config.hasOpencodeZen, "opencode/ models"));
@@ -194,12 +194,12 @@ async function runTuiMode(detected: DetectedConfig): Promise<InstallConfig | nul
       {
         value: "no" as const,
         label: "No",
-        hint: "Seer Advisor will use fallback models",
+        hint: "Advisor Plan will use fallback models",
       },
       {
         value: "yes" as const,
         label: "Yes",
-        hint: "GPT-5.2 for Seer Advisor (high-IQ debugging)",
+        hint: "GPT-5.2 for Advisor Plan (high-IQ debugging)",
       },
     ],
     initialValue: initial.openai,

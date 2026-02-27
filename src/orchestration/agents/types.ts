@@ -4,7 +4,7 @@ export type AgentConfig = SDKAgentConfig;
 /**
  * Agent mode determines UI model selection behavior:
  * - "primary": Respects user's UI-selected model (cipherOperator, nexusOrchestrator)
- * - "subagent": Uses own fallback chain, ignores UI selection (seerAdvisor, researcher-codebase, etc.)
+ * - "subagent": Uses own fallback chain, ignores UI selection (advisorPlan, researcher-codebase, etc.)
  * - "all": Available in both contexts (OpenCode compatibility)
  */
 export type AgentMode = "primary" | "subagent" | "all";
@@ -66,10 +66,10 @@ export interface AgentPromptMetadata {
   /** When NOT to use this agent */
   avoidWhen?: string[];
 
-  /** Optional dedicated prompt section (markdown) - for agents like Seer Advisor that have special sections */
+  /** Optional dedicated prompt section (markdown) - for agents like Advisor Plan that have special sections */
   dedicatedSection?: string;
 
-  /** Nickname/alias used in prompt (e.g., "Seer Advisor" instead of "advisor-plan") */
+  /** Nickname/alias used in prompt (e.g., "Advisor Plan" instead of "advisor-plan") */
   promptAlias?: string;
 
   /** Key triggers that should appear in Phase 0 (e.g., "External library mentioned → fire researcher-data") */
