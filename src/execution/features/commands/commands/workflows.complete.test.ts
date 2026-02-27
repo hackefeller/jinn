@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { COMMAND_DEFINITIONS } from "./commands";
+import { COMMAND_DEFINITIONS } from "../../commands";
 
 describe("workflows:complete learnings enforcement", () => {
   test("requires running workflows:learnings during completion", () => {
