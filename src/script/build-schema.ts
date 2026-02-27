@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import * as z from "zod";
-import { GhostwireConfigSchema } from "../src/platform/config/schema";
+import { GhostwireConfigSchema } from "../platform/config/schema";
 
 const SCHEMA_OUTPUT_PATH = "assets/ghostwire.schema.json";
 

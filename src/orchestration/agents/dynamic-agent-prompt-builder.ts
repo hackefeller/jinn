@@ -112,7 +112,7 @@ export function buildToolSelectionTable(
 
   rows.push("");
   rows.push(
-    "**Default flow**: scoutRecon/archiveResearcher (background) + tools → seerAdvisor (if required)",
+    "**Default flow**: researcher-codebase/researcher-data (background) + tools → seerAdvisor (if required)",
   );
 
   return rows.join("\n");
@@ -154,7 +154,7 @@ Search **external references** (docs, OSS, web). Fire proactively when unfamilia
 | | Library best practices & quirks |
 | | OSS implementation examples |
 
-**Trigger phrases** (fire archiveResearcher immediately):
+**Trigger phrases** (fire researcher-data immediately):
 ${useWhen.map((w) => `- "${w}"`).join("\n")}`;
 }
 

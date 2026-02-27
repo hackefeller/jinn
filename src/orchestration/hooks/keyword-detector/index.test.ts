@@ -509,7 +509,7 @@ Commands executed:
 - grep: located file
 - scan: completed
 
-Please scoutRecon the codebase and discover patterns.
+Please researcher-codebase the codebase and discover patterns.
 </system-reminder>`,
         },
       ],

@@ -6,7 +6,7 @@
  * against constants.ts. Exits with error if invalid references found.
  *
  * Usage:
- *   bun script/validate-agent-references.ts
+ *   bun src/script/validate-agent-references.ts
  *   bun run validate:agent-references
  */
 
@@ -68,13 +68,13 @@ import {
   CATEGORY_UNSPECIFIED_LOW,
   CATEGORY_UNSPECIFIED_HIGH,
   CATEGORY_WRITING,
-} from "../src/orchestration/agents/constants";
+} from "../orchestration/agents/constants";
 
 const PROJECT_ROOT = join(import.meta.dir, "..");
-const COMMANDS_DIR = join(PROJECT_ROOT, "src/execution/features/commands/commands");
-const TEMPLATES_DIR = join(PROJECT_ROOT, "src/execution/features/commands/templates");
-const TASK_QUEUE_DIR = join(PROJECT_ROOT, "src/execution/features/task-queue");
-const HOOKS_DIR = join(PROJECT_ROOT, "src/orchestration/hooks");
+const COMMANDS_DIR = join(PROJECT_ROOT, "execution/features/commands/commands");
+const TEMPLATES_DIR = join(PROJECT_ROOT, "execution/features/commands/templates");
+const TASK_QUEUE_DIR = join(PROJECT_ROOT, "execution/features/task-queue");
+const HOOKS_DIR = join(PROJECT_ROOT, "orchestration/hooks");
 const DOC_FILES = [
   join(PROJECT_ROOT, "README.md"),
   join(PROJECT_ROOT, "system-prompt.md"),

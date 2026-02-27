@@ -53,13 +53,13 @@ ${green("dev-setup")}   Ensure plugin wrapper + agents manifest
   },
 
   build: async () => {
-    await run(["bun", "run", "script/ensure-plugin-wrapper.ts"], {
+    await run(["bun", "run", "src/script/ensure-plugin-wrapper.ts"], {
       spinnerText: "Ensuring plugin wrapper",
     });
-    await run(["bun", "run", "script/build-agents-manifest.ts"], {
+    await run(["bun", "run", "src/script/build-agents-manifest.ts"], {
       spinnerText: "Generating agents manifest",
     });
-    await run(["bun", "run", "script/build-schema.ts"], {
+    await run(["bun", "run", "src/script/build-schema.ts"], {
       spinnerText: "Regenerating schema",
     });
     await run(
@@ -97,7 +97,7 @@ ${green("dev-setup")}   Ensure plugin wrapper + agents manifest
       ],
       { spinnerText: "Building CLI" },
     );
-    await run(["bun", "run", "script/copy-skills.ts"], {
+    await run(["bun", "run", "src/script/copy-skills.ts"], {
       spinnerText: "Copying skills",
     });
     console.log(green("✓ Build complete"));
@@ -139,10 +139,10 @@ ${green("dev-setup")}   Ensure plugin wrapper + agents manifest
       ],
       { spinnerText: "Building CLI" },
     );
-    await run(["bun", "run", "script/copy-skills.ts"], {
+    await run(["bun", "run", "src/script/copy-skills.ts"], {
       spinnerText: "Copying skills",
     });
-    await run(["bun", "run", "script/build-schema.ts"], {
+    await run(["bun", "run", "src/script/build-schema.ts"], {
       spinnerText: "Regenerating schema",
     });
     console.log(green("✓ Fast build complete"));
@@ -190,7 +190,7 @@ ${green("dev-setup")}   Ensure plugin wrapper + agents manifest
 
   sync: async () => {
     await tasks["build"]();
-    await run(["bun", "run", "script/sync-ghostwire-config.ts"], {
+    await run(["bun", "run", "src/script/sync-ghostwire-config.ts"], {
       spinnerText: "Syncing ghostwire config",
     });
     await run(
@@ -201,38 +201,38 @@ ${green("dev-setup")}   Ensure plugin wrapper + agents manifest
   },
 
   schema: async () => {
-    await run(["bun", "run", "script/build-schema.ts"], {
+    await run(["bun", "run", "src/script/build-schema.ts"], {
       spinnerText: "Regenerating schema",
     });
   },
 
   agents: async () => {
-    await run(["bun", "run", "script/build-agents-manifest.ts"], {
+    await run(["bun", "run", "src/script/build-agents-manifest.ts"], {
       spinnerText: "Regenerating agents manifest",
     });
   },
 
   binaries: async () => {
-    await run(["bun", "run", "script/build-binaries.ts"], {
+    await run(["bun", "run", "src/script/build-binaries.ts"], {
       spinnerText: "Building platform binaries",
     });
   },
 
   docs: async () => {
-    await run(["bun", "run", "script/sync-docs.ts"], {
+    await run(["bun", "run", "src/script/sync-docs.ts"], {
       spinnerText: "Syncing docs",
     });
   },
 
   topology: async () => {
-    await run(["bun", "run", "script/check-topology.ts"], {
+    await run(["bun", "run", "src/script/check-topology.ts"], {
       spinnerText: "Checking topology",
     });
   },
 
   "dev-setup": async () => {
     await tasks["agents"]();
-    await run(["bun", "run", "script/ensure-plugin-wrapper.ts"], {
+    await run(["bun", "run", "src/script/ensure-plugin-wrapper.ts"], {
       spinnerText: "Ensuring plugin wrapper exists",
     });
     console.log(green("✓ Development setup ready"));

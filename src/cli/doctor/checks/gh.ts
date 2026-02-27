@@ -130,7 +130,7 @@ export async function checkGhCli(): Promise<CheckResult> {
       status: "warn",
       message: "Not installed (optional)",
       details: [
-        "GitHub CLI is used by archiveResearcher agent and scripts",
+        "GitHub CLI is used by researcher-data agent and scripts",
         "Install: https://cli.github.com/",
       ],
     };

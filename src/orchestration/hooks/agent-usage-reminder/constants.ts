@@ -4,7 +4,7 @@ import { getOpenCodeStorageDir } from "../../../integration/shared/data-path";
 export const OPENCODE_STORAGE = getOpenCodeStorageDir();
 export const AGENT_USAGE_REMINDER_STORAGE = join(OPENCODE_STORAGE, "grid-agent-usage-reminder");
 
-// All tool names normalized to lowercase for case-insensitive matching
+// Use lowercase for case-insensitive matching
 export const TARGET_TOOLS = new Set([
   "grep",
   "safe_grep",
@@ -25,7 +25,7 @@ export const REMINDER_MESSAGE = `
 
 You called a search/fetch tool directly without leveraging specialized agents.
 
-RECOMMENDED: Use delegate_task with scoutRecon/archiveResearcher agents for better results:
+RECOMMENDED: Use delegate_task with researcher-codebase/researcher-data agents for better results:
 
 \`\`\`
 // Parallel exploration - fire multiple agents simultaneously

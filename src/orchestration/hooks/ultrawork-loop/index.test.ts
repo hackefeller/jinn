@@ -233,7 +233,7 @@ describe("ultrawork-loop", () => {
       // #then - continuation should be injected
       expect(promptCalls.length).toBe(1);
       expect(promptCalls[0].sessionID).toBe("session-123");
-      expect(promptCalls[0].text).toContain("RALPH LOOP");
+      expect(promptCalls[0].text).toContain("ULTRAWORK LOOP");
       expect(promptCalls[0].text).toContain("Build a feature");
       expect(promptCalls[0].text).toContain("2/10");
 

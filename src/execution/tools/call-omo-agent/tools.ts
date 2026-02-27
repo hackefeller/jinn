@@ -53,7 +53,7 @@ export function createCallOmoAgent(
       subagent_type: tool.schema
         .string()
         .describe(
-          "The type of specialized agent to use for this task (scoutRecon or archiveResearcher only)",
+          "The type of specialized agent to use for this task (researcher-codebase or researcher-data only)",
         ),
       run_in_background: tool.schema
         .boolean()

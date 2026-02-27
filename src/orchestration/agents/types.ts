@@ -4,7 +4,7 @@ export type AgentConfig = SDKAgentConfig;
 /**
  * Agent mode determines UI model selection behavior:
  * - "primary": Respects user's UI-selected model (cipherOperator, nexusOrchestrator)
- * - "subagent": Uses own fallback chain, ignores UI selection (seerAdvisor, scoutRecon, etc.)
+ * - "subagent": Uses own fallback chain, ignores UI selection (seerAdvisor, researcher-codebase, etc.)
  * - "all": Available in both contexts (OpenCode compatibility)
  */
 export type AgentMode = "primary" | "subagent" | "all";

@@ -1,5 +1,5 @@
-import { detectCurrentConfig, writeOmoConfig } from "../src/cli/config-manager";
-import type { InstallConfig } from "../src/cli/types";
+import { detectCurrentConfig, writeOmoConfig } from "../cli/config-manager";
+import type { InstallConfig } from "../cli/types";
 
 function buildInstallConfigFromDetected(): InstallConfig {
   const detected = detectCurrentConfig();

@@ -1,6 +1,6 @@
 export const ALLOWED_AGENTS = ["researcher-codebase", "researcher-data"] as const;
 
-export const CALL_OMO_AGENT_DESCRIPTION = `Spawn scoutRecon/archiveResearcher agent. run_in_background REQUIRED (true=async with task_id, false=sync).
+export const CALL_OMO_AGENT_DESCRIPTION = `Spawn researcher-codebase/researcher-data agent. run_in_background REQUIRED (true=async with task_id, false=sync).
 
 Available: {agents}
 

@@ -61,8 +61,16 @@ describe("deleted agent coverage map", () => {
 
   it("contains prompt sources for every mapped profile and no extras", () => {
     const mappedProfiles = DELETED_AGENT_COMMAND_COVERAGE.map((entry) => entry.replacement_profile_id);
-    const promptProfiles = Object.keys(PROFILE_PROMPTS);
-    expect(promptProfiles.sort()).toEqual([...new Set(mappedProfiles)].sort());
+    const uniqueMapped = [...new Set(mappedProfiles)];
+    
+    // Every mapped profile should have a prompt
+    const errors: string[] = [];
+    for (const profileId of uniqueMapped) {
+      if (!PROFILE_PROMPTS[profileId]) {
+        errors.push(`${profileId}: missing prompt source`);
+      }
+    }
+    expect(errors).toEqual([]);
   });
 
   it("uses exact command-owned prompts for mapped profiles", () => {

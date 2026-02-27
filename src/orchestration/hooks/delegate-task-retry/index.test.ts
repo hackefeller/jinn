@@ -63,7 +63,7 @@ describe("operator-task-retry", () => {
 
     it("should detect unknown agent error", () => {
       const output =
-        '[ERROR] Unknown agent: "fake-agent". Available agents: scoutRecon, archiveResearcher, advisor-plan';
+        '[ERROR] Unknown agent: "fake-agent". Available agents: researcher-codebase, researcher-data, advisor-plan';
 
       const result = detectDelegateTaskError(output);
 
@@ -109,7 +109,7 @@ describe("operator-task-retry", () => {
     it("should provide fix for unknown agent with available list", () => {
       const errorInfo = {
         errorType: "unknown_agent",
-        originalOutput: '[ERROR] Unknown agent: "fake". Available agents: scoutRecon, advisor-plan',
+        originalOutput: '[ERROR] Unknown agent: "fake". Available agents: researcher-codebase, advisor-plan',
       };
 
       const guidance = buildRetryGuidance(errorInfo);

@@ -1,18 +1,18 @@
 import { writeFileSync, readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { parseFrontmatter } from "../src/integration/shared/frontmatter";
+import { parseFrontmatter } from "../integration/shared/frontmatter";
 import {
   AGENT_MODEL_REQUIREMENTS,
   CATEGORY_MODEL_REQUIREMENTS,
-} from "../src/orchestration/agents/model-requirements";
-import { COMMAND_DEFINITIONS } from "../src/execution/features/commands/commands";
-import type { AgentMetadata } from "../src/orchestration/agents/agent-schema";
+} from "../orchestration/agents/model-requirements";
+import { COMMAND_DEFINITIONS } from "../execution/features/commands/commands";
+import type { AgentMetadata } from "../orchestration/agents/agent-schema";
 import YAML from "js-yaml";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = join(__dirname, "..");
-const AGENTS_DIR = join(PROJECT_ROOT, "src/orchestration/agents");
+const AGENTS_DIR = join(PROJECT_ROOT, "orchestration/agents");
 const AGENTS_YML_PATH = join(PROJECT_ROOT, "docs/agents.yml");
 const COMMANDS_YML_PATH = join(PROJECT_ROOT, "docs/commands.yml");
 
