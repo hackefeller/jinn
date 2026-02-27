@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ### 1. Analyze
 
-Get all unresolved TODOs from the /todos/\*.md directory
+Get all unresolved TODOs from the /todos/*.md directory
 
 ### 2. Plan
 

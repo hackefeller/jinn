@@ -64,7 +64,7 @@ function listTsFiles(dir: string): string[] {
 }
 
 function isSharedBarrelImport(modulePath: string): boolean {
-  return modulePath === "./shared" || modulePath === "../shared" || /\/shared$/.test(modulePath);
+  return modulePath === "./shared" || modulePath === "../shared" || modulePath.endsWith('/shared');
 }
 
 function hasForbiddenSharedPath(modulePath: string): boolean {

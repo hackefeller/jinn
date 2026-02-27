@@ -1,4 +1,4 @@
-import { writeFileSync, readFileSync, readdirSync, existsSync } from "node:fs";
+import { writeFileSync, readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseFrontmatter } from "../src/integration/shared/frontmatter";
@@ -7,6 +7,7 @@ import {
   CATEGORY_MODEL_REQUIREMENTS,
 } from "../src/orchestration/agents/model-requirements";
 import { COMMAND_DEFINITIONS } from "../src/execution/features/commands/commands";
+import type { AgentMetadata } from "../src/orchestration/agents/agent-schema";
 import YAML from "js-yaml";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -22,11 +23,11 @@ async function syncAgents() {
   console.log("Syncing agents.yml...");
 
   const files = readdirSync(AGENTS_DIR).filter((f) => f.endsWith(".md"));
-  const agentsList = [];
+  const agentsList: Array<{ id: string; display_name: string; model: string; purpose: string; fallback_chain?: Array<{ providers: string[]; model: string; variant?: string }> }> = [];
 
   for (const file of files) {
     const content = readFileSync(join(AGENTS_DIR, file), "utf-8");
-    const { data: metadata } = parseFrontmatter(content);
+    const { data: metadata } = parseFrontmatter<AgentMetadata>(content);
 
     if (!metadata || !metadata.id) continue;
 

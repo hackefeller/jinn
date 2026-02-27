@@ -46,7 +46,7 @@ Examples:
 - `ghostwire export --target codex`
 - `ghostwire export --target all --groups instructions,prompts --strict --manifest`
 
-See [Export Reference](./export.md) for artifact topology and validation rules.
+See [Export Reference](../export.md) for artifact topology and validation rules.
 
 ## Deprecation Policy
 

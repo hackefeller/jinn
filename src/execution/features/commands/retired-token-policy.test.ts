@@ -52,7 +52,7 @@ describe("retired token policy", () => {
         lines.forEach((line, index) => {
           RETIRED_TOKENS.forEach((token) => {
             if (line.includes(token)) {
-              errors.push(`${file}:${index + 1}: retired token \"${token}\"`);
+              errors.push(`${file}:${index + 1}: retired token "${token}"`);
             }
           });
         });

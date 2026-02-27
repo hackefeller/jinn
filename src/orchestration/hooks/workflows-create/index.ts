@@ -1,12 +1,9 @@
-import type { PluginInput } from "@opencode-ai/plugin";
-import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { existsSync } from "node:fs";
 import { log } from "../../../integration/shared/logger";
-import type {
-  Task,
-  WorkflowTaskList,
-  DelegationCategory,
-} from "../../../execution/features/task-queue";
+import { updatePlanFile } from "../../../execution/features/task-queue/plan-parser";
+import { saveOpenCodeTodos } from "../../hooks/claude-code-hooks/todo";
+import type { Task, WorkflowTaskList } from "../../../execution/features/task-queue";
 
 export const HOOK_NAME = "workflows-create";
 
@@ -80,6 +77,71 @@ function createWorkflowTaskList(planName: string, tasks: Task[]): WorkflowTaskLi
 }
 
 /**
+ * Convert tasks to OpenCode todo format
+ */
+function tasksToOpenCodeTodos(tasks: Task[]) {
+  return tasks.map((task, index) => ({
+    id: task.id || `task-${index}`,
+    content: `[${task.category || "unspecified"}] ${task.subject}${task.estimatedEffort ? ` (${task.estimatedEffort})` : ""}`,
+    status: task.status || "pending",
+    priority: task.category === "deep" || task.category === "artistry" ? "high" : "medium",
+  }));
+}
+
+/**
+ * Process extracted tasks and update plan file
+ */
+export async function processTasksForPlan(
+  planPath: string,
+  planName: string,
+  tasks: Task[],
+  sessionID: string,
+): Promise<{
+  success: boolean;
+  taskList?: WorkflowTaskList;
+  error?: string;
+}> {
+  if (!existsSync(planPath)) {
+    return {
+      success: false,
+      error: `Plan file not found: ${planPath}`,
+    };
+  }
+
+  try {
+    // Create workflow task list structure
+    const taskList = createWorkflowTaskList(planName, tasks);
+    taskList.breakdown_at = new Date().toISOString();
+
+    // Update plan file with task list
+    await updatePlanFile(planPath, taskList);
+
+    log(`[${HOOK_NAME}] Updated plan file with task list`, {
+      sessionID,
+      taskCount: tasks.length,
+      planPath,
+    });
+
+    // Convert to OpenCode todo format and save
+    const todos = tasksToOpenCodeTodos(tasks);
+    saveOpenCodeTodos(sessionID, todos);
+
+    log(`[${HOOK_NAME}] Saved ${todos.length} todos to OpenCode format`, {
+      sessionID,
+    });
+
+    return { success: true, taskList };
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    log(`[${HOOK_NAME}] Failed to process tasks`, {
+      sessionID,
+      error: errorMsg,
+    });
+    return { success: false, error: errorMsg };
+  }
+}
+
+/**
  * Format task list as markdown code block
  */
 function formatTaskListAsJson(taskList: WorkflowTaskList): string {
@@ -133,7 +195,7 @@ Focus on logical dependencies and parallelizable work. Independent tasks should 
 /**
  * Parse planner response to extract task array
  */
-function extractTasksFromPlannerResponse(responseText: string): Task[] | null {
+export function extractTasksFromPlannerResponse(responseText: string): Task[] | null {
   // Look for JSON array in response
   const jsonMatch = responseText.match(/\[[\s\S]*\{[\s\S]*\}\s*\]/);
   if (!jsonMatch) return null;
@@ -157,7 +219,7 @@ function extractTasksFromPlannerResponse(responseText: string): Task[] | null {
   }
 }
 
-export function createWorkflowsCreateHook(ctx: PluginInput) {
+export function createWorkflowsCreateHook() {
   return {
     "chat.message": async (
       input: WorkflowsCreateInput,
@@ -183,12 +245,43 @@ export function createWorkflowsCreateHook(ctx: PluginInput) {
         sessionID: input.sessionID,
       });
 
-      // Check if tasks already exist in prompt
+      // Check if tasks already exist in prompt (from planner response)
       const existingTasks = extractExistingTasks(promptText);
       if (existingTasks && existingTasks.length > 0) {
-        log(`[${HOOK_NAME}] Tasks already present in prompt, skipping delegation`, {
+        log(`[${HOOK_NAME}] Tasks already present in prompt, processing them`, {
           taskCount: existingTasks.length,
         });
+
+        // Extract plan name from user request
+        const planNameMatch = promptText.match(/<user-request>\s*([\s\S]*?)\s*<\/user-request>/i);
+        if (!planNameMatch) {
+          log(`[${HOOK_NAME}] Could not extract plan name from user request`, {
+            sessionID: input.sessionID,
+          });
+          return;
+        }
+
+        const planName = planNameMatch[1].trim();
+        const planPath = join(input.sessionID, ".ghostwire", "plans", `${planName}.md`);
+
+        const result = await processTasksForPlan(
+          planPath,
+          planName,
+          existingTasks,
+          input.sessionID,
+        );
+
+        if (result.success && result.taskList) {
+          // Inject formatted task list into output for user
+          const formattedList = formatTaskListAsJson(result.taskList);
+          if (parts) {
+            parts.push({
+              type: "text",
+              text: `## Workflow Task Breakdown Complete\n\n${formattedList}`,
+            });
+          }
+        }
+
         return;
       }
 
@@ -218,11 +311,15 @@ ${delegationPrompt}
 ---
 
 **After receiving the task breakdown from the agent:**
-1. Save the JSON task list to a plan file in \`.ghostwire/plans/\`
-2. Apply automatic parallelization (wave calculation)
-3. Return the formatted execution plan
+1. Format tasks as JSON array
+2. Invoke /workflows:create again with tasks (hook will process them)
+3. Hook will: save tasks to plan, update ultrawork.json, return formatted execution plan
 
-Use \`buildExecutionPlan()\` from the task-queue module to generate the final plan.
+Once tasks are extracted, the workflow:create hook will automatically:
+- Create WorkflowTaskList structure
+- Update plan file with task metadata (breakdown_at timestamp)
+- Save tasks as OpenCode todos for session tracking
+- Return formatted task list for execution coordination
 `;
 
       // Add instruction to output parts

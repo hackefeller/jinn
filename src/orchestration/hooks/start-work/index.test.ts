@@ -271,7 +271,7 @@ describe("jack-in-work hook", () => {
           {
             type: "text",
             text: `<session-context>
-<user-request>my-feature-plan ultrawork</user-request>
+<user-request>my-feature-plan @ultrawork</user-request>
 </session-context>`,
           },
         ],
@@ -299,7 +299,7 @@ describe("jack-in-work hook", () => {
           {
             type: "text",
             text: `<session-context>
-<user-request>api-refactor ulw</user-request>
+<user-request>api-refactor @ulw</user-request>
 </session-context>`,
           },
         ],

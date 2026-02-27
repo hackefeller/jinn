@@ -72,7 +72,7 @@ Run ALL or most of these agents at the same time:
 
 These agents are run ONLY when the PR matches specific criteria. Check the PR files list to determine if they apply:
 
-**If PR contains database migrations (db/migrate/\*.rb files) or data backfills:**
+**If PR contains database migrations (db/migrate/*.rb files) or data backfills:**
 
 14. Task profile.expert_migrations(PR content) - Validates ID mappings match production, checks for swapped values, verifies rollback safety
 15. Task profile.validator_deployment(PR content) - Creates Go/No-Go deployment checklist with SQL verification queries

@@ -111,7 +111,7 @@ async function generateChangelog(previous: string, currentVersion?: string): Pro
   }
 
   try {
-    const log = await $`git log v${compareTag}..HEAD --oneline --format="%h %s"`.text();
+    const log: string = await $`git log v${compareTag}..HEAD --oneline --format="%h %s"`.text();
     const commits = log
       .split("\n")
       .filter((line) => line && !line.match(/^\w+ (ignore:|test:|chore:|ci:|release:)/i));

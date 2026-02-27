@@ -100,7 +100,7 @@ Every \`delegate_task()\` prompt must include all 6 sections:
 
 ### Notepad Paths
 
-- READ: .ghostwire/notepads/{plan-name}/\*.md
+- READ: .ghostwire/notepads/{plan-name}/*.md
 - WRITE: Append to appropriate category
 
 ### Inherited Wisdom

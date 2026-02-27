@@ -5,7 +5,7 @@ export const TEST_BROWSER_TEMPLATE = `<command-instruction>
 
 ## CRITICAL: Use agent-browser CLI Only
 
-**DO NOT use Chrome MCP tools (mcp**claude-in-chrome**\*).**
+**DO NOT use Chrome MCP tools (mcp**claude-in-chrome***).**
 
 This command uses the \`agent-browser\` CLI exclusively. The agent-browser CLI is a Bash-based tool from Vercel that runs headless Chromium. It is NOT the same as Chrome browser automation via MCP.
 
@@ -328,7 +328,7 @@ After all tests complete, present summary:
 
 ## agent-browser CLI Reference
 
-**ALWAYS use these Bash commands. NEVER use mcp**claude-in-chrome**\* tools.**
+**ALWAYS use these Bash commands. NEVER use mcp**claude-in-chrome*** tools.**
 
 \`\`\`bash
 # Navigation

@@ -88,7 +88,7 @@ function loadAgentFromFile(filePath: string): LoadedAgent {
   }
 
   // Parse frontmatter and body
-  const parsed = parseFrontmatter<Record<string, unknown>>(content);
+  const parsed = parseFrontmatter<AgentMetadata>(content);
   if (!parsed.hadFrontmatter) {
     throw new Error("Markdown file is missing YAML frontmatter");
   }

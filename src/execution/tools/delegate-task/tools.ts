@@ -9,11 +9,7 @@ import type {
   GitMasterConfig,
   BrowserAutomationProvider,
 } from "../../../platform/config/schema";
-import {
-  DEFAULT_CATEGORIES,
-  CATEGORY_PROMPT_APPENDS,
-  CATEGORY_DESCRIPTIONS,
-} from "./constants";
+import { DEFAULT_CATEGORIES, CATEGORY_PROMPT_APPENDS, CATEGORY_DESCRIPTIONS } from "./constants";
 import { getTimingConfig } from "./timing";
 import {
   findNearestMessageWithFields,
@@ -25,10 +21,7 @@ import { discoverSkills } from "../../features/opencode-skill-loader";
 import { getTaskToastManager } from "../../features/task-toast-manager";
 import type { ModelFallbackInfo } from "../../features/task-toast-manager/types";
 import { subagentSessions, getSessionAgent } from "../../features/claude-code-session-state";
-import {
-  log,
-  promptWithModelSuggestionRetry,
-} from "../../../integration/shared";
+import { log, promptWithModelSuggestionRetry } from "../../../integration/shared";
 import { getAgentToolRestrictions } from "../../../orchestration/agents/agent-tool-restrictions";
 import { resolveModel } from "../../../orchestration/agents/model-resolver";
 import { getOpenCodeConfigPaths } from "../../../platform/opencode/config-dir";
@@ -144,7 +137,7 @@ export function resolveCategoryConfig(
   promptAppend: string;
   model: string | undefined;
 } | null {
-  const { userCategories, inheritedModel, systemDefaultModel, availableModels } = options;
+  const { userCategories, systemDefaultModel, availableModels } = options;
 
   // Check if category requires a specific model
   const categoryReq = CATEGORY_MODEL_REQUIREMENTS[categoryName];
@@ -308,21 +301,19 @@ Prompts MUST be in English.`;
           `Invalid arguments: 'run_in_background' parameter is REQUIRED. Use run_in_background=false for task delegation, run_in_background=true only for parallel exploration.`,
         );
       }
-      if (args.load_skills === undefined) {
-        throw new Error(
-          `Invalid arguments: 'load_skills' parameter is REQUIRED. Pass [] if no skills needed, but IT IS HIGHLY RECOMMENDED to pass proper skills like ["playwright"], ["git-master"] for best results.`,
-        );
-      }
+      // Check for null explicitly - throw error
       if (args.load_skills === null) {
         throw new Error(
           `Invalid arguments: load_skills=null is not allowed. Pass [] if no skills needed, but IT IS HIGHLY RECOMMENDED to pass proper skills.`,
         );
       }
+      // Default undefined to empty array
+      const loadSkills = args.load_skills ?? [];
       const runInBackground = args.run_in_background === true;
 
       let skillContent: string | undefined;
-      if (args.load_skills.length > 0) {
-        const { resolved, notFound } = await resolveMultipleSkillsAsync(args.load_skills, {
+      if (loadSkills.length > 0) {
+        const { resolved, notFound } = await resolveMultipleSkillsAsync(loadSkills, {
           gitMasterConfig,
           browserProvider,
         });
@@ -377,7 +368,7 @@ Prompts MUST be in English.`;
               metadata: {
                 prompt: args.prompt,
                 agent: task.agent,
-                load_skills: args.load_skills,
+                load_skills: loadSkills,
                 description: args.description,
                 run_in_background: args.run_in_background,
                 sessionId: task.sessionID,
@@ -421,7 +412,7 @@ Use \`background_output\` with task_id="${task.id}" to check progress.`;
           title: `Continue: ${args.description}`,
           metadata: {
             prompt: args.prompt,
-            load_skills: args.load_skills,
+            load_skills: loadSkills,
             description: args.description,
             run_in_background: args.run_in_background,
             sessionId: args.session_id,
@@ -739,7 +730,7 @@ Available categories: ${categoryNames.join(", ")}`;
               parentModel,
               parentAgent,
               model: categoryModel,
-              skills: args.load_skills.length > 0 ? args.load_skills : undefined,
+              skills: loadSkills.length > 0 ? loadSkills : undefined,
               skillContent: systemContent,
             });
 
@@ -776,7 +767,7 @@ Available categories: ${categoryNames.join(", ")}`;
                 prompt: args.prompt,
                 agent: agentToUse,
                 category: args.category,
-                load_skills: args.load_skills,
+                load_skills: loadSkills,
                 description: args.description,
                 run_in_background: args.run_in_background,
                 sessionId: sessionID,
@@ -895,9 +886,7 @@ To continue this session: session_id="${sessionID}"`;
         }
         const normalizedAgent = args.subagent_type.trim().toLowerCase();
         if (
-          !VALID_SUBAGENT_TYPES.includes(
-            normalizedAgent as (typeof VALID_SUBAGENT_TYPES)[number],
-          )
+          !VALID_SUBAGENT_TYPES.includes(normalizedAgent as (typeof VALID_SUBAGENT_TYPES)[number])
         ) {
           return `Invalid subagent_type "${args.subagent_type}". Valid values: ${VALID_SUBAGENT_TYPES.join(", ")}.`;
         }
@@ -921,7 +910,7 @@ To continue this session: session_id="${sessionID}"`;
             parentModel,
             parentAgent,
             model: categoryModel,
-            skills: args.load_skills.length > 0 ? args.load_skills : undefined,
+            skills: loadSkills.length > 0 ? loadSkills : undefined,
             skillContent: systemContent,
           });
 
@@ -931,7 +920,7 @@ To continue this session: session_id="${sessionID}"`;
               prompt: args.prompt,
               agent: task.agent,
               category: args.category,
-              load_skills: args.load_skills,
+              load_skills: loadSkills,
               description: args.description,
               run_in_background: args.run_in_background,
               sessionId: task.sessionID,
@@ -1015,7 +1004,7 @@ To continue this session: session_id="${task.sessionID}"`;
             agent: agentToUse,
             isBackground: false,
             category: args.category,
-            skills: args.load_skills,
+            skills: loadSkills,
             modelInfo,
           });
         }
@@ -1026,7 +1015,7 @@ To continue this session: session_id="${task.sessionID}"`;
             prompt: args.prompt,
             agent: agentToUse,
             category: args.category,
-            load_skills: args.load_skills,
+            load_skills: loadSkills,
             description: args.description,
             run_in_background: args.run_in_background,
             sessionId: sessionID,

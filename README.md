@@ -69,11 +69,11 @@ or explicit commands:
 
 Primary configuration reference:
 
-- [docs/reference/configurations.md](docs/reference/configurations.md)
+- [docs/reference/configurations.md](docs/configurations.md)
 
 Command naming reference:
 
-- [docs/reference/commands.md](docs/reference/commands.md)
+- [docs/reference/commands.md](docs/commands.md)
 
 ## Documentation (Canonical)
 
@@ -84,7 +84,7 @@ Command naming reference:
 - [docs/features.yml](docs/features.yml)
 - [docs/commands.yml](docs/commands.yml)
 - [docs/skills.yml](docs/skills.yml)
-- [docs/reference/services-models.yaml](docs/reference/services-models.yaml)
+- [docs/reference/services-models.yaml](docs/services-models.yaml)
 
 ## Development
 

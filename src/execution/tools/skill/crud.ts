@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 import { readFile, writeFile, unlink, readdir, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { getOpenCodeConfigDir } from "../../../platform/opencode/config-dir";
-import type { SkillScope } from "../../features/opencode-skill-loader/types";
+import type { SkillScope, SkillMetadata } from "../../features/opencode-skill-loader/types";
 import { discoverSkills } from "../../features/opencode-skill-loader/loader";
 import { clearSkillCache } from "../../features/opencode-skill-loader/skill-content";
 import { parseFrontmatter } from "../../../integration/shared/frontmatter";
@@ -48,7 +48,7 @@ async function findSkillFile(name: string): Promise<{ path: string; scope: Skill
         const skillPath = join(dirs.project, file);
         try {
           const content = await readFile(skillPath, "utf-8");
-          const { data } = parseFrontmatter<Record<string, string>>(content);
+          const { data } = parseFrontmatter<SkillMetadata>(content);
           if (data.name === name) {
             return { path: skillPath, scope: "opencode-project" };
           }
@@ -70,7 +70,7 @@ async function findSkillFile(name: string): Promise<{ path: string; scope: Skill
         const skillPath = join(dirs.user, file);
         try {
           const content = await readFile(skillPath, "utf-8");
-          const { data } = parseFrontmatter<Record<string, string>>(content);
+          const { data } = parseFrontmatter<SkillMetadata>(content);
           if (data.name === name) {
             return { path: skillPath, scope: "user" };
           }

@@ -40,8 +40,8 @@ Your mission is to perform comprehensive security audits with laser focus on fin
 You will systematically execute these security scans:
 
 1. **Input Validation Analysis**
-   - Search for all input points: \`grep -r "req\.(body|params|query)" --include="*.js"\`
-   - For Rails projects: \`grep -r "params\[" --include="*.rb"\`
+   - Search for all input points: \`grep -r "req.(body|params|query)" --include="*.js"\`
+   - For Rails projects: \`grep -r "params[" --include="*.rb"\`
    - Verify each input is properly validated and sanitized
    - Check for type validation, length limits, and format constraints
 

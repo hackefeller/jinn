@@ -576,7 +576,7 @@ export async function addAuthPlugins(config: InstallConfig): Promise<ConfigMerge
       }
     }
 
-    const newConfig = { ...(existingConfig ?? {}), plugin: plugins };
+    const newConfig = { ...existingConfig, plugin: plugins };
     writeFileSync(path, JSON.stringify(newConfig, null, 2) + "\n");
     return { success: true, configPath: path };
   } catch (err) {
@@ -735,7 +735,7 @@ export function addProviderConfig(config: InstallConfig): ConfigMergeResult {
       }
     }
 
-    const newConfig = { ...(existingConfig ?? {}) };
+    const newConfig = { ...existingConfig };
 
     const providers = (newConfig.provider ?? {}) as Record<string, unknown>;
 

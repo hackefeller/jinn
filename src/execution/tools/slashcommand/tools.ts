@@ -265,7 +265,7 @@ export function createSlashcommandTool(options: SlashcommandToolOptions = {}): T
       if (partialMatches.length > 0) {
         const matchList = partialMatches.map((cmd) => `/${cmd.name}`).join(", ");
         return (
-          `No exact match for "/${cmdName}\". Did you mean: ${matchList}?\n\n` +
+          `No exact match for "/${cmdName}". Did you mean: ${matchList}?\n\n` +
           formatCommandList(allItems)
         );
       }

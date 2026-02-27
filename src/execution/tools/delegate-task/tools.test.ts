@@ -640,7 +640,7 @@ describe("operator-task", () => {
   });
 
   describe("skills parameter", () => {
-    test("skills parameter is required - throws error when not provided", async () => {
+    test("undefined skills defaults to empty array", async () => {
       // #given
       const { createDelegateTask } = require("./tools");
 
@@ -668,18 +668,17 @@ describe("operator-task", () => {
       };
 
       // #when - skills not provided (undefined)
-      // #then - should throw error about missing skills
-      await expect(
-        tool.execute(
-          {
-            description: "Test task",
-            prompt: "Do something",
-            category: "ultrabrain",
-            run_in_background: false,
-          },
-          toolContext,
-        ),
-      ).rejects.toThrow("IT IS HIGHLY RECOMMENDED");
+      // #then - should proceed with empty array
+      const result = await tool.execute(
+        {
+          description: "Test task",
+          prompt: "Do something",
+          category: "ultrabrain",
+          run_in_background: false,
+        },
+        toolContext,
+      );
+      expect(result).toBeDefined();
     });
 
     test("null skills throws error", async () => {

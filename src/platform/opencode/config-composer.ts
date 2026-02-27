@@ -191,7 +191,7 @@ export function createConfigHandler(deps: ConfigHandlerDeps) {
     };
 
     if (builderEnabled || migratedBuild) {
-      mergedAgents.build = { ...(migratedBuild ?? {}), mode: "subagent", hidden: true };
+      mergedAgents.build = { ...migratedBuild, mode: "subagent", hidden: true };
     }
 
     config.agent = mergedAgents;

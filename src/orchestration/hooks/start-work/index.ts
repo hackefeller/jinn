@@ -17,7 +17,7 @@ import {
 
 export const HOOK_NAME = "start-work";
 
-const KEYWORD_PATTERN = /\b(ultrawork|ulw)\b/gi;
+const KEYWORD_PATTERN = /@ultrawork|@ulw/gi;
 
 interface StartWorkHookInput {
   sessionID: string;

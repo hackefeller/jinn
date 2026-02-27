@@ -61,9 +61,7 @@ describe("look_at tool conditional registration", () => {
     // #then look_at should be included
     it("includes look_at when lookAt is not null", () => {
       const lookAt = { execute: () => {} }; // mock tool
-      const tools = {
-        ...(lookAt ? { look_at: lookAt } : {}),
-      };
+      const tools = (lookAt ? { look_at: lookAt } : {});
       expect(tools).toHaveProperty("look_at");
     });
 
@@ -72,9 +70,7 @@ describe("look_at tool conditional registration", () => {
     // #then look_at should NOT be included
     it("excludes look_at when lookAt is null", () => {
       const lookAt = null;
-      const tools = {
-        ...(lookAt ? { look_at: lookAt } : {}),
-      };
+      const tools = (lookAt ? { look_at: lookAt } : {});
       expect(tools).not.toHaveProperty("look_at");
     });
   });

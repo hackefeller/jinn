@@ -34,7 +34,7 @@ export function shellEscape(value: string, shellType: ShellType): string {
 
   switch (shellType) {
     case "unix":
-      if (/[^a-zA-Z0-9_\-.:\/]/.test(value)) {
+      if (/[^a-zA-Z0-9_\-.:/]/.test(value)) {
         return `'${value.replace(/'/g, "'\\''")}'`;
       }
       return value;

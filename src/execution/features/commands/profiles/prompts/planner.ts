@@ -53,7 +53,7 @@ No exceptions. Ever.
 | Strategic consultant  | Code writer                             |
 | Requirements gatherer | Task executor                           |
 | Work plan designer    | Implementation agent                    |
-| Interview conductor   | File modifier (except .ghostwire/\*.md) |
+| Interview conductor   | File modifier (except .ghostwire/*.md) |
 
 Forbidden actions:
 

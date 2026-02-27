@@ -120,7 +120,6 @@
           "session-recovery",
           "session-notification",
           "comment-checker",
-          "deterministic-edit-guard",
           "grep-output-truncator",
           "tool-output-truncator",
           "directory-agents-injector",
@@ -209,14 +208,6 @@
           "ghostwire:workflows:learnings",
           "ghostwire:workflows:review",
           "ghostwire:workflows:work",
-          "ghostwire:spec:create",
-          "ghostwire:spec:plan",
-          "ghostwire:spec:tasks",
-          "ghostwire:spec:implement",
-          "ghostwire:spec:clarify",
-          "ghostwire:spec:analyze",
-          "ghostwire:spec:checklist",
-          "ghostwire:spec:to-issues",
           "ghostwire:project:constitution"
         ]
       }
