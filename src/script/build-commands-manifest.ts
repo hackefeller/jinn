@@ -20,11 +20,31 @@ type ManifestEntry = {
 function isCommandDefinitionLike(value: unknown): value is Omit<CommandDefinition, "name"> {
   if (!value || typeof value !== "object") return false;
   const command = value as Record<string, unknown>;
+
+  const isValidHandoff = (handoff: unknown): boolean => {
+    if (!handoff || typeof handoff !== "object") return false;
+    const entry = handoff as Record<string, unknown>;
+    return (
+      typeof entry.label === "string" &&
+      typeof entry.agent === "string" &&
+      typeof entry.prompt === "string" &&
+      (entry.send === undefined || typeof entry.send === "boolean")
+    );
+  };
+
+  const handoffs = command.handoffs;
+  const hasValidHandoffs =
+    handoffs === undefined || (Array.isArray(handoffs) && handoffs.every(isValidHandoff));
+
   return (
     (command.name === undefined || typeof command.name === "string") &&
-    typeof command.description === "string" &&
+    (command.description === undefined || typeof command.description === "string") &&
     typeof command.template === "string" &&
-    (command.argumentHint === undefined || typeof command.argumentHint === "string")
+    (command.argumentHint === undefined || typeof command.argumentHint === "string") &&
+    (command.agent === undefined || typeof command.agent === "string") &&
+    (command.model === undefined || typeof command.model === "string") &&
+    (command.subtask === undefined || typeof command.subtask === "boolean") &&
+    hasValidHandoffs
   );
 }
 
@@ -50,9 +70,15 @@ async function loadCommandModule(filePath: string): Promise<ManifestEntry> {
   }
 
   const normalizedCommand: Omit<CommandDefinition, "name"> = {
-    description: String(rawCommand.description),
+    ...(rawCommand.description ? { description: String(rawCommand.description) } : {}),
     template: String(rawCommand.template),
     ...(rawCommand.argumentHint ? { argumentHint: String(rawCommand.argumentHint) } : {}),
+    ...(rawCommand.agent ? { agent: String(rawCommand.agent) } : {}),
+    ...(rawCommand.model ? { model: String(rawCommand.model) } : {}),
+    ...(typeof rawCommand.subtask === "boolean" ? { subtask: rawCommand.subtask } : {}),
+    ...(rawCommand.handoffs
+      ? { handoffs: rawCommand.handoffs as CommandDefinition["handoffs"] }
+      : {}),
   };
 
   return {
