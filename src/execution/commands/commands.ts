@@ -35,7 +35,8 @@ function getCommandDefinitions(): Record<CommandName, Omit<CommandDefinition, "n
   return commandDefinitions;
 }
 
-let commandDefinitions: Record<CommandName, Omit<CommandDefinition, "name">> | undefined = undefined;
+let commandDefinitions: Record<CommandName, Omit<CommandDefinition, "name">> | undefined =
+  undefined;
 
 /**
  * Re-export for backward compatibility with existing code that imports COMMAND_DEFINITIONS.
