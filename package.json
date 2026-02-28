@@ -1,5 +1,5 @@
 {
-  "name": "ghostwire",
+  "name": "@hackefeller/ghostwire",
   "version": "3.1.10",
   "description": "The Best AI Agent Harness - Batteries-Included OpenCode Plugin with Multi-Model Orchestration, Parallel Background Agents, and Crafted LSP/AST Tools",
   "keywords": [
@@ -22,11 +22,10 @@
     "url": "git+https://github.com/hackefeller/ghostwire.git"
   },
   "bin": {
-    "ghostwire": "./bin/ghostwire.js"
+    "ghostwire": "./dist/cli/index.js"
   },
   "files": [
     "dist",
-    "bin",
     "postinstall.mjs"
   ],
   "type": "module",
@@ -80,6 +79,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/picomatch": "^3.0.2",
     "bun-types": "latest",
+    "knip": "^5.85.0",
     "lint-staged": "^16.2.7",
     "nanospinner": "^1.2.2",
     "oxfmt": "^0.35.0",
