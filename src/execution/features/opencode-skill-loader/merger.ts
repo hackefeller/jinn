@@ -3,16 +3,16 @@ import type {
   SkillScope,
   SkillMetadata,
   DeterministicResolutionResult,
-} from "./types";
-import type { SkillsConfig, SkillDefinition } from "../../platform/config/schema";
-import type { Skill } from "../skills/types";
-import type { CommandDefinition } from "../claude-code-command-loader/types";
+} from "../../opencode-skill-loader/types";
+import type { SkillsConfig, SkillDefinition } from "../../../platform/config/schema";
+import type { Skill } from "../../skills/types";
+import type { CommandDefinition } from "../../claude-code-command-loader/types";
 import { readFileSync, existsSync } from "fs";
 import { dirname, resolve, isAbsolute } from "path";
 import { homedir } from "os";
-import { parseFrontmatter } from "../../integration/shared/frontmatter";
-import { sanitizeModelField } from "../../integration/shared/model-sanitizer";
-import { deepMerge } from "../../integration/shared/deep-merge";
+import { parseFrontmatter } from "../../../integration/shared/frontmatter";
+import { sanitizeModelField } from "../../../integration/shared/model-sanitizer";
+import { deepMerge } from "../../../integration/shared/deep-merge";
 
 function parseAllowedToolsFromMetadata(
   allowedTools: string | string[] | undefined,

@@ -147,23 +147,6 @@ export function injectGitMasterConfig(template: string, config?: GitMasterConfig
   return template + "\n\n" + injection;
 }
 
-export function resolveSkillContent(
-  skillName: string,
-  options?: SkillResolutionOptions,
-): string | null {
-  const skills = createSkills({
-    browserProvider: options?.browserProvider,
-  });
-  const skill = skills.find((s) => s.name === skillName);
-  if (!skill) return null;
-
-  if (skillName === "git-master") {
-    return injectGitMasterConfig(skill.template, options?.gitMasterConfig);
-  }
-
-  return skill.template;
-}
-
 export function resolveMultipleSkills(
   skillNames: string[],
   options?: SkillResolutionOptions,
@@ -193,23 +176,6 @@ export function resolveMultipleSkills(
   }
 
   return { resolved, notFound };
-}
-
-export async function resolveSkillContentAsync(
-  skillName: string,
-  options?: SkillResolutionOptions,
-): Promise<string | null> {
-  const allSkills = await getAllSkills(options);
-  const skill = allSkills.find((s) => s.name === skillName);
-  if (!skill) return null;
-
-  const template = await extractSkillTemplate(skill);
-
-  if (skillName === "git-master") {
-    return injectGitMasterConfig(template, options?.gitMasterConfig);
-  }
-
-  return template;
 }
 
 export async function resolveMultipleSkillsAsync(

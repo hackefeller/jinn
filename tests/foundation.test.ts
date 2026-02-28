@@ -1,4 +1,6 @@
 import { describe, test, expect } from "bun:test";
+import { join } from "node:path";
+import { existsSync } from "node:fs";
 
 describe("Learnings System - Foundation Tests", () => {
   describe("Learnings Command", () => {
@@ -30,6 +32,25 @@ describe("Learnings System - Foundation Tests", () => {
       expect(learningsSkill).toBeDefined();
       expect(learningsSkill?.description).toBeDefined();
       expect(learningsSkill?.template).toBeDefined();
+    });
+  });
+
+  describe("Copy Skills Script", () => {
+    test("source skills directory exists with SKILL.md files", () => {
+      // Verify the source path used by copy-skills.ts is correct
+      const sourceSkillsDir = join(process.cwd(), "src", "execution", "skills");
+      expect(existsSync(sourceSkillsDir)).toBe(true);
+
+      // Verify at least one skill directory has SKILL.md
+      const fs = require("fs");
+      const entries = fs.readdirSync(sourceSkillsDir, { withFileTypes: true });
+      const skillDirs = entries.filter((e: any) => e.isDirectory());
+
+      const skillsWithManifest = skillDirs.filter((dir: any) => {
+        return existsSync(join(sourceSkillsDir, dir.name, "SKILL.md"));
+      });
+
+      expect(skillsWithManifest.length).toBeGreaterThan(0);
     });
   });
 });

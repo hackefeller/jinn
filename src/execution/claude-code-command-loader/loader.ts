@@ -133,13 +133,3 @@ export async function loadOpencodeProjectCommands(): Promise<Record<string, Comm
   const commands = await loadCommandsFromDir(opencodeProjectDir, "opencode-project");
   return commandsToRecord(commands);
 }
-
-export async function loadAllCommands(): Promise<Record<string, CommandDefinition>> {
-  const [user, project, global, projectOpencode] = await Promise.all([
-    loadUserCommands(),
-    loadProjectCommands(),
-    loadOpencodeGlobalCommands(),
-    loadOpencodeProjectCommands(),
-  ]);
-  return { ...projectOpencode, ...global, ...project, ...user };
-}

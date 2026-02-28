@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { AGENTS_MANIFEST } from "../execution/agents-manifest";
@@ -18,7 +17,6 @@ export interface ExportArgs {
   force?: boolean;
   groups?: string;
   strict?: boolean;
-  manifest?: boolean;
 }
 
 interface ExportArtifact {
@@ -413,39 +411,6 @@ function createCoverageEntry(
   };
 }
 
-function createManifestArtifact(
-  baseDirectory: string,
-  target: ExportTarget,
-  model: ExportModel,
-  relativeArtifacts: ExportArtifact[],
-  coverage: ExportCoverage,
-): ExportArtifact {
-  const entries = relativeArtifacts
-    .map((artifact) => ({
-      path: artifact.path,
-      target: artifact.target,
-      sha256: createHash("sha256").update(artifact.content).digest("hex"),
-      bytes: Buffer.byteLength(artifact.content, "utf-8"),
-    }))
-    .sort((a, b) => a.path.localeCompare(b.path));
-
-  return {
-    target: "shared",
-    path: join(baseDirectory, "docs", "export-manifest.json"),
-    content: JSON.stringify(
-      {
-        generator: "ghostwire-export/v3-full",
-        generatedAt: model.generatedAt,
-        target,
-        coverage,
-        entries,
-      },
-      null,
-      2,
-    ),
-  };
-}
-
 async function resolveArtifactsWithGroups(
   baseDirectory: string,
   target: ExportTarget,
@@ -546,12 +511,6 @@ function validateTarget(target: string | undefined): target is ExportTarget {
   return target === undefined || target === "copilot" || target === "codex" || target === "all";
 }
 
-// Backward-compatible helper retained for existing import surface.
-export function buildAgentCatalogLegacy(): string {
-  const sorted = [...AGENTS_MANIFEST].sort((a, b) => a.id.localeCompare(b.id));
-  return sorted.map((agent) => `- \`${agent.id}\`: ${agent.purpose}`).join("\n");
-}
-
 function parseGroups(groupsArg: string | undefined): Set<CopilotGroup> | null {
   if (!groupsArg || groupsArg.trim().length === 0) {
     return new Set(COPILOT_GROUPS);
@@ -626,7 +585,6 @@ export async function exportGenius(args: ExportArgs): Promise<number> {
   const target = args.target ?? "all";
   const force = args.force ?? false;
   const strict = args.strict ?? false;
-  const writeManifest = args.manifest ?? false;
   const baseDirectory = resolve(args.directory ?? process.cwd());
 
   const groups = parseGroups(args.groups);
@@ -640,20 +598,6 @@ export async function exportGenius(args: ExportArgs): Promise<number> {
   const resolved = await resolveArtifactsWithGroups(baseDirectory, target, groups);
 
   const artifacts = [...resolved.artifacts];
-  if (writeManifest) {
-    artifacts.push(
-      createManifestArtifact(
-        baseDirectory,
-        target,
-        resolved.model,
-        artifacts.map((artifact) => ({
-          ...artifact,
-          path: relative(baseDirectory, artifact.path).replace(/\\/g, "/"),
-        })),
-        resolved.coverage,
-      ),
-    );
-  }
 
   if (strict) {
     const errors = runStrictValidation(artifacts, resolved.coverage);

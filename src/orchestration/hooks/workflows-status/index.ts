@@ -6,7 +6,7 @@ import { getTasksByWave } from "../../../execution/task-queue/parallelization";
 import type { Task } from "../../../execution/task-queue";
 import { resolvePlanArtifactRef } from "../../../execution/workflow-artifacts/store";
 
-export const HOOK_NAME = "workflows-status";
+const HOOK_NAME = "workflows-status";
 
 interface WorkflowsStatusInput {
   sessionID: string;

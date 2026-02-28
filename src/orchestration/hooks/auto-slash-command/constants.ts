@@ -1,4 +1,4 @@
-export const HOOK_NAME = "auto-slash-command" as const;
+const HOOK_NAME = "auto-slash-command" as const;
 
 export const AUTO_SLASH_COMMAND_TAG_OPEN = "<grid-auto-slash-command>";
 export const AUTO_SLASH_COMMAND_TAG_CLOSE = "</grid-auto-slash-command>";

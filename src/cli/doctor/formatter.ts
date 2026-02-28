@@ -79,17 +79,8 @@ export function formatFooter(summary: DoctorSummary): string {
   return `\n${SYMBOLS.check} ${color.green("All systems operational!")}\n`;
 }
 
-export function formatProgress(current: number, total: number, name: string): string {
-  const progress = color.dim(`[${current}/${total}]`);
-  return `${progress} Checking ${name}...`;
-}
-
 export function formatJsonOutput(result: DoctorResult): string {
   return JSON.stringify(result, null, 2);
-}
-
-export function formatDetails(details: string[]): string {
-  return details.map((d) => `      ${SYMBOLS.bullet} ${color.dim(d)}`).join("\n");
 }
 
 function stripAnsi(str: string): string {

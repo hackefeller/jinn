@@ -430,14 +430,6 @@ export async function discoverSkills(options: DiscoverSkillsOptions = {}): Promi
   return [...opencodeProjectSkills, ...projectSkills, ...opencodeGlobalSkills, ...userSkills];
 }
 
-export async function getSkillByName(
-  name: string,
-  options: DiscoverSkillsOptions = {},
-): Promise<LoadedSkill | undefined> {
-  const skills = await discoverSkills(options);
-  return skills.find((s) => s.name === name);
-}
-
 export async function discoverUserClaudeSkills(): Promise<LoadedSkill[]> {
   const userSkillsDir = join(getClaudeConfigDir(), "skills");
   return loadSkillsFromDir(userSkillsDir, "user");

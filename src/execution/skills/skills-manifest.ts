@@ -178,12 +178,6 @@ export const SKILL_NAME_VALUES = [
 
 export type SkillName = (typeof SKILL_NAME_VALUES)[number];
 
-export const SKILLS_MANIFEST_RESOLUTION = {
-  canonicalPath: ".agents/skills",
-  collisionPolicy: "first-wins",
-  builtinMerge: "fallback-after-scoped",
-} as const;
-
 export function mergeBuiltinManifestAfterScoped(scopedSkills: ReadonlyArray<Skill>): Skill[] {
   const mergedSkills: Skill[] = [...scopedSkills];
   const seenNames = new Set(scopedSkills.map((skill) => skill.name));

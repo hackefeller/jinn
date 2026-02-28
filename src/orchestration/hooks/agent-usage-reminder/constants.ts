@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { getOpenCodeStorageDir } from "../../../integration/shared/data-path";
 
-export const OPENCODE_STORAGE = getOpenCodeStorageDir();
+const OPENCODE_STORAGE = getOpenCodeStorageDir();
 export const AGENT_USAGE_REMINDER_STORAGE = join(OPENCODE_STORAGE, "grid-agent-usage-reminder");
 
 // Use lowercase for case-insensitive matching

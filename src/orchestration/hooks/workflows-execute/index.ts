@@ -21,7 +21,7 @@ import {
 } from "../../../execution/task-queue/delegation-engine";
 import type { Task, WorkflowTaskList } from "../../../execution/task-queue";
 
-export const HOOK_NAME = "workflows-execute";
+const HOOK_NAME = "workflows-execute";
 
 interface WorkflowsExecuteInput {
   sessionID: string;

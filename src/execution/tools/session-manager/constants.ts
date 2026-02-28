@@ -2,7 +2,7 @@ import { join } from "node:path";
 import { getOpenCodeStorageDir } from "../../../integration/shared/data-path";
 import { getClaudeConfigDir } from "../../../platform/claude/config-dir";
 
-export const OPENCODE_STORAGE = getOpenCodeStorageDir();
+const OPENCODE_STORAGE = getOpenCodeStorageDir();
 export const MESSAGE_STORAGE = join(OPENCODE_STORAGE, "message");
 export const PART_STORAGE = join(OPENCODE_STORAGE, "part");
 export const SESSION_STORAGE = join(OPENCODE_STORAGE, "session");
@@ -129,4 +129,4 @@ Example:
 session_update(session_id="ses_abc123", title="Updated: Security audit")
 Successfully updated session ses_abc123`;
 
-export const TOOL_NAME_PREFIX = "session_";
+// export const TOOL_NAME_PREFIX = "session_";

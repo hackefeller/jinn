@@ -71,10 +71,3 @@ export interface DeterministicResolutionResult {
   skills: LoadedSkill[];
   collisions: SkillCollisionDiagnostic[];
 }
-
-export const CANONICAL_DISCOVERY_POLICY: CanonicalDiscoveryPolicy = {
-  canonicalPath: ".agents/skills",
-  scopeWalkEnabled: true,
-  collisionPolicy: "first-wins",
-  emitCollisionDiagnostics: true,
-};

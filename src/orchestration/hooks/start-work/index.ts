@@ -12,7 +12,7 @@ import {
 import { log } from "../../../integration/shared/logger";
 import { getSessionAgent, updateSessionAgent } from "../../../execution/claude-code-session-state";
 
-export const HOOK_NAME = "start-work";
+const HOOK_NAME = "start-work";
 
 const KEYWORD_PATTERN = /@ultrawork|@ulw/gi;
 

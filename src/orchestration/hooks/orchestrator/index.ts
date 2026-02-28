@@ -21,7 +21,7 @@ import {
 import { isCallerOrchestrator, getMessageDir } from "../../../integration/shared/session-utils";
 import type { BackgroundManager } from "../../../execution/background-agent";
 
-export const HOOK_NAME = "orchestrator";
+const HOOK_NAME = "orchestrator";
 
 /**
  * Cross-platform check if a path is inside the workflow docs directory.

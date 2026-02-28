@@ -1,43 +1,19 @@
 // postinstall.mjs
-// Runs after npm install to verify platform binary is available
+// Runs after npm install to verify the package is ready
 
-import { createRequire } from "node:module";
-import { getPlatformPackage, getBinaryPath } from "./bin/platform.js";
-
-const require = createRequire(import.meta.url);
-
-/**
- * Detect libc family on Linux
- */
-function getLibcFamily() {
-  if (process.platform !== "linux") {
-    return undefined;
-  }
-
-  try {
-    const detectLibc = require("detect-libc");
-    return detectLibc.familySync();
-  } catch {
-    return null;
-  }
-}
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 
 function main() {
-  const { platform, arch } = process;
-  const libcFamily = getLibcFamily();
+  const distPath = join(process.cwd(), "dist", "cli", "index.js");
 
-  try {
-    const pkg = getPlatformPackage({ platform, arch, libcFamily });
-    const binPath = getBinaryPath(pkg, platform);
-
-    // Try to resolve the binary
-    require.resolve(binPath);
-    console.log(`✓ ghostwire binary installed for ${platform}-${arch}`);
-  } catch (error) {
-    console.warn(`⚠ ghostwire: ${error.message}`);
-    console.warn(`  The CLI may not work on this platform.`);
-    // Don't fail installation - let user try anyway
+  if (!existsSync(distPath)) {
+    console.warn(`⚠ ghostwire: CLI not built. Run 'bun run build' first.`);
+    console.warn(`  To use the CLI: bun run src/cli/index.ts <command>`);
+    return;
   }
+
+  console.log(`✓ ghostwire CLI ready`);
 }
 
 main();

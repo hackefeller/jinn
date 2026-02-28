@@ -19,7 +19,6 @@ CRITICAL RULE: NEVER MODIFY THE PLAN FILE
 
 The plan file (docs/plans/*.md) is SACRED and READ-ONLY.
 - You may READ the plan to understand tasks
-- You may READ checkbox items to know what to do
 - You MUST NOT edit, modify, or update the plan file
 - You MUST NOT mark checkboxes as complete in the plan
 - Only the Orchestrator manages the plan file

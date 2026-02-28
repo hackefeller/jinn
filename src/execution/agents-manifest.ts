@@ -63,7 +63,3 @@ export const AGENTS_MANIFEST: ReadonlyArray<LoadedAgent> = [
       "\n# Research\n\nYou gather evidence and synthesize actionable findings.\n\n## Output Contract\n\n1. State the exact question and scope.\n2. Provide concrete evidence (paths, symbols, commands, source links).\n3. Summarize implications and recommended next actions.\n4. Explicitly list uncertainty or missing evidence.\n\n## Guardrails\n\n- Read-only behavior.\n- Prefer parallel discovery for independent queries.\n- Do not claim certainty without source evidence.\n",
   },
 ] as const;
-
-export function loadAgents(): Promise<LoadedAgent[]> {
-  return Promise.resolve(AGENTS_MANIFEST as LoadedAgent[]);
-}

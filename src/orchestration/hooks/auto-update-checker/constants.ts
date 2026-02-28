@@ -15,7 +15,7 @@ function getCacheDir(): string {
 }
 
 export const CACHE_DIR = getCacheDir();
-export const VERSION_FILE = path.join(CACHE_DIR, "version");
+const VERSION_FILE = path.join(CACHE_DIR, "version");
 export const INSTALLED_PACKAGE_JSON = path.join(
   CACHE_DIR,
   "node_modules",

@@ -87,14 +87,6 @@ function getPluginInstallPath(): string {
   return join(getConfigDir(), "plugins", "ghostwire.mjs");
 }
 
-export function detectLegacySkillPaths(projectDir = process.cwd()): string[] {
-  const legacyPaths = [
-    join(projectDir, ".claude", "skills"),
-    join(projectDir, ".opencode", "skills"),
-  ];
-  return legacyPaths.filter((path) => existsSync(path));
-}
-
 function resolveLocalPluginSourcePath(explicitPath?: string): string | null {
   const candidates = [
     explicitPath,

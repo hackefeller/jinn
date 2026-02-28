@@ -168,7 +168,3 @@ export function generateModelConfig(config: InstallConfig): GeneratedOmoConfig {
     categories,
   };
 }
-
-export function shouldShowChatGPTOnlyWarning(config: InstallConfig): boolean {
-  return !config.hasGemini && config.hasOpenAI;
-}

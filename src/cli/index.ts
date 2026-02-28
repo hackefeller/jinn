@@ -149,7 +149,6 @@ program
     "Copilot artifact groups: instructions,prompts,skills,agents,hooks (default: all)",
   )
   .option("--strict", "Fail export if strict validation detects invalid artifacts")
-  .option("--manifest", "Also write docs/export-manifest.json (opt-in)")
   .option("--force", "Overwrite existing output files")
   .addHelpText("after", EXPORT_HELP)
   .action(async (options) => {
@@ -158,7 +157,6 @@ program
       directory: options.directory,
       groups: options.groups,
       strict: options.strict ?? false,
-      manifest: options.manifest ?? false,
       force: options.force ?? false,
     });
     process.exit(exitCode);
