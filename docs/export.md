@@ -25,11 +25,18 @@ ghostwire export --target <copilot|codex|all> [--groups <csv>] [--strict] [--man
 - `.github/agents/*.agent.md`
 - `.github/hooks/*.json`
 
-Current full-parity inventory (from source-of-truth manifests/templates) includes:
+Export inventory is generated from current source-of-truth manifests/templates at runtime.
+Use `--manifest` to inspect exact emitted counts for your current revision.
 
-- 38 agent artifacts
-- 19 skill artifacts
-- 46 prompt artifacts
+## Runtime Parity Semantics
+
+Export skill coverage is aligned to runtime skill resolution semantics:
+
+- canonical scoped discovery rooted at `.agents/skills`
+- deterministic first-wins collision handling
+- built-in skills merged as fallback after scoped resolution
+
+This ensures export coverage metrics reflect what runtime resolves, not just static embedded defaults.
 
 ## Groups Filter
 

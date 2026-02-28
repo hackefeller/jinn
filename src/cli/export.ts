@@ -1,8 +1,11 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
-import { AGENTS_MANIFEST } from "../execution/features/agents-manifest";
-import { createSkills } from "../execution/features/skills";
+import { AGENTS_MANIFEST } from "../execution/agents-manifest";
+import { createSkills, mergeScopedSkillsWithBuiltins } from "../execution/skills";
+import { resolveScopedSkillsCanonical } from "../execution/opencode-skill-loader";
+import type { Skill } from "../execution/skills/types";
+import type { LoadedSkill } from "../execution/opencode-skill-loader/types";
 
 type ExportTarget = "copilot" | "codex" | "all";
 
@@ -109,7 +112,32 @@ function extractTemplateLiteralsFromSource(source: string): string[] {
   return matches;
 }
 
-function compileExportModel(): ExportModel {
+function loadedSkillToRuntimeSkill(skill: LoadedSkill): Skill {
+  return {
+    name: skill.name,
+    description: skill.definition.description ?? "",
+    template: skill.definition.template ?? "",
+    ...(skill.allowedTools ? { allowedTools: skill.allowedTools } : {}),
+    ...(skill.mcpConfig ? { mcpConfig: skill.mcpConfig } : {}),
+  };
+}
+
+async function collectRuntimeResolvedSkills(): Promise<Skill[]> {
+  const scopedResolution = await resolveScopedSkillsCanonical({
+    includeUserScope: false,
+    includeSystemScope: false,
+  });
+  const scopedSkills = scopedResolution.skills.map(loadedSkillToRuntimeSkill);
+  const mergedScopedAndBuiltins = mergeScopedSkillsWithBuiltins(scopedSkills);
+
+  if (mergedScopedAndBuiltins.length > 0) {
+    return mergedScopedAndBuiltins;
+  }
+
+  return createSkills();
+}
+
+async function compileExportModel(): Promise<ExportModel> {
   const generatedAt = new Date().toISOString();
 
   const agents = [...AGENTS_MANIFEST]
@@ -121,8 +149,12 @@ function compileExportModel(): ExportModel {
       prompt: agent.prompt,
     }));
 
-  const uniqueSkills = new Map<string, { id: string; name: string; description: string; template: string }>();
-  for (const skill of createSkills()) {
+  const uniqueSkills = new Map<
+    string,
+    { id: string; name: string; description: string; template: string }
+  >();
+  const runtimeSkills = await collectRuntimeResolvedSkills();
+  for (const skill of runtimeSkills) {
     const id = slugify(skill.name || "skill");
     if (!uniqueSkills.has(id)) {
       uniqueSkills.set(id, {
@@ -135,7 +167,7 @@ function compileExportModel(): ExportModel {
   }
   const skills = [...uniqueSkills.values()].sort((a, b) => a.id.localeCompare(b.id));
 
-  const templatesRoot = new URL("../execution/features/commands/templates", import.meta.url).pathname;
+  const templatesRoot = new URL("../execution/commands/templates", import.meta.url).pathname;
   const templateFiles = collectFilesRecursively(
     templatesRoot,
     (path) => path.endsWith(".ts") && !path.endsWith(".test.ts") && !path.endsWith("/index.ts"),
@@ -233,7 +265,10 @@ function buildCopilotScopedInstructions(model: ExportModel): ExportArtifact[] {
   ];
 }
 
-function buildCopilotPromptArtifacts(model: ExportModel): { artifacts: ExportArtifact[]; emittedIds: string[] } {
+function buildCopilotPromptArtifacts(model: ExportModel): {
+  artifacts: ExportArtifact[];
+  emittedIds: string[];
+} {
   const artifacts: ExportArtifact[] = [];
   const emittedIds: string[] = [];
   const usedSlugs = new Set<string>();
@@ -243,14 +278,9 @@ function buildCopilotPromptArtifacts(model: ExportModel): { artifacts: ExportArt
     artifacts.push({
       target: "copilot",
       path: `.github/prompts/${slug}.prompt.md`,
-      content: [
-        `# ${prompt.id}`,
-        ``,
-        `Source: ${prompt.sourcePath}`,
-        ``,
-        prompt.content,
-        ``,
-      ].join("\n"),
+      content: [`# ${prompt.id}`, ``, `Source: ${prompt.sourcePath}`, ``, prompt.content, ``].join(
+        "\n",
+      ),
     });
     emittedIds.push(prompt.id);
   }
@@ -258,7 +288,10 @@ function buildCopilotPromptArtifacts(model: ExportModel): { artifacts: ExportArt
   return { artifacts, emittedIds };
 }
 
-function buildCopilotSkillArtifacts(model: ExportModel): { artifacts: ExportArtifact[]; emittedIds: string[] } {
+function buildCopilotSkillArtifacts(model: ExportModel): {
+  artifacts: ExportArtifact[];
+  emittedIds: string[];
+} {
   const artifacts: ExportArtifact[] = [];
   const emittedIds: string[] = [];
   const usedSlugs = new Set<string>();
@@ -284,7 +317,10 @@ function buildCopilotSkillArtifacts(model: ExportModel): { artifacts: ExportArti
   return { artifacts, emittedIds };
 }
 
-function buildCopilotAgentArtifacts(model: ExportModel): { artifacts: ExportArtifact[]; emittedIds: string[] } {
+function buildCopilotAgentArtifacts(model: ExportModel): {
+  artifacts: ExportArtifact[];
+  emittedIds: string[];
+} {
   const artifacts: ExportArtifact[] = [];
   const emittedIds: string[] = [];
   const usedSlugs = new Set<string>();
@@ -361,7 +397,11 @@ function buildCodexInstructions(model: ExportModel): { content: string; emittedI
   };
 }
 
-function createCoverageEntry(sourceIds: string[], emittedIds: string[], applicable: boolean): CoverageEntry {
+function createCoverageEntry(
+  sourceIds: string[],
+  emittedIds: string[],
+  applicable: boolean,
+): CoverageEntry {
   const sourceSet = new Set(sourceIds);
   const emittedSet = new Set(emittedIds);
   const missingIds = applicable ? [...sourceSet].filter((id) => !emittedSet.has(id)).sort() : [];
@@ -406,12 +446,12 @@ function createManifestArtifact(
   };
 }
 
-function resolveArtifactsWithGroups(
+async function resolveArtifactsWithGroups(
   baseDirectory: string,
   target: ExportTarget,
   groups: Set<CopilotGroup>,
-): ResolvedArtifacts {
-  const model = compileExportModel();
+): Promise<ResolvedArtifacts> {
+  const model = await compileExportModel();
   const relativeArtifacts: ExportArtifact[] = [];
 
   let emittedAgentIdsForCopilot: string[] = [];
@@ -483,7 +523,11 @@ function resolveArtifactsWithGroups(
       emittedPromptIds,
       (target === "copilot" || target === "all") && groups.has("prompts"),
     ),
-    codex_catalog: createCoverageEntry(sourceAgentIds, emittedCodexAgentIds, target === "codex" || target === "all"),
+    codex_catalog: createCoverageEntry(
+      sourceAgentIds,
+      emittedCodexAgentIds,
+      target === "codex" || target === "all",
+    ),
   };
 
   const absoluteArtifacts = relativeArtifacts.map((artifact) => ({
@@ -545,14 +589,22 @@ function runStrictValidation(artifacts: ExportArtifact[], coverage: ExportCovera
       }
     }
 
-    if (artifact.path.endsWith(".github/copilot-instructions.md") && artifact.content.length > 4000) {
+    if (
+      artifact.path.endsWith(".github/copilot-instructions.md") &&
+      artifact.content.length > 4000
+    ) {
       errors.push(
         `Copilot root instructions exceed 4000 characters (${artifact.content.length}): ${artifact.path}`,
       );
     }
   }
 
-  const parityClasses: Array<keyof ExportCoverage> = ["agents", "skills", "prompts", "codex_catalog"];
+  const parityClasses: Array<keyof ExportCoverage> = [
+    "agents",
+    "skills",
+    "prompts",
+    "codex_catalog",
+  ];
   for (const className of parityClasses) {
     const entry = coverage[className];
     if (entry.applicable && entry.missing_ids.length > 0) {
@@ -585,7 +637,7 @@ export async function exportGenius(args: ExportArgs): Promise<number> {
     return 1;
   }
 
-  const resolved = resolveArtifactsWithGroups(baseDirectory, target, groups);
+  const resolved = await resolveArtifactsWithGroups(baseDirectory, target, groups);
 
   const artifacts = [...resolved.artifacts];
   if (writeManifest) {
@@ -615,7 +667,9 @@ export async function exportGenius(args: ExportArgs): Promise<number> {
 
   for (const artifact of artifacts) {
     if (existsSync(artifact.path) && !force) {
-      console.error(`Refusing to overwrite existing file: ${artifact.path}. Use --force to overwrite.`);
+      console.error(
+        `Refusing to overwrite existing file: ${artifact.path}. Use --force to overwrite.`,
+      );
       return 1;
     }
   }

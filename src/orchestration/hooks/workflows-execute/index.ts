@@ -7,19 +7,19 @@ import {
   updatePlanFile,
   validateTaskDependencies,
   hasCircularDependency,
-} from "../../../execution/features/task-queue/plan-parser";
-import { resolvePlanArtifactRef } from "../../../execution/features/workflow-artifacts/store";
+} from "../../../execution/task-queue/plan-parser";
+import { resolvePlanArtifactRef } from "../../../execution/workflow-artifacts/store";
 import {
   calculateExecutionWaves,
   applyAutoWaves,
   getTasksByWave,
-} from "../../../execution/features/task-queue/parallelization";
+} from "../../../execution/task-queue/parallelization";
 import {
   buildTaskDelegationPlan,
   buildTaskDelegationPrompt,
   getTaskDelegationConfig,
-} from "../../../execution/features/task-queue/delegation-engine";
-import type { Task, WorkflowTaskList } from "../../../execution/features/task-queue";
+} from "../../../execution/task-queue/delegation-engine";
+import type { Task, WorkflowTaskList } from "../../../execution/task-queue";
 
 export const HOOK_NAME = "workflows-execute";
 

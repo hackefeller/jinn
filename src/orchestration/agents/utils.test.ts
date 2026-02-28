@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach, afterEach, spyOn } from "bun:test";
 import { createAgents, buildAgent, createAgentToolRestrictions } from "./utils";
 import type { AgentConfig } from "@opencode-ai/sdk";
-import { clearSkillCache } from "../../execution/features/opencode-skill-loader/skill-content";
+import { clearSkillCache } from "../../execution/opencode-skill-loader/skill-content";
 import * as connectedProvidersCache from "../../platform/opencode/connected-providers-cache";
 
 const TEST_DEFAULT_MODEL = "anthropic/claude-opus-4-5";
@@ -76,13 +76,12 @@ describe("buildAgent", () => {
   });
 
   test("applies category model when base model is absent", () => {
-    const source =
-      () =>
-        ({
-          description: "test",
-          category: "visual-engineering",
-          prompt: "Base prompt",
-        }) as AgentConfig;
+    const source = () =>
+      ({
+        description: "test",
+        category: "visual-engineering",
+        prompt: "Base prompt",
+      }) as AgentConfig;
 
     const built = buildAgent(source, TEST_MODEL);
 
@@ -92,13 +91,12 @@ describe("buildAgent", () => {
   });
 
   test("prepends skill content", () => {
-    const source =
-      () =>
-        ({
-          description: "test",
-          skills: ["frontend-ui-ux"],
-          prompt: "Agent prompt",
-        }) as AgentConfig;
+    const source = () =>
+      ({
+        description: "test",
+        skills: ["frontend-ui-ux"],
+        prompt: "Agent prompt",
+      }) as AgentConfig;
 
     const built = buildAgent(source, TEST_MODEL);
 
@@ -107,13 +105,12 @@ describe("buildAgent", () => {
   });
 
   test("falls back to provided model when category is unknown", () => {
-    const source =
-      () =>
-        ({
-          description: "test",
-          category: "unknown-category",
-          prompt: "Base prompt",
-        }) as AgentConfig;
+    const source = () =>
+      ({
+        description: "test",
+        category: "unknown-category",
+        prompt: "Base prompt",
+      }) as AgentConfig;
 
     const built = buildAgent(source, TEST_MODEL);
 

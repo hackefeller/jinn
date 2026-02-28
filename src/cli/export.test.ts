@@ -1,10 +1,18 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
-import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
+import { dirname, join } from "node:path";
 import { tmpdir } from "node:os";
 import { exportGenius } from "./export";
-import { AGENTS_MANIFEST } from "../execution/features/agents-manifest";
-import { createSkills } from "../execution/features/skills";
+import { AGENTS_MANIFEST } from "../execution/agents-manifest";
+import { createSkills } from "../execution/skills";
 
 function countFilesRecursive(root: string): number {
   if (!existsSync(root)) return 0;
@@ -30,6 +38,7 @@ describe("export CLI", () => {
   const mockConsoleError = mock(() => {});
   const originalConsoleLog = console.log;
   const originalConsoleError = console.error;
+  const originalCwd = process.cwd();
 
   beforeEach(() => {
     //#given temporary project directory
@@ -45,6 +54,7 @@ describe("export CLI", () => {
   });
 
   afterEach(() => {
+    process.chdir(originalCwd);
     console.log = originalConsoleLog;
     console.error = originalConsoleError;
     if (existsSync(tempDir)) {
@@ -80,7 +90,6 @@ describe("export CLI", () => {
     const content = readFileSync(outputPath, "utf-8");
     expect(content).toContain("Ghostwire Copilot Instructions");
     expect(content.length).toBeLessThan(4000);
-
   });
 
   test("exports codex instructions to AGENTS.md", async () => {
@@ -207,10 +216,50 @@ describe("export CLI", () => {
     expect(manifest.coverage.agents.source_count).toBe(AGENTS_MANIFEST.length);
     expect(manifest.coverage.agents.emitted_count).toBe(AGENTS_MANIFEST.length);
     expect(manifest.coverage.agents.missing_ids).toHaveLength(0);
-    expect(manifest.coverage.skills.source_count).toBe(createSkills().length);
-    expect(manifest.coverage.skills.emitted_count).toBe(createSkills().length);
+    expect(manifest.coverage.skills.source_count).toBeGreaterThanOrEqual(createSkills().length);
+    expect(manifest.coverage.skills.emitted_count).toBe(manifest.coverage.skills.source_count);
     expect(manifest.coverage.skills.missing_ids).toHaveLength(0);
     expect(manifest.coverage.prompts.source_count).toBeGreaterThan(30);
     expect(manifest.coverage.prompts.source_count).toBe(manifest.coverage.prompts.emitted_count);
+  });
+
+  test("includes canonical scoped runtime skills in export parity model", async () => {
+    //#given
+    process.chdir(tempDir);
+    const scopedSkillPath = join(
+      tempDir,
+      ".agents",
+      "skills",
+      "runtime-parity-extra-skill",
+      "SKILL.md",
+    );
+    mkdirSync(dirname(scopedSkillPath), { recursive: true });
+    writeFileSync(
+      scopedSkillPath,
+      `---
+name: runtime-parity-extra-skill
+description: Runtime parity scoped skill for export verification.
+---
+Scoped export parity template body.
+`,
+      "utf-8",
+    );
+
+    //#when
+    const exitCode = await exportGenius({
+      target: "copilot",
+      directory: tempDir,
+      manifest: true,
+      force: true,
+    });
+
+    //#then
+    expect(exitCode).toBe(0);
+    const manifestPath = join(tempDir, ".ghostwire", "export-manifest.json");
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf-8"));
+    expect(manifest.coverage.skills.source_count).toBeGreaterThanOrEqual(createSkills().length + 1);
+    expect(
+      existsSync(join(tempDir, ".github", "skills", "runtime-parity-extra-skill", "SKILL.md")),
+    ).toBe(true);
   });
 });

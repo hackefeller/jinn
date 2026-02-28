@@ -3,7 +3,7 @@ import { executeSlashCommand, type ExecutorOptions } from "./executor";
 import { log } from "../../../integration/shared";
 import { AUTO_SLASH_COMMAND_TAG_OPEN, AUTO_SLASH_COMMAND_TAG_CLOSE } from "./constants";
 import type { AutoSlashCommandHookInput, AutoSlashCommandHookOutput } from "./types";
-import type { LoadedSkill } from "../../../execution/features/opencode-skill-loader";
+import type { LoadedSkill } from "../../../execution/opencode-skill-loader";
 
 export * from "./detector";
 export * from "./executor";

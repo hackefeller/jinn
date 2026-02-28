@@ -1,6 +1,6 @@
 import type { CheckResult, CheckDefinition } from "../types";
 import { CHECK_IDS, CHECK_NAMES } from "../constants";
-import { getMcpOauthStoragePath } from "../../../execution/features/mcp-oauth/storage";
+import { getMcpOauthStoragePath } from "../../../execution/mcp-oauth/storage";
 import { existsSync, readFileSync } from "node:fs";
 
 interface OAuthTokenData {

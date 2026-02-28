@@ -136,7 +136,7 @@ describe("Regression Tests", () => {
 
     test("learnings skill exists", () => {
       //#given & #when
-      const { createSkills } = require("../src/execution/features/skills/skills");
+      const { createSkills } = require("../src/execution/skills/skills");
       const skills = createSkills();
 
       //#then

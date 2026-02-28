@@ -1,10 +1,10 @@
 import type { PluginInput } from "@opencode-ai/plugin";
 import { existsSync } from "node:fs";
 import { log } from "../../../integration/shared/logger";
-import { parsePlanFile } from "../../../execution/features/task-queue/plan-parser";
-import { getTasksByWave } from "../../../execution/features/task-queue/parallelization";
-import type { Task } from "../../../execution/features/task-queue";
-import { resolvePlanArtifactRef } from "../../../execution/features/workflow-artifacts/store";
+import { parsePlanFile } from "../../../execution/task-queue/plan-parser";
+import { getTasksByWave } from "../../../execution/task-queue/parallelization";
+import type { Task } from "../../../execution/task-queue";
+import { resolvePlanArtifactRef } from "../../../execution/workflow-artifacts/store";
 
 export const HOOK_NAME = "workflows-status";
 

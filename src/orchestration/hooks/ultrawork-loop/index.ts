@@ -10,7 +10,7 @@ import { getTranscriptPath as getDefaultTranscriptPath } from "../claude-code-ho
 import {
   findNearestMessageWithFields,
   MESSAGE_STORAGE,
-} from "../../../execution/features/hook-message-injector";
+} from "../../../execution/hook-message-injector";
 
 function getMessageDir(sessionID: string): string | null {
   if (!existsSync(MESSAGE_STORAGE)) return null;

@@ -7,10 +7,10 @@ import {
   writeUltraworkState,
   clearUltraworkState,
   readUltraworkState,
-} from "../../../execution/features/ultrawork-state";
-import type { UltraworkState } from "../../../execution/features/ultrawork-state";
+} from "../../../execution/ultrawork-state";
+import type { UltraworkState } from "../../../execution/ultrawork-state";
 
-import { MESSAGE_STORAGE } from "../../../execution/features/hook-message-injector";
+import { MESSAGE_STORAGE } from "../../../execution/hook-message-injector";
 
 describe("orchestrator hook", () => {
   const TEST_DIR = join(tmpdir(), "orchestrator-test-" + Date.now());

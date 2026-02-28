@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from "bun:test";
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { saveToken } from "../../execution/features/mcp-oauth/storage";
+import { saveToken } from "../../execution/mcp-oauth/storage";
 
 import { logout } from "./logout";
 

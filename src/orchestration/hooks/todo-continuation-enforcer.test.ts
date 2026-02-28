@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 
-import type { BackgroundManager } from "../../execution/features/background-agent";
+import type { BackgroundManager } from "../../execution/background-agent";
 import {
   setMainSession,
   subagentSessions,
   _resetForTesting,
-} from "../../execution/features/claude-code-session-state";
+} from "../../execution/claude-code-session-state";
 import { createTodoContinuationEnforcer } from "./todo-continuation-enforcer";
 
 type TimerCallback = (...args: any[]) => void;

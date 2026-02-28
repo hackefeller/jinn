@@ -5,7 +5,7 @@ import {
   setMainSession,
   subagentSessions,
   _resetForTesting,
-} from "../../execution/features/claude-code-session-state";
+} from "../../execution/claude-code-session-state";
 import * as utils from "./session-notification-utils";
 
 describe("grid-session-notification", () => {

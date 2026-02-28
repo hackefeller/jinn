@@ -24,7 +24,7 @@ import {
 import type { PluginConfig } from "./types";
 import { log } from "../../../integration/shared";
 import { isHookDisabled } from "../../../platform/claude/hook-disabled";
-import type { ContextCollector } from "../../../execution/features/context-injector";
+import type { ContextCollector } from "../../../execution/context-injector";
 
 const sessionFirstMessageProcessed = new Set<string>();
 const sessionErrorState = new Map<string, { hasError: boolean; errorMessage?: string }>();

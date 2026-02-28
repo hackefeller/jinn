@@ -1,4 +1,4 @@
-import { injectHookMessage } from "../../../execution/features/hook-message-injector";
+import { injectHookMessage } from "../../../execution/hook-message-injector";
 import { log } from "../../../integration/shared/logger";
 import {
   createSystemDirective,

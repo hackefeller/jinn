@@ -16,13 +16,13 @@ describe("Learnings System - Foundation Tests", () => {
       // Verify the learnings skill directory exists
       const fs = require("fs");
 
-      const skillPath = "src/execution/features/skills/learnings/SKILL.md";
+      const skillPath = "src/execution/skills/learnings/SKILL.md";
       expect(fs.existsSync(skillPath)).toBe(true);
       expect(fs.statSync(skillPath).isFile()).toBe(true);
     });
 
     test("learnings skill has valid frontmatter", () => {
-      const { createSkills } = require("../src/execution/features/skills/skills");
+      const { createSkills } = require("../src/execution/skills/skills");
 
       const skills = createSkills();
       const learningsSkill = skills.find((s) => s.name === "learnings");

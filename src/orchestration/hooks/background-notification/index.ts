@@ -1,4 +1,4 @@
-import type { BackgroundManager } from "../../../execution/features/background-agent";
+import type { BackgroundManager } from "../../../execution/background-agent";
 
 interface Event {
   type: string;

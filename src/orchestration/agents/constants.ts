@@ -1,5 +1,5 @@
-import { COMMAND_NAME_VALUES } from "../../execution/features/commands/command-name-values";
-import { SKILL_NAME_VALUES } from "../../execution/features/skills/skills-manifest";
+import { COMMAND_NAME_VALUES } from "../../execution/commands/command-name-values";
+import { SKILL_NAME_VALUES } from "../../execution/skills/skills-manifest";
 
 export const AGENT_DO = "do";
 export const AGENT_RESEARCH = "research";

@@ -45,7 +45,7 @@ import {
 } from "./background-task";
 
 import type { PluginInput, ToolDefinition } from "@opencode-ai/plugin";
-import type { BackgroundManager } from "../features/background-agent";
+import type { BackgroundManager } from "../background-agent";
 
 type OpencodeClient = PluginInput["client"];
 

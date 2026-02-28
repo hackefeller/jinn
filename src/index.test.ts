@@ -1,5 +1,11 @@
 import { describe, expect, it } from "bun:test";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { tmpdir } from "node:os";
 import { includesCaseInsensitive } from "./integration/shared";
+import { createSkills } from "./execution/skills";
+import { discoverSharedPipelineSkills, mergeSkills } from "./execution/opencode-skill-loader";
+import type { LoadedSkill } from "./execution/opencode-skill-loader";
 
 /**
  * Tests for conditional tool registration logic in index.ts
@@ -61,7 +67,7 @@ describe("look_at tool conditional registration", () => {
     // #then look_at should be included
     it("includes look_at when lookAt is not null", () => {
       const lookAt = { execute: () => {} }; // mock tool
-      const tools = (lookAt ? { look_at: lookAt } : {});
+      const tools = lookAt ? { look_at: lookAt } : {};
       expect(tools).toHaveProperty("look_at");
     });
 
@@ -70,8 +76,45 @@ describe("look_at tool conditional registration", () => {
     // #then look_at should NOT be included
     it("excludes look_at when lookAt is null", () => {
       const lookAt = null;
-      const tools = (lookAt ? { look_at: lookAt } : {});
+      const tools = lookAt ? { look_at: lookAt } : {};
       expect(tools).not.toHaveProperty("look_at");
     });
+  });
+});
+
+describe("shared skill pipeline integration (US3)", () => {
+  it("uses one canonical discovery pipeline for merged runtime skills", async () => {
+    //#given
+    const sandboxRoot = mkdtempSync(join(tmpdir(), "ghostwire-us3-index-"));
+    const scopedSkillPath = join(sandboxRoot, ".agents", "skills", "us3-shared-skill", "SKILL.md");
+    mkdirSync(dirname(scopedSkillPath), { recursive: true });
+    writeFileSync(
+      scopedSkillPath,
+      `---
+name: us3-shared-skill
+description: Shared pipeline scoped skill for index integration test.
+---
+Scoped shared pipeline content.
+`,
+    );
+
+    try {
+      const builtins = createSkills();
+
+      //#when
+      const sharedDiscoveredSkills = await discoverSharedPipelineSkills({
+        cwd: sandboxRoot,
+        includeUserScope: false,
+      });
+      const merged = mergeSkills(builtins, undefined, sharedDiscoveredSkills);
+
+      //#then
+      expect(
+        sharedDiscoveredSkills.some((skill: LoadedSkill) => skill.name === "us3-shared-skill"),
+      ).toBe(true);
+      expect(merged.some((skill: LoadedSkill) => skill.name === "us3-shared-skill")).toBe(true);
+    } finally {
+      rmSync(sandboxRoot, { recursive: true, force: true });
+    }
   });
 });

@@ -4,24 +4,18 @@ import {
   loadProjectCommands,
   loadOpencodeGlobalCommands,
   loadOpencodeProjectCommands,
-} from "../../execution/features/claude-code-command-loader";
-import { loadCommands } from "../../execution/features/commands";
+} from "../../execution/claude-code-command-loader";
+import { loadCommands } from "../../execution/commands";
 import {
   loadUserSkills,
   loadProjectSkills,
   loadOpencodeGlobalSkills,
   loadOpencodeProjectSkills,
-  discoverUserClaudeSkills,
-  discoverProjectClaudeSkills,
-  discoverOpencodeGlobalSkills,
-  discoverOpencodeProjectSkills,
-} from "../../execution/features/opencode-skill-loader";
-import {
-  loadUserAgents,
-  loadProjectAgents,
-} from "../../execution/features/claude-code-agent-loader";
-import { loadMcpConfigs } from "../../execution/features/claude-code-mcp-loader";
-import { loadAllPluginComponents } from "../../execution/features/claude-code-plugin-loader";
+  discoverSharedPipelineSkills,
+} from "../../execution/opencode-skill-loader";
+import { loadUserAgents, loadProjectAgents } from "../../execution/claude-code-agent-loader";
+import { loadMcpConfigs } from "../../execution/claude-code-mcp-loader";
+import { loadAllPluginComponents } from "../../execution/claude-code-plugin-loader";
 import { createMcps } from "../../integration/mcp";
 import type { GhostwireConfig } from "../../platform/config";
 import { log } from "../../integration/shared";
@@ -41,6 +35,16 @@ export function resolveCategoryConfig(
   userCategories?: Record<string, CategoryConfig>,
 ): CategoryConfig | undefined {
   return userCategories?.[categoryName] ?? DEFAULT_CATEGORIES[categoryName];
+}
+
+export async function discoverSkillsForAgentAwareness(options: {
+  cwd: string;
+  includeUserScope: boolean;
+}): Promise<Awaited<ReturnType<typeof discoverSharedPipelineSkills>>> {
+  return discoverSharedPipelineSkills({
+    cwd: options.cwd,
+    includeUserScope: options.includeUserScope,
+  });
 }
 
 export function createConfigHandler(deps: ConfigHandlerDeps) {
@@ -98,24 +102,10 @@ export function createConfigHandler(deps: ConfigHandlerDeps) {
     const disabledAgents = pluginConfig.disabled_agents ?? [];
 
     const includeClaudeSkillsForAwareness = pluginConfig.claude_code?.skills ?? true;
-    const [
-      discoveredUserSkills,
-      discoveredProjectSkills,
-      discoveredOpencodeGlobalSkills,
-      discoveredOpencodeProjectSkills,
-    ] = await Promise.all([
-      includeClaudeSkillsForAwareness ? discoverUserClaudeSkills() : Promise.resolve([]),
-      includeClaudeSkillsForAwareness ? discoverProjectClaudeSkills() : Promise.resolve([]),
-      discoverOpencodeGlobalSkills(),
-      discoverOpencodeProjectSkills(),
-    ]);
-
-    const allDiscoveredSkills = [
-      ...discoveredOpencodeProjectSkills,
-      ...discoveredProjectSkills,
-      ...discoveredOpencodeGlobalSkills,
-      ...discoveredUserSkills,
-    ];
+    const allDiscoveredSkills = await discoverSkillsForAgentAwareness({
+      cwd: ctx.directory,
+      includeUserScope: includeClaudeSkillsForAwareness,
+    });
 
     const browserProvider = pluginConfig.browser_automation_engine?.provider ?? "playwright";
     // config.model represents the currently active model in OpenCode (including UI selection)

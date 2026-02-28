@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from "bun:test";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { mkdirSync, rmSync, writeFileSync, readFileSync, existsSync } from "node:fs";
-import type { Task } from "../../../execution/features/task-queue";
+import type { Task } from "../../../execution/task-queue";
 import { extractTasksFromPlannerResponse, processTasksForPlan } from ".";
 
 // Mock implementations of hook functions for testing

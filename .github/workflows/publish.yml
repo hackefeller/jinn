@@ -51,7 +51,7 @@ jobs:
           # Run them in separate processes to prevent cross-file contamination
           bun test src/platform/opencode/config-composer.test.ts
           bun test src/orchestration/hooks/compaction-context-injector
-          bun test src/execution/features/tmux-subagent
+          bun test src/execution/tmux-subagent
 
       - name: Run remaining tests
         run: |
@@ -61,13 +61,13 @@ jobs:
             src/orchestration/hooks/anthropic-context-window-limit-recovery \
             src/orchestration/hooks/session-notification.ts \
             src/orchestration/hooks/todo-continuation-enforcer.ts \
-            src/execution/features/background-agent \
-            src/execution/features/builtin-commands \
-            src/execution/features/builtin-skills \
-            src/execution/features/claude-code-session-state \
-            src/execution/features/hook-message-injector \
-            src/execution/features/opencode-skill-loader \
-            src/execution/features/skill-mcp-manager
+            src/execution/background-agent \
+            src/execution/builtin-commands \
+            src/execution/builtin-skills \
+            src/execution/claude-code-session-state \
+            src/execution/hook-message-injector \
+            src/execution/opencode-skill-loader \
+            src/execution/skill-mcp-manager
 
   typecheck:
     runs-on: ubuntu-latest

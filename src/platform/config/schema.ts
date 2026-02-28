@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { AnyMcpNameSchema, McpNameSchema } from "../../integration/mcp/types";
-import { COMMAND_NAME_VALUES } from "../../execution/features/commands/command-name-values";
-import { SKILL_NAME_VALUES } from "../../execution/features/skills/skills-manifest";
-import type { CommandName } from "../../execution/features/commands/command-name-values";
+import { COMMAND_NAME_VALUES } from "../../execution/commands/command-name-values";
+import { SKILL_NAME_VALUES } from "../../execution/skills/skills-manifest";
+import type { CommandName } from "../../execution/commands/command-name-values";
 
 const PermissionValue = z.enum(["ask", "allow", "deny"]);
 

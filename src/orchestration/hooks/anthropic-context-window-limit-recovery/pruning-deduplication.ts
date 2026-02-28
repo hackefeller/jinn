@@ -3,7 +3,7 @@ import { join } from "node:path";
 import type { PruningState, ToolCallSignature } from "./pruning-types";
 import { estimateTokens } from "./pruning-types";
 import { log } from "../../../integration/shared/logger";
-import { MESSAGE_STORAGE } from "../../../execution/features/hook-message-injector";
+import { MESSAGE_STORAGE } from "../../../execution/hook-message-injector";
 
 export interface DeduplicationConfig {
   enabled: boolean;

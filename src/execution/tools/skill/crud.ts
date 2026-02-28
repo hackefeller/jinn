@@ -3,9 +3,9 @@ import { existsSync } from "node:fs";
 import { readFile, writeFile, unlink, readdir, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { getOpenCodeConfigDir } from "../../../platform/opencode/config-dir";
-import type { SkillScope, SkillMetadata } from "../../features/opencode-skill-loader/types";
-import { discoverSkills } from "../../features/opencode-skill-loader/loader";
-import { clearSkillCache } from "../../features/opencode-skill-loader/skill-content";
+import type { SkillScope, SkillMetadata } from "../../opencode-skill-loader/types";
+import { discoverSkills } from "../../opencode-skill-loader/loader";
+import { clearSkillCache } from "../../opencode-skill-loader/skill-content";
 import { parseFrontmatter } from "../../../integration/shared/frontmatter";
 import type {
   SkillCreateArgs,
@@ -210,7 +210,7 @@ Lists all available skills`,
       const loadedSkills = await discoverSkills({ includeClaudeCodePaths: true });
 
       // Also get builtin skills
-      const { createSkills } = await import("../../features/skills/skills");
+      const { createSkills } = await import("../../skills/skills");
       const builtinDefs = createSkills({});
       const builtinSkills: SkillInfo[] = builtinDefs.map((s) => ({
         name: s.name,

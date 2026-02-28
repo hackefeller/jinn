@@ -117,6 +117,7 @@ describe("session-manager tools", () => {
     const result = await session_search.execute(
       {
         query: "TEST",
+        session_id: "ses_test123",
         case_sensitive: true,
       },
       mockContext,

@@ -268,9 +268,30 @@ Disable built-in skills via `disabled_skills` in `~/.config/opencode/ghostwire.j
 
 Available built-in skills: `playwright`, `agent-browser`, `git-master`
 
+## Canonical Skills Discovery (Hard Switch)
+
+Ghostwire now uses a canonical scoped discovery path:
+
+- `.agents/skills` (walked from current working directory up to repository root)
+
+Deterministic precedence is applied from nearest scope outward (first-wins collision policy).
+
+### Migration Note
+
+Automatic runtime discovery from legacy paths has been removed:
+
+- `.claude/skills`
+- `.opencode/skills`
+
+To migrate, move skills to `.agents/skills/<skill-name>/SKILL.md`.
+
+Built-in skills are merged as fallback after scoped discovery.
+
 ## Skills Configuration
 
 Configure advanced skills settings including custom skill sources, enabling/disabling specific skills, and defining custom skills.
+
+Note: `skills.sources` remains supported for explicit configuration-driven loading. The hard switch described above applies to automatic filesystem discovery.
 
 ```json
 {

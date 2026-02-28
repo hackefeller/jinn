@@ -5,7 +5,7 @@ import { join } from "node:path";
 import {
   findNearestMessageWithFields,
   MESSAGE_STORAGE,
-} from "../../execution/features/hook-message-injector";
+} from "../../execution/hook-message-injector";
 
 export function getMessageDir(sessionID: string): string | null {
   if (!existsSync(MESSAGE_STORAGE)) return null;

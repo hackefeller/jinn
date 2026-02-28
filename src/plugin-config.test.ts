@@ -1,6 +1,11 @@
 import { describe, expect, it } from "bun:test";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { tmpdir } from "node:os";
 import { mergeConfigs } from "./plugin-config";
 import type { GhostwireConfig } from "./platform/config";
+import { discoverSkillsForAgentAwareness } from "./platform/opencode/config-composer";
+import type { LoadedSkill } from "./execution/opencode-skill-loader";
 
 describe("mergeConfigs", () => {
   describe("categories merging", () => {
@@ -114,6 +119,42 @@ describe("mergeConfigs", () => {
       expect(result.disabled_hooks).toContain("think-mode");
       expect(result.disabled_hooks).toContain("session-recovery");
       expect(result.disabled_hooks?.length).toBe(3);
+    });
+  });
+
+  describe("US3 single-pipeline discovery", () => {
+    it("discovers awareness skills through shared canonical pipeline", async () => {
+      const sandboxRoot = mkdtempSync(join(tmpdir(), "ghostwire-us3-config-"));
+      const scopedSkillPath = join(
+        sandboxRoot,
+        ".agents",
+        "skills",
+        "us3-config-pipeline-skill",
+        "SKILL.md",
+      );
+      mkdirSync(dirname(scopedSkillPath), { recursive: true });
+      writeFileSync(
+        scopedSkillPath,
+        `---
+name: us3-config-pipeline-skill
+description: Shared pipeline scoped skill for config composer test.
+---
+Scoped config composer shared pipeline content.
+`,
+      );
+
+      try {
+        const discovered = await discoverSkillsForAgentAwareness({
+          cwd: sandboxRoot,
+          includeUserScope: false,
+        });
+
+        expect(
+          discovered.some((skill: LoadedSkill) => skill.name === "us3-config-pipeline-skill"),
+        ).toBe(true);
+      } finally {
+        rmSync(sandboxRoot, { recursive: true, force: true });
+      }
     });
   });
 });

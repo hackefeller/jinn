@@ -1,7 +1,7 @@
 import { tool, type PluginInput, type ToolDefinition } from "@opencode-ai/plugin";
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import type { BackgroundManager } from "../../features/background-agent";
+import type { BackgroundManager } from "../../background-agent";
 import type { DelegateTaskArgs } from "./types";
 import type {
   CategoryConfig,
@@ -15,12 +15,12 @@ import {
   findNearestMessageWithFields,
   findFirstMessageWithAgent,
   MESSAGE_STORAGE,
-} from "../../features/hook-message-injector";
-import { resolveMultipleSkillsAsync } from "../../features/opencode-skill-loader/skill-content";
-import { discoverSkills } from "../../features/opencode-skill-loader";
-import { getTaskToastManager } from "../../features/task-toast-manager";
-import type { ModelFallbackInfo } from "../../features/task-toast-manager/types";
-import { subagentSessions, getSessionAgent } from "../../features/claude-code-session-state";
+} from "../../hook-message-injector";
+import { resolveMultipleSkillsAsync } from "../../opencode-skill-loader/skill-content";
+import { discoverSkills } from "../../opencode-skill-loader";
+import { getTaskToastManager } from "../../task-toast-manager";
+import type { ModelFallbackInfo } from "../../task-toast-manager/types";
+import { subagentSessions, getSessionAgent } from "../../claude-code-session-state";
 import { log, promptWithModelSuggestionRetry } from "../../../integration/shared";
 import { getAgentToolRestrictions } from "../../../orchestration/agents/agent-tool-restrictions";
 import { resolveModel } from "../../../orchestration/agents/model-resolver";

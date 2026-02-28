@@ -2,12 +2,12 @@ import { dirname, join } from "node:path";
 import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseFrontmatter } from "../integration/shared/frontmatter";
-import type { Skill } from "../execution/features/skills/types";
-import type { SkillMcpConfig } from "../execution/features/skill-mcp-manager/types";
+import type { Skill } from "../execution/skills/types";
+import type { SkillMcpConfig } from "../execution/skill-mcp-manager/types";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SKILLS_DIR = join(__dirname, "../execution/features/skills");
-const OUTPUT_FILE = join(__dirname, "../execution/features/skills/skills-manifest.ts");
+const SKILLS_DIR = join(__dirname, "../execution/skills");
+const OUTPUT_FILE = join(__dirname, "../execution/skills/skills-manifest.ts");
 
 interface SkillFrontmatter {
   name: string;
@@ -78,6 +78,27 @@ export const SKILLS_MANIFEST: ReadonlyArray<Skill> = ${skillsJson} as const;
 export const SKILL_NAME_VALUES = ${skillNamesJson} as const;
 
 export type SkillName = (typeof SKILL_NAME_VALUES)[number];
+
+export const SKILLS_MANIFEST_RESOLUTION = {
+  canonicalPath: ".agents/skills",
+  collisionPolicy: "first-wins",
+  builtinMerge: "fallback-after-scoped",
+} as const;
+
+export function mergeBuiltinManifestAfterScoped(scopedSkills: ReadonlyArray<Skill>): Skill[] {
+  const mergedSkills: Skill[] = [...scopedSkills];
+  const seenNames = new Set(scopedSkills.map((skill) => skill.name));
+
+  for (const builtinSkill of SKILLS_MANIFEST) {
+    if (seenNames.has(builtinSkill.name)) {
+      continue;
+    }
+    seenNames.add(builtinSkill.name);
+    mergedSkills.push(builtinSkill);
+  }
+
+  return mergedSkills;
+}
 `;
 }
 

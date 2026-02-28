@@ -11,8 +11,8 @@ import {
   getMainSessionID,
   getSessionAgent,
   subagentSessions,
-} from "../../../execution/features/claude-code-session-state";
-import type { ContextCollector } from "../../../execution/features/context-injector";
+} from "../../../execution/claude-code-session-state";
+import type { ContextCollector } from "../../../execution/context-injector";
 
 export * from "./detector";
 export * from "./constants";

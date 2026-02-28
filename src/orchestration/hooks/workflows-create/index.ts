@@ -1,9 +1,9 @@
 import { join } from "node:path";
 import { existsSync } from "node:fs";
 import { log } from "../../../integration/shared/logger";
-import { updatePlanFile } from "../../../execution/features/task-queue/plan-parser";
+import { updatePlanFile } from "../../../execution/task-queue/plan-parser";
 import { saveOpenCodeTodos } from "../../hooks/claude-code-hooks/todo";
-import type { Task, WorkflowTaskList } from "../../../execution/features/task-queue";
+import type { Task, WorkflowTaskList } from "../../../execution/task-queue";
 
 export const HOOK_NAME = "workflows-create";
 

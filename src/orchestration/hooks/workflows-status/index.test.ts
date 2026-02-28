@@ -1,5 +1,5 @@
 import { describe, it, expect } from "bun:test";
-import type { Task } from "../../../execution/features/task-queue";
+import type { Task } from "../../../execution/task-queue";
 
 //#given a workflows:status hook
 //#when invoked to check workflow progress

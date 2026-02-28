@@ -2,7 +2,7 @@ import { describe, expect, it, mock, beforeEach, afterEach } from "bun:test";
 
 // Mock dependencies before importing
 const mockInjectHookMessage = mock(() => true);
-mock.module("../../../execution/features/hook-message-injector", () => ({
+mock.module("../../../execution/hook-message-injector", () => ({
   injectHookMessage: mockInjectHookMessage,
 }));
 

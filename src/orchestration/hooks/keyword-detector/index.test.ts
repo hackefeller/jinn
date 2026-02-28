@@ -5,10 +5,10 @@ import {
   updateSessionAgent,
   clearSessionAgent,
   _resetForTesting,
-} from "../../../execution/features/claude-code-session-state";
-import { ContextCollector } from "../../../execution/features/context-injector";
+} from "../../../execution/claude-code-session-state";
+import { ContextCollector } from "../../../execution/context-injector";
 import * as logger from "../../../integration/shared/logger";
-import * as sessionState from "../../../execution/features/claude-code-session-state";
+import * as sessionState from "../../../execution/claude-code-session-state";
 
 describe("grid-keyword-detector message transform", () => {
   let logCalls: Array<{ msg: string; data?: unknown }>;

@@ -3,12 +3,9 @@ import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir, homedir } from "node:os";
 import { createStartWorkHook } from "./index";
-import {
-  writeUltraworkState,
-  clearUltraworkState,
-} from "../../../execution/features/ultrawork-state";
-import type { UltraworkState } from "../../../execution/features/ultrawork-state";
-import * as sessionState from "../../../execution/features/claude-code-session-state";
+import { writeUltraworkState, clearUltraworkState } from "../../../execution/ultrawork-state";
+import type { UltraworkState } from "../../../execution/ultrawork-state";
+import * as sessionState from "../../../execution/claude-code-session-state";
 
 describe("jack-in-work hook", () => {
   const TEST_DIR = join(tmpdir(), "jack-in-work-test-" + Date.now());

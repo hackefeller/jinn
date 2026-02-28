@@ -35,9 +35,9 @@ import {
   DEFAULT_CATEGORIES,
   CATEGORY_DESCRIPTIONS,
 } from "../../execution/tools/delegate-task/constants";
-import { resolveMultipleSkills } from "../../execution/features/opencode-skill-loader/skill-content";
-import { createSkills } from "../../execution/features/skills";
-import type { LoadedSkill, SkillScope } from "../../execution/features/opencode-skill-loader/types";
+import { resolveMultipleSkills } from "../../execution/opencode-skill-loader/skill-content";
+import { createSkills } from "../../execution/skills";
+import type { LoadedSkill, SkillScope } from "../../execution/opencode-skill-loader/types";
 import type { BrowserAutomationProvider } from "../../platform/config/schema";
 export {
   createAgentToolAllowlist,

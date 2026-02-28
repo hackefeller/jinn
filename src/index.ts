@@ -38,30 +38,24 @@ import {
 import {
   contextCollector,
   createContextInjectorMessagesTransformHook,
-} from "./execution/features/context-injector";
+} from "./execution/context-injector";
 import {
   applyAgentVariant,
   resolveAgentVariant,
   resolveVariantForModel,
 } from "./integration/shared/agent-variant";
 import { createFirstMessageVariantGate } from "./integration/shared/first-message-variant";
-import {
-  discoverUserClaudeSkills,
-  discoverProjectClaudeSkills,
-  discoverOpencodeGlobalSkills,
-  discoverOpencodeProjectSkills,
-  mergeSkills,
-} from "./execution/features/opencode-skill-loader";
-import { createSkills } from "./execution/features/skills";
+import { discoverSharedPipelineSkills, mergeSkills } from "./execution/opencode-skill-loader";
+import { createSkills } from "./execution/skills";
 import { createAgents } from "./orchestration/agents";
-import { getSystemMcpServerNames } from "./execution/features/claude-code-mcp-loader";
+import { getSystemMcpServerNames } from "./execution/claude-code-mcp-loader";
 import {
   setMainSession,
   getMainSessionID,
   setSessionAgent,
   updateSessionAgent,
   clearSessionAgent,
-} from "./execution/features/claude-code-session-state";
+} from "./execution/claude-code-session-state";
 import {
   tools,
   createBackgroundTools,
@@ -76,11 +70,11 @@ import {
   startTmuxCheck,
   lspManager,
 } from "./execution/tools";
-import { BackgroundManager } from "./execution/features/background-agent";
-import { SkillMcpManager } from "./execution/features/skill-mcp-manager";
-import { initTaskToastManager } from "./execution/features/task-toast-manager";
-import { TmuxSessionManager } from "./execution/features/tmux-subagent";
-import { clearUltraworkState } from "./execution/features/ultrawork-state";
+import { BackgroundManager } from "./execution/background-agent";
+import { SkillMcpManager } from "./execution/skill-mcp-manager";
+import { initTaskToastManager } from "./execution/task-toast-manager";
+import { TmuxSessionManager } from "./execution/tmux-subagent";
+import { clearUltraworkState } from "./execution/ultrawork-state";
 import { type HookName } from "./platform/config";
 import {
   log,
@@ -372,20 +366,11 @@ const GhostwirePlugin: Plugin = async (ctx) => {
     return true;
   });
   const includeClaudeSkills = pluginConfig.claude_code?.skills !== false;
-  const [userSkills, globalSkills, projectSkills, opencodeProjectSkills] = await Promise.all([
-    includeClaudeSkills ? discoverUserClaudeSkills() : Promise.resolve([]),
-    discoverOpencodeGlobalSkills(),
-    includeClaudeSkills ? discoverProjectClaudeSkills() : Promise.resolve([]),
-    discoverOpencodeProjectSkills(),
-  ]);
-  const mergedSkills = mergeSkills(
-    skills,
-    pluginConfig.skills,
-    userSkills,
-    globalSkills,
-    projectSkills,
-    opencodeProjectSkills,
-  );
+  const sharedPipelineDiscoveredSkills = await discoverSharedPipelineSkills({
+    cwd: ctx.directory,
+    includeUserScope: includeClaudeSkills,
+  });
+  const mergedSkills = mergeSkills(skills, pluginConfig.skills, sharedPipelineDiscoveredSkills);
   const skillMcpManager = new SkillMcpManager();
   const getSessionIDForMcp = () => getMainSessionID() || "";
   const skillTool = createSkillTool({

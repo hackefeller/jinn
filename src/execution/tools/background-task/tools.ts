@@ -1,7 +1,7 @@
 import { tool, type PluginInput, type ToolDefinition } from "@opencode-ai/plugin";
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import type { BackgroundManager, BackgroundTask } from "../../features/background-agent";
+import type { BackgroundManager, BackgroundTask } from "../../background-agent";
 import type { BackgroundTaskArgs, BackgroundOutputArgs, BackgroundCancelArgs } from "./types";
 import {
   BACKGROUND_TASK_DESCRIPTION,
@@ -12,8 +12,8 @@ import {
   findNearestMessageWithFields,
   findFirstMessageWithAgent,
   MESSAGE_STORAGE,
-} from "../../features/hook-message-injector";
-import { getSessionAgent } from "../../features/claude-code-session-state";
+} from "../../hook-message-injector";
+import { getSessionAgent } from "../../claude-code-session-state";
 import { log } from "../../../integration/shared/logger";
 import { consumeNewMessages } from "../../../integration/shared/session-cursor";
 

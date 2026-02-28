@@ -1,14 +1,17 @@
 import { describe, it, expect, beforeEach } from "bun:test";
-import {
-  parsePlanFile,
-  validateTaskDependencies,
-} from "../src/execution/features/task-queue/plan-parser";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { tmpdir } from "node:os";
+import { parsePlanFile, validateTaskDependencies } from "../src/execution/task-queue/plan-parser";
 import {
   calculateExecutionWaves,
   applyAutoWaves,
-} from "../src/execution/features/task-queue/parallelization";
-import { buildTaskDelegationPlan } from "../src/execution/features/task-queue/delegation-engine";
-import type { Task, WorkflowTaskList } from "../src/execution/features/task-queue";
+} from "../src/execution/task-queue/parallelization";
+import { buildTaskDelegationPlan } from "../src/execution/task-queue/delegation-engine";
+import type { Task, WorkflowTaskList } from "../src/execution/task-queue";
+import { exportGenius } from "../src/cli/export";
+import { resolveScopedSkillsCanonical } from "../src/execution/opencode-skill-loader";
+import { createSkills, mergeScopedSkillsWithBuiltins } from "../src/execution/skills";
 
 //#given the complete workflow execution system
 //#when workflows:execute and workflows:status are used together
@@ -277,5 +280,69 @@ describe("workflows:execute and workflows:status integration", () => {
 
     //#then total should be correct (2h + 3h + 2h + 1h + 3h = 11h)
     expect(totalEffort).toBe(660); // 11 hours in minutes
+  });
+
+  describe("US2 runtime/export manifest parity", () => {
+    it("keeps manifest skill source count aligned with runtime scoped-first semantics", async () => {
+      //#given
+      const testRoot = mkdirSync(join(tmpdir(), `ghostwire-us2-parity-${Date.now()}-`), {
+        recursive: true,
+      });
+      const originalCwd = process.cwd();
+
+      try {
+        process.chdir(testRoot);
+
+        const scopedSkillPath = join(testRoot, ".agents", "skills", "us2-parity-skill", "SKILL.md");
+        mkdirSync(dirname(scopedSkillPath), { recursive: true });
+        writeFileSync(
+          scopedSkillPath,
+          `---
+name: us2-parity-skill
+description: Scoped skill used to verify runtime-export parity semantics.
+---
+Parity check skill template body.
+`,
+        );
+
+        //#when
+        const exportCode = await exportGenius({
+          target: "copilot",
+          directory: testRoot,
+          manifest: true,
+          force: true,
+        });
+
+        const scopedResolution = await resolveScopedSkillsCanonical({
+          cwd: testRoot,
+          repoRoot: testRoot,
+          includeUserScope: false,
+          includeSystemScope: false,
+        });
+
+        const runtimeScopedSkills = scopedResolution.skills.map((skill) => ({
+          name: skill.name,
+          description: skill.definition.description ?? "",
+          template: skill.definition.template ?? "",
+          ...(skill.allowedTools ? { allowedTools: skill.allowedTools } : {}),
+          ...(skill.mcpConfig ? { mcpConfig: skill.mcpConfig } : {}),
+        }));
+
+        const expectedRuntimeSkillCount = mergeScopedSkillsWithBuiltins(runtimeScopedSkills).length;
+        const manifest = JSON.parse(
+          readFileSync(join(testRoot, ".ghostwire", "export-manifest.json"), "utf-8"),
+        );
+
+        //#then
+        expect(exportCode).toBe(0);
+        expect(expectedRuntimeSkillCount).toBeGreaterThanOrEqual(createSkills().length + 1);
+        expect(manifest.coverage.skills.source_count).toBe(expectedRuntimeSkillCount);
+        expect(manifest.coverage.skills.emitted_count).toBe(expectedRuntimeSkillCount);
+        expect(manifest.coverage.skills.missing_ids).toHaveLength(0);
+      } finally {
+        process.chdir(originalCwd);
+        rmSync(testRoot, { recursive: true, force: true });
+      }
+    });
   });
 });

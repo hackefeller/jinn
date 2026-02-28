@@ -6,7 +6,7 @@ import {
   AGENT_MODEL_REQUIREMENTS,
   CATEGORY_MODEL_REQUIREMENTS,
 } from "../orchestration/agents/model-requirements";
-import { COMMAND_DEFINITIONS } from "../execution/features/commands/commands";
+import { COMMAND_DEFINITIONS } from "../execution/commands/commands";
 import type { AgentMetadata } from "../orchestration/agents/agent-schema";
 import YAML from "js-yaml";
 
@@ -23,7 +23,13 @@ async function syncAgents() {
   console.log("Syncing agents.yml...");
 
   const files = readdirSync(AGENTS_DIR).filter((f) => f.endsWith(".md"));
-  const agentsList: Array<{ id: string; display_name: string; model: string; purpose: string; fallback_chain?: Array<{ providers: string[]; model: string; variant?: string }> }> = [];
+  const agentsList: Array<{
+    id: string;
+    display_name: string;
+    model: string;
+    purpose: string;
+    fallback_chain?: Array<{ providers: string[]; model: string; variant?: string }>;
+  }> = [];
 
   for (const file of files) {
     const content = readFileSync(join(AGENTS_DIR, file), "utf-8");
@@ -108,7 +114,7 @@ async function syncCommands() {
 
   const yamlContent = {
     version: 1,
-    source: "src/execution/features/commands/commands.ts",
+    source: "src/execution/commands/commands.ts",
     description: "Canonical command metadata for Ghostwire, synchronized from source code.",
     metadata: {
       generated: new Date().toISOString().split("T")[0],

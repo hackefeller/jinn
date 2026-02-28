@@ -1,7 +1,7 @@
 import { describe, it, expect } from "bun:test";
 import { createSlashcommandTool } from "./tools";
 import type { CommandInfo } from "./types";
-import type { LoadedSkill } from "../../features/opencode-skill-loader";
+import type { LoadedSkill } from "../../opencode-skill-loader";
 
 function createMockCommand(name: string, description = ""): CommandInfo {
   return {
@@ -73,5 +73,4 @@ describe("slashcommand tool - synchronous description", () => {
     // #then - even with no items, description should be built synchronously (not just prefix)
     expect(tool.description).toContain("Load a skill");
   });
-
 });

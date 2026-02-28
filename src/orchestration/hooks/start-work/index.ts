@@ -8,12 +8,9 @@ import {
   createUltraworkState,
   getPlanName,
   clearUltraworkState,
-} from "../../../execution/features/ultrawork-state";
+} from "../../../execution/ultrawork-state";
 import { log } from "../../../integration/shared/logger";
-import {
-  getSessionAgent,
-  updateSessionAgent,
-} from "../../../execution/features/claude-code-session-state";
+import { getSessionAgent, updateSessionAgent } from "../../../execution/claude-code-session-state";
 
 export const HOOK_NAME = "start-work";
 

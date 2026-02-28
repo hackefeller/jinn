@@ -8,11 +8,11 @@ import {
   sanitizeModelField,
 } from "../../../integration/shared";
 import { getOpenCodeConfigDir } from "../../../platform/opencode/config-dir";
-import type { CommandFrontmatter } from "../../features/claude-code-command-loader/types";
+import type { CommandFrontmatter } from "../../claude-code-command-loader/types";
 import { isMarkdownFile } from "../../../integration/shared/file-utils";
 import { getClaudeConfigDir } from "../../../platform/claude/config-dir";
-import { discoverAllSkills, type LoadedSkill } from "../../features/opencode-skill-loader";
-import { loadCommands } from "../../features/commands";
+import { discoverAllSkills, type LoadedSkill } from "../../opencode-skill-loader";
+import { loadCommands } from "../../commands";
 import type { CommandScope, CommandMetadata, CommandInfo, SlashcommandToolOptions } from "./types";
 
 function discoverCommandsFromDir(commandsDir: string, scope: CommandScope): CommandInfo[] {
@@ -207,7 +207,7 @@ export function createSlashcommandTool(options: SlashcommandToolOptions = {}): T
   const getSkills = async (): Promise<LoadedSkill[]> => {
     if (cachedSkills) return cachedSkills;
     cachedSkills = await discoverAllSkills();
-    return cachedSkills;
+    return cachedSkills!;
   };
 
   const getAllItems = async (): Promise<CommandInfo[]> => {

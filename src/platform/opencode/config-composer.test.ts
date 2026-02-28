@@ -4,12 +4,12 @@ import type { CategoryConfig } from "../../platform/config/schema";
 import type { GhostwireConfig } from "../../platform/config";
 
 import * as agents from "../../orchestration/agents";
-import * as commandLoader from "../../execution/features/claude-code-command-loader";
-import * as commands from "../../execution/features/commands";
-import * as skillLoader from "../../execution/features/opencode-skill-loader";
-import * as agentLoader from "../../execution/features/claude-code-agent-loader";
-import * as mcpLoader from "../../execution/features/claude-code-mcp-loader";
-import * as pluginLoader from "../../execution/features/claude-code-plugin-loader";
+import * as commandLoader from "../../execution/claude-code-command-loader";
+import * as commands from "../../execution/commands";
+import * as skillLoader from "../../execution/opencode-skill-loader";
+import * as agentLoader from "../../execution/claude-code-agent-loader";
+import * as mcpLoader from "../../execution/claude-code-mcp-loader";
+import * as pluginLoader from "../../execution/claude-code-plugin-loader";
 import * as mcpModule from "../../integration/mcp";
 import * as logger from "../../integration/shared/logger";
 import * as configDir from "./config-dir";

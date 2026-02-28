@@ -2,13 +2,10 @@ import { loadMarkdownAgents } from "../orchestration/agents/load-markdown-agents
 import { join, dirname } from "path";
 import { writeFileSync } from "fs";
 
-const AGENTS_DIR = join(
-  dirname(import.meta.url.replace("file://", "")),
-  "../orchestration/agents",
-);
+const AGENTS_DIR = join(dirname(import.meta.url.replace("file://", "")), "../orchestration/agents");
 const OUTPUT_FILE = join(
   dirname(import.meta.url.replace("file://", "")),
-  "../src/execution/features/agents-manifest.ts",
+  "../src/execution/agents-manifest.ts",
 );
 
 async function generateAgentsManifest() {

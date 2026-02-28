@@ -1,4 +1,4 @@
-import { listAllTokens, listTokensByHost } from "../../execution/features/mcp-oauth/storage";
+import { listAllTokens, listTokensByHost } from "../../execution/mcp-oauth/storage";
 
 export async function status(serverName: string | undefined): Promise<number> {
   try {

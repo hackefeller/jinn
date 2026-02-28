@@ -4,7 +4,7 @@ import {
   updateSessionAgent,
   clearSessionAgent,
   _resetForTesting,
-} from "../../../execution/features/claude-code-session-state";
+} from "../../../execution/claude-code-session-state";
 import * as logger from "../../../integration/shared/logger";
 
 describe("grid-category-skill-reminder hook", () => {

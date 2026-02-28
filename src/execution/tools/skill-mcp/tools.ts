@@ -5,8 +5,8 @@ import type {
   SkillMcpManager,
   SkillMcpClientInfo,
   SkillMcpServerContext,
-} from "../../features/skill-mcp-manager";
-import type { LoadedSkill } from "../../features/opencode-skill-loader/types";
+} from "../../skill-mcp-manager";
+import type { LoadedSkill } from "../../opencode-skill-loader/types";
 
 interface SkillMcpToolOptions {
   manager: SkillMcpManager;

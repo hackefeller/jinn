@@ -14,8 +14,8 @@ import {
   findNearestMessageWithFields,
   findFirstMessageWithAgent,
   MESSAGE_STORAGE,
-} from "../../../execution/features/hook-message-injector";
-import { getSessionAgent } from "../../../execution/features/claude-code-session-state";
+} from "../../../execution/hook-message-injector";
+import { getSessionAgent } from "../../../execution/claude-code-session-state";
 import { log } from "../../../integration/shared/logger";
 import { SYSTEM_DIRECTIVE_PREFIX } from "../../../integration/shared/system-directive";
 import { getAgentDisplayName } from "../../../integration/shared/agent-display-names";
