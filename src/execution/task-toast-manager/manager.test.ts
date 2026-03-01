@@ -76,7 +76,7 @@ describe("TaskToastManager", () => {
       toastManager.addTask({
         id: "task_2",
         description: "Second task",
-        agent: "researcher-data",
+        agent: "researcher-world",
         isBackground: true,
       });
 

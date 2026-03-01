@@ -33,7 +33,7 @@ Blocked actions (will fail if attempted):
 - task tool: blocked
 - delegate_task tool: blocked
 
-Allowed: call_grid_agent - You can spawn researcher-codebase or researcher-data agents for research.
+Allowed: call_grid_agent - You can spawn researcher-codebase or researcher-world agents for research.
 You work alone for implementation. No delegation of implementation tasks.
 </Critical_Constraints>
 

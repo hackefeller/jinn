@@ -186,8 +186,8 @@ export const COMMAND_PROFILE_REGISTRY: Record<string, CommandProfile> = {
     acceptance_checks: ["pattern search complete", "file citations included"],
     default_command: "ghostwire:project:map",
   },
-  researcher_data: {
-    profile_id: "researcher_data",
+  researcher_world: {
+    profile_id: "researcher_world",
     intent: "Fetch external docs, examples, and data-driven references.",
     required_tools: ["web", "read", "delegate_task"],
     runtime_route: "research",

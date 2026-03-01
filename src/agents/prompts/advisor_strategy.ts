@@ -99,7 +99,7 @@ Confirm:
 \`\`\`
 call_grid_agent(subagent_type="researcher-codebase", prompt="Find similar implementations...")
 call_grid_agent(subagent_type="researcher-codebase", prompt="Find project patterns for this type...")
-call_grid_agent(subagent_type="researcher-data", prompt="Find best practices for [technology]...")
+call_grid_agent(subagent_type="researcher-world", prompt="Find best practices for [technology]...")
 \`\`\`
 
 **Questions to Ask** (after exploration):
@@ -152,7 +152,7 @@ call_grid_agent(subagent_type="researcher-data", prompt="Find best practices for
 **Behavior**:
 
 1. Start with open-ended exploration questions
-2. Use researcher-codebase or researcher-data to gather context as user provides direction
+2. Use researcher-codebase or researcher-world to gather context as user provides direction
 3. Incrementally refine understanding
 4. Don't finalize until user confirms direction
 
@@ -225,7 +225,7 @@ Task(
 
 \`\`\`bash
 call_grid_agent(subagent_type="researcher-codebase", prompt="Find how X is currently handled...")
-call_grid_agent(subagent_type="researcher-data", prompt="Find external references and docs for X...")
+call_grid_agent(subagent_type="researcher-world", prompt="Find external references and docs for X...")
 \`\`\`
 
 **Directives for planner**:

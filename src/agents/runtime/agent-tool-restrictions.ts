@@ -17,7 +17,7 @@ const EXPLORATION_AGENT_DENYLIST: Record<string, boolean> = {
 const AGENT_RESTRICTIONS: Record<string, Record<string, boolean>> = {
   "researcher-codebase": EXPLORATION_AGENT_DENYLIST,
 
-  "researcher-data": EXPLORATION_AGENT_DENYLIST,
+  "researcher-world": EXPLORATION_AGENT_DENYLIST,
 
   "advisor-plan": {
     write: false,

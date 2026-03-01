@@ -53,7 +53,7 @@ export function createCallOmoAgent(
       subagent_type: tool.schema
         .string()
         .describe(
-          "The type of specialized agent to use for this task (researcher-codebase or researcher-data only)",
+          "The type of specialized agent to use for this task (researcher-codebase or researcher-world only)",
         ),
       run_in_background: tool.schema
         .boolean()

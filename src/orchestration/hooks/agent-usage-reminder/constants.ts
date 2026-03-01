@@ -25,13 +25,13 @@ export const REMINDER_MESSAGE = `
 
 You called a search/fetch tool directly without leveraging specialized agents.
 
-RECOMMENDED: Use delegate_task with researcher-codebase/researcher-data agents for better results:
+RECOMMENDED: Use delegate_task with researcher-codebase/researcher-world agents for better results:
 
 \`\`\`
 // Parallel exploration - fire multiple agents simultaneously
 delegate_task(subagent_type="research", prompt="[profile: researcher_codebase] Find all files matching pattern X")
 delegate_task(subagent_type="research", prompt="[profile: researcher_codebase] Search for implementation of Y")
-delegate_task(subagent_type="research", prompt="[profile: researcher_data] Lookup documentation for Z")
+delegate_task(subagent_type="research", prompt="[profile: researcher_world] Lookup documentation for Z")
 
 // Then continue your work while they run in background
 // System will notify you when each completes

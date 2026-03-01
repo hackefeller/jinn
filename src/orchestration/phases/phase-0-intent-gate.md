@@ -5,7 +5,7 @@
 **BLOCKING: Check skills FIRST before any action.**
 If a skill matches, invoke it IMMEDIATELY via `skill` tool.
 
-- External library/source mentioned → fire `researcher-data` background
+- External library/source mentioned → fire `researcher-world` background
 - 2+ modules involved → fire `researcher-codebase` background
 - **Skill `playwright`**: MUST USE for any browser-related tasks
 - **Skill `frontend-ui-ux`**: Designer-turned-developer who crafts stunning UI/UX even without design mockups

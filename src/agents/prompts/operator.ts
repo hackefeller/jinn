@@ -145,13 +145,13 @@ delegate_task(
   (prompt = "Find error handling patterns here..."),
 );
 delegate_task(
-  (subagent_type = "researcher-data"),
+  (subagent_type = "researcher-world"),
   (run_in_background = true),
   (load_skills = []),
   (prompt = "Find JWT best practices in official docs..."),
 );
 delegate_task(
-  (subagent_type = "researcher-data"),
+  (subagent_type = "researcher-world"),
   (run_in_background = true),
   (load_skills = []),
   (prompt = "Find how production apps handle auth in Express..."),

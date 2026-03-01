@@ -143,14 +143,14 @@ export const AGENT_DEFINITIONS: AgentProfileSpec[] = [
     promptAppend: 'Search codebase effectively and provide context.',
   },
   {
-    id: 'researcher-data',
-    intent: 'Multi-repository analysis and official documentation retrieval',
+    id: 'researcher-world',
+    intent: 'World-wide documentation and multi-repo analysis specialist',
     role: 'Research',
     route: 'research',
     tools: ['web', 'search', 'read'],
     acceptanceChecks: ['Documentation found', 'Sources reliable', 'Information complete'],
     defaultCommand: 'ghostwire:project:topology',
-    promptAppend: 'Research data and documentation across multiple sources.',
+    promptAppend: 'Research documentation and data across multiple repositories and domains.',
   },
   {
     id: 'researcher-docs',

@@ -38,7 +38,7 @@ export const AGENT_DISPLAY_NAMES: Record<string, string> = {
   "editor-style": "editor-style",
   // Phase 6 - Legacy Agents (final phase)
   "researcher-codebase": "researcher-codebase",
-  "researcher-data": "researcher-data",
+  "researcher-world": "researcher-world",
   // Phase 16 - New Agents from Export
   "reviewer-security": "reviewer-security",
   "validator-bugs": "validator-bugs",

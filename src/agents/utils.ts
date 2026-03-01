@@ -438,7 +438,7 @@ export async function createAgents(
       config = applyCategoryOverride(config, overrideCategory, mergedCategories);
     }
 
-    if (agentName === "researcher-data" && directory && config.prompt) {
+    if (agentName === "researcher-world" && directory && config.prompt) {
       const envContext = createEnvContext();
       config = { ...config, prompt: config.prompt + envContext };
     }

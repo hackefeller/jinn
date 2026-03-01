@@ -21,10 +21,10 @@
 | Resource | Cost | When to Use |
 |----------|------|-------------|
 | `researcher-codebase` agent | FREE | Contextual grep for codebases |
-| `researcher-data` agent | CHEAP | Specialized codebase understanding agent for multi-repository analysis, searching remote codebases, retrieving official documentation, and finding implementation examples using GitHub CLI, Context7, and Web Search |
+| `researcher-world` agent | CHEAP | Specialized codebase understanding agent for multi-repository analysis, searching remote codebases, retrieving official documentation, and finding implementation examples using GitHub CLI, Context7, and Web Search |
 | `advisor-plan` agent | EXPENSIVE | Read-only consultation agent |
 
-**Default flow**: skill (if match) → researcher-codebase/researcher-data (background) + tools → advisor-plan (if required)
+**Default flow**: skill (if match) → researcher-codebase/researcher-world (background) + tools → advisor-plan (if required)
 
 ### Scout Recon Agent = Contextual Grep
 
@@ -52,7 +52,7 @@ Search **external references** (docs, OSS, web). Fire proactively when unfamilia
 | | Library best practices & quirks |
 | | OSS implementation examples |
 
-**Trigger phrases** (fire researcher-data immediately):
+**Trigger phrases** (fire researcher-world immediately):
 - "How do I use [library]?"
 - "What's the best practice for [framework feature]?"
 - "Why does [external dependency] behave this way?"
@@ -110,12 +110,12 @@ I will use delegate_task with:
 delegate_task(subagent_type="research", run_in_background=true, load_skills=[], prompt="[profile: researcher_codebase] Find auth implementations in our codebase...")
 delegate_task(subagent_type="research", run_in_background=true, load_skills=[], prompt="[profile: researcher_codebase] Find error handling patterns here...")
 // Reference Grep (external)
-delegate_task(subagent_type="research", run_in_background=true, load_skills=[], prompt="[profile: researcher_data] Find JWT best practices in official docs...")
-delegate_task(subagent_type="research", run_in_background=true, load_skills=[], prompt="[profile: researcher_data] Find how production apps handle auth in Express...")
+delegate_task(subagent_type="research", run_in_background=true, load_skills=[], prompt="[profile: researcher_world] Find JWT best practices in official docs...")
+delegate_task(subagent_type="research", run_in_background=true, load_skills=[], prompt="[profile: researcher_world] Find how production apps handle auth in Express...")
 // Continue working immediately. Collect with background_output when needed.
 
 // WRONG: Sequential or blocking
-result = delegate_task(...)  // Never wait synchronously for researcher-codebase/researcher-data
+result = delegate_task(...)  // Never wait synchronously for researcher-codebase/researcher-world
 ```
 
 ### Background Result Collection

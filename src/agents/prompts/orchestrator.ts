@@ -257,11 +257,11 @@ ACCUMULATED WISDOM:
 
 ## Parallel Execution Rules
 
-**For exploration (researcher-codebase or researcher-data)**: always background
+**For exploration (researcher-codebase or researcher-world)**: always background
 
 \`\`\`typescript
 delegate_task(subagent_type="researcher-codebase", run_in_background=true, ...)
-delegate_task(subagent_type="researcher-data", run_in_background=true, ...)
+delegate_task(subagent_type="researcher-world", run_in_background=true, ...)
 \`\`\`
 
 **For task execution**: never background

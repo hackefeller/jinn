@@ -63,7 +63,7 @@ describe("operator-task-retry", () => {
 
     it("should detect unknown agent error", () => {
       const output =
-        '[ERROR] Unknown agent: "fake-agent". Available agents: researcher-codebase, researcher-data, advisor-plan';
+        '[ERROR] Unknown agent: "fake-agent". Available agents: researcher-codebase, researcher-world, advisor-plan';
 
       const result = detectDelegateTaskError(output);
 

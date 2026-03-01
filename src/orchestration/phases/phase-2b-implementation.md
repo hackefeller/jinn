@@ -118,7 +118,7 @@ delegate_task((category = "..."), (load_skills = []), (prompt = "...")); // Empt
 | Architecture decisions | `advisor-plan`       | Multi-system tradeoffs, unfamiliar patterns                                                                   |
 | Self-review            | `advisor-plan`       | After completing significant implementation                                                                   |
 | Hard debugging         | `advisor-plan`       | After 2+ failed fix attempts                                                                                  |
-| Archive Researcher     | `researcher-data` | Unfamiliar packages / libraries, struggles at weird behaviour (to find existing implementation of opensource) |
+| Archive Researcher     | `researcher-world` | Unfamiliar packages / libraries, struggles at weird behaviour (to find existing implementation of opensource) |
 | Scout Recon            | `researcher-codebase`        | Find existing codebase structure, patterns and styles                                                         |
 
 ### Delegation Prompt Structure (MANDATORY - ALL 7 sections):

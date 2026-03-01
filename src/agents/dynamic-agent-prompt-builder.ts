@@ -112,7 +112,7 @@ export function buildToolSelectionTable(
 
   rows.push("");
   rows.push(
-    "**Default flow**: researcher-codebase/researcher-data (background) + tools → advisorPlan (if required)",
+    "**Default flow**: researcher-codebase/researcher-world (background) + tools → advisorPlan (if required)",
   );
 
   return rows.join("\n");
@@ -136,7 +136,7 @@ ${useWhen.map((w) => `|  | ${w} |`).join("\n")}`;
 }
 
 export function buildLibrarianSection(agents: AvailableAgent[]): string {
-  const archiveAgent = agents.find((a) => a.name === "researcher-data");
+  const archiveAgent = agents.find((a) => a.name === "researcher-world");
   if (!archiveAgent) return "";
 
   const useWhen = archiveAgent.metadata.useWhen || [];
@@ -154,7 +154,7 @@ Search **external references** (docs, OSS, web). Fire proactively when unfamilia
 | | Library best practices & quirks |
 | | OSS implementation examples |
 
-**Trigger phrases** (fire researcher-data immediately):
+**Trigger phrases** (fire researcher-world immediately):
 ${useWhen.map((w) => `- "${w}"`).join("\n")}`;
 }
 
@@ -351,7 +351,7 @@ export function buildUltraworkSection(
   if (agents.length > 0) {
     const ultraworkAgentPriority = [
       "researcher-codebase",
-      "researcher-data",
+      "researcher-world",
       "plan",
       "advisor-plan",
     ];
@@ -368,7 +368,7 @@ export function buildUltraworkSection(
     for (const agent of sortedAgents) {
       const shortDesc = agent.description.split(".")[0] || agent.description;
       const suffix =
-        agent.name === "researcher-codebase" || agent.name === "researcher-data"
+        agent.name === "researcher-codebase" || agent.name === "researcher-world"
           ? " (multiple)"
           : "";
       lines.push(`- \`${agent.name}${suffix}\`: ${shortDesc}`);

@@ -72,7 +72,7 @@ export interface AgentPromptMetadata {
   /** Nickname/alias used in prompt (e.g., "Advisor Plan" instead of "advisor-plan") */
   promptAlias?: string;
 
-  /** Key triggers that should appear in Phase 0 (e.g., "External library mentioned → fire researcher-data") */
+  /** Key triggers that should appear in Phase 0 (e.g., "External library mentioned → fire researcher-world") */
   keyTrigger?: string;
 }
 

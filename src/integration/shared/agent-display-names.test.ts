@@ -35,15 +35,15 @@ describe("getAgentDisplayName", () => {
     expect(result).toBe("researcher-codebase");
   });
 
-  it("returns display name for researcher-data", () => {
-    // #given config key "researcher-data"
-    const configKey = "researcher-data";
+  it("returns display name for researcher-world", () => {
+    // #given config key "researcher-world"
+    const configKey = "researcher-world";
 
     // #when getAgentDisplayName called
     const result = getAgentDisplayName(configKey);
 
-    // #then returns "researcher-data"
-    expect(result).toBe("researcher-data");
+    // #then returns "researcher-world"
+    expect(result).toBe("researcher-world");
   });
 });
 
@@ -85,7 +85,7 @@ describe("AGENT_DISPLAY_NAMES", () => {
       "editor-style",
       // Phase 6
       "researcher-codebase",
-      "researcher-data",
+      "researcher-world",
     ];
 
     // #when checking the constant

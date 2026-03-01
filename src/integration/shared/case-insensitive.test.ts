@@ -55,7 +55,7 @@ describe("findCaseInsensitive", () => {
 describe("includesCaseInsensitive", () => {
   test("returns true for exact match", () => {
     // #given - array with exact value
-    const arr = ["researcher-codebase", "researcher-data"];
+    const arr = ["researcher-codebase", "researcher-world"];
 
     // #when - check exact match
     const result = includesCaseInsensitive(arr, "researcher-codebase");
@@ -66,7 +66,7 @@ describe("includesCaseInsensitive", () => {
 
   test("returns true for case-insensitive match", () => {
     // #given - array with lowercase values
-    const arr = ["scan-ops", "researcher-data"];
+    const arr = ["scan-ops", "researcher-world"];
 
     // #when - check uppercase value
     const result = includesCaseInsensitive(arr, "SCAN-OPS");
@@ -88,7 +88,7 @@ describe("includesCaseInsensitive", () => {
 
   test("returns false when value not found", () => {
     // #given - array without target value
-    const arr = ["researcher-codebase", "researcher-data"];
+    const arr = ["researcher-codebase", "researcher-world"];
 
     // #when - check missing value
     const result = includesCaseInsensitive(arr, "advisor-plan");
@@ -143,7 +143,7 @@ describe("findByNameCaseInsensitive", () => {
     const arr = [{ name: "advisor-plan", value: 1 }];
 
     // #when - find missing name
-    const result = findByNameCaseInsensitive(arr, "researcher-data");
+    const result = findByNameCaseInsensitive(arr, "researcher-world");
 
     // #then - returns undefined
     expect(result).toBeUndefined();
