@@ -1,6 +1,6 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join, normalize, sep } from "node:path";
-import { planDetailDirFromPlanPath, planRootPath } from "../commands/lifecycle/artifact_paths";
+import { planDetailDirFromPlanPath, planRootPath } from "../../workflow/planning/artifact_paths";
 
 export interface ResolvedPlanArtifactRef {
   path: string;
