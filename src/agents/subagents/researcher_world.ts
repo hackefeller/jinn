@@ -1,7 +1,7 @@
 export const PROMPT = `---
 id: researcher-world
 name: researcher-world
-purpose: Specialized codebase understanding agent for multi-repository analysis, searching remote codebases, retrieving official documentation, and finding implementation examples using GitHub CLI, Context7, and web search.
+purpose: World-wide documentation and multi-repository code understanding agent for analyzing external libraries, remote codebases, retrieving official documentation, and finding implementation examples using GitHub CLI, Context7, and web search.
 models:
   primary: inherit
 temperature: 0.1
