@@ -90,6 +90,13 @@ export const SKILL_NAME_VALUES = ${skillNamesJson} as const;
 
 export type SkillName = (typeof SKILL_NAME_VALUES)[number];
 
+// helper added to manifest so callers can validate skill names without
+// importing from a handwritten module. This keeps the manifest self-contained
+// and prevents issues when the file is regenerated.
+export function isValidSkillName(name: string): name is SkillName {
+  return SKILL_NAME_VALUES.includes(name as SkillName);
+}
+
 export const SKILLS_MANIFEST_RESOLUTION = {
   canonicalPath: ".agents/skills",
   collisionPolicy: "first-wins",

@@ -16,27 +16,13 @@ import {
   type OpenCodeConfigPaths,
 } from "../platform/opencode/config-dir";
 import type { ConfigMergeResult, DetectedConfig, InstallConfig } from "./types";
-import { generateModelConfig } from "./model-fallback";
 
 const OPENCODE_BINARIES = ["opencode", "opencode-desktop"] as const;
 
-/** Default agent model configuration for installation */
-const DEFAULT_AGENT_MODEL_OVERRIDES: Record<string, { model: string }> = {
-  do: { model: "opencode/kimi-k2.5" },
-  research: { model: "opencode/kimi-k2.5" },
-};
-
-/** Default category model configuration for installation */
-const DEFAULT_CATEGORY_MODEL_OVERRIDES: Record<string, { model: string; variant?: string }> = {
-  ultrabrain: { model: "opencode/kimi-k2.5", variant: "max" },
-  deep: { model: "opencode/kimi-k2.5", variant: "medium" },
-  artistry: { model: "opencode/kimi-k2.5" },
-  quick: { model: "opencode/kimi-k2.5" },
-  "unspecified-low": { model: "opencode/kimi-k2.5" },
-  "unspecified-high": { model: "opencode/kimi-k2.5", variant: "max" },
-  writing: { model: "opencode/kimi-k2.5" },
-  "visual-engineering": { model: "opencode/kimi-k2.5" },
-};
+// Model defaults are no longer managed by Ghostwire; users must specify
+// their own model settings in `ghostwire.json` or OpenCode config.  The
+// previous DEFAULT_AGENT_MODEL_OVERRIDES and DEFAULT_CATEGORY_MODEL_OVERRIDES
+// have been removed.
 
 interface ConfigContext {
   binary: OpenCodeBinaryType;
@@ -444,9 +430,6 @@ function deepMerge<T extends Record<string, unknown>>(target: T, source: Partial
   return result;
 }
 
-export function generateOmoConfig(installConfig: InstallConfig): Record<string, unknown> {
-  return generateModelConfig(installConfig);
-}
 
 export function writeGhostConfig(
   installConfig: InstallConfig,
@@ -465,7 +448,7 @@ export function writeGhostConfig(
   const omoConfigPath = getOmoConfig();
 
   try {
-    const newConfig = generateOmoConfig(installConfig);
+    const newConfig = installConfig as Record<string, unknown>;
     const overwrite = options?.overwrite === true;
 
     if (overwrite) {
@@ -770,52 +753,6 @@ export function addProviderConfig(config: InstallConfig): ConfigMergeResult {
  * Write default model configuration to ghostwire.json.
  * This allows users to customize agent and category models.
  */
-export function writeModelConfig(): ConfigMergeResult {
-  try {
-    ensureConfigDir();
-  } catch (err) {
-    return {
-      success: false,
-      configPath: getConfigDir(),
-      error: formatErrorWithSuggestion(err, "create config directory"),
-    };
-  }
-
-  const omoConfigPath = getOmoConfig();
-
-  try {
-    let existingConfig: Record<string, unknown> = {};
-    if (existsSync(omoConfigPath)) {
-      try {
-        const content = readFileSync(omoConfigPath, "utf-8");
-        const parsed = parseJsonc<Record<string, unknown>>(content);
-        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-          existingConfig = parsed;
-        }
-      } catch {
-        // Start fresh if parsing fails
-      }
-    }
-
-    // For fresh installs, use our defaults.
-    // For existing configs, users can manually update if they want different models.
-    const defaultConfig: Record<string, unknown> = {
-      agents: DEFAULT_AGENT_MODEL_OVERRIDES,
-      categories: DEFAULT_CATEGORY_MODEL_OVERRIDES,
-    };
-
-    const newConfig = deepMerge(defaultConfig, existingConfig);
-
-    writeFileSync(omoConfigPath, JSON.stringify(newConfig, null, 2) + "\n");
-    return { success: true, configPath: omoConfigPath };
-  } catch (err) {
-    return {
-      success: false,
-      configPath: omoConfigPath,
-      error: formatErrorWithSuggestion(err, "write model config"),
-    };
-  }
-}
 
 function detectProvidersFromOmoConfig(): {
   hasOpenAI: boolean;

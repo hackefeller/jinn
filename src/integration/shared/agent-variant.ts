@@ -1,9 +1,5 @@
 import type { GhostwireConfig } from "../../platform/config";
 import { findCaseInsensitive } from "./case-insensitive";
-import {
-  getAgentModelRequirement,
-  getCategoryModelRequirement,
-} from "../../execution/agents/default-models";
 
 export function resolveAgentVariant(
   config: GhostwireConfig,
@@ -36,37 +32,13 @@ export function resolveAgentVariant(
 export function resolveVariantForModel(
   config: GhostwireConfig,
   agentName: string,
-  currentModel: { providerID: string; modelID: string },
+  _currentModel: { providerID: string; modelID: string },
 ): string | undefined {
-  const agentRequirement = getAgentModelRequirement(agentName);
-  if (agentRequirement) {
-    return findVariantInChain(agentRequirement.fallbackChain, currentModel.providerID);
-  }
-
-  const agentOverrides = config.agents as Record<string, { category?: string }> | undefined;
-  const agentOverride = agentOverrides ? findCaseInsensitive(agentOverrides, agentName) : undefined;
-  const categoryName = agentOverride?.category;
-  if (categoryName) {
-    const categoryRequirement = getCategoryModelRequirement(categoryName);
-    if (categoryRequirement) {
-      return findVariantInChain(categoryRequirement.fallbackChain, currentModel.providerID);
-    }
-  }
-
-  return undefined;
+  // Once model-based fallback chains were removed, variant resolution is
+  // derived purely from explicit user configuration (agent/category overrides).
+  return resolveAgentVariant(config, agentName);
 }
 
-function findVariantInChain(
-  fallbackChain: { providers: string[]; model: string; variant?: string }[],
-  providerID: string,
-): string | undefined {
-  for (const entry of fallbackChain) {
-    if (entry.providers.includes(providerID)) {
-      return entry.variant;
-    }
-  }
-  return undefined;
-}
 
 export function applyAgentVariant(
   config: GhostwireConfig,

@@ -28,13 +28,7 @@ import { dirname, join } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PLUGIN_ROOT = join(__dirname, "../..");
-import {
-  fetchAvailableModels,
-  isModelAvailable,
-  readConnectedProvidersCache,
-} from "../platform/opencode";
-import { resolveModelWithFallback } from "./runtime/model-resolver";
-import { getAgentModelRequirement } from "../execution/agents/default-models";
+import { readConnectedProvidersCache } from "../platform/opencode";
 import {
   DEFAULT_CATEGORIES,
   CATEGORY_DESCRIPTIONS,
@@ -342,12 +336,6 @@ export async function createAgents(
       // ignore cache update failures
     }
   }
-  // IMPORTANT: Do NOT pass client to fetchAvailableModels during plugin initialization.
-  // This function is called from config handler, and calling client API causes deadlock.
-  // See: https://github.com/hackefeller/ghostwire/issues/1301
-  const availableModels = await fetchAvailableModels(undefined, {
-    connectedProviders: connectedProviders ?? undefined,
-  });
 
   const result: Record<string, AgentConfig> = {};
   const availableAgents: AvailableAgent[] = [];
@@ -388,27 +376,8 @@ export async function createAgents(
     if (includesCaseInsensitive(disabledAgents, agentName)) continue;
 
     const override = findCaseInsensitive(agentOverrides, agentName as BuiltinAgentName);
-    const requirement = getAgentModelRequirement(agentName as BuiltinAgentName);
-
-    // Check if agent requires a specific model
-    if (requirement?.requiresModel && availableModels) {
-      if (!isModelAvailable(requirement.requiresModel, availableModels)) {
-        continue;
-      }
-    }
-
-    const resolution = resolveModelWithFallback({
-      uiSelectedModel,
-      userModel: override?.model,
-      fallbackChain: requirement?.fallbackChain,
-      availableModels,
-      systemDefaultModel,
-    });
-    if (!resolution && !systemDefaultModel) {
-      continue;
-    }
-    const model = resolution?.model ?? systemDefaultModel ?? "";
-    const resolvedVariant = resolution?.variant;
+    const model = override?.model ?? uiSelectedModel ?? systemDefaultModel ?? "";
+    const resolvedVariant = undefined;
 
     const markdownAgent = markdownAgentMap.get(agentName);
     const baseConfig = buildAgent(
@@ -433,10 +402,7 @@ export async function createAgents(
       };
     }
 
-    // Apply resolved variant from model fallback chain
-    if (resolvedVariant) {
-      config = { ...config, variant: resolvedVariant };
-    }
+    // variant resolution was removed when model defaults were eliminated
 
     // Expand override.category into concrete properties (higher priority than factory/resolved)
     const overrideCategory = (override as Record<string, unknown> | undefined)?.category as
@@ -471,24 +437,10 @@ export async function createAgents(
   if (!disabledAgents.includes("operator")) {
     const operatorMarkdown = markdownAgentMap.get("operator");
     const operatorOverride = agentOverrides["operator"];
-    const operatorRequirement = getAgentModelRequirement("operator");
+    const operatorModel = operatorOverride?.model ?? uiSelectedModel ?? systemDefaultModel ?? "";
 
-    const operatorResolution = resolveModelWithFallback({
-      uiSelectedModel,
-      userModel: operatorOverride?.model,
-      fallbackChain: operatorRequirement?.fallbackChain,
-      availableModels,
-      systemDefaultModel,
-    });
-
-    if (operatorResolution && operatorMarkdown) {
-      const { model: operatorModel, variant: operatorResolvedVariant } = operatorResolution;
-
+    if (operatorMarkdown) {
       let operatorConfig = buildOperatorAgentConfig(operatorMarkdown, operatorModel);
-
-      if (operatorResolvedVariant) {
-        operatorConfig = { ...operatorConfig, variant: operatorResolvedVariant };
-      }
 
       const sisOverrideCategory = operatorOverride?.category as string | undefined;
       if (sisOverrideCategory) {
@@ -518,27 +470,10 @@ export async function createAgents(
   if (!disabledAgents.includes("orchestrator")) {
     const orchestratorMarkdown = markdownAgentMap.get("orchestrator");
     const orchestratorOverride = agentOverrides["orchestrator"];
-    const nexusRequirement = getAgentModelRequirement("orchestrator");
+    const nexusModel = orchestratorOverride?.model ?? systemDefaultModel ?? "";
 
-    const nexusResolution = resolveModelWithFallback({
-      // NOTE: orchestrator does NOT use uiSelectedModel - respects its own fallbackChain (k2p5 primary)
-      userModel: orchestratorOverride?.model,
-      fallbackChain: nexusRequirement?.fallbackChain,
-      availableModels,
-      systemDefaultModel,
-    });
-
-    if (nexusResolution && orchestratorMarkdown) {
-      const { model: nexusModel, variant: nexusResolvedVariant } = nexusResolution;
-
+    if (orchestratorMarkdown) {
       let orchestratorConfig = buildOrchestratorAgentConfig(orchestratorMarkdown, nexusModel);
-
-      if (nexusResolvedVariant) {
-        orchestratorConfig = {
-          ...orchestratorConfig,
-          variant: nexusResolvedVariant,
-        };
-      }
 
       const nexusOverrideCategory = (orchestratorOverride as Record<string, unknown> | undefined)
         ?.category as string | undefined;

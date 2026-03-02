@@ -10,7 +10,6 @@ import {
   addAuthPlugins,
   addProviderConfig,
   detectCurrentConfig,
-  writeModelConfig,
 } from "./config-manager";
 import packageJson from "../../package.json" with { type: "json" };
 
@@ -54,10 +53,9 @@ function formatConfigSummary(config: InstallConfig): string {
   lines.push(color.dim("─".repeat(40)));
   lines.push("");
 
-  lines.push(color.bold(color.white("Model Assignment")));
+  lines.push(color.bold(color.white("Model Configuration")));
   lines.push("");
-  lines.push(`  ${SYMBOLS.info} Models auto-configured based on provider priority`);
-  lines.push(`  ${SYMBOLS.bullet} Priority: Native > Copilot > OpenCode Zen > Z.ai`);
+  lines.push(`  ${SYMBOLS.info} Models are not configured automatically.  You must set them manually in your ghostwire.json or OpenCode settings.`);
 
   return lines.join("\n");
 }
@@ -425,13 +423,9 @@ async function runNonTuiInstall(args: InstallArgs): Promise<number> {
   }
   printSuccess(`Config written ${SYMBOLS.arrow} ${color.dim(omoResult.configPath)}`);
 
-  printStep(step++, totalSteps, "Writing model configuration...");
-  const modelResult = writeModelConfig();
-  if (!modelResult.success) {
-    printError(`Failed: ${modelResult.error}`);
-    return 1;
-  }
-  printSuccess(`Model config written ${SYMBOLS.arrow} ${color.dim(modelResult.configPath)}`);
+  // model configuration is no longer managed by Ghostwire; skip this step
+  printStep(step++, totalSteps, "(skipping deprecated model configuration step)");
+  printSuccess("Model configuration handled externally");
 
   printBox(
     formatConfigSummary(config),
@@ -551,15 +545,6 @@ export async function install(args: InstallArgs): Promise<number> {
     return 1;
   }
   s.stop(`Config written to ${color.cyan(omoResult.configPath)}`);
-
-  s.start("Writing model configuration");
-  const modelResult = writeModelConfig();
-  if (!modelResult.success) {
-    s.stop(`Failed to write model config: ${modelResult.error}`);
-    p.outro(color.red("Installation failed."));
-    return 1;
-  }
-  s.stop(`Model config written to ${color.cyan(modelResult.configPath)}`);
 
   if (!config.hasOpenAI && !config.hasGemini && !config.hasCopilot && !config.hasOpencodeZen) {
     p.log.warn("No model providers configured. Using opencode/glm-4.7-free as fallback.");

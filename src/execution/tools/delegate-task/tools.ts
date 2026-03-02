@@ -23,14 +23,7 @@ import type { ModelFallbackInfo } from "../../task-toast-manager/types";
 import { subagentSessions, getSessionAgent } from "../../session-state";
 import { log, promptWithModelSuggestionRetry } from "../../../integration/shared";
 import { getAgentToolRestrictions } from "../../../execution/agents/agent-tool-restrictions";
-import { resolveModel } from "../../../execution/agents/model-resolver";
-import {
-  fetchAvailableModels,
-  isModelAvailable,
-} from "../../../platform/opencode/model-availability";
-import { readConnectedProvidersCache } from "../../../platform/opencode/connected-providers-cache";
-import { resolveModelWithFallback } from "../../../execution/agents/model-resolver";
-import { getCategoryModelRequirement } from "../../../execution/agents/default-models";
+// model resolution handled by caller; no defaults or availability checks.
 
 type OpencodeClient = PluginInput["client"];
 
@@ -129,25 +122,15 @@ export function resolveCategoryConfig(
     userCategories?: CategoriesConfig;
     inheritedModel?: string;
     systemDefaultModel?: string;
-    availableModels?: Set<string>;
   },
 ): {
   config: CategoryConfig;
   promptAppend: string;
   model: string | undefined;
 } | null {
-  const { userCategories, systemDefaultModel, availableModels } = options;
+  const { userCategories, systemDefaultModel } = options;
 
-  // Check if category requires a specific model
-  const categoryReq = CATEGORY_MODEL_REQUIREMENTS[categoryName];
-  if (categoryReq?.requiresModel && availableModels) {
-    if (!isModelAvailable(categoryReq.requiresModel, availableModels)) {
-      log(
-        `[resolveCategoryConfig] Category ${categoryName} requires ${categoryReq.requiresModel} but not available`,
-      );
-      return null;
-    }
-  }
+  // no model requirements enforced; just merge configs
 
   const defaultConfig = DEFAULT_CATEGORIES[categoryName];
   const userConfig = userCategories?.[categoryName];
@@ -193,7 +176,6 @@ export interface DelegateTaskToolOptions {
   directory: string;
   userCategories?: CategoriesConfig;
   gitMasterConfig?: GitMasterConfig;
-  cipherJuniorModel?: string;
   browserProvider?: BrowserAutomationProvider;
   onSyncSessionCreated?: (event: SyncSessionCreatedEvent) => Promise<void>;
 }
@@ -231,7 +213,6 @@ export function createDelegateTask(options: DelegateTaskToolOptions): ToolDefini
     directory,
     userCategories,
     gitMasterConfig,
-    cipherJuniorModel,
     browserProvider,
     onSyncSessionCreated,
   } = options;
@@ -607,68 +588,23 @@ To continue this session: session_id="${args.session_id}"`;
           userCategories,
           inheritedModel,
           systemDefaultModel,
-          availableModels,
         });
         if (!resolved) {
           return `Unknown category: "${args.category}". Available: ${Object.keys({ ...DEFAULT_CATEGORIES, ...userCategories }).join(", ")}`;
         }
 
-        const requirement = getCategoryModelRequirement(args.category);
-        let actualModel: string | undefined;
-
-        if (!requirement) {
-          actualModel = resolved.model;
-          if (actualModel) {
-            modelInfo = {
-              model: actualModel,
-              type: "system-default",
-              source: "system-default",
-            };
-          }
-        } else {
-          const resolution = resolveModelWithFallback({
-            userModel: userCategories?.[args.category]?.model,
-            categoryDefaultModel: resolved.model ?? cipherJuniorModel,
-            fallbackChain: requirement?.fallbackChain,
-            availableModels,
-            systemDefaultModel,
-          });
-
-          if (resolution) {
-            const { model: resolvedModel, source, variant: resolvedVariant } = resolution;
-            actualModel = resolvedModel;
-
-            if (!parseModelString(actualModel)) {
-              return `Invalid model format "${actualModel}". Expected "provider/model" format (e.g., "anthropic/claude-sonnet-4-5").`;
-            }
-
-            let type: "user-defined" | "inherited" | "category-default" | "system-default";
-            switch (source) {
-              case "override":
-                type = "user-defined";
-                break;
-              case "category-default":
-              case "provider-fallback":
-                type = "category-default";
-                break;
-              case "system-default":
-                type = "system-default";
-                break;
-            }
-
-            modelInfo = { model: actualModel, type, source };
-
-            const parsedModel = parseModelString(actualModel);
-            const variantToUse =
-              userCategories?.[args.category]?.variant ??
-              resolvedVariant ??
-              resolved.config.variant;
-            categoryModel = parsedModel
-              ? variantToUse
-                ? { ...parsedModel, variant: variantToUse }
-                : parsedModel
-              : undefined;
-          }
+        let actualModel: string | undefined =
+          userCategories?.[args.category]?.model ?? resolved.model ?? systemDefaultModel;
+        if (actualModel) {
+          modelInfo = {
+            model: actualModel,
+            type: userCategories?.[args.category]?.model ? "user-defined" : "system-default",
+            source: userCategories?.[args.category]?.model ? "override" : "system-default",
+          };
+          const parsedModel = parseModelString(actualModel);
+          const variantToUse =
+            userCategories?.[args.category]?.variant ?? resolved.config.variant;
+          categoryModel = parsedModel ? variantToUse : undefined;
         }
 
         agentToUse = DO_AGENT;
