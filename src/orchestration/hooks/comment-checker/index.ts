@@ -5,7 +5,7 @@ import {
   startBackgroundInit,
   type HookInput,
 } from "./cli";
-import type { CommentCheckerConfig } from "../../../platform/config/schema";
+import type { CommentCheckerConfig } from "../../../platform/config/comment.schema";
 
 import * as fs from "fs";
 import { existsSync } from "fs";
