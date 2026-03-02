@@ -30,7 +30,7 @@ import {
 } from "../../../platform/opencode/model-availability";
 import { readConnectedProvidersCache } from "../../../platform/opencode/connected-providers-cache";
 import { resolveModelWithFallback } from "../../../execution/agents/model-resolver";
-import { CATEGORY_MODEL_REQUIREMENTS } from "../../../agents/model-requirements";
+import { CATEGORY_MODEL_REQUIREMENTS } from "../../../execution/agents/model-config";
 
 type OpencodeClient = PluginInput["client"];
 

@@ -33,7 +33,6 @@ const FORBIDDEN_SHARED_PATH_SEGMENTS = [
   "shared/model-availability",
   "shared/claude-config-dir",
   "shared/hook-disabled",
-  "shared/model-requirements",
   "shared/model-resolver",
   "shared/permission-compat",
   "shared/migration",

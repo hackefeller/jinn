@@ -1,6 +1,6 @@
 import { log } from "../integration/shared/logger";
 import { fuzzyMatchModel } from "../platform/opencode/model-availability";
-import type { FallbackEntry } from "./model-requirements";
+import type { FallbackEntry } from "./model-config";
 import { readConnectedProvidersCache } from "../platform/opencode/connected-providers-cache";
 
 export type ModelResolutionInput = {

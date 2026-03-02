@@ -26,7 +26,7 @@ import {
   readConnectedProvidersCache,
 } from "../platform/opencode";
 import { resolveModelWithFallback } from "./model-resolver";
-import { AGENT_MODEL_REQUIREMENTS } from "./model-requirements";
+import { AGENT_MODEL_REQUIREMENTS } from "./model-config";
 import {
   DEFAULT_CATEGORIES,
   CATEGORY_DESCRIPTIONS,
