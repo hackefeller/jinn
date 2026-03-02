@@ -1,5 +1,5 @@
 import type { CommandDefinition } from "../../execution/command-loader";
-import { AGENT_PLANNER, AGENT_RESEARCHER_CODEBASE } from "../../agents/runtime/constants";
+import { AGENT_PLANNER, AGENT_RESEARCHER_CODEBASE } from "../../execution/agents/constants";
 
 export const NAME = "ghostwire:refactor";
 

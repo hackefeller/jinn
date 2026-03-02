@@ -8,7 +8,7 @@ import type {
 } from "./types";
 import type { CategoriesConfig, CategoryConfig, GitMasterConfig } from "../platform/config/schema";
 import { createAgentToolRestrictions } from "../platform/config/permission-compat";
-import { loadMarkdownAgents } from "./loader/markdown-loader";
+import { loadMarkdownAgents } from "../../agents/loader/markdown-loader";
 import type {
   AvailableAgent,
   AvailableCategory,
@@ -25,8 +25,8 @@ import {
   isModelAvailable,
   readConnectedProvidersCache,
 } from "../platform/opencode";
-import { resolveModelWithFallback } from "./runtime/model-resolver";
-import { AGENT_MODEL_REQUIREMENTS } from "./runtime/model-requirements";
+import { resolveModelWithFallback } from "./model-resolver";
+import { AGENT_MODEL_REQUIREMENTS } from "./model-requirements";
 import {
   DEFAULT_CATEGORIES,
   CATEGORY_DESCRIPTIONS,

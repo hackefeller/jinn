@@ -36,8 +36,8 @@ def fix_file(filepath):
 
 # Files to fix
 files = [
-    "src/execution/commands/commands-manifest.ts",
-    "src/execution/commands/templates/workflows/plan.ts",
+    "src/commands/commands-manifest.ts",
+    "src/commands/templates/workflows/plan.ts",
     ".github/prompts/workflows-plan.prompt.md",
     ".github/prompts/workflows-plan-2.prompt.md",
 ]

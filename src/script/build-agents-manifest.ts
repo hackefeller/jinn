@@ -1,4 +1,4 @@
-import { loadMarkdownAgents } from "../agents/load-markdown-agents";
+import { loadMarkdownAgents } from "../agents/loader/markdown-loader";
 import { join, dirname } from "path";
 import { writeFileSync } from "fs";
 

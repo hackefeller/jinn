@@ -1,4 +1,4 @@
-import type { ModelSource } from "../../agents/runtime/model-resolver";
+import type { ModelSource } from "../../execution/agents/model-resolver";
 
 export type TaskStatus = "running" | "queued" | "completed" | "error";
 
