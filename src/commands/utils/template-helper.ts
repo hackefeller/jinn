@@ -17,7 +17,7 @@ import {
 import {
   SKILL_NAME_VALUES as VALID_SKILL_NAMES,
   isValidSkillName,
-} from "../../skills/skill-name-values";
+} from "../../skills/skills-manifest";
 
 /**
  * Extract all agent/category references from a template string for validation

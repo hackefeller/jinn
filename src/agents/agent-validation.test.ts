@@ -2,11 +2,11 @@ import { describe, it, expect } from "bun:test";
 import { join } from "path";
 import { VALID_AGENT_IDS } from "../execution/agents/constants";
 import { COMMAND_NAME_VALUES as VALID_COMMAND_NAMES } from "../commands/command-name-values";
-import { SKILL_NAME_VALUES as VALID_SKILL_NAMES, isValidSkillName } from "../skills/skill-name-values";
 import {
-  validateDirectories,
-  validateMarkdownFiles,
-} from "./agent-validation";
+  SKILL_NAME_VALUES as VALID_SKILL_NAMES,
+  isValidSkillName,
+} from "../skills/skills-manifest";
+import { validateDirectories, validateMarkdownFiles } from "./agent-validation";
 
 const COMMANDS_DIR = join(import.meta.dir, "commands");
 const TEMPLATES_DIR = join(import.meta.dir, "templates");
