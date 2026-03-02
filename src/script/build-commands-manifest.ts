@@ -1,7 +1,7 @@
 import { dirname, join } from "node:path";
 import { writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import type { CommandDefinition } from "../execution/command-loader"; // path updated earlier
+import type { CommandDefinition } from "../execution/command-loader/types"; // path updated earlier
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const COMMANDS_DIR = join(__dirname, "../commands/prompts");

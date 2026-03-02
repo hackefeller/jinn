@@ -4,9 +4,6 @@ import { HOOK_NAME, NON_INTERACTIVE_ENV, SHELL_COMMAND_PATTERNS } from "./consta
 import { isNonInteractive } from "./detector";
 import { log, buildEnvPrefix } from "../../../integration/shared";
 
-export * from "./constants";
-export * from "./detector";
-export * from "./types";
 
 const BANNED_COMMAND_PATTERNS = SHELL_COMMAND_PATTERNS.banned
   .filter((cmd) => !cmd.includes("("))

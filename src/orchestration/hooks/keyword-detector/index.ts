@@ -14,9 +14,6 @@ import {
 } from "../../../execution/session-state";
 import type { ContextCollector } from "../../../execution/context-injector";
 
-export * from "./detector";
-export * from "./constants";
-export * from "./types";
 
 export function createKeywordDetectorHook(ctx: PluginInput, collector?: ContextCollector) {
   return {

@@ -23,8 +23,6 @@ function getMessageDir(sessionID: string): string | null {
   return null;
 }
 
-export * from "./types";
-export * from "./constants";
 export { readState, writeState, clearState, incrementIteration } from "./storage";
 
 interface SessionState {

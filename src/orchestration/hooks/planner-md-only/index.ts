@@ -20,7 +20,6 @@ import { log } from "../../../integration/shared/logger";
 import { SYSTEM_DIRECTIVE_PREFIX } from "../../../integration/shared/system-directive";
 import { getAgentDisplayName } from "../../../integration/shared/agent-display-names";
 
-export * from "./constants";
 
 /**
  * Cross-platform path validator for planner file writes.

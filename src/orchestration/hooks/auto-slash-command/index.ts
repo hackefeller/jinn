@@ -5,10 +5,6 @@ import { AUTO_SLASH_COMMAND_TAG_OPEN, AUTO_SLASH_COMMAND_TAG_CLOSE } from "./con
 import type { AutoSlashCommandHookInput, AutoSlashCommandHookOutput } from "./types";
 import type { LoadedSkill } from "../../../execution/opencode-skill-loader";
 
-export * from "./detector";
-export * from "./executor";
-export * from "./constants";
-export * from "./types";
 
 const sessionProcessedCommands = new Set<string>();
 

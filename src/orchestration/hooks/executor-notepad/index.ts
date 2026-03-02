@@ -4,7 +4,6 @@ import { SYSTEM_DIRECTIVE_PREFIX } from "../../../integration/shared/system-dire
 import { log } from "../../../integration/shared/logger";
 import { HOOK_NAME, NOTEPAD_DIRECTIVE } from "./constants";
 
-export * from "./constants";
 
 export function createExecutorNotepadHook(ctx: PluginInput) {
   return {
