@@ -112,6 +112,45 @@ export const AgentMetadataSchema = z.object({
 
 export type AgentMetadata = z.infer<typeof AgentMetadataSchema>;
 
+// ---------- additional shared schemas ----------
+
+export const AgentModeSchema = z.enum(["primary", "subagent", "all"]);
+export type AgentMode = z.infer<typeof AgentModeSchema>;
+
+export const AgentCategorySchema = z.enum([
+  "exploration",
+  "specialist",
+  "advisor",
+  "utility",
+  "review",
+  "research",
+  "design",
+  "workflow",
+  "documentation",
+]);
+export type AgentCategory = z.infer<typeof AgentCategorySchema>;
+
+export const AgentCostSchema = z.enum(["FREE", "CHEAP", "EXPENSIVE", "LOW", "MODERATE", "HIGH"]);
+export type AgentCost = z.infer<typeof AgentCostSchema>;
+
+export const DelegationTriggerSchema = z.object({
+  domain: z.string(),
+  trigger: z.string(),
+});
+export type DelegationTrigger = z.infer<typeof DelegationTriggerSchema>;
+
+export const AgentPromptMetadataSchema = z.object({
+  category: AgentCategorySchema,
+  cost: AgentCostSchema,
+  triggers: z.array(DelegationTriggerSchema).optional().default([]),
+  useWhen: z.array(z.string()).optional().default([]),
+  avoidWhen: z.array(z.string()).optional().default([]),
+  dedicatedSection: z.string().optional(),
+  promptAlias: z.string().optional(),
+  keyTrigger: z.string().optional(),
+});
+export type AgentPromptMetadata = z.infer<typeof AgentPromptMetadataSchema>;
+
 /**
  * Load and validate agent metadata from parsed YAML
  *

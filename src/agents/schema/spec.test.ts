@@ -5,7 +5,8 @@ import {
   validateAgentSpecList,
   serializeAgentSpec,
   digestAgentSpec,
-} from "./schema";
+  detectDuplicateAgentIds,
+} from ".";
 
 describe("AgentSpec Schema", () => {
   // ============================================================================
@@ -583,7 +584,7 @@ describe("AgentSpec Schema", () => {
         promptAppend: "This is a duplicate",
       },
     ];
-    const duplicates = serializeAgentSpec(specs);
+    const duplicates = detectDuplicateAgentIds(specs);
     expect(duplicates.length).toBe(1);
     expect(duplicates[0].id).toBe("plan");
     expect(duplicates[0].indices).toEqual([0, 2]);
@@ -612,7 +613,7 @@ describe("AgentSpec Schema", () => {
         promptAppend: "Second test prompt",
       },
     ];
-    const duplicates = serializeAgentSpec(specs);
+    const duplicates = detectDuplicateAgentIds(specs);
     expect(duplicates.length).toBe(0);
   });
 
