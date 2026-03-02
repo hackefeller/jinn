@@ -1,19 +1,23 @@
 /**
  * Template Helper Utilities
  *
- * Provides tagged template functions that validate agent/category/skill references
- * against constants.ts at build time, preventing drift between templates and sources of truth.
+ * Provides tagged template functions that validate agent/category/command/skill
+ * references against the appropriate source-of-truth modules at build time.
  */
 
 import {
   VALID_AGENT_IDS,
   VALID_CATEGORIES,
-  VALID_COMMAND_NAMES,
-  VALID_SKILL_NAMES,
   isValidAgentId,
-  isValidCommandName,
-  isValidSkillName,
 } from "../../execution/agents/constants";
+import {
+  COMMAND_NAME_VALUES as VALID_COMMAND_NAMES,
+  isValidCommandName,
+} from "../../commands/command-name-values";
+import {
+  SKILL_NAME_VALUES as VALID_SKILL_NAMES,
+  isValidSkillName,
+} from "../../skills/skills-manifest";
 
 /**
  * Extract all agent/category references from a template string for validation

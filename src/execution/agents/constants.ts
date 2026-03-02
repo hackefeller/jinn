@@ -1,6 +1,3 @@
-import { COMMAND_NAME_VALUES } from "../../commands/command-name-values";
-import { SKILL_NAME_VALUES } from "../../skills/skills-manifest";
-
 export const AGENT_DO = "do";
 export const AGENT_RESEARCH = "research";
 
@@ -57,28 +54,4 @@ export type ValidAgentId = (typeof VALID_AGENT_IDS)[number];
  */
 export function isValidAgentId(agentId: string): agentId is ValidAgentId {
   return VALID_AGENT_IDS.includes(agentId as ValidAgentId);
-}
-
-// Valid command names for validation
-export const VALID_COMMAND_NAMES = COMMAND_NAME_VALUES;
-
-export type ValidCommandName = (typeof VALID_COMMAND_NAMES)[number];
-
-/**
- * Validate that a command name is valid
- */
-export function isValidCommandName(commandName: string): commandName is ValidCommandName {
-  return VALID_COMMAND_NAMES.includes(commandName as ValidCommandName);
-}
-
-// Valid skill names for validation
-export const VALID_SKILL_NAMES = SKILL_NAME_VALUES;
-
-export type ValidSkillName = (typeof VALID_SKILL_NAMES)[number];
-
-/**
- * Validate that a skill name is valid
- */
-export function isValidSkillName(skillName: string): skillName is ValidSkillName {
-  return VALID_SKILL_NAMES.includes(skillName as ValidSkillName);
 }

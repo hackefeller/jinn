@@ -143,6 +143,13 @@ export const SKILL_NAME_VALUES = [
 
 export type SkillName = (typeof SKILL_NAME_VALUES)[number];
 
+/**
+ * True if the provided string is a known skill name.
+ */
+export function isValidSkillName(skill: string): skill is SkillName {
+  return SKILL_NAME_VALUES.includes(skill as SkillName);
+}
+
 export const SKILLS_MANIFEST_RESOLUTION = {
   canonicalPath: ".agents/skills",
   collisionPolicy: "first-wins",

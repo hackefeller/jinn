@@ -1,8 +1,13 @@
 import { readdir, readFile } from "fs/promises";
 import { join } from "path";
 import * as AGENT_CONSTANTS from "../execution/agents/constants";
+import { isValidCommandName } from "../commands/command-name-values";
+import { isValidSkillName } from "../skills/skills-manifest";
 
-const EXPORTED_CONSTANTS = AGENT_CONSTANTS as Record<string, string | readonly string[] | ((value: string) => boolean)>;
+const EXPORTED_CONSTANTS = AGENT_CONSTANTS as Record<
+  string,
+  string | readonly string[] | ((value: string) => boolean)
+>;
 
 type Reference = { value: string; line: number };
 
@@ -109,30 +114,30 @@ export async function validateFile(filePath: string): Promise<string[]> {
   for (const { value, line } of subagentTypes) {
     const resolved = resolveConstant(value);
     if (isPlaceholderValue(resolved)) continue;
-    if (!isValidAgentId(resolved)) {
-      errors.push(`${filePath}:${line}: Invalid subagent_type=\"${value}\"`);
+    if (!AGENT_CONSTANTS.isValidAgentId(resolved)) {
+      errors.push(`${filePath}:${line}: Invalid subagent_type="${value}"`);
     }
   }
 
   for (const { value, line } of categories) {
     const resolved = resolveConstant(value);
     if (isPlaceholderValue(resolved)) continue;
-    if (!isValidCategory(resolved)) {
-      errors.push(`${filePath}:${line}: Invalid category=\"${value}\"`);
+    if (!AGENT_CONSTANTS.isValidCategory(resolved)) {
+      errors.push(`${filePath}:${line}: Invalid category="${value}"`);
     }
   }
 
   for (const { value, line } of commands) {
     if (isPlaceholderValue(value)) continue;
     if (!isValidCommandName(value)) {
-      errors.push(`${filePath}:${line}: Invalid command=\"${value}\"`);
+      errors.push(`${filePath}:${line}: Invalid command="${value}"`);
     }
   }
 
   for (const { value, line } of skills) {
     if (isPlaceholderValue(value)) continue;
     if (!isValidSkillName(value)) {
-      errors.push(`${filePath}:${line}: Invalid skill=\"${value}\"`);
+      errors.push(`${filePath}:${line}: Invalid skill="${value}"`);
     }
   }
 

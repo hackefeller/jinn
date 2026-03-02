@@ -31,3 +31,10 @@ export const COMMAND_NAME_VALUES = [
 ] as const;
 
 export type CommandName = (typeof COMMAND_NAME_VALUES)[number];
+
+/**
+ * True if the provided string is a known command name.
+ */
+export function isValidCommandName(command: string): command is CommandName {
+  return COMMAND_NAME_VALUES.includes(command as CommandName);
+}
