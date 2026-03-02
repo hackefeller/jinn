@@ -79,8 +79,6 @@ export const CommandNameSchema = z.custom<CommandName>(
 );
 
 export const AgentOverrideConfigSchema = z.object({
-  /** @deprecated Use `category` instead. Model is inherited from category defaults. */
-  model: z.string().optional(),
   variant: z.string().optional(),
   /** Category name to inherit model and other settings from CategoryConfig */
   category: z.string().optional(),

@@ -10,7 +10,7 @@ import {
   detectDuplicateAgentIds,
   serializeAgentSpec,
   type AgentSpec,
-} from "./schema";
+} from "./schema/index";
 
 // ============================================================================
 // AGENT DEFINITIONS (39 total, organized by category)

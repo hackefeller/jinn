@@ -213,7 +213,7 @@ Use `prompt_append` to add extra instructions without replacing the default syst
 }
 ```
 
-You can also override settings for `Cipher Operator` (the main orchestrator) and `build` (the default agent) using the same options.
+You can also override settings for `Operator` (the main orchestrator) and `build` (the default agent) using the same options.
 
 ### Permission Options
 
@@ -629,14 +629,14 @@ Configure git-master skill behavior:
 
 | Option                   | Default | Description                                                                          |
 | ------------------------ | ------- | ------------------------------------------------------------------------------------ |
-| `commit_footer`          | `true`  | Adds "Ultraworked with Cipher Operator" footer to commit messages.                   |
-| `include_co_authored_by` | `true`  | Adds `Co-authored-by: Cipher Operator <clio-agent@ghostwire.ai>` trailer to commits. |
+| `commit_footer`          | `true`  | Adds "Ultraworked with Operator" footer to commit messages.                   |
+| `include_co_authored_by` | `true`  | Adds `Co-authored-by: Operator <clio-agent@ghostwire.ai>` trailer to commits. |
 
-## Cipher Operator Agent
+## Operator Agent
 
-When enabled (default), Cipher Operator provides a powerful orchestrator with optional specialized agents:
+When enabled (default), Operator provides a powerful orchestrator with optional specialized agents:
 
-- **Cipher Operator**: Primary orchestrator agent (Claude Opus 4.5)
+- **Operator**: Primary orchestrator agent (Claude Opus 4.5)
 - **OpenCode-Builder**: OpenCode's default build agent, renamed due to SDK limitations (disabled by default)
 - **planner**: OpenCode's default plan agent with work-planner methodology (enabled by default)
 - **advisor-strategy**: Pre-planning analysis agent that identifies hidden requirements and AI failure points
@@ -664,9 +664,9 @@ When enabled (default), Cipher Operator provides a powerful orchestrator with op
 }
 ```
 
-This enables OpenCode-Builder agent alongside Cipher Operator. The default build agent is always demoted to subagent mode when Cipher Operator is enabled.
+This enables OpenCode-Builder agent alongside Operator. The default build agent is always demoted to subagent mode when Operator is enabled.
 
-**Example: Disable all Cipher Operator orchestration:**
+**Example: Disable all Operator orchestration:**
 
 ```json
 {
@@ -676,12 +676,12 @@ This enables OpenCode-Builder agent alongside Cipher Operator. The default build
 }
 ```
 
-You can also customize Cipher Operator agents like other agents:
+You can also customize Operator agents like other agents:
 
 ```json
 {
   "agents": {
-    "Cipher Operator": {
+    "Operator": {
       "model": "opencode/kimi-k2.5",
       "temperature": 0.3
     },
@@ -700,7 +700,7 @@ You can also customize Cipher Operator agents like other agents:
 
 | Option                    | Default | Description                                                                                                                  |
 | ------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `disabled`                | `false` | When `true`, disables all Cipher Operator orchestration and restores original build/plan as primary.                         |
+| `disabled`                | `false` | When `true`, disables all Operator orchestration and restores original build/plan as primary.                         |
 | `default_builder_enabled` | `false` | When `true`, enables OpenCode-Builder agent (same as OpenCode build, renamed due to SDK limitations). Disabled by default.   |
 | `planner_enabled`         | `true`  | When `true`, enables planner agent with work-planner methodology. Enabled by default.                                        |
 | `replace_plan`            | `true`  | When `true`, demotes default planner agent to subagent mode. Set to `false` to keep both planner and default plan available. |
@@ -741,7 +741,7 @@ Configure concurrency limits for background agent tasks. This controls how many 
 
 ## Categories
 
-Categories enable domain-specific task delegation via the `delegate_task` tool. Each category applies runtime presets (model, temperature, prompt additions) when calling the `Cipher Operator-Junior` agent.
+Categories enable domain-specific task delegation via the `delegate_task` tool. Each category applies runtime presets (model, temperature, prompt additions) when calling the Operator agent.
 
 ### Built-in Categories
 
@@ -889,7 +889,7 @@ At runtime, Ghostwire uses a 3-step resolution process to determine which model 
 │   ┌─────────────────────────────────────────────────────────┐   │
 │   │ For each provider in requirement.providers order:       │   │
 │   │                                                         │   │
-│   │ Example for Cipher Operator:                                   │   │
+│   │ Example for Operator:                                   │   │
 │   │ anthropic → github-copilot → opencode → antigravity     │   │
 │   │     │            │              │            │          │   │
 │   │     ▼            ▼              ▼            ▼          │   │
@@ -1064,7 +1064,7 @@ Configure ghost Tasks and Swarm systems for advanced task management and multi-a
 
 | Option               | Default            | Description                                       |
 | -------------------- | ------------------ | ------------------------------------------------- |
-| `enabled`            | `false`            | Enable Cipher Operator Tasks system               |
+| `enabled`            | `false`            | Enable Operator Tasks system               |
 | `storage_path`       | `.ghostwire/tasks` | Storage path for tasks (relative to project root) |
 | `claude_code_compat` | `false`            | Enable Claude Code path compatibility mode        |
 
@@ -1072,7 +1072,7 @@ Configure ghost Tasks and Swarm systems for advanced task management and multi-a
 
 | Option         | Default            | Description                                                       |
 | -------------- | ------------------ | ----------------------------------------------------------------- |
-| `enabled`      | `false`            | Enable Cipher Operator Swarm system for multi-agent orchestration |
+| `enabled`      | `false`            | Enable Operator Swarm system for multi-agent orchestration |
 | `storage_path` | `.ghostwire/teams` | Storage path for teams (relative to project root)                 |
 | `ui_mode`      | `toast`            | UI mode: `toast` (notifications), `tmux` (panes), or `both`       |
 

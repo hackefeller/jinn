@@ -257,7 +257,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
 
   const plannerMdOnly = isHookEnabled("planner-md-only") ? createPlannerMdOnlyHook(ctx) : null;
 
-  const cipherJuniorNotepad = isHookEnabled("executor-notepad")
+  const executorNotepad = isHookEnabled("executor-notepad")
     ? createExecutorNotepadHook(ctx)
     : null;
 
@@ -334,7 +334,6 @@ const GhostwirePlugin: Plugin = async (ctx) => {
     directory: ctx.directory,
     userCategories: pluginConfig.categories,
     gitMasterConfig: pluginConfig.git_master,
-    cipherJuniorModel: pluginConfig.agents?.do?.model,
     browserProvider,
     onSyncSessionCreated: async (event) => {
       log("[index] onSyncSessionCreated callback", {
@@ -705,7 +704,7 @@ const GhostwirePlugin: Plugin = async (ctx) => {
         plannerMdOnly?.["tool.execute.before"]?.(input, output),
       );
       await runHook("tool.execute.before", "executor-notepad", () =>
-        cipherJuniorNotepad?.["tool.execute.before"]?.(input, output),
+        executorNotepad?.["tool.execute.before"]?.(input, output),
       );
       await runHook("tool.execute.before", "orchestrator", () =>
         nexusHook?.["tool.execute.before"]?.(input, output),

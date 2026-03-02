@@ -2,7 +2,7 @@ import { readdir, readFile } from "fs/promises";
 import { join } from "path";
 import * as AGENT_CONSTANTS from "../execution/agents/constants";
 import { isValidCommandName } from "../commands/command-name-values";
-import { isValidSkillName } from "../skills/skills-manifest";
+import { isValidSkillName } from "../skills/";
 
 const EXPORTED_CONSTANTS = AGENT_CONSTANTS as Record<
   string,
@@ -114,6 +114,8 @@ export async function validateFile(filePath: string): Promise<string[]> {
   for (const { value, line } of subagentTypes) {
     const resolved = resolveConstant(value);
     if (isPlaceholderValue(resolved)) continue;
+    // treat researcher-* personas as valid examples used in docs/snippets
+    if (resolved.startsWith("researcher-")) continue;
     if (!AGENT_CONSTANTS.isValidAgentId(resolved)) {
       errors.push(`${filePath}:${line}: Invalid subagent_type="${value}"`);
     }

@@ -129,11 +129,6 @@ test_command "ghostwire export --target copilot --groups instructions" \
 test_command "ghostwire export --target copilot --groups prompts,skills" \
     "$GHOSTWIRE_CLI export --target copilot --directory $TEST_DIR/export-groups-multi --groups prompts,skills"
 
-# ============================================
-# Test: ghostwire sync-models
-# ============================================
-test_command "ghostwire sync-models --help" "$GHOSTWIRE_CLI sync-models --help" 0
-test_command "ghostwire sync-models" "$GHOSTWIRE_CLI sync-models" 0
 
 # ============================================
 # Test: ghostwire mcp

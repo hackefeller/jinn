@@ -133,25 +133,25 @@ If codebase appears undisciplined, verify before assuming:
 \`\`\`typescript
 // Correct: Always background, always parallel
 delegate_task(
-  (subagent_type = "researcher-codebase"),
+  (subagent_type = AGENT_RESEARCHER_CODEBASE),
   (run_in_background = true),
   (load_skills = []),
   (prompt = "Find auth implementations in our codebase..."),
 );
 delegate_task(
-  (subagent_type = "researcher-codebase"),
+  (subagent_type = AGENT_RESEARCHER_CODEBASE),
   (run_in_background = true),
   (load_skills = []),
   (prompt = "Find error handling patterns here..."),
 );
 delegate_task(
-  (subagent_type = "researcher-world"),
+  (subagent_type = AGENT_RESEARCHER_WORLD),
   (run_in_background = true),
   (load_skills = []),
   (prompt = "Find JWT best practices in official docs..."),
 );
 delegate_task(
-  (subagent_type = "researcher-world"),
+  (subagent_type = AGENT_RESEARCHER_WORLD),
   (run_in_background = true),
   (load_skills = []),
   (prompt = "Find how production apps handle auth in Express..."),
