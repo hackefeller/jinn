@@ -429,7 +429,10 @@ export async function createAgents(
     const operatorResolvedVariant = operatorOverride?.variant;
 
     if (operatorModel && operatorMarkdown) {
-      const { model: operatorModel, variant: operatorResolvedVariant } = { model: operatorModel, variant: operatorResolvedVariant };
+      const { model: operatorModel, variant: operatorResolvedVariant } = {
+        model: operatorModel,
+        variant: operatorResolvedVariant,
+      };
 
       let operatorConfig = buildOperatorAgentConfig(operatorMarkdown, operatorModel);
 
@@ -469,7 +472,10 @@ export async function createAgents(
     const nexusResolvedVariant = orchestratorOverride?.variant;
 
     if (nexusModel && orchestratorMarkdown) {
-      const { model: nexusModel, variant: nexusResolvedVariant } = { model: nexusModel, variant: nexusResolvedVariant };
+      const { model: nexusModel, variant: nexusResolvedVariant } = {
+        model: nexusModel,
+        variant: nexusResolvedVariant,
+      };
 
       let orchestratorConfig = buildOrchestratorAgentConfig(orchestratorMarkdown, nexusModel);
 

@@ -602,8 +602,7 @@ To continue this session: session_id="${args.session_id}"`;
             source: userCategories?.[args.category]?.model ? "override" : "system-default",
           };
           const parsedModel = parseModelString(actualModel);
-          const variantToUse =
-            userCategories?.[args.category]?.variant ?? resolved.config.variant;
+          const variantToUse = userCategories?.[args.category]?.variant ?? resolved.config.variant;
           categoryModel = parsedModel ? variantToUse : undefined;
         }
 
