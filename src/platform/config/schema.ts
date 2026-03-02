@@ -55,6 +55,7 @@ import {
   TaskQueueConfigSchema,
   AgentSwarmConfigSchema,
 } from "./runtime.schema";
+import { CommentCheckerConfigSchema } from "./comment.schema";
 
 // root configuration schema that aggregates all pieces
 export const GhostwireConfigSchema = z.object({
@@ -70,7 +71,7 @@ export const GhostwireConfigSchema = z.object({
   imports: ImportsConfigSchema.optional(),
   features: FeaturesConfigSchema.optional(),
   operator: OperatorConfigSchemaWrapper.optional(),
-  comment_checker: z.object({ custom_prompt: z.string().optional() }).optional(),
+  comment_checker: CommentCheckerConfigSchema.optional(),
   experimental: ExperimentalConfigSchema.optional(),
   auto_update: z.boolean().optional(),
   skills: SkillsConfigSchema.optional(),
@@ -84,37 +85,6 @@ export const GhostwireConfigSchema = z.object({
   inject_agents_globally: z.boolean().optional(),
 });
 
-// export types for convenience (pick from imported schemas)
+// export only the root config type; other types live in their modules
 export type GhostwireConfig = z.infer<typeof GhostwireConfigSchema>;
-export type AgentOverrideConfig = z.infer<typeof AgentOverrideConfigSchema>;
-export type AgentOverrides = z.infer<typeof AgentOverridesSchema>;
-export type CategoryConfig = z.infer<typeof CategoryConfigSchema>;
-export type CategoriesConfig = z.infer<typeof CategoriesConfigSchema>;
-export type OperatorConfig = z.infer<typeof OperatorConfigSchema>;
-export type CommentCheckerConfig = z.infer<
-  z.infer<typeof GhostwireConfigSchema> extends { comment_checker?: infer C }
-    ? z.ZodType<C>
-    : never
->;
-export type ExperimentalConfig = z.infer<typeof ExperimentalConfigSchema>;
-export type DynamicContextPruningConfig = z.infer<
-  typeof DynamicContextPruningConfigSchema
->;
-export type SkillsConfig = z.infer<typeof SkillsConfigSchema>;
-export type SkillDefinition = z.infer<typeof SkillDefinitionSchema>;
-export type UltraworkLoopConfig = z.infer<typeof UltraworkLoopConfigSchema>;
-export type NotificationConfig = z.infer<typeof NotificationConfigSchema>;
-export type GitMasterConfig = z.infer<typeof GitMasterConfigSchema>;
-export type BrowserAutomationProvider = z.infer<typeof BrowserAutomationProviderSchema>;
-export type BrowserAutomationConfig = z.infer<typeof BrowserAutomationConfigSchema>;
-export type TmuxConfig = z.infer<typeof TmuxConfigSchema>;
-export type TmuxLayout = z.infer<typeof TmuxLayoutSchema>;
-export type TaskQueueConfig = z.infer<typeof TaskQueueConfigSchema>;
-export type AgentSwarmConfig = z.infer<typeof AgentSwarmConfigSchema>;
 
-export {
-  AnyMcpNameSchema,
-  type AnyMcpName,
-  McpNameSchema,
-  type McpName,
-} from "../../integration/mcp/types";
