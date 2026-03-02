@@ -13,7 +13,7 @@ import {
   isValidAgentId,
   isValidCommandName,
   isValidSkillName,
-} from "../../../orchestration/agents/constants";
+} from "../../execution/agents/constants";
 
 /**
  * Extract all agent/category references from a template string for validation
