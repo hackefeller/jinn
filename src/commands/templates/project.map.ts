@@ -1,4 +1,4 @@
-import { AGENT_RESEARCHER_CODEBASE } from "../../agents/runtime/constants";
+import { AGENT_RESEARCHER_CODEBASE } from "../../execution/agents/constants";
 export const PROJECT_MAP_TEMPLATE = `
 # /init-deep
 Generate hierarchical AGENTS.md files. Root + complexity-scored subdirectories.

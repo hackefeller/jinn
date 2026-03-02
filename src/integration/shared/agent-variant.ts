@@ -3,7 +3,7 @@ import { findCaseInsensitive } from "./case-insensitive";
 import {
   AGENT_MODEL_REQUIREMENTS,
   CATEGORY_MODEL_REQUIREMENTS,
-} from "../../agents/runtime/model-requirements";
+} from "../../execution/agents/model-requirements";
 
 export function resolveAgentVariant(
   config: GhostwireConfig,

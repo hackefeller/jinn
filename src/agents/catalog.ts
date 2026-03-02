@@ -7,7 +7,7 @@
 
 import {
   validateAgentSpecList,
-  detectDuplicateAgentIds
+  detectDuplicateAgentIds,
   serializeAgentSpec,
   type AgentSpec,
 } from "./schema";

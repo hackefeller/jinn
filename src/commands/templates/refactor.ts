@@ -2,7 +2,7 @@ import {
   AGENT_PLANNER,
   AGENT_RESEARCHER_CODEBASE,
   AGENT_RESEARCHER_WORLD,
-} from "../../agents/runtime/constants";
+} from "../../execution/agents/constants";
 export const REFACTOR_TEMPLATE = `
 # Intelligent Refactor Command
 ## Usage
@@ -449,7 +449,7 @@ Use \`ast_grep_search\` and \`ast_grep_replace\` for structural transformations.
 ## Agents
 - \`profile.researcher_codebase\`: Parallel codebase pattern discovery
 - \`plan\`: Detailed refactoring plan generation
-- `profile.plan`: Read-only consultation for complex architectural decisions and debugging
+- \`profile.plan\`: Read-only consultation for complex architectural decisions and debugging
 - \`profile.researcher_world\`: **Use proactively** when encountering deprecated methods or library migration tasks. Query official docs and OSS examples for modern replacements.
 ## Deprecated Code & Library Migration
 When you encounter deprecated methods/APIs during refactoring:
