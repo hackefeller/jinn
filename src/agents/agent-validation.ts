@@ -2,7 +2,7 @@ import { readdir, readFile } from "fs/promises";
 import { join } from "path";
 import * as AGENT_CONSTANTS from "../execution/agents/constants";
 import { isValidCommandName } from "../commands/command-name-values";
-import { isValidSkillName } from "../skills/";
+import { isValidSkillName } from "../skills/skills-manifest";
 
 const EXPORTED_CONSTANTS = AGENT_CONSTANTS as Record<
   string,
