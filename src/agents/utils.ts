@@ -6,6 +6,14 @@ import type {
   AgentFactory,
   AgentPromptMetadata,
 } from "./types";
+
+/**
+ * Convenience helper used in multiple builder functions.
+ * Separated from agent-types since this is runtime logic, not purely a type.
+ */
+export function isGptModel(model: string): boolean {
+  return model.startsWith("openai/") || model.startsWith("github-copilot/gpt-");
+}
 import type { CategoriesConfig, CategoryConfig, GitMasterConfig } from "../platform/config/schema";
 import { createAgentToolRestrictions } from "../platform/config/permission-compat";
 import { loadMarkdownAgents } from "./loader/markdown-loader";

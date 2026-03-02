@@ -1,11 +1,5 @@
 import type { AgentConfig as SDKAgentConfig } from "@opencode-ai/sdk";
-import type {
-  AgentMode,
-  AgentCategory,
-  AgentCost,
-  DelegationTrigger,
-  AgentPromptMetadata,
-} from "./schema/metadata";
+import type { AgentMode } from "./schema/metadata";
 
 export type AgentConfig = SDKAgentConfig;
 
@@ -17,9 +11,6 @@ export type AgentFactory = ((model: string) => AgentConfig) & {
   mode: AgentMode;
 };
 
-export function isGptModel(model: string): boolean {
-  return model.startsWith("openai/") || model.startsWith("github-copilot/gpt-");
-}
 
 export type BuiltinAgentName = string;
 
