@@ -1,7 +1,7 @@
 /**
- * Ghostwire update command
+ * Jinn update command
  *
- * Updates/regenerates ghostwire files with beautiful TUI.
+ * Updates/regenerates jinn files with beautiful TUI.
  */
 
 import * as fs from 'fs/promises';
@@ -20,11 +20,13 @@ export interface UpdateOptions {
   yes?: boolean;
 }
 
+const CONFIG_DIR = '.jinn';
+
 export async function executeUpdate(options: UpdateOptions): Promise<void> {
   const projectPath = options.projectPath || process.cwd();
-  const configPath = path.join(projectPath, '.ghostwire', 'config.yaml');
+  const configPath = path.join(projectPath, CONFIG_DIR, 'config.yaml');
 
-  console.log(colors.cyan('\n📦 Updating ghostwire...\n'));
+  console.log(colors.cyan('\n📦 Updating Jinn...\n'));
 
   try {
     const configContent = await fs.readFile(configPath, 'utf-8');
@@ -39,7 +41,7 @@ export async function executeUpdate(options: UpdateOptions): Promise<void> {
     console.log(colors.dim('Delivery:'), colors.primary(config.delivery));
     console.log('');
 
-    const generateSpinner = startSpinner('Regenerating ghostwire files...');
+    const generateSpinner = startSpinner('Regenerating jinn files...');
     const result = await generateFiles(config, projectPath);
     
     const tableData = [
@@ -60,10 +62,10 @@ export async function executeUpdate(options: UpdateOptions): Promise<void> {
 
     successSpinner(generateSpinner, 'Files regenerated');
 
-    console.log(colors.success('\n✓ Ghostwire updated successfully!'));
+    console.log(colors.success('\n✓ Jinn updated successfully!'));
   } catch (error) {
     console.error(colors.error('\nError:'), error);
-    console.log(colors.dim('\nRun "ghostwire init" first to initialize ghostwire.'));
+    console.log(colors.dim('\nRun "jinn init" first to initialize jinn.'));
   }
 }
 

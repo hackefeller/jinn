@@ -1,36 +1,34 @@
 {
-  "name": "@hackefeller/ghostwire",
-  "version": "3.1.10",
-  "description": "The Best AI Agent Harness - Batteries-Included OpenCode Plugin with Multi-Model Orchestration, Parallel Background Agents, and Crafted LSP/AST Tools",
+  "name": "@hackefeller/jinn",
+  "version": "0.0.1",
+  "description": "AI-powered assistant for all personal computing tasks",
   "keywords": [
-    "agents",
     "ai",
-    "llm",
-    "opencode",
-    "plan",
-    "plugin",
-    "researcher-data"
+    "assistant",
+    "agent",
+    "automation",
+    "personal-computing"
   ],
-  "homepage": "https://github.com/hackefeller/ghostwire#readme",
+  "homepage": "https://github.com/hackefeller/jinn#readme",
   "bugs": {
-    "url": "https://github.com/hackefeller/ghostwire/issues"
+    "url": "https://github.com/hackefeller/jinn/issues"
   },
   "license": "SUL-1.0",
-  "author": "YeonGyu-Kim",
+  "author": "Charles Ponti",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hackefeller/ghostwire.git"
+    "url": "git+https://github.com/hackefeller/jinn.git"
   },
   "bin": {
-    "ghostwire": "./dist/ghostwire"
+    "jinn": "./dist/jinn"
   },
   "files": [
     "dist"
   ],
   "type": "module",
   "scripts": {
-    "build": "bun build ./src/cli/main.ts --compile --outfile ./dist/ghostwire",
-    "build:bin": "bun build ./src/cli/main.ts --compile --outfile ./dist/ghostwire",
+    "build": "bun build ./src/cli/main.ts --compile --outfile ./dist/jinn",
+    "build:bin": "bun build ./src/cli/main.ts --compile --outfile ./dist/jinn",
     "dev:cli": "bun ./src/cli/main.ts",
     "typecheck": "bun --bun tsc --noEmit"
   },
