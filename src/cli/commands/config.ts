@@ -1,7 +1,7 @@
 /**
- * Ghostwire config command
+ * Jinn config command
  *
- * Manages ghostwire configuration with beautiful TUI.
+ * Manages jinn configuration with beautiful TUI.
  */
 
 import * as fs from 'fs/promises';
@@ -18,9 +18,11 @@ export interface ConfigOptions {
   projectPath?: string;
 }
 
+const CONFIG_DIR = '.jinn';
+
 export async function executeConfig(options: ConfigOptions): Promise<void> {
   const projectPath = options.projectPath || process.cwd();
-  const configPath = path.join(projectPath, '.ghostwire', 'config.yaml');
+  const configPath = path.join(projectPath, CONFIG_DIR, 'config.yaml');
 
   try {
     const configContent = await fs.readFile(configPath, 'utf-8');
@@ -44,7 +46,7 @@ export async function executeConfig(options: ConfigOptions): Promise<void> {
       return;
     }
 
-    console.log(colors.cyan('\n⚙️  Ghostwire Configuration\n'));
+    console.log(colors.cyan('\n⚙️  Jinn Configuration\n'));
     
     const tableData = [
       [colors.dim('Key'), colors.dim('Value')],
@@ -56,13 +58,13 @@ export async function executeConfig(options: ConfigOptions): Promise<void> {
     simpleTable(tableData);
     
     console.log(colors.dim('\nUsage:'));
-    console.log(colors.dim('  ghostwire config show        # Show configuration'));
-    console.log(colors.dim('  ghostwire config get <key>   # Get a value'));
-    console.log(colors.dim('  ghostwire config set <key> <value>  # Set a value'));
+    console.log(colors.dim('  jinn config show        # Show configuration'));
+    console.log(colors.dim('  jinn config get <key>   # Get a value'));
+    console.log(colors.dim('  jinn config set <key> <value>  # Set a value'));
     console.log('');
   } catch (error) {
     console.error(colors.error('\nError:'), error);
-    console.log(colors.dim('\nRun "ghostwire init" first to initialize ghostwire.'));
+    console.log(colors.dim('\nRun "jinn init" first to initialize jinn.'));
   }
 }
 

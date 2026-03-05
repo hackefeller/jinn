@@ -2,18 +2,18 @@
 
 import { Command } from 'commander';
 
-const VERSION = '1.0.0';
+const VERSION = '0.0.1';
 
 const program = new Command();
 
 program
-  .name('ghostwire')
-  .description('AI-native development workflows for any coding assistant')
+  .name('jinn')
+  .description('AI-powered assistant for all personal computing tasks')
   .version(VERSION);
 
 program
   .command('init')
-  .description('Initialize ghostwire in the current project')
+  .description('Initialize jinn in the current project')
   .option('-t, --tools <tools>', 'Tools to configure (comma-separated or "all")')
   .option('-y, --yes', 'Skip confirmation prompts')
   .action(async (options) => {
@@ -23,7 +23,7 @@ program
 
 program
   .command('update')
-  .description('Update/regenerate ghostwire files')
+  .description('Update/regenerate jinn files')
   .option('-y, --yes', 'Skip confirmation prompts')
   .action(async (options) => {
     const { executeUpdate } = await import('./commands/update.js');
@@ -32,7 +32,7 @@ program
 
 program
   .command('config')
-  .description('Manage ghostwire configuration')
+  .description('Manage jinn configuration')
   .argument('[action]', 'Action to perform (show, set, get)', 'show')
   .argument('[key]', 'Configuration key')
   .argument('[value]', 'Configuration value')
