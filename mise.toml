@@ -1,0 +1,76 @@
+[tasks.ghostwire-init]
+description = "Initialize ghostwire in test project"
+run = "bun run src/cli/ghostwire/index.ts init --tools opencode --yes"
+
+[tasks.ghostwire-update]
+description = "Update ghostwire files"
+run = "bun run src/cli/ghostwire/index.ts update"
+
+[tasks.ghostwire-detect]
+description = "Detect available AI tools"
+run = "bun run src/cli/ghostwire/index.ts detect"
+
+[tasks.ghostwire-config-show]
+description = "Show ghostwire configuration"
+run = "bun run src/cli/ghostwire/index.ts config show"
+
+[tasks.ghostwire-config-add-tool]
+description = "Add a tool to config"
+run = "bun run src/cli/ghostwire/index.ts config add-tool cursor"
+
+[tasks.ghostwire-all]
+description = "Run all ghostwire CLI commands"
+run = [
+  "bun run src/cli/ghostwire/index.ts detect",
+  "bun runwire/index.ts init src/cli/ghost --tools opencode --yes",
+  "bun run src/cli/ghostwire/index.ts config show",
+  "bun run src/cli/ghostwire/index.ts update"
+]
+
+[tasks.test]
+description = "Run all tests"
+run = "bun test"
+
+[tasks.test-adapters]
+description = "Run adapter tests"
+run = "bun test src/core/adapters"
+
+[tasks.test-integration]
+description = "Run integration tests"
+run = "bun test test/integration"
+
+[tasks.typecheck]
+description = "Run TypeScript type checking"
+run = "bun run typecheck"
+
+[tasks.lint]
+description = "Run linting"
+run = "bun run lint"
+
+[tasks.gw]
+description = "Run ghostwire CLI (shortcut)"
+run = "bun run src/cli/ghostwire/index.ts"
+
+[tasks.gw-init]
+description = "Run ghostwire init"
+run = "bun run src/cli/ghostwire/index.ts init"
+
+[tasks.gw-detect]
+description = "Run ghostwire detect"
+run = "bun run src/cli/ghostwire/index.ts detect"
+
+[tasks.gw-config]
+description = "Run ghostwire config show"
+run = "bun run src/cli/ghostwire/index.ts config show"
+
+[tasks.gw-update]
+description = "Run ghostwire update"
+run = "bun run src/cli/ghostwire/index.ts update"
+
+[tasks.link]
+description = "Link ghostwire CLI globally with bun link"
+run = "bun link"
+
+[tasks.unlink]
+description = "Remove global ghostwire CLI link"
+run = "bun unlink"
