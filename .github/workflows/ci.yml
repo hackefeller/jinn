@@ -38,29 +38,8 @@ jobs:
         env:
           BUN_INSTALL_ALLOW_SCRIPTS: "@ast-grep/napi"
 
-      - name: Run mock-heavy tests (isolated)
-        run: |
-          # These files use mock.module() which pollutes module cache
-          # Run them in separate processes to prevent cross-file contamination
-          bun test src/platform/opencode/config-composer.test.ts
-          bun test src/orchestration/hooks/compaction-context-injector
-          bun test src/execution/tmux-subagent
-
-      - name: Run remaining tests
-        run: |
-          # Run all other tests (mock-heavy ones are re-run but that's acceptable)
-          bun test bin script src/cli src/config src/mcp src/index.test.ts \
-            src/agents src/tools src/shared src/platform \
-            src/orchestration/hooks/anthropic-context-window-limit-recovery \
-            src/orchestration/hooks/session-notification.ts \
-            src/orchestration/hooks/todo-continuation-enforcer.ts \
-            src/execution/background-agent \
-            src/execution/builtin-commands \
-            src/execution/builtin-skills \
-            src/execution/session-state \
-            src/execution/hook-message-injector \
-            src/execution/opencode-skill-loader \
-            src/execution/skill-mcp-manager
+      - name: Run tests
+        run: bun test
 
   typecheck:
     runs-on: ubuntu-latest
@@ -103,70 +82,4 @@ jobs:
 
       - name: Verify build output
         run: |
-          test -f dist/index.js || (echo "ERROR: dist/index.js not found!" && exit 1)
-          test -f dist/index.d.ts || (echo "ERROR: dist/index.d.ts not found!" && exit 1)
-
-      - name: Auto-commit schema changes
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          if git diff --quiet assets/ghostwire.schema.json; then
-            echo "No schema changes to commit"
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add assets/ghostwire.schema.json
-            git commit -m "chore: auto-update schema.json"
-            git push
-          fi
-
-  draft-release:
-    runs-on: ubuntu-latest
-    needs: [build]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - run: git fetch --force --tags
-
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Generate release notes
-        id: notes
-        run: |
-          NOTES=$(bun run script/generate-changelog.ts)
-          echo "notes<<EOF" >> $GITHUB_OUTPUT
-          echo "$NOTES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create or update draft release
-        run: |
-          EXISTING_DRAFT=$(gh release list --json tagName,isDraft --jq '.[] | select(.isDraft == true and .tagName == "next") | .tagName')
-
-          if [ -n "$EXISTING_DRAFT" ]; then
-            echo "Updating existing draft release..."
-            gh release edit next \
-              --title "Upcoming Changes 🍿" \
-              --notes-file - \
-              --draft <<'EOF'
-          ${{ steps.notes.outputs.notes }}
-          EOF
-          else
-            echo "Creating new draft release..."
-            gh release create next \
-              --title "Upcoming Changes 🍿" \
-              --notes-file - \
-              --draft \
-              --target ${{ github.sha }} <<'EOF'
-          ${{ steps.notes.outputs.notes }}
-          EOF
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          test -f dist/jinn || (echo "ERROR: dist/jinn not found!" && exit 1)
