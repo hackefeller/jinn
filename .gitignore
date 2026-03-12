@@ -28,6 +28,7 @@ npm-debug.log*
 
 # Temporary files
 .tmp/
+.worktrees/
 
 # Lock files (use bun.lockb instead)
 package-lock.json
