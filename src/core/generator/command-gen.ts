@@ -13,7 +13,7 @@ export function generateCommand(options: CommandGenerationOptions): GeneratedFil
 
   const content: CommandContent = {
     id: commandId,
-    fullId: `ghostwire:${commandId}`,
+    fullId: `jinn:${commandId}`,
     name: template.name,
     description: template.description,
     category: template.category,
@@ -35,7 +35,7 @@ export function generateCommandsForTool(
 ): GeneratedFile {
   const content: CommandContent = {
     id: commandId,
-    fullId: `ghostwire:${commandId}`,
+    fullId: `jinn:${commandId}`,
     name: template.name,
     description: template.description,
     category: template.category,

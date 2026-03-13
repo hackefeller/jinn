@@ -1,12 +1,116 @@
 import type { CommandTemplate } from '../../core/templates/types.js';
 
+export function getJinnProposeCommandTemplate(): CommandTemplate {
+  return {
+    name: 'Jinn: Propose',
+    description: 'Create or update a Linear project and seed execution issues',
+    category: 'Workflow',
+    tags: ['workflow', 'proposal', 'linear', 'planning'],
+    content: `Jinn: Propose
+
+Create a new Linear-backed change. Linear is the source of truth.
+
+## Steps
+
+1. Clarify the goal, success criteria, and scope.
+2. Create or update a Linear project for the change.
+3. Write the proposal summary and design context into the Linear project description.
+4. Seed top-level Linear issues for major workstreams.
+5. Seed sub-issues for immediately known implementation work.
+6. Report the created Linear project, issue links, and open decisions.
+
+## Guardrails
+
+- Do not create local artifact files as the primary workflow record.
+- Prefer one Linear project per change.
+- Keep top-level Linear issues outcome-oriented and sub-issues execution-oriented.
+- If a matching Linear project already exists, update it instead of duplicating it.
+`,
+  };
+}
+
+export function getJinnExploreCommandTemplate(): CommandTemplate {
+  return {
+    name: 'Jinn: Explore',
+    description: 'Explore ideas using current Linear project and issue context',
+    category: 'Workflow',
+    tags: ['workflow', 'explore', 'linear', 'investigation'],
+    content: `Enter explore mode with Linear context.
+
+## Steps
+
+1. Identify the relevant Linear project or Linear issue from the conversation.
+2. Read the existing Linear description, issue hierarchy, and status.
+3. Explore options, risks, dependencies, and edge cases.
+4. Offer to capture new decisions back into the relevant Linear project or Linear issue.
+
+## Guardrails
+
+- Explore and reason before implementation.
+- Use Linear as the context source when work has already been captured.
+- Keep recommendations grounded in the current codebase and current Linear state.
+`,
+  };
+}
+
+export function getJinnApplyCommandTemplate(): CommandTemplate {
+  return {
+    name: 'Jinn: Apply',
+    description: 'Implement work from Linear issues and sub-issues',
+    category: 'Workflow',
+    tags: ['workflow', 'apply', 'linear', 'execution'],
+    content: `Implement work from Linear.
+
+## Steps
+
+1. Select the Linear project or Linear issue to execute.
+2. Read the active top-level Linear issues and pending sub-issues.
+3. Choose the next unblocked sub-issue.
+4. Implement the change, run verification, and summarize progress.
+5. Update the Linear issue state, assignee, or notes through the available workflow.
+6. Continue until the selected Linear scope is complete or blocked.
+
+## Guardrails
+
+- Treat Linear sub-issues as the execution queue.
+- Pause when the next Linear issue is ambiguous or blocked.
+- Keep code changes scoped to the selected Linear work item.
+`,
+  };
+}
+
+export function getJinnArchiveCommandTemplate(): CommandTemplate {
+  return {
+    name: 'Jinn: Archive',
+    description: 'Close out completed Linear work',
+    category: 'Workflow',
+    tags: ['workflow', 'archive', 'linear', 'completion'],
+    content: `Archive completed Linear work.
+
+## Steps
+
+1. Select the Linear project to close.
+2. Review open top-level Linear issues and sub-issues.
+3. Confirm whether any remaining items should stay open or be deferred.
+4. Mark the Linear project complete and transition finished Linear issues to done.
+5. Summarize remaining follow-ups, if any.
+
+## Guardrails
+
+- Do not move local folders as the completion mechanism.
+- Use Linear project and Linear issue state transitions as the archive step.
+- Surface incomplete items before closing the Linear project.
+`,
+  };
+}
+
 export function getWorkflowsBrainstormCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Workflows Brainstorm',
+    name: 'Jinn: Workflows Brainstorm',
     description: 'Generate ideas and explore solutions',
     category: 'Workflow',
     tags: ['brainstorm', 'ideas', 'exploration'],
-    content: `# Ghostwire: Workflows Brainstorm
+    content: `# Jinn: Workflows Brainstorm
 
 Generate ideas and explore solutions.
 
@@ -37,11 +141,11 @@ Generate ideas and explore solutions.
 
 export function getWorkflowsCompleteCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Workflows Complete',
+    name: 'Jinn: Workflows Complete',
     description: 'Complete ongoing work items',
     category: 'Workflow',
     tags: ['complete', 'finish', 'done'],
-    content: `# Ghostwire: Workflows Complete
+    content: `# Jinn: Workflows Complete
 
 Complete ongoing work items.
 
@@ -72,11 +176,11 @@ Complete ongoing work items.
 
 export function getWorkflowsCreateCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Workflows Create',
+    name: 'Jinn: Workflows Create',
     description: 'Create new work item or project',
     category: 'Workflow',
     tags: ['create', 'new', 'initiate'],
-    content: `# Ghostwire: Workflows Create
+    content: `# Jinn: Workflows Create
 
 Create new work item or project.
 
@@ -107,11 +211,11 @@ Create new work item or project.
 
 export function getWorkflowsExecuteCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Workflows Execute',
+    name: 'Jinn: Workflows Execute',
     description: 'Execute planned work',
     category: 'Workflow',
     tags: ['execute', 'run', 'do'],
-    content: `# Ghostwire: Workflows Execute
+    content: `# Jinn: Workflows Execute
 
 Execute planned work.
 
@@ -142,11 +246,11 @@ Execute planned work.
 
 export function getWorkflowsLearningsCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Workflows Learnings',
+    name: 'Jinn: Workflows Learnings',
     description: 'Document and share project learnings',
     category: 'Workflow',
     tags: ['learnings', 'knowledge', 'documentation'],
-    content: `# Ghostwire: Workflows Learnings
+    content: `# Jinn: Workflows Learnings
 
 Document and share project learnings.
 
@@ -172,11 +276,11 @@ Document and share project learnings.
 
 export function getWorkflowsPlanCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Workflows Plan',
+    name: 'Jinn: Workflows Plan',
     description: 'Create detailed work plan',
     category: 'Workflow',
     tags: ['plan', 'planning', 'roadmap'],
-    content: `# Ghostwire: Workflows Plan
+    content: `# Jinn: Workflows Plan
 
 Create detailed work plan.
 
@@ -207,11 +311,11 @@ Create detailed work plan.
 
 export function getWorkflowsReviewCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Workflows Review',
+    name: 'Jinn: Workflows Review',
     description: 'Review completed or in-progress work',
     category: 'Workflow',
     tags: ['review', 'feedback', 'assessment'],
-    content: `# Ghostwire: Workflows Review
+    content: `# Jinn: Workflows Review
 
 Review completed or in-progress work.
 
@@ -242,11 +346,11 @@ Review completed or in-progress work.
 
 export function getWorkflowsStatusCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Workflows Status',
+    name: 'Jinn: Workflows Status',
     description: 'Check status of ongoing work',
     category: 'Workflow',
     tags: ['status', 'progress', 'check'],
-    content: `# Ghostwire: Workflows Status
+    content: `# Jinn: Workflows Status
 
 Check status of ongoing work.
 
@@ -272,11 +376,11 @@ Check status of ongoing work.
 
 export function getWorkflowsStopCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Workflows Stop',
+    name: 'Jinn: Workflows Stop',
     description: 'Stop ongoing work',
     category: 'Workflow',
     tags: ['stop', 'halt', 'pause'],
-    content: `# Ghostwire: Workflows Stop
+    content: `# Jinn: Workflows Stop
 
 Stop ongoing work.
 
@@ -302,11 +406,11 @@ Stop ongoing work.
 
 export function getWorkflowsWorkCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Workflows Work',
+    name: 'Jinn: Workflows Work',
     description: 'Perform work tasks',
     category: 'Workflow',
     tags: ['work', 'task', 'do'],
-    content: `# Ghostwire: Workflows Work
+    content: `# Jinn: Workflows Work
 
 Perform work tasks.
 

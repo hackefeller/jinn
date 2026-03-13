@@ -19,8 +19,8 @@ import type { ConfigMergeResult, DetectedConfig, InstallConfig } from "./types";
 
 const OPENCODE_BINARIES = ["opencode", "opencode-desktop"] as const;
 
-// Model defaults are no longer managed by Ghostwire; users must specify
-// their own model settings in `ghostwire.json` or OpenCode config.  The
+// Model defaults are no longer managed by Jinn; users must specify
+// their own model settings in `jinn.json` or OpenCode config.  The
 // previous DEFAULT_AGENT_MODEL_OVERRIDES and DEFAULT_CATEGORY_MODEL_OVERRIDES
 // have been removed.
 
@@ -145,7 +145,7 @@ export async function fetchNpmDistTags(packageName: string): Promise<NpmDistTags
   }
 }
 
-const PACKAGE_NAME = "ghostwire";
+const PACKAGE_NAME = "jinn";
 
 const PRIORITIZED_TAGS = ["latest", "beta", "next"] as const;
 
@@ -380,7 +380,7 @@ export async function addToInstalledPlugins(
     isLocal: true,
   };
 
-  const pluginName = "ghostwire";
+  const pluginName = "jinn";
   if (!db.plugins[pluginName]) {
     db.plugins[pluginName] = [];
   }
@@ -490,7 +490,7 @@ export function writeGhostConfig(
     return {
       success: false,
       configPath: omoConfigPath,
-      error: formatErrorWithSuggestion(err, "write ghostwire config"),
+      error: formatErrorWithSuggestion(err, "write jinn config"),
     };
   }
 }
@@ -750,7 +750,7 @@ export function addProviderConfig(config: InstallConfig): ConfigMergeResult {
 }
 
 /**
- * Write default model configuration to ghostwire.json.
+ * Write default model configuration to jinn.json.
  * This allows users to customize agent and category models.
  */
 
@@ -822,7 +822,7 @@ export function detectCurrentConfig(): DetectedConfig {
 
   const openCodeConfig = parseResult.config;
   const plugins = openCodeConfig.plugin ?? [];
-  result.isInstalled = plugins.some((p) => p.startsWith("ghostwire"));
+  result.isInstalled = plugins.some((p) => p.startsWith("jinn"));
 
   if (!result.isInstalled) {
     return result;

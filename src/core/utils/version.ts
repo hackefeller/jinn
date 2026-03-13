@@ -9,9 +9,9 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
 /**
- * Get the current ghostwire version from package.json
+ * Get the current jinn version from package.json
  */
-export function getGhostwireVersion(): string {
+export function getJinnVersion(): string {
   try {
     const { version } = require('../../package.json');
     return version;

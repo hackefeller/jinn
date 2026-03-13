@@ -2,12 +2,12 @@ import type { SkillTemplate } from '../../core/templates/types.js';
 
 export function getGitMasterSkillTemplate(): SkillTemplate {
   return {
-    name: 'ghostwire-git-master',
-    description: 'Advanced git workflows, branch management, and collaboration patterns',
+    name: 'jinn-git-master',
+    description: 'Use when working through advanced git workflows, branch strategy, history cleanup, or collaboration conflicts.',
     license: 'MIT',
     compatibility: 'Works with any git repository',
     metadata: {
-      author: 'ghostwire',
+      author: 'jinn',
       version: '1.0',
       category: 'Version Control',
       tags: ['git', 'workflow', 'collaboration'],
@@ -72,12 +72,12 @@ git push --force-with-lease origin feature/descriptive-name
 
 export function getBrainstormingSkillTemplate(): SkillTemplate {
   return {
-    name: 'ghostwire-brainstorming',
-    description: 'Creative problem-solving and idea generation',
+    name: 'jinn-brainstorming',
+    description: 'Use when exploring ideas, opening solution space, or generating multiple approaches before deciding.',
     license: 'MIT',
     compatibility: 'Works with any project',
     metadata: {
-      author: 'ghostwire',
+      author: 'jinn',
       version: '1.0',
       category: 'Productivity',
       tags: ['brainstorming', 'ideas', 'creativity'],
@@ -121,12 +121,12 @@ You help users generate creative solutions and explore ideas.
 
 export function getRailsStyleSkillTemplate(): SkillTemplate {
   return {
-    name: 'ghostwire-rails-style',
-    description: 'Ruby on Rails conventions and best practices',
+    name: 'jinn-rails-style',
+    description: 'Use when working in a Ruby on Rails codebase and needing Rails-native conventions or structure.',
     license: 'MIT',
     compatibility: 'Works with Rails projects',
     metadata: {
-      author: 'ghostwire',
+      author: 'jinn',
       version: '1.0',
       category: 'Framework',
       tags: ['rails', 'ruby', 'conventions'],
@@ -161,12 +161,12 @@ You are an expert in Ruby on Rails development.
 
 export function getFrontendDesignSkillTemplate(): SkillTemplate {
   return {
-    name: 'ghostwire-frontend-design',
-    description: 'Frontend development and UI implementation',
+    name: 'jinn-frontend-design',
+    description: 'Use when building or refining frontend UI, component structure, styling, or accessibility behavior.',
     license: 'MIT',
     compatibility: 'Works with any frontend project',
     metadata: {
-      author: 'ghostwire',
+      author: 'jinn',
       version: '1.0',
       category: 'Frontend',
       tags: ['frontend', 'ui', 'css', 'html'],

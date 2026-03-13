@@ -1,8 +1,8 @@
-# Ghostwire Configuration Reference
+# Jinn Configuration Reference
 
 ## Configuration File
 
-Location: `.ghostwire/config.yaml`
+Location: `.jinn/config.yaml`
 
 ## Schema
 
@@ -143,25 +143,25 @@ delivery: both
 ### View Config
 
 ```bash
-ghostwire config show
+jinn config show
 ```
 
 ### Add Tool
 
 ```bash
-ghostwire config add-tool claude
+jinn config add-tool claude
 ```
 
 ### Remove Tool
 
 ```bash
-ghostwire config remove-tool cursor
+jinn config remove-tool cursor
 ```
 
 ### Set Profile
 
 ```bash
-ghostwire config set profile extended
+jinn config set profile extended
 ```
 
 ## Environment Variables

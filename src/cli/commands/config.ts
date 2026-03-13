@@ -7,7 +7,8 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import type { GhostwireConfig } from '../../core/config/schema.js';
+import type { JinnConfig } from '../../core/config/schema.js';
+import { parseConfig, serializeConfig } from './config-file.js';
 import { colors } from '../ui/colors.js';
 import { simpleTable } from '../ui/table.js';
 
@@ -54,6 +55,7 @@ export async function executeConfig(options: ConfigOptions): Promise<void> {
       [colors.primary('tools'), colors.success(config.tools.join(', '))],
       [colors.primary('profile'), colors.success(config.profile)],
       [colors.primary('delivery'), colors.success(config.delivery)],
+      [colors.primary('workflow.backend'), colors.success(config.workflow.backend)],
     ];
     simpleTable(tableData);
     
@@ -66,43 +68,4 @@ export async function executeConfig(options: ConfigOptions): Promise<void> {
     console.error(colors.error('\nError:'), error);
     console.log(colors.dim('\nRun "jinn init" first to initialize jinn.'));
   }
-}
-
-function parseConfig(content: string): GhostwireConfig {
-  const lines = content.split('\n');
-  const config: any = {
-    version: '1.0.0',
-    tools: [],
-    profile: 'core',
-    delivery: 'both',
-  };
-
-  let currentKey = '';
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-
-    if (trimmed.startsWith('version:')) {
-      config.version = trimmed.split(':')[1].trim().replace(/"/g, '');
-    } else if (trimmed.startsWith('tools:')) {
-      currentKey = 'tools';
-    } else if (trimmed.startsWith('profile:')) {
-      config.profile = trimmed.split(':')[1].trim();
-    } else if (trimmed.startsWith('delivery:')) {
-      config.delivery = trimmed.split(':')[1].trim();
-    } else if (currentKey === 'tools' && trimmed.startsWith('-')) {
-      config.tools.push(trimmed.replace('-', '').trim());
-    }
-  }
-
-  return config as GhostwireConfig;
-}
-
-function serializeConfig(config: GhostwireConfig): string {
-  return `version: "${config.version}"
-tools:
-${config.tools.map((t) => `  - ${t}`).join('\n')}
-profile: ${config.profile}
-delivery: ${config.delivery}
-`;
 }

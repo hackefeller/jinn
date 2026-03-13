@@ -7,8 +7,9 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import type { GhostwireConfig } from '../../core/config/schema.js';
+import type { JinnConfig } from '../../core/config/schema.js';
 import { generateFiles } from '../../core/generator/index.js';
+import { parseConfig, serializeConfig } from './config-file.js';
 import { startSpinner, successSpinner, errorSpinner } from '../ui/spinner.js';
 import { colors } from '../ui/colors.js';
 import { simpleTable } from '../ui/table.js';
@@ -39,6 +40,7 @@ export async function executeUpdate(options: UpdateOptions): Promise<void> {
     console.log(colors.dim('Tools:'), colors.primary(config.tools.join(', ')));
     console.log(colors.dim('Profile:'), colors.primary(config.profile));
     console.log(colors.dim('Delivery:'), colors.primary(config.delivery));
+    console.log(colors.dim('Workflow:'), colors.primary(config.workflow.backend));
     console.log('');
 
     const generateSpinner = startSpinner('Regenerating jinn files...');
@@ -67,34 +69,4 @@ export async function executeUpdate(options: UpdateOptions): Promise<void> {
     console.error(colors.error('\nError:'), error);
     console.log(colors.dim('\nRun "jinn init" first to initialize jinn.'));
   }
-}
-
-function parseConfig(content: string): GhostwireConfig {
-  const lines = content.split('\n');
-  const config: any = {
-    version: '1.0.0',
-    tools: [],
-    profile: 'core',
-    delivery: 'both',
-  };
-
-  let currentKey = '';
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-
-    if (trimmed.startsWith('version:')) {
-      config.version = trimmed.split(':')[1].trim().replace(/"/g, '');
-    } else if (trimmed.startsWith('tools:')) {
-      currentKey = 'tools';
-    } else if (trimmed.startsWith('profile:')) {
-      config.profile = trimmed.split(':')[1].trim();
-    } else if (trimmed.startsWith('delivery:')) {
-      config.delivery = trimmed.split(':')[1].trim();
-    } else if (currentKey === 'tools' && trimmed.startsWith('-')) {
-      config.tools.push(trimmed.replace('-', '').trim());
-    }
-  }
-
-  return config as GhostwireConfig;
 }

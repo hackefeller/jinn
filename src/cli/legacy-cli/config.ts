@@ -1,11 +1,13 @@
 /**
- * Ghostwire config command
+ * Jinn config command
  *
- * Manages ghostwire configuration.
+ * Manages jinn configuration.
  */
 
 import * as fs from 'fs/promises';
 import * as path from 'path';
+
+import { parseConfig, serializeConfig } from '../commands/config-file.js';
 
 export interface ConfigOptions {
   action: 'show' | 'get' | 'set' | 'add-tool' | 'remove-tool';
@@ -16,7 +18,7 @@ export interface ConfigOptions {
 
 export async function executeConfig(options: ConfigOptions): Promise<void> {
   const projectPath = options.projectPath || process.cwd();
-  const configPath = path.join(projectPath, '.ghostwire', 'config.yaml');
+  const configPath = path.join(projectPath, '.jinn', 'config.yaml');
 
   if (options.action === 'show') {
     await showConfig(configPath);
@@ -34,71 +36,55 @@ async function showConfig(configPath: string): Promise<void> {
     const content = await fs.readFile(configPath, 'utf-8');
     console.log(content);
   } catch {
-    console.log('No ghostwire configuration found.');
-    console.log('Run "ghostwire init" to initialize.');
+    console.log('No jinn configuration found.');
+    console.log('Run "jinn init" to initialize.');
   }
 }
 
 async function addTool(configPath: string, tool: string): Promise<void> {
   try {
     const content = await fs.readFile(configPath, 'utf-8');
-    const lines = content.split('\n');
-    const toolsIndex = lines.findIndex((l) => l.trim() === 'tools:');
+    const config = parseConfig(content);
 
-    if (toolsIndex === -1) {
-      console.log('No tools section in config.');
-      return;
-    }
-
-    const toolLine = `  - ${tool}`;
-    if (!lines.includes(toolLine)) {
-      lines.splice(toolsIndex + 1, 0, toolLine);
-      await fs.writeFile(configPath, lines.join('\n'));
+    if (!config.tools.includes(tool as any)) {
+      config.tools = [...config.tools, tool as any];
+      await fs.writeFile(configPath, serializeConfig(config));
       console.log(`Added tool: ${tool}`);
     } else {
       console.log(`Tool already configured: ${tool}`);
     }
   } catch {
-    console.log('No ghostwire configuration found.');
+    console.log('No jinn configuration found.');
   }
 }
 
 async function removeTool(configPath: string, tool: string): Promise<void> {
   try {
     const content = await fs.readFile(configPath, 'utf-8');
-    const lines = content.split('\n');
-    const toolLine = `  - ${tool}`;
-    const filtered = lines.filter((l) => l.trim() !== toolLine);
+    const config = parseConfig(content);
+    const filtered = config.tools.filter((configuredTool) => configuredTool !== tool);
 
-    if (filtered.length === lines.length) {
+    if (filtered.length === config.tools.length) {
       console.log(`Tool not found: ${tool}`);
       return;
     }
 
-    await fs.writeFile(configPath, filtered.join('\n'));
+    config.tools = filtered as typeof config.tools;
+    await fs.writeFile(configPath, serializeConfig(config));
     console.log(`Removed tool: ${tool}`);
   } catch {
-    console.log('No ghostwire configuration found.');
+    console.log('No jinn configuration found.');
   }
 }
 
 async function setConfig(configPath: string, key: string, value: string): Promise<void> {
   try {
     const content = await fs.readFile(configPath, 'utf-8');
-    const lines = content.split('\n');
-    const keyLine = `${key}:`;
-
-    const existingIndex = lines.findIndex((l) => l.trim().startsWith(keyLine));
-
-    if (existingIndex !== -1) {
-      lines[existingIndex] = `${key}: ${value}`;
-    } else {
-      lines.push(`${key}: ${value}`);
-    }
-
-    await fs.writeFile(configPath, lines.join('\n'));
+    const config = parseConfig(content) as Record<string, unknown>;
+    config[key] = value;
+    await fs.writeFile(configPath, serializeConfig(config as any));
     console.log(`Set ${key} = ${value}`);
   } catch {
-    console.log('No ghostwire configuration found.');
+    console.log('No jinn configuration found.');
   }
 }

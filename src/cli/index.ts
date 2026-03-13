@@ -40,22 +40,22 @@ const DOCTOR_HELP = readHelpFile("../../docs/cli/doctor-help.md");
 const EXPORT_HELP = readHelpFile(
   "../../docs/cli/export-help.md",
   [
-    "$ ghostwire export --target all",
-    "$ ghostwire export --target copilot --directory /path/to/repo",
-    "$ ghostwire export --target codex --force",
+    "$ jinn export --target all",
+    "$ jinn export --target copilot --directory /path/to/repo",
+    "$ jinn export --target codex --force",
   ].join("\n"),
 );
 
 const program = new Command();
 
 program
-  .name("ghostwire")
-  .description("The ultimate Ghostwire plugin - multi-model orchestration, LSP tools, and more")
+  .name("jinn")
+  .description("The ultimate Jinn plugin - multi-model orchestration, LSP tools, and more")
   .version(VERSION, "-v, --version", "Show version number");
 
 program
   .command("install")
-  .description("Install and configure ghostwire with interactive setup")
+  .description("Install and configure jinn with interactive setup")
   .option("--no-tui", "Run in non-interactive mode (requires all options)")
   .option("--openai <value>", "OpenAI/ChatGPT subscription: no, yes (default: no)")
   .option("--gemini <value>", "Gemini integration: no, yes")
@@ -86,7 +86,7 @@ program
 
 program
   .command("run <message>")
-  .description("Run ghostwire with todo/background task completion enforcement")
+  .description("Run jinn with todo/background task completion enforcement")
   .option("-a, --agent <name>", "Agent to use (default: operator)")
   .option("-d, --directory <path>", "Working directory")
   .option("-t, --timeout <ms>", "Timeout in milliseconds (default: 30 minutes)", parseInt)
@@ -119,7 +119,7 @@ program
 
 program
   .command("doctor")
-  .description("Check ghostwire installation health and diagnose issues")
+  .description("Check jinn installation health and diagnose issues")
   .option("--verbose", "Show detailed diagnostic information")
   .option("--json", "Output results in JSON format")
   .option("--category <category>", "Run only specific category")
@@ -136,7 +136,7 @@ program
 
 program
   .command("export")
-  .description("Export Ghostwire orchestration intelligence for external agent runtimes")
+  .description("Export Jinn orchestration intelligence for external agent runtimes")
   .option("--target <value>", "Export target: copilot, codex, all (default: all)")
   .option("-d, --directory <path>", "Output directory (default: current working directory)")
   .option(
@@ -161,7 +161,7 @@ program
   .command("version")
   .description("Show version information")
   .action(() => {
-    console.log(`ghostwire v${VERSION}`);
+    console.log(`jinn v${VERSION}`);
   });
 
 

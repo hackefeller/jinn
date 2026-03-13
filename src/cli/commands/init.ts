@@ -7,9 +7,10 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import type { GhostwireConfig } from '../../core/config/schema.js';
+import type { JinnConfig } from '../../core/config/schema.js';
 import { generateFiles } from '../../core/generator/index.js';
 import { detectAvailableTools } from '../../core/discovery/detector.js';
+import { serializeConfig } from './config-file.js';
 import { displayBanner, displaySubtitle } from '../ui/banner.js';
 import { startSpinner, successSpinner, errorSpinner } from '../ui/spinner.js';
 import { colors, theme } from '../ui/colors.js';
@@ -67,23 +68,21 @@ export async function executeInit(options: InitOptions): Promise<void> {
 
   console.log(colors.dim('\nConfigured tools:'), colors.success(selectedTools.join(', ')));
 
-  const config: GhostwireConfig = {
+  const config: JinnConfig = {
     version: '0.0.1',
     tools: selectedTools as any,
     profile: (options.profile as any) || 'core',
     delivery: (options.delivery as any) || 'both',
+    workflow: {
+      backend: 'filesystem',
+    },
   };
 
   const jinnDir = path.join(projectPath, CONFIG_DIR);
   await fs.mkdir(jinnDir, { recursive: true });
 
   const configPath = path.join(jinnDir, 'config.yaml');
-  const configContent = `version: "${config.version}"
-tools:
-${config.tools.map((t) => `  - ${t}`).join('\n')}
-profile: ${config.profile}
-delivery: ${config.delivery}
-`;
+  const configContent = serializeConfig(config);
 
   const configSpinner = startSpinner('Creating configuration...');
   await fs.writeFile(configPath, configContent, 'utf-8');

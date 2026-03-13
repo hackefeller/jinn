@@ -4,6 +4,8 @@ import { join } from "node:path";
 import type { CheckResult, CheckDefinition, McpServerInfo } from "../types";
 import { CHECK_IDS, CHECK_NAMES } from "../constants";
 import { parseJsonc } from "../../../integration/shared/jsonc-parser";
+import type { WorkflowConfig } from "../../../platform/config";
+import { parseConfig as parseJinnConfig } from "../../commands/config-file.js";
 
 const MCP_SERVERS = ["context7", "grep_app"];
 
@@ -17,7 +19,12 @@ interface McpConfig {
   mcpServers?: Record<string, unknown>;
 }
 
-function loadUserMcpConfig(): Record<string, unknown> {
+interface LinearMcpValidationResult {
+  valid: boolean;
+  errors: string[];
+}
+
+export function loadUserMcpConfig(): Record<string, unknown> {
   const servers: Record<string, unknown> = {};
 
   for (const configPath of MCP_CONFIG_PATHS) {
@@ -35,6 +42,49 @@ function loadUserMcpConfig(): Record<string, unknown> {
   }
 
   return servers;
+}
+
+function loadJinnWorkflowConfig(): WorkflowConfig | null {
+  const configPath = join(process.cwd(), ".jinn", "config.yaml");
+  if (!existsSync(configPath)) return null;
+
+  try {
+    const content = readFileSync(configPath, "utf-8");
+    return parseJinnConfig(content).workflow;
+  } catch {
+    return null;
+  }
+}
+
+export function validateLinearWorkflowMcpServer(
+  workflow: WorkflowConfig,
+  servers: Record<string, unknown>,
+): LinearMcpValidationResult {
+  if (workflow.backend !== "linear") {
+    return { valid: true, errors: [] };
+  }
+
+  const serverName = workflow.linear?.mcpServerName;
+  if (!serverName) {
+    return { valid: false, errors: ["Linear workflow is missing workflow.linear.mcpServerName"] };
+  }
+
+  const server = servers[serverName];
+  if (!server) {
+    return {
+      valid: false,
+      errors: [`Linear workflow requires MCP server "${serverName}" in user MCP config`],
+    };
+  }
+
+  if (typeof server !== "object" || server === null) {
+    return {
+      valid: false,
+      errors: [`Linear MCP server "${serverName}" has an invalid configuration format`],
+    };
+  }
+
+  return { valid: true, errors: [] };
 }
 
 export function getMcpInfo(): McpServerInfo[] {
@@ -76,9 +126,23 @@ export async function checkMcpServers(): Promise<CheckResult> {
 }
 
 export async function checkUserMcpServers(): Promise<CheckResult> {
+  const rawServers = loadUserMcpConfig();
   const servers = getUserMcpInfo();
+  const workflow = loadJinnWorkflowConfig();
 
   if (servers.length === 0) {
+    if (workflow?.backend === "linear") {
+      return {
+        name: CHECK_NAMES[CHECK_IDS.MCP_USER],
+        status: "fail",
+        message: "Linear workflow requires user MCP configuration",
+        details: [
+          `Expected MCP server: ${workflow.linear?.mcpServerName ?? "linear"}`,
+          "Add the configured Linear MCP server to .mcp.json or ~/.claude/.mcp.json",
+        ],
+      };
+    }
+
     return {
       name: CHECK_NAMES[CHECK_IDS.MCP_USER],
       status: "skip",
@@ -98,6 +162,18 @@ export async function checkUserMcpServers(): Promise<CheckResult> {
         ...invalidServers.map((s) => `Invalid: ${s.id} - ${s.error}`),
       ],
     };
+  }
+
+  if (workflow) {
+    const linearValidation = validateLinearWorkflowMcpServer(workflow, rawServers);
+    if (!linearValidation.valid) {
+      return {
+        name: CHECK_NAMES[CHECK_IDS.MCP_USER],
+        status: "fail",
+        message: "Linear workflow MCP configuration is incomplete",
+        details: linearValidation.errors,
+      };
+    }
   }
 
   return {

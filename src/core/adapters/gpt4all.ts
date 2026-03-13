@@ -18,7 +18,7 @@ export const gpt4allAdapter: ToolCommandAdapter = {
   skillsDir: '.gpt4all',
 
   getCommandPath(commandId: string): string {
-    return path.join('.gpt4all', 'commands', `ghostwire-${commandId}.md`);
+    return path.join('.gpt4all', 'commands', `jinn-${commandId}.md`);
   },
 
   getSkillPath(skillName: string): string {
@@ -38,9 +38,9 @@ ${content.body}`;
       `name: ${template.name}`,
       `description: ${template.description}`,
       `license: ${template.license || 'MIT'}`,
-      `compatibility: ${template.compatibility || 'Requires ghostwire CLI.'}`,
+      `compatibility: ${template.compatibility || 'Requires jinn CLI.'}`,
       'metadata:',
-      `  author: ${template.metadata?.author || 'ghostwire'}`,
+      `  author: ${template.metadata?.author || 'jinn'}`,
       `  version: "${template.metadata?.version || '1.0'}"`,
       `  generatedBy: "${version}"`,
     ];

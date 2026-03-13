@@ -15,7 +15,7 @@ export function formatVersionOutput(info: VersionInfo): string {
   const lines: string[] = [];
 
   lines.push("");
-  lines.push(color.bold(color.white("Ghostwire Version Information")));
+  lines.push(color.bold(color.white("Jinn Version Information")));
   lines.push(color.dim("─".repeat(50)));
   lines.push("");
 
@@ -38,7 +38,7 @@ export function formatVersionOutput(info: VersionInfo): string {
     case "outdated":
       lines.push(`  ${SYMBOLS.warn} ${color.yellow("Update available")}`);
       lines.push(
-        `  ${color.dim("Run:")} ${color.cyan("cd ~/.config/opencode && bun update ghostwire")}`,
+        `  ${color.dim("Run:")} ${color.cyan("cd ~/.config/opencode && bun update jinn")}`,
       );
       break;
     case "local-dev":

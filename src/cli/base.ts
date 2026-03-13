@@ -1,7 +1,7 @@
 import { Command } from '@oclif/core';
 import { displayBanner } from './ui/banner.js';
 
-export abstract class GhostwireCommand extends Command {
+export abstract class JinnCommand extends Command {
   async init(): Promise<void> {
     // Add banner for init command
     if (this.id === 'init') {

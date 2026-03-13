@@ -2,17 +2,20 @@
  * Default configuration values
  */
 
-import type { GhostwireConfig } from './schema.js';
+import type { JinnConfig } from './schema.js';
 
 /**
  * Default configuration values
  */
-export const DEFAULT_CONFIG: GhostwireConfig = {
+export const DEFAULT_CONFIG: JinnConfig = {
   version: '1.0.0',
   tools: [],
   profile: 'core',
   delivery: 'both',
   featureFlags: {},
+  workflow: {
+    backend: 'filesystem',
+  },
 };
 
 /**
@@ -21,9 +24,9 @@ export const DEFAULT_CONFIG: GhostwireConfig = {
 export const DEFAULT_CONFIG_FILENAME = 'config.yaml';
 
 /**
- * Ghostwire directory name
+ * Jinn directory name
  */
-export const GHOSTWIRE_DIR_NAME = '.ghostwire';
+export const JINN_DIR_NAME = '.jinn';
 
 /**
  * Current configuration schema version

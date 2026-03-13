@@ -59,7 +59,7 @@ export async function run(options: RunOptions): Promise<number> {
 
       for (let attempt = 1; attempt <= SESSION_CREATE_MAX_RETRIES; attempt++) {
         const sessionRes = await client.session.create({
-          body: { title: "ghostwire run" },
+          body: { title: "jinn run" },
         });
 
         if (sessionRes.error) {

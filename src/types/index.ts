@@ -1,7 +1,7 @@
 /**
  * Type re-exports for convenience.
  *
- * This module provides a single import point for all ghostwire types.
+ * This module provides a single import point for all jinn types.
  */
 
 // Template types
@@ -22,7 +22,7 @@ export type {
 
 // Config types
 export type {
-  GhostwireConfig,
+  JinnConfig,
   ToolId,
   Profile,
   Delivery,

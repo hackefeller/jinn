@@ -1,15 +1,16 @@
 /**
- * Ghostwire init command
+ * Jinn init command
  *
- * Initializes ghostwire in the current project.
+ * Initializes jinn in the current project.
  */
 
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import type { GhostwireConfig } from '../../core/config/schema.js';
+import type { JinnConfig } from '../../core/config/schema.js';
 import { generateFiles } from '../../core/generator/index.js';
 import { detectAvailableTools } from '../../core/discovery/detector.js';
+import { serializeConfig } from '../commands/config-file.js';
 
 export interface InitOptions {
   tools?: string;
@@ -22,7 +23,7 @@ export interface InitOptions {
 export async function executeInit(options: InitOptions): Promise<void> {
   const projectPath = options.projectPath || process.cwd();
 
-  console.log('Initializing ghostwire...\n');
+  console.log('Initializing jinn...\n');
 
   const availableTools = await detectAvailableTools(projectPath);
 
@@ -36,7 +37,7 @@ export async function executeInit(options: InitOptions): Promise<void> {
     }
   } else if (availableTools.length === 0) {
     console.log('No AI tools detected. Install a tool first (e.g., OpenCode, Cursor).');
-    console.log('\nGhostwire supports:');
+    console.log('\nJinn supports:');
     console.log('  - OpenCode (.opencode/)');
     console.log('  - Cursor (.cursor/)');
     console.log('  - Claude Code (.claude/)');
@@ -58,28 +59,26 @@ export async function executeInit(options: InitOptions): Promise<void> {
 
   console.log(`Configured tools: ${selectedTools.join(', ')}\n`);
 
-  const config: GhostwireConfig = {
+  const config: JinnConfig = {
     version: '1.0.0',
     tools: selectedTools as any,
     profile: (options.profile as any) || 'core',
     delivery: (options.delivery as any) || 'both',
+    workflow: {
+      backend: 'filesystem',
+    },
   };
 
-  const ghostwireDir = path.join(projectPath, '.ghostwire');
-  await fs.mkdir(ghostwireDir, { recursive: true });
+  const jinnDir = path.join(projectPath, '.jinn');
+  await fs.mkdir(jinnDir, { recursive: true });
 
-  const configPath = path.join(ghostwireDir, 'config.yaml');
-  const configContent = `version: "${config.version}"
-tools:
-${config.tools.map((t) => `  - ${t}`).join('\n')}
-profile: ${config.profile}
-delivery: ${config.delivery}
-`;
+  const configPath = path.join(jinnDir, 'config.yaml');
+  const configContent = serializeConfig(config);
 
   await fs.writeFile(configPath, configContent, 'utf-8');
   console.log(`Created ${configPath}\n`);
 
-  console.log('Generating ghostwire files...');
+  console.log('Generating jinn files...');
   const result = await generateFiles(config, projectPath);
 
   console.log(`\nGenerated ${result.generated.length} files`);
@@ -91,11 +90,11 @@ delivery: ${config.delivery}
     }
   }
 
-  console.log('\n✓ Ghostwire initialized successfully!');
+  console.log('\n✓ Jinn initialized successfully!');
   console.log(`\nConfigured tools: ${selectedTools.join(', ')}`);
   console.log(`Profile: ${config.profile}`);
   console.log('\nTry running one of these commands in your AI tool:');
-  console.log('  /ghostwire:propose');
-  console.log('  /ghostwire:explore');
-  console.log('  /ghostwire:planner');
+  console.log('  /jinn:propose');
+  console.log('  /jinn:explore');
+  console.log('  /jinn:planner');
 }

@@ -1,10 +1,11 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { dirname, join, relative, resolve } from "node:path";
-import { AGENTS_MANIFEST } from "../execution/agents-manifest";
-import { createSkills, mergeScopedSkillsWithBuiltins } from "../skills/skills";
-import { resolveScopedSkillsCanonical } from "../execution/opencode-skill-loader";
-import type { Skill } from "../skills/types";
-import type { LoadedSkill } from "../execution/opencode-skill-loader/types";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+
+import {
+  getDefaultAgentTemplates,
+  getDefaultCommandTemplates,
+  getDefaultSkillTemplates,
+} from "../templates/catalog.js";
 
 type ExportTarget = "copilot" | "codex" | "all";
 
@@ -22,15 +23,22 @@ export interface ExportArgs {
 interface ExportArtifact {
   path: string;
   content: string;
-  target: "copilot" | "codex" | "shared";
+  target: "copilot" | "codex";
 }
 
 interface ExportModel {
   generatedAt: string;
   generatedDate: string;
-  agents: Array<{ id: string; name: string; purpose: string; prompt: string }>;
+  agents: Array<{ id: string; name: string; purpose: string; instructions: string }>;
+  commands: Array<{
+    id: string;
+    fullId: string;
+    name: string;
+    description: string;
+    category: string;
+    content: string;
+  }>;
   skills: Array<{ id: string; name: string; description: string; template: string }>;
-  prompts: Array<{ id: string; sourcePath: string; content: string }>;
 }
 
 interface CoverageEntry {
@@ -42,15 +50,16 @@ interface CoverageEntry {
 
 interface ExportCoverage {
   agents: CoverageEntry;
-  skills: CoverageEntry;
   prompts: CoverageEntry;
-  codex_catalog: CoverageEntry;
+  skills: CoverageEntry;
+  codex_agents: CoverageEntry;
+  codex_commands: CoverageEntry;
+  codex_skills: CoverageEntry;
 }
 
 interface ResolvedArtifacts {
   artifacts: ExportArtifact[];
   coverage: ExportCoverage;
-  model: ExportModel;
 }
 
 function slugify(value: string): string {
@@ -66,203 +75,146 @@ function ensureUniqueSlug(base: string, used: Set<string>): string {
     used.add(base);
     return base;
   }
-  let i = 2;
-  let candidate = `${base}-${i}`;
+
+  let index = 2;
+  let candidate = `${base}-${index}`;
   while (used.has(candidate)) {
-    i++;
-    candidate = `${base}-${i}`;
+    index += 1;
+    candidate = `${base}-${index}`;
   }
   used.add(candidate);
   return candidate;
 }
 
-function collectFilesRecursively(root: string, predicate: (path: string) => boolean): string[] {
-  const out: string[] = [];
-  if (!existsSync(root)) return out;
-
-  const walk = (dir: string) => {
-    for (const entry of readdirSync(dir)) {
-      const fullPath = join(dir, entry);
-      const stat = statSync(fullPath);
-      if (stat.isDirectory()) {
-        walk(fullPath);
-      } else if (predicate(fullPath)) {
-        out.push(fullPath);
-      }
-    }
-  };
-
-  walk(root);
-  return out.sort((a, b) => a.localeCompare(b));
+function normalizeCommandId(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/^jinn:?\s*/i, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
-function extractTemplateLiteralsFromSource(source: string): string[] {
-  const matches: string[] = [];
-  const regex = /export const\s+[A-Za-z0-9_]+\s*=\s*`([\s\S]*?)`;/g;
-  let match = regex.exec(source);
-  while (match) {
-    const content = match[1]?.trim();
-    if (content) {
-      matches.push(content);
-    }
-    match = regex.exec(source);
-  }
-  return matches;
+function formatSkillDocument(name: string, description: string, instructions: string): string {
+  return [
+    "---",
+    `name: ${name}`,
+    `description: ${description.replace(/\n+/g, " ")}`,
+    "---",
+    "",
+    instructions.trim(),
+    "",
+  ].join("\n");
 }
 
-function loadedSkillToRuntimeSkill(skill: LoadedSkill): Skill {
+function createCoverageEntry(
+  sourceIds: string[],
+  emittedIds: string[],
+  applicable: boolean,
+): CoverageEntry {
+  const sourceSet = new Set(sourceIds);
+  const emittedSet = new Set(emittedIds);
   return {
-    name: skill.name,
-    description: skill.definition.description ?? "",
-    template: skill.definition.template ?? "",
-    ...(skill.allowedTools ? { allowedTools: skill.allowedTools } : {}),
-    ...(skill.mcpConfig ? { mcpConfig: skill.mcpConfig } : {}),
+    source_count: sourceSet.size,
+    emitted_count: emittedSet.size,
+    missing_ids: applicable ? [...sourceSet].filter((id) => !emittedSet.has(id)).sort() : [],
+    applicable,
   };
 }
 
-async function collectRuntimeResolvedSkills(): Promise<Skill[]> {
-  const scopedResolution = await resolveScopedSkillsCanonical({
-    includeUserScope: false,
-    includeSystemScope: false,
-  });
-  const scopedSkills = scopedResolution.skills.map(loadedSkillToRuntimeSkill);
-  const mergedScopedAndBuiltins = mergeScopedSkillsWithBuiltins(scopedSkills);
-
-  if (mergedScopedAndBuiltins.length > 0) {
-    return mergedScopedAndBuiltins;
-  }
-
-  return createSkills();
-}
-
-async function compileExportModel(): Promise<ExportModel> {
+function compileExportModel(): ExportModel {
   const generatedAt = new Date().toISOString();
 
-  const agents = [...AGENTS_MANIFEST]
-    .sort((a, b) => a.id.localeCompare(b.id))
-    .map((agent) => ({
-      id: agent.id,
-      name: agent.name,
-      purpose: agent.purpose,
-      prompt: agent.prompt,
-    }));
+  const agents = getDefaultAgentTemplates()
+    .map((template) => ({
+      id: template.name,
+      name: template.name,
+      purpose: template.description,
+      instructions: template.instructions,
+    }))
+    .sort((a, b) => a.id.localeCompare(b.id));
 
-  const uniqueSkills = new Map<
-    string,
-    { id: string; name: string; description: string; template: string }
-  >();
-  const runtimeSkills = await collectRuntimeResolvedSkills();
-  for (const skill of runtimeSkills) {
-    const id = slugify(skill.name || "skill");
-    if (!uniqueSkills.has(id)) {
-      uniqueSkills.set(id, {
+  const commands = getDefaultCommandTemplates()
+    .map((template) => {
+      const id = normalizeCommandId(template.name);
+      return {
         id,
-        name: skill.name,
-        description: skill.description,
-        template: skill.template,
-      });
-    }
-  }
-  const skills = [...uniqueSkills.values()].sort((a, b) => a.id.localeCompare(b.id));
+        fullId: `jinn:${id}`,
+        name: template.name,
+        description: template.description,
+        category: template.category,
+        content: template.content,
+      };
+    })
+    .sort((a, b) => a.fullId.localeCompare(b.fullId));
 
-  const templatesRoot = new URL("../commands/templates", import.meta.url).pathname;
-  const templateFiles = collectFilesRecursively(
-    templatesRoot,
-    (path) =>
-      path.endsWith(".ts") &&
-      !path.endsWith(".test.ts") &&
-      !path.endsWith(".d.ts") &&
-      !path.endsWith("/index.ts"),
-  );
-
-  const prompts = templateFiles.map((filePath) => {
-    const source = readFileSync(filePath, "utf-8");
-    const rel = relative(templatesRoot, filePath).replace(/\\/g, "/");
-    // Remove both .d.ts and .ts extensions to get clean prompt id
-    const id = slugify(rel.replace(/\.d\.ts$/, "").replace(/\.ts$/, ""));
-    const extracted = extractTemplateLiteralsFromSource(source);
-    const content =
-      extracted.length > 0
-        ? extracted.join("\n\n---\n\n")
-        : [`# Source Template`, "", `Path: ${rel}`, "", "```ts", source.trim(), "```"].join("\n");
-
-    return {
-      id,
-      sourcePath: rel,
-      content,
-    };
-  });
+  const skills = getDefaultSkillTemplates()
+    .map((template) => ({
+      id: slugify(template.name),
+      name: template.name,
+      description: template.description,
+      template: template.instructions,
+    }))
+    .sort((a, b) => a.id.localeCompare(b.id));
 
   return {
     generatedAt,
     generatedDate: generatedAt.slice(0, 10),
     agents,
+    commands,
     skills,
-    prompts,
   };
 }
 
 function buildCopilotRootInstructions(model: ExportModel): string {
   return [
-    `# Ghostwire Copilot Instructions`,
-    ``,
+    "# Jinn Copilot Instructions",
+    "",
     `Generated: ${model.generatedDate}`,
-    ``,
-    `Repository-wide constraints:`,
-    `- Use technical and scientific language with explicit assumptions and measurable outcomes.`,
-    `- Apply RED -> GREEN -> REFACTOR for non-trivial code changes.`,
-    `- Prefer deterministic validation (typecheck, tests, lint, diagnostics) before completion.`,
-    `- Keep edits minimal and scoped to requested behavior.`,
-    `- Surface defects by severity, with file evidence and reproducible verification steps.`,
-    ``,
-    `Full capability export is available via modular artifacts:`,
-    `- .github/instructions/*.instructions.md`,
-    `- .github/prompts/*.prompt.md`,
-    `- .github/skills/*/SKILL.md`,
-    `- .github/agents/*.agent.md`,
-    `- .github/hooks/*.json`,
-    ``,
+    "",
+    "Repository-wide constraints:",
+    "- Use technical and scientific language with explicit assumptions and measurable outcomes.",
+    "- Apply RED -> GREEN -> REFACTOR for non-trivial code changes.",
+    "- Prefer deterministic validation before completion.",
+    "- Keep edits minimal and scoped to requested behavior.",
+    "",
+    "Full capability export is available via modular artifacts:",
+    "- .github/instructions/*.instructions.md",
+    "- .github/prompts/*.prompt.md",
+    "- .github/skills/*/SKILL.md",
+    "- .github/agents/*.agent.md",
+    "- .github/hooks/*.json",
+    "",
+    `Available commands: ${model.commands.length}`,
+    `Available skills: ${model.skills.length}`,
+    `Available agents: ${model.agents.length}`,
+    "",
   ].join("\n");
 }
 
 function buildCopilotScopedInstructions(model: ExportModel): ExportArtifact[] {
-  const topAgentLines = model.agents
-    .slice(0, 20)
-    .map((agent) => `- \`${agent.id}\`: ${agent.purpose}`)
+  const workflowCommands = model.commands
+    .filter((command) => command.category.toLowerCase() === "workflow")
+    .slice(0, 12)
+    .map((command) => `- \`${command.fullId}\`: ${command.description}`)
     .join("\n");
 
   return [
     {
       target: "copilot",
-      path: ".github/instructions/typescript.instructions.md",
+      path: ".github/instructions/workflows.instructions.md",
       content: [
-        `---`,
-        `applyTo: "**/*.ts,**/*.tsx"`,
-        `---`,
-        ``,
-        `# TypeScript Engineering Rules`,
-        `- Enforce strict typing and avoid silent fallback behavior.`,
-        `- Keep API and function contracts explicit and testable.`,
-        `- Validate all behavior changes with typecheck and targeted tests.`,
-        ``,
-        `## Agent Catalog (Top)`,
-        topAgentLines,
-        ``,
-      ].join("\n"),
-    },
-    {
-      target: "copilot",
-      path: ".github/instructions/tests.instructions.md",
-      content: [
-        `---`,
-        `applyTo: "**/*.test.ts,**/*.spec.ts"`,
-        `---`,
-        ``,
-        `# Test Rules`,
-        `- Start with failing assertions for new behavior.`,
-        `- Encode regression and boundary cases with deterministic expectations.`,
-        `- Do not remove failing tests unless behavior is intentionally deprecated.`,
-        ``,
+        "---",
+        'applyTo: "**/*"',
+        "---",
+        "",
+        "# Workflow Rules",
+        "- Prefer the Linear-backed workflow commands for planning and execution.",
+        "- Treat Linear as the source of truth for proposals, plans, and task state.",
+        "- Keep implementation aligned with the active workflow command context.",
+        "",
+        "## Workflow Commands",
+        workflowCommands,
+        "",
       ].join("\n"),
     },
   ];
@@ -276,16 +228,21 @@ function buildCopilotPromptArtifacts(model: ExportModel): {
   const emittedIds: string[] = [];
   const usedSlugs = new Set<string>();
 
-  for (const prompt of model.prompts) {
-    const slug = ensureUniqueSlug(slugify(prompt.id || "prompt"), usedSlugs);
+  for (const command of model.commands) {
+    const slug = ensureUniqueSlug(slugify(command.id), usedSlugs);
     artifacts.push({
       target: "copilot",
       path: `.github/prompts/${slug}.prompt.md`,
-      content: [`# ${prompt.id}`, ``, `Source: ${prompt.sourcePath}`, ``, prompt.content, ``].join(
-        "\n",
-      ),
+      content: [
+        `# ${command.fullId}`,
+        "",
+        `Category: ${command.category}`,
+        "",
+        command.content.trim(),
+        "",
+      ].join("\n"),
     });
-    emittedIds.push(prompt.id);
+    emittedIds.push(command.id);
   }
 
   return { artifacts, emittedIds };
@@ -304,15 +261,7 @@ function buildCopilotSkillArtifacts(model: ExportModel): {
     artifacts.push({
       target: "copilot",
       path: `.github/skills/${slug}/SKILL.md`,
-      content: [
-        `---`,
-        `name: ${skill.name}`,
-        `description: ${skill.description.replace(/\n+/g, " ")}`,
-        `---`,
-        ``,
-        skill.template.trim(),
-        ``,
-      ].join("\n"),
+      content: formatSkillDocument(skill.name, skill.description, skill.template),
     });
     emittedIds.push(skill.id);
   }
@@ -334,15 +283,15 @@ function buildCopilotAgentArtifacts(model: ExportModel): {
       target: "copilot",
       path: `.github/agents/${slug}.agent.md`,
       content: [
-        `---`,
+        "---",
         `name: ${agent.name}`,
         `description: ${agent.purpose.replace(/\n+/g, " ")}`,
-        `---`,
-        ``,
+        "---",
+        "",
         `# ${agent.id}`,
-        ``,
-        agent.prompt.trim(),
-        ``,
+        "",
+        agent.instructions.trim(),
+        "",
       ].join("\n"),
     });
     emittedIds.push(agent.id);
@@ -355,14 +304,14 @@ function buildCopilotHookArtifacts(): ExportArtifact[] {
   return [
     {
       target: "copilot",
-      path: ".github/hooks/ghostwire-guardrails.json",
+      path: ".github/hooks/jinn-guardrails.json",
       content: JSON.stringify(
         {
           version: 1,
           hooks: {
-            sessionStart: [{ command: "echo ghostwire-session-start" }],
-            preToolUse: [{ command: "echo ghostwire-pre-tool" }],
-            postToolUse: [{ command: "echo ghostwire-post-tool" }],
+            sessionStart: [{ command: "echo jinn-session-start" }],
+            preToolUse: [{ command: "echo jinn-pre-tool" }],
+            postToolUse: [{ command: "echo jinn-post-tool" }],
           },
         },
         null,
@@ -372,47 +321,69 @@ function buildCopilotHookArtifacts(): ExportArtifact[] {
   ];
 }
 
-function buildCodexInstructions(model: ExportModel): { content: string; emittedIds: string[] } {
-  const catalog = model.agents.map((agent) => `- \`${agent.id}\`: ${agent.purpose}`).join("\n");
-  return {
-    emittedIds: model.agents.map((agent) => agent.id),
-    content: [
-      `# Ghostwire Codex Instructions`,
-      ``,
-      `Generated: ${model.generatedDate}`,
-      ``,
-      `Use technical and scientific language and point of view.`,
-      `Apply RED -> GREEN -> REFACTOR for non-trivial implementation.`,
-      `Quantify uncertainty and state assumptions explicitly.`,
-      `Prefer deterministic validation evidence over narrative claims.`,
-      ``,
-      `## Full Agent Catalog`,
-      catalog,
-      ``,
-      `## Companion Artifacts`,
-      `- .github/copilot-instructions.md`,
-      `- .github/instructions/`,
-      `- .github/prompts/`,
-      `- .github/skills/`,
-      `- .github/hooks/`,
-      ``,
-    ].join("\n"),
-  };
+function buildCodexSkillArtifacts(model: ExportModel): {
+  artifacts: ExportArtifact[];
+  emittedIds: string[];
+} {
+  const artifacts: ExportArtifact[] = [];
+  const emittedIds: string[] = [];
+  const usedSlugs = new Set<string>();
+
+  for (const skill of model.skills) {
+    const slug = ensureUniqueSlug(slugify(skill.id || skill.name), usedSlugs);
+    artifacts.push({
+      target: "codex",
+      path: `.agents/skills/${slug}/SKILL.md`,
+      content: formatSkillDocument(skill.name, skill.description, skill.template),
+    });
+    emittedIds.push(skill.id);
+  }
+
+  return { artifacts, emittedIds };
 }
 
-function createCoverageEntry(
-  sourceIds: string[],
-  emittedIds: string[],
-  applicable: boolean,
-): CoverageEntry {
-  const sourceSet = new Set(sourceIds);
-  const emittedSet = new Set(emittedIds);
-  const missingIds = applicable ? [...sourceSet].filter((id) => !emittedSet.has(id)).sort() : [];
+function buildCodexInstructions(model: ExportModel): {
+  content: string;
+  emittedAgentIds: string[];
+  emittedCommandIds: string[];
+} {
+  const workflowCommands = model.commands
+    .filter((command) => command.category.toLowerCase() === "workflow")
+    .map((command) => `- \`${command.fullId}\`: ${command.description}`)
+    .join("\n");
+  const agents = model.agents.map((agent) => `- \`${agent.id}\`: ${agent.purpose}`).join("\n");
+  const skills = model.skills
+    .map((skill) => `- \`${skill.name}\`: ${skill.description}`)
+    .join("\n");
+
   return {
-    source_count: sourceSet.size,
-    emitted_count: emittedSet.size,
-    missing_ids: missingIds,
-    applicable,
+    emittedAgentIds: model.agents.map((agent) => agent.id),
+    emittedCommandIds: model.commands
+      .filter((command) => command.category.toLowerCase() === "workflow")
+      .map((command) => command.id),
+    content: [
+      "# Jinn Codex Instructions",
+      "",
+      `Generated: ${model.generatedDate}`,
+      "",
+      "Use technical and scientific language and state assumptions explicitly.",
+      "Apply RED -> GREEN -> REFACTOR for non-trivial implementation.",
+      "Prefer deterministic validation evidence over narrative claims.",
+      "Treat Linear as the source of truth for workflow state.",
+      "",
+      "## Workflow Commands",
+      workflowCommands,
+      "",
+      "## Agents",
+      agents,
+      "",
+      "## Skills",
+      "Codex discovers reusable skills from `.agents/skills/<skill-name>/SKILL.md`.",
+      "Commands and agents are cataloged in this file instead of `.agents/commands` or `.agents/agents` directories.",
+      "",
+      skills,
+      "",
+    ].join("\n"),
   };
 }
 
@@ -421,13 +392,15 @@ async function resolveArtifactsWithGroups(
   target: ExportTarget,
   groups: Set<CopilotGroup>,
 ): Promise<ResolvedArtifacts> {
-  const model = await compileExportModel();
+  const model = compileExportModel();
   const relativeArtifacts: ExportArtifact[] = [];
 
-  let emittedAgentIdsForCopilot: string[] = [];
-  let emittedSkillIds: string[] = [];
-  let emittedPromptIds: string[] = [];
+  let emittedCopilotAgentIds: string[] = [];
+  let emittedCopilotPromptIds: string[] = [];
+  let emittedCopilotSkillIds: string[] = [];
   let emittedCodexAgentIds: string[] = [];
+  let emittedCodexCommandIds: string[] = [];
+  let emittedCodexSkillIds: string[] = [];
 
   if (target === "copilot" || target === "all") {
     relativeArtifacts.push({
@@ -443,19 +416,19 @@ async function resolveArtifactsWithGroups(
     if (groups.has("prompts")) {
       const prompts = buildCopilotPromptArtifacts(model);
       relativeArtifacts.push(...prompts.artifacts);
-      emittedPromptIds = prompts.emittedIds;
+      emittedCopilotPromptIds = prompts.emittedIds;
     }
 
     if (groups.has("skills")) {
       const skills = buildCopilotSkillArtifacts(model);
       relativeArtifacts.push(...skills.artifacts);
-      emittedSkillIds = skills.emittedIds;
+      emittedCopilotSkillIds = skills.emittedIds;
     }
 
     if (groups.has("agents")) {
       const agents = buildCopilotAgentArtifacts(model);
       relativeArtifacts.push(...agents.artifacts);
-      emittedAgentIdsForCopilot = agents.emittedIds;
+      emittedCopilotAgentIds = agents.emittedIds;
     }
 
     if (groups.has("hooks")) {
@@ -464,41 +437,18 @@ async function resolveArtifactsWithGroups(
   }
 
   if (target === "codex" || target === "all") {
+    const codexSkills = buildCodexSkillArtifacts(model);
     const codex = buildCodexInstructions(model);
-    emittedCodexAgentIds = codex.emittedIds;
     relativeArtifacts.push({
       target: "codex",
       path: "AGENTS.md",
       content: codex.content,
     });
+    relativeArtifacts.push(...codexSkills.artifacts);
+    emittedCodexAgentIds = codex.emittedAgentIds;
+    emittedCodexCommandIds = codex.emittedCommandIds;
+    emittedCodexSkillIds = codexSkills.emittedIds;
   }
-
-  const sourceAgentIds = model.agents.map((agent) => agent.id);
-  const sourceSkillIds = model.skills.map((skill) => skill.id);
-  const sourcePromptIds = model.prompts.map((prompt) => prompt.id);
-
-  const coverage: ExportCoverage = {
-    agents: createCoverageEntry(
-      sourceAgentIds,
-      emittedAgentIdsForCopilot,
-      (target === "copilot" || target === "all") && groups.has("agents"),
-    ),
-    skills: createCoverageEntry(
-      sourceSkillIds,
-      emittedSkillIds,
-      (target === "copilot" || target === "all") && groups.has("skills"),
-    ),
-    prompts: createCoverageEntry(
-      sourcePromptIds,
-      emittedPromptIds,
-      (target === "copilot" || target === "all") && groups.has("prompts"),
-    ),
-    codex_catalog: createCoverageEntry(
-      sourceAgentIds,
-      emittedCodexAgentIds,
-      target === "codex" || target === "all",
-    ),
-  };
 
   const absoluteArtifacts = relativeArtifacts.map((artifact) => ({
     ...artifact,
@@ -507,8 +457,40 @@ async function resolveArtifactsWithGroups(
 
   return {
     artifacts: absoluteArtifacts,
-    coverage,
-    model,
+    coverage: {
+      agents: createCoverageEntry(
+        model.agents.map((agent) => agent.id),
+        emittedCopilotAgentIds,
+        (target === "copilot" || target === "all") && groups.has("agents"),
+      ),
+      prompts: createCoverageEntry(
+        model.commands.map((command) => command.id),
+        emittedCopilotPromptIds,
+        (target === "copilot" || target === "all") && groups.has("prompts"),
+      ),
+      skills: createCoverageEntry(
+        model.skills.map((skill) => skill.id),
+        emittedCopilotSkillIds,
+        (target === "copilot" || target === "all") && groups.has("skills"),
+      ),
+      codex_agents: createCoverageEntry(
+        model.agents.map((agent) => agent.id),
+        emittedCodexAgentIds,
+        target === "codex" || target === "all",
+      ),
+      codex_commands: createCoverageEntry(
+        model.commands
+          .filter((command) => command.category.toLowerCase() === "workflow")
+          .map((command) => command.id),
+        emittedCodexCommandIds,
+        target === "codex" || target === "all",
+      ),
+      codex_skills: createCoverageEntry(
+        model.skills.map((skill) => skill.id),
+        emittedCodexSkillIds,
+        target === "codex" || target === "all",
+      ),
+    },
   };
 }
 
@@ -521,13 +503,11 @@ function parseGroups(groupsArg: string | undefined): Set<CopilotGroup> | null {
     return new Set(COPILOT_GROUPS);
   }
 
-  const groups = groupsArg
-    .split(",")
-    .map((group) => group.trim().toLowerCase())
-    .filter(Boolean);
-
   const parsed = new Set<CopilotGroup>();
-  for (const group of groups) {
+  for (const group of groupsArg.split(",").map((value) => value.trim().toLowerCase())) {
+    if (!group) {
+      continue;
+    }
     if (!COPILOT_GROUPS.includes(group as CopilotGroup)) {
       return null;
     }
@@ -552,23 +532,17 @@ function runStrictValidation(artifacts: ExportArtifact[], coverage: ExportCovera
         errors.push(`Invalid JSON artifact: ${artifact.path}`);
       }
     }
-
-    if (
-      artifact.path.endsWith(".github/copilot-instructions.md") &&
-      artifact.content.length > 4000
-    ) {
-      errors.push(
-        `Copilot root instructions exceed 4000 characters (${artifact.content.length}): ${artifact.path}`,
-      );
-    }
   }
 
   const parityClasses: Array<keyof ExportCoverage> = [
     "agents",
-    "skills",
     "prompts",
-    "codex_catalog",
+    "skills",
+    "codex_agents",
+    "codex_commands",
+    "codex_skills",
   ];
+
   for (const className of parityClasses) {
     const entry = coverage[className];
     if (entry.applicable && entry.missing_ids.length > 0) {
@@ -601,11 +575,8 @@ export async function exportGenius(args: ExportArgs): Promise<number> {
   }
 
   const resolved = await resolveArtifactsWithGroups(baseDirectory, target, groups);
-
-  const artifacts = [...resolved.artifacts];
-
   if (strict) {
-    const errors = runStrictValidation(artifacts, resolved.coverage);
+    const errors = runStrictValidation(resolved.artifacts, resolved.coverage);
     if (errors.length > 0) {
       for (const error of errors) {
         console.error(error);
@@ -614,7 +585,7 @@ export async function exportGenius(args: ExportArgs): Promise<number> {
     }
   }
 
-  for (const artifact of artifacts) {
+  for (const artifact of resolved.artifacts) {
     if (existsSync(artifact.path) && !force) {
       console.error(
         `Refusing to overwrite existing file: ${artifact.path}. Use --force to overwrite.`,
@@ -623,7 +594,7 @@ export async function exportGenius(args: ExportArgs): Promise<number> {
     }
   }
 
-  for (const artifact of artifacts) {
+  for (const artifact of resolved.artifacts) {
     mkdirSync(dirname(artifact.path), { recursive: true });
     writeFileSync(artifact.path, artifact.content, "utf-8");
     console.log(`Exported ${artifact.target} artifact -> ${artifact.path}`);

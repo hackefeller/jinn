@@ -55,7 +55,7 @@ function formatConfigSummary(config: InstallConfig): string {
 
   lines.push(color.bold(color.white("Model Configuration")));
   lines.push("");
-  lines.push(`  ${SYMBOLS.info} Models are not configured automatically.  You must set them manually in your ghostwire.json or OpenCode settings.`);
+  lines.push(`  ${SYMBOLS.info} Models are not configured automatically.  You must set them manually in your jinn.json or OpenCode settings.`);
 
   return lines.join("\n");
 }
@@ -337,7 +337,7 @@ async function runNonTuiInstall(args: InstallArgs): Promise<number> {
     }
     console.log();
     printInfo(
-      "Usage: bunx ghostwire install --no-tui --claude=<no|yes|max20> --gemini=<no|yes> --copilot=<no|yes>",
+      "Usage: bunx jinn install --no-tui --claude=<no|yes|max20> --gemini=<no|yes> --copilot=<no|yes>",
     );
     console.log();
     return 1;
@@ -371,7 +371,7 @@ async function runNonTuiInstall(args: InstallArgs): Promise<number> {
   const config = argsToConfig(args);
 
   if (!args.localOnly) {
-    printStep(step++, totalSteps, "Adding ghostwire plugin...");
+    printStep(step++, totalSteps, "Adding jinn plugin...");
     const pluginResult = await addPluginToOpenCodeConfig(VERSION);
     if (!pluginResult.success) {
       printError(`Failed: ${pluginResult.error}`);
@@ -415,7 +415,7 @@ async function runNonTuiInstall(args: InstallArgs): Promise<number> {
     step += 2;
   }
 
-  printStep(step++, totalSteps, "Writing ghostwire configuration...");
+  printStep(step++, totalSteps, "Writing jinn configuration...");
   const omoResult = writeGhostConfig(config);
   if (!omoResult.success) {
     printError(`Failed: ${omoResult.error}`);
@@ -423,7 +423,7 @@ async function runNonTuiInstall(args: InstallArgs): Promise<number> {
   }
   printSuccess(`Config written ${SYMBOLS.arrow} ${color.dim(omoResult.configPath)}`);
 
-  // model configuration is no longer managed by Ghostwire; skip this step
+  // model configuration is no longer managed by Jinn; skip this step
   printStep(step++, totalSteps, "(skipping deprecated model configuration step)");
   printSuccess("Model configuration handled externally");
 
@@ -453,7 +453,7 @@ async function runNonTuiInstall(args: InstallArgs): Promise<number> {
     `${SYMBOLS.star} ${color.yellow("If you found this helpful, consider starring the repo!")}`,
   );
   console.log(
-    `  ${color.dim("gh api --silent --method PUT /user/starred/hackefeller/ghostwire >/dev/null 2>&1 || true")}`,
+    `  ${color.dim("gh api --silent --method PUT /user/starred/hackefeller/jinn >/dev/null 2>&1 || true")}`,
   );
   console.log();
   console.log(color.dim("oMoMoMoMo... Enjoy!"));
@@ -508,7 +508,7 @@ export async function install(args: InstallArgs): Promise<number> {
   const config = await runTuiMode(detected);
   if (!config) return 1;
 
-  s.start("Adding ghostwire to OpenCode config");
+  s.start("Adding jinn to OpenCode config");
   const pluginResult = await addPluginToOpenCodeConfig(VERSION);
   if (!pluginResult.success) {
     s.stop(`Failed to add plugin: ${pluginResult.error}`);
@@ -537,7 +537,7 @@ export async function install(args: InstallArgs): Promise<number> {
     s.stop(`Provider config added to ${color.cyan(providerResult.configPath)}`);
   }
 
-  s.start("Writing ghostwire configuration");
+  s.start("Writing jinn configuration");
   const omoResult = writeGhostConfig(config);
   if (!omoResult.success) {
     s.stop(`Failed to write config: ${omoResult.error}`);
@@ -564,7 +564,7 @@ export async function install(args: InstallArgs): Promise<number> {
 
   p.log.message(`${color.yellow("★")} If you found this helpful, consider starring the repo!`);
   p.log.message(
-    `  ${color.dim("gh api --silent --method PUT /user/starred/hackefeller/ghostwire >/dev/null 2>&1 || true")}`,
+    `  ${color.dim("gh api --silent --method PUT /user/starred/hackefeller/jinn >/dev/null 2>&1 || true")}`,
   );
 
   p.outro(color.green("oMoMoMoMo... Enjoy!"));

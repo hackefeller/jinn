@@ -34,12 +34,12 @@ const run = async (
 };
 
 /**
- * Ensures the dev symlink exists at ~/.config/opencode/plugins/ghostwire.mjs
+ * Ensures the dev symlink exists at ~/.config/opencode/plugins/jinn.mjs
  * Points to the local dist/index.js for development
  */
 async function ensureDevSymlink(): Promise<void> {
   const pluginsDir = join(homedir(), ".config/opencode/plugins");
-  const symlinkPath = join(pluginsDir, "ghostwire.mjs");
+  const symlinkPath = join(pluginsDir, "jinn.mjs");
   const distPath = join(process.cwd(), "dist/index.js");
 
   // Check if dist exists
@@ -306,7 +306,7 @@ ${green("dev-setup")}   Ensure plugin symlink + agents manifest
 const command = defineCommand({
   meta: {
     name: "task",
-    description: "Bun-first task runner for Ghostwire",
+    description: "Bun-first task runner for Jinn",
     version: "3.1.10",
   },
   args: {

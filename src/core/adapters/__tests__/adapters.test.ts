@@ -57,8 +57,8 @@ const allAdapters: ToolCommandAdapter[] = [
 
 const testCommandContent: CommandContent = {
   id: 'propose',
-  fullId: 'ghostwire:propose',
-  name: 'Ghostwire: Propose',
+  fullId: 'jinn:propose',
+  name: 'Jinn: Propose',
   description: 'Propose a new change',
   category: 'Workflow',
   tags: ['planning', 'workflow'],
@@ -66,13 +66,13 @@ const testCommandContent: CommandContent = {
 };
 
 const testSkillTemplate = {
-  name: 'ghostwire-planner',
+  name: 'jinn-planner',
   description: 'Planning agent',
   instructions: 'You are a planner agent.',
   license: 'MIT',
-  compatibility: 'Works with ghostwire CLI',
+  compatibility: 'Works with jinn CLI',
   metadata: {
-    author: 'ghostwire',
+    author: 'jinn',
     version: '1.0.0',
     category: 'Orchestration',
     tags: ['planning'],
@@ -94,12 +94,12 @@ describe('Adapter Registry', () => {
 describe('OpenCode Adapter', () => {
   it('uses .opencode directory', () => {
     expect(opencodeAdapter.skillsDir).toBe('.opencode');
-    expect(opencodeAdapter.getCommandPath('test')).toBe('.opencode/commands/ghostwire-test.md');
+    expect(opencodeAdapter.getCommandPath('test')).toBe('.opencode/commands/jinn-test.md');
   });
 
   it('generates correct skill path', () => {
-    const path = opencodeAdapter.getSkillPath('ghostwire-planner');
-    expect(path).toBe('.opencode/skills/ghostwire-planner/SKILL.md');
+    const path = opencodeAdapter.getSkillPath('jinn-planner');
+    expect(path).toBe('.opencode/skills/jinn-planner/SKILL.md');
   });
 
   it('formats command with frontmatter', () => {
@@ -112,7 +112,7 @@ describe('OpenCode Adapter', () => {
   it('formats skill with frontmatter', () => {
     const result = opencodeAdapter.formatSkill(testSkillTemplate as any, '1.0.0');
     expect(result).toContain('---');
-    expect(result).toContain('name: ghostwire-planner');
+    expect(result).toContain('name: jinn-planner');
     expect(result).toContain('generatedBy: "1.0.0"');
   });
 });
@@ -120,12 +120,12 @@ describe('OpenCode Adapter', () => {
 describe('Cursor Adapter', () => {
   it('uses .cursor directory', () => {
     expect(cursorAdapter.skillsDir).toBe('.cursor');
-    expect(cursorAdapter.getCommandPath('test')).toBe('.cursor/commands/ghostwire-test.md');
+    expect(cursorAdapter.getCommandPath('test')).toBe('.cursor/commands/jinn-test.md');
   });
 
   it('generates correct skill path', () => {
-    const path = cursorAdapter.getSkillPath('ghostwire-planner');
-    expect(path).toBe('.cursor/skills/ghostwire-planner/SKILL.md');
+    const path = cursorAdapter.getSkillPath('jinn-planner');
+    expect(path).toBe('.cursor/skills/jinn-planner/SKILL.md');
   });
 
   it('formats command with frontmatter', () => {
@@ -138,24 +138,24 @@ describe('Cursor Adapter', () => {
 describe('Claude Adapter', () => {
   it('uses .claude directory', () => {
     expect(claudeAdapter.skillsDir).toBe('.claude');
-    expect(claudeAdapter.getCommandPath('test')).toBe('.claude/commands/ghostwire/test.md');
+    expect(claudeAdapter.getCommandPath('test')).toBe('.claude/commands/jinn/test.md');
   });
 
   it('generates correct skill path', () => {
-    const path = claudeAdapter.getSkillPath('ghostwire-planner');
-    expect(path).toBe('.claude/skills/ghostwire-planner/SKILL.md');
+    const path = claudeAdapter.getSkillPath('jinn-planner');
+    expect(path).toBe('.claude/skills/jinn-planner/SKILL.md');
   });
 });
 
 describe('GitHub Copilot Adapter', () => {
   it('uses .github directory with prompt extension', () => {
     expect(githubCopilotAdapter.skillsDir).toBe('.github');
-    expect(githubCopilotAdapter.getCommandPath('test')).toBe('.github/prompts/ghostwire-test.prompt.md');
+    expect(githubCopilotAdapter.getCommandPath('test')).toBe('.github/prompts/jinn-test.prompt.md');
   });
 
   it('generates correct skill path', () => {
-    const path = githubCopilotAdapter.getSkillPath('ghostwire-planner');
-    expect(path).toBe('.github/skills/ghostwire-planner/SKILL.md');
+    const path = githubCopilotAdapter.getSkillPath('jinn-planner');
+    expect(path).toBe('.github/skills/jinn-planner/SKILL.md');
   });
 });
 

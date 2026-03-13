@@ -1,5 +1,5 @@
 /**
- * Ghostwire detect command
+ * Jinn detect command
  *
  * Detects available AI tools in the project with beautiful TUI.
  */
