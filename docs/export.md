@@ -1,22 +1,22 @@
 # Export Reference
 
-Ghostwire supports modular export of orchestration intelligence for external agent runtimes with full capability parity.
+Jinn exports workflow commands, skills, and agents into the native shapes expected by each supported runtime.
 
 ## Command
 
 ```bash
-ghostwire export --target <copilot|codex|all> [--groups <csv>] [--strict] [--manifest] [--force] [--directory <path>]
+jinn export --target <copilot|codex|all> [--groups <csv>] [--strict] [--force] [--directory <path>]
 ```
 
 ## Targets
 
 - `copilot`: emits GitHub Copilot customization artifacts.
-- `codex`: emits concise `AGENTS.md`.
+- `codex`: emits `AGENTS.md` plus canonical `.agents/skills/*/SKILL.md` artifacts.
 - `all`: emits both target outputs.
 
 ## Copilot Artifact Topology
 
-`ghostwire export --target copilot` emits:
+`jinn export --target copilot` emits:
 
 - `.github/copilot-instructions.md`
 - `.github/instructions/*.instructions.md`
@@ -25,18 +25,25 @@ ghostwire export --target <copilot|codex|all> [--groups <csv>] [--strict] [--man
 - `.github/agents/*.agent.md`
 - `.github/hooks/*.json`
 
-Export inventory is generated from current source-of-truth manifests/templates at runtime.
-Use `--manifest` to inspect exact emitted counts for your current revision.
+## Codex Artifact Topology
+
+`jinn export --target codex` emits:
+
+- `AGENTS.md`
+- `.agents/skills/*/SKILL.md`
+
+Codex commands and agents are cataloged in `AGENTS.md`.
+Jinn does not emit `.agents/commands` or `.agents/agents`, because `.agents/skills` is the only canonical filesystem discovery surface in this repo's Codex model.
 
 ## Runtime Parity Semantics
 
-Export skill coverage is aligned to runtime skill resolution semantics:
+Codex skill export is aligned to runtime skill resolution semantics:
 
 - canonical scoped discovery rooted at `.agents/skills`
 - deterministic first-wins collision handling
 - built-in skills merged as fallback after scoped resolution
 
-This ensures export coverage metrics reflect what runtime resolves, not just static embedded defaults.
+Workflow skills are emitted with Codex-style `SKILL.md` frontmatter that includes only `name` and `description`.
 
 ## Groups Filter
 
@@ -51,10 +58,10 @@ Use `--groups` to emit a subset of Copilot artifact groups:
 Example:
 
 ```bash
-ghostwire export --target copilot --groups prompts,skills
+jinn export --target copilot --groups prompts,skills
 ```
 
-Root `.github/copilot-instructions.md` and `.ghostwire/export-manifest.json` are always emitted for Copilot targets.
+Root `.github/copilot-instructions.md` is always emitted for Copilot targets.
 
 ## Strict Mode
 
@@ -62,25 +69,6 @@ Root `.github/copilot-instructions.md` and `.ghostwire/export-manifest.json` are
 
 - artifact content must be non-empty
 - JSON artifacts must parse
-- `.github/copilot-instructions.md` must be <= 4000 characters
 - parity coverage must report zero missing IDs for applicable classes
 
 Strict validation failure exits with status code `1`.
-
-## Manifest (Opt-In)
-
-By default, export does **not** write a manifest file.
-
-Use `--manifest` to generate:
-
-- `.ghostwire/export-manifest.json`
-
-`.ghostwire/export-manifest.json` includes:
-
-- generator id
-- generation timestamp
-- target
-- coverage summary (`source_count`, `emitted_count`, `missing_ids`, `applicable`) for agents/skills/prompts/codex catalog
-- entries with path, target, SHA-256 hash, and byte size
-
-This supports deterministic verification and auditability.

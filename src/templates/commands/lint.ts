@@ -2,11 +2,11 @@ import type { CommandTemplate } from '../../core/templates/types.js';
 
 export function getLintRubyCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Lint Ruby',
+    name: 'Jinn: Lint Ruby',
     description: 'Run Ruby linting and style checks',
     category: 'Lint',
     tags: ['lint', 'ruby', 'style'],
-    content: `# Ghostwire: Lint Ruby
+    content: `# Jinn: Lint Ruby
 
 Run Ruby linting and style checks.
 

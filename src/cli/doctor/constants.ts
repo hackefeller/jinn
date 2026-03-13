@@ -71,6 +71,6 @@ export const EXIT_CODES = {
 
 export const MIN_OPENCODE_VERSION = "1.0.150";
 
-export const PACKAGE_NAME = "ghostwire";
+export const PACKAGE_NAME = "jinn";
 
 export const OPENCODE_BINARIES = ["opencode", "opencode-desktop"] as const;

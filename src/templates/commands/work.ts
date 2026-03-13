@@ -2,11 +2,11 @@ import type { CommandTemplate } from '../../core/templates/types.js';
 
 export function getWorkCancelCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Work Cancel',
+    name: 'Jinn: Work Cancel',
     description: 'Cancel ongoing work or process',
     category: 'Work',
     tags: ['cancel', 'stop', 'abort'],
-    content: `# Ghostwire: Work Cancel
+    content: `# Jinn: Work Cancel
 
 Cancel ongoing work or process.
 
@@ -43,11 +43,11 @@ Cancel ongoing work or process.
 
 export function getWorkLoopCommandTemplate(): CommandTemplate {
   return {
-    name: 'Ghostwire: Work Loop',
+    name: 'Jinn: Work Loop',
     description: 'Execute work in a continuous loop',
     category: 'Work',
     tags: ['loop', 'iteration', 'repeat'],
-    content: `# Ghostwire: Work Loop
+    content: `# Jinn: Work Loop
 
 Execute work in a continuous loop.
 

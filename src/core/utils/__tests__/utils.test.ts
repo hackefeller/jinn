@@ -41,7 +41,7 @@ describe('Path Utilities', () => {
 });
 
 describe('File System Utilities', () => {
-  const tempDir = path.join(os.tmpdir(), 'ghostwire-test-' + Date.now());
+  const tempDir = path.join(os.tmpdir(), 'jinn-test-' + Date.now());
 
   beforeAll(async () => {
     await fs.mkdir(tempDir, { recursive: true });

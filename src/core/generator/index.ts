@@ -7,205 +7,30 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import type { GhostwireConfig } from '../config/schema.js';
+import type { JinnConfig } from '../config/schema.js';
 import type { GenerationResult, GenerationOptions } from './types.js';
 import type { ToolCommandAdapter } from '../adapters/types.js';
-import type { CommandTemplate, SkillTemplate, AgentTemplate } from '../templates/types.js';
+import type { AgentTemplate, CommandTemplate, SkillTemplate } from '../templates/types.js';
 
 import { createPopulatedAdapterRegistry } from '../adapters/index.js';
 import { generateCommandsForTool, generateCommandsForAllTools } from './command-gen.js';
 import { generateSkillsForAllTools } from './skill-gen.js';
 import { generateAgentsForAllTools } from './agent-gen.js';
-
 import {
-  getGitSmartCommitCommandTemplate,
-  getGitBranchCommandTemplate,
-  getGitCleanupCommandTemplate,
-  getGitMergeCommandTemplate,
-} from '../../templates/commands/git.js';
-
-import {
-  getCodeFormatCommandTemplate,
-  getCodeRefactorCommandTemplate,
-  getCodeReviewCommandTemplate,
-  getCodeOptimizeCommandTemplate,
-} from '../../templates/commands/code.js';
-
-import {
-  getWorkflowsPlanCommandTemplate,
-  getWorkflowsExecuteCommandTemplate,
-  getWorkflowsReviewCommandTemplate,
-  getWorkflowsStatusCommandTemplate,
-  getWorkflowsStopCommandTemplate,
-  getWorkflowsCompleteCommandTemplate,
-  getWorkflowsCreateCommandTemplate,
-  getWorkflowsBrainstormCommandTemplate,
-  getWorkflowsLearningsCommandTemplate,
-} from '../../templates/commands/workflows.js';
-
-import {
-  getDocsDeployCommandTemplate,
-  getDocsFeatureVideoCommandTemplate,
-  getDocsReleaseCommandTemplate,
-  getDocsTestBrowserCommandTemplate,
-} from '../../templates/commands/docs.js';
-
-import {
-  getProjectBuildCommandTemplate,
-  getProjectConstitutionCommandTemplate,
-  getProjectDeployCommandTemplate,
-  getProjectInitCommandTemplate,
-  getProjectMapCommandTemplate,
-} from '../../templates/commands/project.js';
-
-import {
-  getUtilBackupCommandTemplate,
-  getUtilCleanCommandTemplate,
-  getUtilDoctorCommandTemplate,
-  getUtilRestoreCommandTemplate,
-} from '../../templates/commands/util.js';
-
-import {
-  getWorkCancelCommandTemplate,
-  getWorkLoopCommandTemplate,
-} from '../../templates/commands/work.js';
-
-import {
-  getLintRubyCommandTemplate,
-} from '../../templates/commands/lint.js';
-
-import {
-  getRefactorCommandTemplate,
-} from '../../templates/commands/refactor.js';
-
-import {
-  getGhostwireProposeCommandTemplate,
-  getGhostwireExploreCommandTemplate,
-  getGhostwireApplyCommandTemplate,
-  getGhostwireArchiveCommandTemplate,
-} from '../../templates/commands/workflows-rich.js';
-
-import {
-  getSpeckitAnalyzeCommandTemplate,
-  getSpeckitPlanCommandTemplate,
-  getSpeckitImplementCommandTemplate,
-  getSpeckitSpecifyCommandTemplate,
-  getSpeckitTasksCommandTemplate,
-  getSpeckitConstitutionCommandTemplate,
-} from '../../templates/commands/speckit.js';
-
-import {
-  getGitMasterSkillTemplate,
-  getBrainstormingSkillTemplate,
-  getRailsStyleSkillTemplate,
-  getFrontendDesignSkillTemplate,
-} from '../../templates/skills/index.js';
-
-import {
-  getOpenspecProposeSkillTemplate,
-  getOpenspecExploreSkillTemplate,
-  getOpenspecApplySkillTemplate,
-  getOpenspecArchiveSkillTemplate,
-  getReadyForProdSkillTemplate,
-} from '../../templates/skills/ghostwire-skills.js';
-
-import {
-  getAdvisorStrategyAgentTemplate,
-  getPlannerAgentTemplate,
-  getAdvisorArchitectureAgentTemplate,
-  getAnalyzerDesignAgentTemplate,
-  getAnalyzerPatternsAgentTemplate,
-  getDesignerBuilderAgentTemplate,
-  getDesignerFlowAgentTemplate,
-  getDesignerIteratorAgentTemplate,
-  getDesignerSyncAgentTemplate,
-  getDoAgentTemplate,
-  getResearchAgentTemplate,
-  getPlanAgentTemplate,
-  RESEARCH_AGENTS,
-} from '../../templates/agents/index.js';
-
-const DEFAULT_COMMAND_TEMPLATES: CommandTemplate[] = [
-  getGitSmartCommitCommandTemplate(),
-  getGitBranchCommandTemplate(),
-  getGitCleanupCommandTemplate(),
-  getGitMergeCommandTemplate(),
-  getCodeFormatCommandTemplate(),
-  getCodeRefactorCommandTemplate(),
-  getCodeReviewCommandTemplate(),
-  getCodeOptimizeCommandTemplate(),
-  getWorkflowsPlanCommandTemplate(),
-  getWorkflowsExecuteCommandTemplate(),
-  getWorkflowsReviewCommandTemplate(),
-  getWorkflowsStatusCommandTemplate(),
-  getWorkflowsStopCommandTemplate(),
-  getWorkflowsCompleteCommandTemplate(),
-  getWorkflowsCreateCommandTemplate(),
-  getWorkflowsBrainstormCommandTemplate(),
-  getWorkflowsLearningsCommandTemplate(),
-  getDocsDeployCommandTemplate(),
-  getDocsFeatureVideoCommandTemplate(),
-  getDocsReleaseCommandTemplate(),
-  getDocsTestBrowserCommandTemplate(),
-  getProjectBuildCommandTemplate(),
-  getProjectConstitutionCommandTemplate(),
-  getProjectDeployCommandTemplate(),
-  getProjectInitCommandTemplate(),
-  getProjectMapCommandTemplate(),
-  getUtilBackupCommandTemplate(),
-  getUtilCleanCommandTemplate(),
-  getUtilDoctorCommandTemplate(),
-  getUtilRestoreCommandTemplate(),
-  getWorkCancelCommandTemplate(),
-  getWorkLoopCommandTemplate(),
-  getLintRubyCommandTemplate(),
-  getRefactorCommandTemplate(),
-  getGhostwireProposeCommandTemplate(),
-  getGhostwireExploreCommandTemplate(),
-  getGhostwireApplyCommandTemplate(),
-  getGhostwireArchiveCommandTemplate(),
-  getSpeckitAnalyzeCommandTemplate(),
-  getSpeckitPlanCommandTemplate(),
-  getSpeckitImplementCommandTemplate(),
-  getSpeckitSpecifyCommandTemplate(),
-  getSpeckitTasksCommandTemplate(),
-  getSpeckitConstitutionCommandTemplate(),
-];
-
-const DEFAULT_SKILL_TEMPLATES: SkillTemplate[] = [
-  getGitMasterSkillTemplate(),
-  getBrainstormingSkillTemplate(),
-  getRailsStyleSkillTemplate(),
-  getFrontendDesignSkillTemplate(),
-  getOpenspecProposeSkillTemplate(),
-  getOpenspecExploreSkillTemplate(),
-  getOpenspecApplySkillTemplate(),
-  getOpenspecArchiveSkillTemplate(),
-  getReadyForProdSkillTemplate(),
-];
-
-const DEFAULT_AGENT_TEMPLATES: AgentTemplate[] = [
-  getAdvisorStrategyAgentTemplate(),
-  getPlannerAgentTemplate(),
-  getAdvisorArchitectureAgentTemplate(),
-  getAnalyzerDesignAgentTemplate(),
-  getAnalyzerPatternsAgentTemplate(),
-  getDesignerBuilderAgentTemplate(),
-  getDesignerFlowAgentTemplate(),
-  getDesignerIteratorAgentTemplate(),
-  getDesignerSyncAgentTemplate(),
-  getDoAgentTemplate(),
-  getResearchAgentTemplate(),
-  getPlanAgentTemplate(),
-  ... RESEARCH_AGENTS.map(fn => fn()),
-];
+  getDefaultAgentTemplates,
+  getDefaultCommandTemplates,
+  getDefaultSkillTemplates,
+} from '../../templates/catalog.js';
 
 export class Generator {
-  private config: GhostwireConfig;
+  private config: JinnConfig;
   private adapterRegistry = createPopulatedAdapterRegistry();
   private version = '1.0.0';
+  private commandTemplates: CommandTemplate[] = getDefaultCommandTemplates();
+  private skillTemplates: SkillTemplate[] = getDefaultSkillTemplates();
+  private agentTemplates: AgentTemplate[] = getDefaultAgentTemplates();
 
-  constructor(config: GhostwireConfig) {
+  constructor(config: JinnConfig) {
     this.config = config;
   }
 
@@ -273,10 +98,10 @@ export class Generator {
 
     const filesToWrite: Array<{ path: string; content: string }> = [];
 
-    for (const template of DEFAULT_COMMAND_TEMPLATES) {
+    for (const template of this.commandTemplates) {
       const commandId = template.name
         .toLowerCase()
-        .replace(/^ghostwire:?\s*/i, '')
+        .replace(/^jinn:?\s*/i, '')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
 
@@ -304,7 +129,7 @@ export class Generator {
       removed: [],
     };
 
-    const generated = generateSkillsForAllTools(DEFAULT_SKILL_TEMPLATES, adapters, this.version);
+    const generated = generateSkillsForAllTools(this.skillTemplates, adapters, this.version);
     const filesToWrite = generated.map(f => ({ path: f.path, content: f.content }));
     const batchResult = await this.writeFilesBatch(filesToWrite, projectPath);
     result.generated = batchResult.generated;
@@ -324,7 +149,7 @@ export class Generator {
       removed: [],
     };
 
-    const generated = generateAgentsForAllTools(DEFAULT_AGENT_TEMPLATES, adapters, this.version);
+    const generated = generateAgentsForAllTools(this.agentTemplates, adapters, this.version);
     const filesToWrite = generated.map(f => ({ path: f.path, content: f.content }));
     const batchResult = await this.writeFilesBatch(filesToWrite, projectPath);
     result.generated = batchResult.generated;
@@ -414,7 +239,7 @@ export class Generator {
 }
 
 export async function generateFiles(
-  config: GhostwireConfig,
+  config: JinnConfig,
   projectPath: string
 ): Promise<GenerationResult> {
   const generator = new Generator(config);

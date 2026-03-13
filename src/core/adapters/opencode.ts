@@ -18,7 +18,7 @@ export const opencodeAdapter: ToolCommandAdapter = {
   skillsDir: '.opencode',
 
   getCommandPath(commandId: string): string {
-    return path.join('.opencode', 'commands', `ghostwire-${commandId}.md`);
+    return path.join('.opencode', 'commands', `jinn-${commandId}.md`);
   },
 
   getSkillPath(skillName: string): string {
@@ -38,9 +38,9 @@ ${content.body}`;
       `name: ${template.name}`,
       `description: ${template.description}`,
       `license: ${template.license || 'MIT'}`,
-      `compatibility: ${template.compatibility || 'Requires ghostwire CLI.'}`,
+      `compatibility: ${template.compatibility || 'Requires jinn CLI.'}`,
       'metadata:',
-      `  author: ${template.metadata?.author || 'ghostwire'}`,
+      `  author: ${template.metadata?.author || 'jinn'}`,
       `  version: "${template.metadata?.version || '1.0'}"`,
       `  generatedBy: "${version}"`,
     ];
@@ -56,7 +56,7 @@ ${content.body}`;
     return `---\n${metadataLines.join('\n')}\n---\n\n${template.instructions}`;
   },
 
-  // OpenCode uses colon format: /ghostwire:propose
+  // OpenCode uses colon format: /jinn:propose
   transformCommandReferences(text: string): string {
     // No transformation needed - OpenCode format is canonical
     return text;

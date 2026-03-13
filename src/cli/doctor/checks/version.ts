@@ -92,7 +92,7 @@ export async function checkVersionStatus(): Promise<CheckResult> {
       name: CHECK_NAMES[CHECK_IDS.VERSION_STATUS],
       status: "warn",
       message: "Unable to determine current version",
-      details: ["Run: bunx ghostwire get-local-version"],
+      details: ["Run: bunx jinn get-local-version"],
     };
   }
 
@@ -110,7 +110,7 @@ export async function checkVersionStatus(): Promise<CheckResult> {
       name: CHECK_NAMES[CHECK_IDS.VERSION_STATUS],
       status: "warn",
       message: `Update available: ${info.currentVersion} -> ${info.latestVersion}`,
-      details: ["Run: cd ~/.config/opencode && bun update ghostwire"],
+      details: ["Run: cd ~/.config/opencode && bun update jinn"],
     };
   }
 

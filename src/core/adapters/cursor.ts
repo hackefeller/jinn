@@ -29,7 +29,7 @@ export const cursorAdapter: ToolCommandAdapter = {
   skillsDir: '.cursor',
 
   getCommandPath(commandId: string): string {
-    return path.join('.cursor', 'commands', `ghostwire-${commandId}.md`);
+    return path.join('.cursor', 'commands', `jinn-${commandId}.md`);
   },
 
   getSkillPath(skillName: string): string {
@@ -38,8 +38,8 @@ export const cursorAdapter: ToolCommandAdapter = {
 
   formatCommand(content: CommandContent): string {
     return `---
-name: /ghostwire-${content.id}
-id: ghostwire-${content.id}
+name: /jinn-${content.id}
+id: jinn-${content.id}
 category: ${escapeYamlValue(content.category)}
 description: ${escapeYamlValue(content.description)}
 ---
@@ -52,9 +52,9 @@ ${content.body}`;
       `name: ${template.name}`,
       `description: ${template.description}`,
       `license: ${template.license || 'MIT'}`,
-      `compatibility: ${template.compatibility || 'Requires ghostwire CLI.'}`,
+      `compatibility: ${template.compatibility || 'Requires jinn CLI.'}`,
       'metadata:',
-      `  author: ${template.metadata?.author || 'ghostwire'}`,
+      `  author: ${template.metadata?.author || 'jinn'}`,
       `  version: "${template.metadata?.version || '1.0'}"`,
       `  generatedBy: "${version}"`,
     ];

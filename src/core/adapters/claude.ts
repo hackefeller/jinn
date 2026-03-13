@@ -4,7 +4,7 @@
  * Formats commands and skills for Claude Code.
  * Claude Code uses:
  * - Skills: .claude/skills/<name>/SKILL.md
- * - Commands: .claude/commands/ghostwire/<id>.md (nested directory)
+ * - Commands: .claude/commands/jinn/<id>.md (nested directory)
  * - Format: YAML frontmatter with name, description, category, tags
  */
 
@@ -34,7 +34,7 @@ export const claudeAdapter: ToolCommandAdapter = {
 
   getCommandPath(commandId: string): string {
     // Claude uses nested directory structure
-    return path.join('.claude', 'commands', 'ghostwire', `${commandId}.md`);
+    return path.join('.claude', 'commands', 'jinn', `${commandId}.md`);
   },
 
   getSkillPath(skillName: string): string {
@@ -57,9 +57,9 @@ ${content.body}`;
       `name: ${template.name}`,
       `description: ${template.description}`,
       `license: ${template.license || 'MIT'}`,
-      `compatibility: ${template.compatibility || 'Requires ghostwire CLI.'}`,
+      `compatibility: ${template.compatibility || 'Requires jinn CLI.'}`,
       'metadata:',
-      `  author: ${template.metadata?.author || 'ghostwire'}`,
+      `  author: ${template.metadata?.author || 'jinn'}`,
       `  version: "${template.metadata?.version || '1.0'}"`,
       `  generatedBy: "${version}"`,
     ];

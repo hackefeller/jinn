@@ -1,6 +1,6 @@
 # File Generator
 
-Orchestrates generation of ghostwire files across all configured AI tools.
+Orchestrates generation of jinn files across all configured AI tools.
 
 ## Files
 
@@ -12,7 +12,7 @@ Orchestrates generation of ghostwire files across all configured AI tools.
 ## Generation Flow
 
 1. Load configuration (which tools, which profile)
-2. Load template registries (commands, skills, agents)
+2. Load the shared template catalog (commands, skills, agents)
 3. For each configured tool:
    - Get tool adapter
    - Generate command files
@@ -41,12 +41,19 @@ Generated files follow tool-specific conventions:
 
 ```
 .opencode/
-├── commands/ghostwire-propose.md
-├── skills/ghostwire-planner/SKILL.md
+├── commands/jinn-propose.md
+├── skills/jinn-planner/SKILL.md
 └── ...
 
 .cursor/
-├── commands/ghostwire-propose.md
-├── skills/ghostwire-planner/SKILL.md
+├── commands/jinn-propose.md
+├── skills/jinn-planner/SKILL.md
 └── ...
+```
+
+The Codex export path is separate from this generator and emits:
+
+```text
+AGENTS.md
+.agents/skills/<skill-name>/SKILL.md
 ```

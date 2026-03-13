@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 /**
- * Ghostwire CLI
+ * Jinn CLI
  *
  * Harness-agnostic AI agent distribution platform.
  */
@@ -14,13 +14,13 @@ import { executeConfig } from './config.js';
 const program = new Command();
 
 program
-  .name('ghostwire')
+  .name('jinn')
   .description('AI-native development workflows for any coding assistant')
   .version('1.0.0');
 
 program
   .command('init')
-  .description('Initialize ghostwire in the current project')
+  .description('Initialize jinn in the current project')
   .option('-t, --tools <tools>', 'Comma-separated list of tools (or "all")')
   .option('-p, --profile <profile>', 'Profile to use (core, extended)', 'core')
   .option('-d, --delivery <delivery>', 'What to install (skills, commands, both)', 'both')
@@ -36,7 +36,7 @@ program
 
 program
   .command('update')
-  .description('Update/regenerate ghostwire files')
+  .description('Update/regenerate jinn files')
   .option('-f, --force', 'Force regeneration')
   .option('-t, --tool <tool>', 'Update specific tool only')
   .action(async (options) => {
@@ -48,7 +48,7 @@ program
 
 program
   .command('config')
-  .description('Manage ghostwire configuration')
+  .description('Manage jinn configuration')
   .argument('[action]', 'Action: show, add-tool, remove-tool, set')
   .argument('[key]', 'Config key (for set)')
   .argument('[value]', 'Config value (for set)')
@@ -79,4 +79,4 @@ program
 
 program.parse();
 
-export { program as ghostwireProgram };
+export { program as jinnProgram };

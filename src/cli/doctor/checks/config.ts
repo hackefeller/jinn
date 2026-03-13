@@ -1,33 +1,13 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { CheckResult, CheckDefinition, ConfigInfo } from "../types";
-import { CHECK_IDS, CHECK_NAMES, PACKAGE_NAME } from "../constants";
-import { parseJsonc, detectConfigFile } from "../../../integration/shared/jsonc-parser";
-import { getOpenCodeConfigDir } from "../../../platform/opencode/config-dir";
-import { GhostwireConfigSchema } from "../../../platform/config";
+import { CHECK_IDS, CHECK_NAMES } from "../constants";
+import { parseConfig as parseJinnConfig } from "../../commands/config-file.js";
+import { performFullValidation } from "../../../core/config/validation.js";
 
-const USER_CONFIG_DIR = getOpenCodeConfigDir({ binary: "opencode" });
-const USER_CONFIG_BASE = join(USER_CONFIG_DIR, `${PACKAGE_NAME}`);
-const PROJECT_CONFIG_BASE = join(process.cwd(), ".opencode", PACKAGE_NAME);
-
-function findConfigPath(): { path: string; format: "json" | "jsonc" } | null {
-  const projectDetected = detectConfigFile(PROJECT_CONFIG_BASE);
-  if (projectDetected.format !== "none") {
-    return {
-      path: projectDetected.path,
-      format: projectDetected.format as "json" | "jsonc",
-    };
-  }
-
-  const userDetected = detectConfigFile(USER_CONFIG_BASE);
-  if (userDetected.format !== "none") {
-    return {
-      path: userDetected.path,
-      format: userDetected.format as "json" | "jsonc",
-    };
-  }
-
-  return null;
+function findConfigPath(): string | null {
+  const configPath = join(process.cwd(), ".jinn", "config.yaml");
+  return existsSync(configPath) ? configPath : null;
 }
 
 export function validateConfig(configPath: string): {
@@ -36,15 +16,12 @@ export function validateConfig(configPath: string): {
 } {
   try {
     const content = readFileSync(configPath, "utf-8");
-    const rawConfig = parseJsonc<Record<string, unknown>>(content);
-    const result = GhostwireConfigSchema.safeParse(rawConfig);
-
-    if (!result.success) {
-      const errors = result.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`);
-      return { valid: false, errors };
-    }
-
-    return { valid: true, errors: [] };
+    const config = parseJinnConfig(content);
+    const result = performFullValidation(config);
+    return {
+      valid: result.valid,
+      errors: result.errors,
+    };
   } catch (err) {
     return {
       valid: false,
@@ -66,22 +43,12 @@ export function getConfigInfo(): ConfigInfo {
     };
   }
 
-  if (!existsSync(configPath.path)) {
-    return {
-      exists: false,
-      path: configPath.path,
-      format: configPath.format,
-      valid: true,
-      errors: [],
-    };
-  }
-
-  const validation = validateConfig(configPath.path);
+  const validation = validateConfig(configPath);
 
   return {
     exists: true,
-    path: configPath.path,
-    format: configPath.format,
+    path: configPath,
+    format: "json",
     valid: validation.valid,
     errors: validation.errors,
   };
@@ -93,9 +60,9 @@ export async function checkConfigValidity(): Promise<CheckResult> {
   if (!info.exists) {
     return {
       name: CHECK_NAMES[CHECK_IDS.CONFIG_VALIDATION],
-      status: "pass",
-      message: "Using default configuration",
-      details: ["No custom config file found (optional)"],
+      status: "fail",
+      message: "Jinn config file not found",
+      details: ["Run: jinn init"],
     };
   }
 
@@ -111,7 +78,7 @@ export async function checkConfigValidity(): Promise<CheckResult> {
   return {
     name: CHECK_NAMES[CHECK_IDS.CONFIG_VALIDATION],
     status: "pass",
-    message: `Valid ${info.format?.toUpperCase()} config`,
+    message: "Valid Jinn config",
     details: [`Path: ${info.path}`],
   };
 }

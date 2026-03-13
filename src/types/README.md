@@ -1,6 +1,6 @@
 # Types
 
-Shared type definitions exported from ghostwire.
+Shared type definitions exported from jinn.
 
 ## Exports
 
@@ -14,11 +14,11 @@ export type { SkillTemplate, CommandTemplate, AgentTemplate } from '../core/temp
 export type { ToolCommandAdapter, CommandContent } from '../core/adapters/types.js';
 
 // From core/config
-export type { GhostwireConfig, ToolId, Profile, Delivery } from '../core/config/schema.js';
+export type { JinnConfig, ToolId, Profile, Delivery } from '../core/config/schema.js';
 ```
 
 ## Usage
 
 ```typescript
-import type { GhostwireConfig, SkillTemplate } from 'ghostwire/types';
+import type { JinnConfig, SkillTemplate } from 'jinn/types';
 ```

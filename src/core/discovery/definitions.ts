@@ -17,7 +17,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     skillsDir: '.opencode',
     available: true,
     successLabel: 'OpenCode',
-    notes: 'Primary development platform with full ghostwire support',
+    notes: 'Primary development platform with full jinn support',
   },
   {
     id: 'cursor',
