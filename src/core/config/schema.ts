@@ -1,7 +1,7 @@
 /**
- * Configuration schema and types for ghostwire.
+ * Configuration schema and types for jinn.
  *
- * Ghostwire uses Zod for runtime validation and TypeScript type inference.
+ * Uses Zod for runtime validation and TypeScript type inference.
  */
 
 import { z } from 'zod';
@@ -58,9 +58,9 @@ export type ToolId = z.infer<typeof ToolIdSchema>;
 
 /**
  * Main configuration schema
- * This defines the structure of .ghostwire/config.yaml
+ * This defines the structure of .jinn/config.yaml
  */
-export const GhostwireConfigSchema = z.object({
+export const ConfigSchema = z.object({
   /** Configuration schema version */
   version: z.string().default('1.0.0'),
 
@@ -79,6 +79,13 @@ export const GhostwireConfigSchema = z.object({
   /** Feature flags for experimental features */
   featureFlags: z.record(z.string(), z.boolean()).optional(),
 
+  /**
+   * Path to the personal knowledge vault containing .codex/skills/.
+   * Used by `jinn vault compile` when --vault is not passed explicitly.
+   * Supports ~ for home directory.
+   */
+  vaultPath: z.string().optional(),
+
   /** Project-specific metadata */
   metadata: z.object({
     name: z.string().optional(),
@@ -87,7 +94,7 @@ export const GhostwireConfigSchema = z.object({
   }).optional(),
 });
 
-export type GhostwireConfig = z.infer<typeof GhostwireConfigSchema>;
+export type Config = z.infer<typeof ConfigSchema>;
 
 /**
  * Tool definition metadata
@@ -127,5 +134,4 @@ export interface ValidationResult {
 /**
  * Configuration file paths
  */
-export const GHOSTWIRE_DIR_NAME = '.ghostwire';
 export const CONFIG_FILENAME = 'config.yaml';
