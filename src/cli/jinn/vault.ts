@@ -5,9 +5,10 @@
  * AI tool's native format, writing the output files into the current project.
  *
  * Usage:
- *   jinn vault compile --vault ~/path/to/vault
- *   jinn vault compile --vault ~/path/to/vault --tools claude,github-copilot
- *   jinn vault compile --vault ~/path/to/vault --dry-run
+ *   jinn vault compile                          # uses vaultPath from .jinn/config.yaml
+ *   jinn vault compile --vault ~/path/to/vault  # explicit override
+ *   jinn vault compile --tools claude,github-copilot
+ *   jinn vault compile --dry-run
  */
 
 import * as fs from 'fs/promises';
@@ -20,7 +21,7 @@ import { loadVaultSkills, compileVaultSkills } from '../../core/vault/index.js';
 import type { GeneratedFile } from '../../core/adapters/types.js';
 
 export interface VaultCompileCommandOptions {
-  vault: string;
+  vault?: string;
   tools?: string;
   dryRun?: boolean;
 }
@@ -45,7 +46,6 @@ async function writeFilesBatch(
     return { written: files.map((f) => f.path), failed };
   }
 
-  // Create all needed directories first
   const dirs = [...new Set(files.map((f) => path.dirname(path.join(projectPath, f.path))))];
   await Promise.all(dirs.map((d) => fs.mkdir(d, { recursive: true })));
 
@@ -65,17 +65,26 @@ async function writeFilesBatch(
 
 export async function executeVaultCompile(options: VaultCompileCommandOptions): Promise<void> {
   const projectPath = process.cwd();
-  const vaultPath = expandHome(options.vault);
   const dryRun = options.dryRun ?? false;
 
-  // 1. Load jinn config to know which tools are configured
+  // 1. Load jinn config
   const config = await loadConfig(projectPath);
   if (!config) {
     console.error('No .jinn/config.yaml found. Run `jinn init` first.');
     process.exit(1);
   }
 
-  // 2. Determine which tools to compile for
+  // 2. Resolve vault path: CLI flag > config field
+  const rawVaultPath = options.vault ?? config.vaultPath;
+  if (!rawVaultPath) {
+    console.error(
+      'No vault path found. Either pass --vault <path> or set vaultPath in .jinn/config.yaml.'
+    );
+    process.exit(1);
+  }
+  const vaultPath = expandHome(rawVaultPath);
+
+  // 3. Determine which tools to compile for
   const requestedTools = options.tools
     ? options.tools.split(',').map((t) => t.trim())
     : config.tools;
@@ -96,7 +105,7 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
     process.exit(1);
   }
 
-  // 3. Load vault skills
+  // 4. Load vault skills
   let skills;
   try {
     skills = await loadVaultSkills(vaultPath);
@@ -110,18 +119,18 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
     return;
   }
 
-  // 4. Compile
+  // 5. Compile
   const files = compileVaultSkills(skills, adapters);
 
-  // 5. Write (or dry-run)
+  // 6. Write (or dry-run)
   const { written, failed } = await writeFilesBatch(files, projectPath, dryRun);
 
-  // 6. Report
-  const label = dryRun ? 'Would write' : 'Wrote';
+  // 7. Report
   console.log(`\nVault skill compilation (dry-run=${dryRun})\n`);
+  console.log(`  Vault:           ${vaultPath}`);
   console.log(`  Skills loaded:   ${skills.length}`);
   console.log(`  Tools targeted:  ${adapters.map((a) => a.toolId).join(', ')}`);
-  console.log(`  Files ${label.toLowerCase()}: ${written.length}`);
+  console.log(`  Files ${dryRun ? 'would write' : 'wrote'}: ${written.length}`);
 
   if (dryRun) {
     console.log('\nFiles that would be written:');

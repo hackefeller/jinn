@@ -79,7 +79,7 @@ const vault = program
 vault
   .command('compile')
   .description('Compile vault skills into each configured AI tool\'s native format')
-  .requiredOption('-v, --vault <path>', 'Path to vault root (the directory containing .codex/skills/)')
+  .option('-v, --vault <path>', 'Path to vault root — overrides vaultPath in .jinn/config.yaml')
   .option('-t, --tools <tools>', 'Comma-separated tool IDs to compile for (default: all configured tools)')
   .option('--dry-run', 'Show what would be written without writing any files')
   .action(async (options) => {
