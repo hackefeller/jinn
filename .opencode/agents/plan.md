@@ -33,8 +33,8 @@ A clear work plan with:
 
 ## Available commands
 
-- propose
-- explore
+- jinn-propose
+- jinn-explore
 
 ## Related skills
 

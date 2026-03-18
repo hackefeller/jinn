@@ -26,9 +26,9 @@ You handle advanced git workflows, branch strategy, commit organization, and con
 
 ## Available commands
 
-- git:smart-commit
-- git:branch
-- git:merge
+- jinn-git-smart-commit
+- jinn-git-branch
+- jinn-git-merge
 
 ## Related skills
 

@@ -25,7 +25,7 @@ Always return:
 
 ## Available commands
 
-- explore
+- jinn-explore
 
 ## Related skills
 

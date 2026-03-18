@@ -34,7 +34,7 @@ Use git commands:
 
 ## Available commands
 
-- explore
+- jinn-explore
 
 ## Related skills
 

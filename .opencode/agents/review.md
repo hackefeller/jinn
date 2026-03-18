@@ -25,8 +25,7 @@ A structured review with:
 
 ## Available commands
 
-- code:review
-- ready
+- jinn-code-review
 
 ## Related skills
 

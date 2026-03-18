@@ -34,8 +34,8 @@ You build production-grade frontend interfaces and verify implementation against
 
 ## Available commands
 
-- code:format
-- code:refactor
+- jinn-code-format
+- jinn-code-refactor
 
 ## Related skills
 

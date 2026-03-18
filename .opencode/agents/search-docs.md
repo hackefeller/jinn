@@ -33,8 +33,8 @@ You research external documentation, best practices, and industry standards to a
 
 ## Available commands
 
-- explore
-- propose
+- jinn-explore
+- jinn-propose
 
 ## Related skills
 

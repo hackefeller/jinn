@@ -23,9 +23,9 @@ You execute work plans and coordinate implementation. You work through tasks seq
 
 ## Available commands
 
-- apply
-- code:format
-- git:smart-commit
+- jinn-apply
+- jinn-code-format
+- jinn-git-smart-commit
 
 ## Related skills
 

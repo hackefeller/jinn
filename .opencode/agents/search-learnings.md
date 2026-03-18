@@ -32,8 +32,8 @@ You search institutional knowledge — past solutions, documented lessons, and a
 
 ## Available commands
 
-- explore
-- propose
+- jinn-explore
+- jinn-propose
 
 ## Related skills
 

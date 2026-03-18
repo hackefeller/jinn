@@ -24,8 +24,8 @@ You review code architecture and design decisions, identify patterns and anti-pa
 
 ## Available commands
 
-- code:review
-- code:refactor
+- jinn-code-review
+- jinn-code-refactor
 
 ## Related skills
 
