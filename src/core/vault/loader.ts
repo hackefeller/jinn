@@ -119,14 +119,14 @@ export async function loadVaultSkills(vaultPath: string): Promise<VaultSkill[]> 
 
   let dirents: Awaited<ReturnType<typeof fs.readdir>>;
   try {
-    dirents = await fs.readdir(skillsDir, { withFileTypes: true });
+    dirents = (await fs.readdir(skillsDir, { withFileTypes: true })) as unknown as Awaited<ReturnType<typeof fs.readdir>>;
   } catch {
     throw new Error(`Cannot read vault skills directory: ${skillsDir}`);
   }
 
   const skillDirs = dirents
     .filter((d) => d.isDirectory())
-    .map((d) => path.join(skillsDir, d.name));
+    .map((d) => path.join(skillsDir, String(d.name)));
 
   const results = await Promise.all(skillDirs.map(loadSkill));
   return results.filter((s): s is VaultSkill => s !== null);
