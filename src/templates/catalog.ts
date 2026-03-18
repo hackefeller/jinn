@@ -58,25 +58,12 @@ import {
   getWorkflowsWorkCommandTemplate,
 } from "./commands/workflows.js";
 import {
-  getAdvisorArchitectureAgentTemplate,
-  getAdvisorStrategyAgentTemplate,
-  getAnalyzerDesignAgentTemplate,
-  getAnalyzerPatternsAgentTemplate,
-  getDesignerBuilderAgentTemplate,
-  getDesignerFlowAgentTemplate,
-  getDesignerIteratorAgentTemplate,
-  getDesignerSyncAgentTemplate,
   getDoAgentTemplate,
   getPlanAgentTemplate,
-  getPlannerAgentTemplate,
-  getResearchAgentTemplate,
-  RESEARCH_AGENTS,
 } from "./agents/index.js";
 import {
-  getBrainstormingSkillTemplate,
   getFrontendDesignSkillTemplate,
   getGitMasterSkillTemplate,
-  getRailsStyleSkillTemplate,
 } from "./skills/index.js";
 import {
   getJinnApplySkillTemplate,
@@ -139,8 +126,6 @@ export function getDefaultCommandTemplates(): CommandTemplate[] {
 export function getDefaultSkillTemplates(): SkillTemplate[] {
   return [
     getGitMasterSkillTemplate(),
-    getBrainstormingSkillTemplate(),
-    getRailsStyleSkillTemplate(),
     getFrontendDesignSkillTemplate(),
     getJinnProposeSkillTemplate(),
     getJinnExploreSkillTemplate(),
@@ -152,18 +137,7 @@ export function getDefaultSkillTemplates(): SkillTemplate[] {
 
 export function getDefaultAgentTemplates(): AgentTemplate[] {
   return [
-    getAdvisorStrategyAgentTemplate(),
-    getPlannerAgentTemplate(),
-    getAdvisorArchitectureAgentTemplate(),
-    getAnalyzerDesignAgentTemplate(),
-    getAnalyzerPatternsAgentTemplate(),
-    getDesignerBuilderAgentTemplate(),
-    getDesignerFlowAgentTemplate(),
-    getDesignerIteratorAgentTemplate(),
-    getDesignerSyncAgentTemplate(),
     getDoAgentTemplate(),
-    getResearchAgentTemplate(),
     getPlanAgentTemplate(),
-    ...RESEARCH_AGENTS.map((createTemplate) => createTemplate()),
   ];
 }
