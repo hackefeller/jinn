@@ -1,5 +1,109 @@
 import type { CommandTemplate } from '../../core/templates/types.js';
 
+export function getJinnProposeCommandTemplate(): CommandTemplate {
+  return {
+    name: 'Jinn: Propose',
+    description: 'Create or update a Linear project and seed execution issues',
+    category: 'Workflow',
+    tags: ['workflow', 'proposal', 'linear', 'planning'],
+    content: `Jinn: Propose
+
+Create a new Linear-backed change. Linear is the source of truth.
+
+## Steps
+
+1. Clarify the goal, success criteria, and scope.
+2. Create or update a Linear project for the change.
+3. Write the proposal summary and design context into the Linear project description.
+4. Seed top-level Linear issues for major workstreams.
+5. Seed sub-issues for immediately known implementation work.
+6. Report the created Linear project, issue links, and open decisions.
+
+## Guardrails
+
+- Do not create local artifact files as the primary workflow record.
+- Prefer one Linear project per change.
+- Keep top-level Linear issues outcome-oriented and sub-issues execution-oriented.
+- If a matching Linear project already exists, update it instead of duplicating it.
+`,
+  };
+}
+
+export function getJinnExploreCommandTemplate(): CommandTemplate {
+  return {
+    name: 'Jinn: Explore',
+    description: 'Explore ideas using current Linear project and issue context',
+    category: 'Workflow',
+    tags: ['workflow', 'explore', 'linear', 'investigation'],
+    content: `Enter explore mode with Linear context.
+
+## Steps
+
+1. Identify the relevant Linear project or Linear issue from the conversation.
+2. Read the existing Linear description, issue hierarchy, and status.
+3. Explore options, risks, dependencies, and edge cases.
+4. Offer to capture new decisions back into the relevant Linear project or Linear issue.
+
+## Guardrails
+
+- Explore and reason before implementation.
+- Use Linear as the context source when work has already been captured.
+- Keep recommendations grounded in the current codebase and current Linear state.
+`,
+  };
+}
+
+export function getJinnApplyCommandTemplate(): CommandTemplate {
+  return {
+    name: 'Jinn: Apply',
+    description: 'Implement work from Linear issues and sub-issues',
+    category: 'Workflow',
+    tags: ['workflow', 'apply', 'linear', 'execution'],
+    content: `Implement work from Linear.
+
+## Steps
+
+1. Select the Linear project or Linear issue to execute.
+2. Read the active top-level Linear issues and pending sub-issues.
+3. Choose the next unblocked sub-issue.
+4. Implement the change, run verification, and summarize progress.
+5. Update the Linear issue state, assignee, or notes through the available workflow.
+6. Continue until the selected Linear scope is complete or blocked.
+
+## Guardrails
+
+- Treat Linear sub-issues as the execution queue.
+- Pause when the next Linear issue is ambiguous or blocked.
+- Keep code changes scoped to the selected Linear work item.
+`,
+  };
+}
+
+export function getJinnArchiveCommandTemplate(): CommandTemplate {
+  return {
+    name: 'Jinn: Archive',
+    description: 'Close out completed Linear work',
+    category: 'Workflow',
+    tags: ['workflow', 'archive', 'linear', 'completion'],
+    content: `Archive completed Linear work.
+
+## Steps
+
+1. Select the Linear project to close.
+2. Review open top-level Linear issues and sub-issues.
+3. Confirm whether any remaining items should stay open or be deferred.
+4. Mark the Linear project complete and transition finished Linear issues to done.
+5. Summarize remaining follow-ups, if any.
+
+## Guardrails
+
+- Do not move local folders as the completion mechanism.
+- Use Linear project and Linear issue state transitions as the archive step.
+- Surface incomplete items before closing the Linear project.
+`,
+  };
+}
+
 export function getWorkflowsBrainstormCommandTemplate(): CommandTemplate {
   return {
     name: 'Jinn: Workflows Brainstorm',
