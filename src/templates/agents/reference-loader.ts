@@ -1,13 +1,33 @@
 import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
+
+function isCompiledMode(metaPath: string): boolean {
+  return metaPath.startsWith("/$bunfs") || metaPath === "/";
+}
+
+function normalizeRefsPath(refsPath: string): string {
+  const normalized = normalize(refsPath);
+  if (normalized.startsWith("../")) {
+    return normalized.slice(3);
+  }
+  return normalized;
+}
 
 export function createTemplateReferenceReader(
   metaUrl: string,
   referenceDirectoryName: string = "references",
 ): (filename: string) => string {
-  const templateDirectory = dirname(fileURLToPath(metaUrl));
+  const metaPath = fileURLToPath(metaUrl);
 
+  if (isCompiledMode(metaPath)) {
+    const baseDir = dirname(process.execPath);
+    const refsPath = normalizeRefsPath(referenceDirectoryName);
+    const fullPath = join(baseDir, refsPath);
+    return (filename: string) => readFileSync(join(fullPath, filename), "utf-8");
+  }
+
+  const templateDirectory = dirname(metaPath);
   return (filename: string) =>
     readFileSync(join(templateDirectory, referenceDirectoryName, filename), "utf-8");
 }

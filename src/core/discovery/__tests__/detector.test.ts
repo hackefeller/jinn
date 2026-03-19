@@ -42,7 +42,7 @@ describe("Tool Definitions", () => {
     const { TOOL_DEFINITIONS } = await import("../definitions.js");
     const codex = TOOL_DEFINITIONS.find((t: any) => t.id === "codex");
     expect(codex).toBeDefined();
-    expect(codex!.skillsDir).toBe(".agents");
+    expect(codex!.skillsDir).toBe(".codex");
   });
 });
 

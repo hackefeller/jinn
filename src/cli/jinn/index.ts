@@ -7,25 +7,42 @@
  */
 
 import { Command } from "commander";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { executeInit } from "./init.js";
 import { executeUpdate } from "./update.js";
 import { executeConfig } from "./config.js";
 import { executeDetect } from "./detect.js";
 import { executeVaultCompile } from "./vault.js";
 
+function getVersion(): string {
+  const metaPath = fileURLToPath(import.meta.url);
+  let baseDir = dirname(metaPath);
+  if (baseDir.startsWith("/$bunfs")) {
+    baseDir = dirname(process.execPath);
+  }
+  try {
+    const pkg = JSON.parse(readFileSync(join(baseDir, "package.json"), "utf-8"));
+    return pkg.version;
+  } catch {
+    return "0.0.0";
+  }
+}
+
 const program = new Command();
 
 program
   .name("jinn")
   .description("AI-native development workflows for any coding assistant")
-  .version("1.0.0");
+  .version(getVersion());
 
 program
   .command("init")
   .description("Initialize jinn in the current project")
   .option("-t, --tools <tools>", 'Comma-separated list of tools (or "all")')
   .option("-p, --profile <profile>", "Profile to use (core, extended)", "core")
-  .option("-d, --delivery <delivery>", "What to install (skills, commands, both)", "both")
+  .option("-d, --delivery <delivery>", "What to install (skills, both)", "both")
   .option("-y, --yes", "Skip prompts and use defaults")
   .option("--path <path>", "Project path to initialize (default: current directory)")
   .action(async (options) => {

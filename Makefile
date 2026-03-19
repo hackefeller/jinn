@@ -16,9 +16,9 @@ help:
 	@echo "Jinn CLI test targets"
 	@echo ""
 	@echo "  make build              Build the CLI binary"
-	@echo "  make test-init         Test 'jinn init --delivery commands' (agents bug fix)"
+	@echo "  make test-init         Test 'jinn init --delivery commands'"
 	@echo "  make test-init-both    Test 'jinn init --delivery both'"
-	@echo "  make test-init-skills  Test 'jinn init --delivery skills' (no agents)"
+	@echo "  make test-init-skills  Test 'jinn init --delivery skills'"
 	@echo "  make test-init-multi   Test 'jinn init' with multiple tools"
 	@echo "  make test-update       Test 'jinn update --force'"
 	@echo "  make test-config       Test 'jinn config show / add-tool'"
@@ -28,15 +28,18 @@ help:
 	@echo "  make clean             Remove test directories"
 	@echo ""
 	@echo "File count expectations:"
-	@echo "  --delivery commands:  32 commands + 10 agents + 0 skills"
-	@echo "  --delivery both:     32 commands + 10 agents + 7 skills"
-	@echo "  --delivery skills:    0 commands + 0 agents + 7 skills"
+	@echo "  --delivery commands:   8 agents + 20 skills"
+	@echo "  --delivery both:       8 agents + 20 skills"
+	@echo "  --delivery skills:     0 agents + 20 skills"
 
 build:
 	bun build ./src/cli/main.ts --compile --outfile ./dist/jinn
+	mkdir -p ./dist
+	cp -r ./src/templates/agents/refs ./dist/
+	cp ./package.json ./dist/
 	ln -sf $(PWD)/dist/jinn /usr/local/bin/jinn
 
-# --- Test init with --delivery commands (the bug fix: agents should now exist) ---
+# --- Test init with --delivery commands ---
 test-init: build
 	rm -rf $(TESTDIR)
 	mkdir -p $(TESTDIR)
@@ -44,13 +47,11 @@ test-init: build
 	$(BIN) init --path $(TESTDIR) --tools opencode --delivery commands --yes
 	@echo ""
 	@echo "=== File counts ==="
-	@echo ".opencode/commands/  -> $$(ls $(TESTDIR)/.opencode/commands/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 32)"
-	@echo ".opencode/agents/    -> $$(ls $(TESTDIR)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 10)"
-	@echo ".opencode/skills/    -> $$(ls -d $(TESTDIR)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 0)"
+	@echo ".opencode/agents/  -> $$(ls $(TESTDIR)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
 	@echo ""
-	@echo "=== Spot-check: plan.md has ## Available commands and ## Related skills ==="
-	@{ grep -q "## Available commands" $(TESTDIR)/.opencode/agents/plan.md && echo "PASS: plan.md has ## Available commands" || echo "FAIL: plan.md missing ## Available commands"; } && \
-	{ grep -q "## Related skills" $(TESTDIR)/.opencode/agents/plan.md && echo "PASS: plan.md has ## Related skills" || echo "FAIL: plan.md missing ## Related skills"; }
+	@echo "=== Spot-check: jinn-plan.md has ## Available skills ==="
+	@{ grep -q "## Available skills" $(TESTDIR)/.opencode/agents/jinn-plan.md && echo "PASS: jinn-plan.md has ## Available skills" || echo "FAIL: jinn-plan.md missing ## Available skills"; }
 
 # --- Test init with --delivery both ---
 test-init-both: build
@@ -60,9 +61,8 @@ test-init-both: build
 	$(BIN) init --path $(TESTDIR_DELIVERY_BOTH) --tools opencode --delivery both --yes
 	@echo ""
 	@echo "=== File counts ==="
-	@echo ".opencode/commands/  -> $$(ls $(TESTDIR_DELIVERY_BOTH)/.opencode/commands/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 32)"
-	@echo ".opencode/agents/    -> $$(ls $(TESTDIR_DELIVERY_BOTH)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 10)"
-	@echo ".opencode/skills/    -> $$(ls -d $(TESTDIR_DELIVERY_BOTH)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 7)"
+	@echo ".opencode/agents/  -> $$(ls $(TESTDIR_DELIVERY_BOTH)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_DELIVERY_BOTH)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
 
 # --- Test init with --delivery skills (agents should NOT exist) ---
 test-init-skills: build
@@ -72,9 +72,8 @@ test-init-skills: build
 	$(BIN) init --path $(TESTDIR_DELIVERY_SKILLS) --tools opencode --delivery skills --yes
 	@echo ""
 	@echo "=== File counts ==="
-	@echo ".opencode/commands/  -> $$(ls $(TESTDIR_DELIVERY_SKILLS)/.opencode/commands/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 0)"
-	@echo ".opencode/agents/    -> $$(ls $(TESTDIR_DELIVERY_SKILLS)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 0)"
-	@echo ".opencode/skills/    -> $$(ls -d $(TESTDIR_DELIVERY_SKILLS)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 7)"
+	@echo ".opencode/agents/  -> $$(ls $(TESTDIR_DELIVERY_SKILLS)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 0)"
+	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_DELIVERY_SKILLS)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
 
 # --- Test init with multiple tools ---
 test-init-multi: build
@@ -84,20 +83,18 @@ test-init-multi: build
 	$(BIN) init --path $(TESTDIR_MULTI) --tools opencode,claude --delivery both --yes
 	@echo ""
 	@echo "=== File counts ==="
-	@echo ".opencode/commands/  -> $$(ls $(TESTDIR_MULTI)/.opencode/commands/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 32)"
-	@echo ".opencode/agents/    -> $$(ls $(TESTDIR_MULTI)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 10)"
-	@echo ".opencode/skills/    -> $$(ls -d $(TESTDIR_MULTI)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 7)"
-	@echo ".claude/commands/jinn/ -> $$(ls $(TESTDIR_MULTI)/.claude/commands/jinn/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 32)"
-	@echo ".claude/agents/      -> $$(ls $(TESTDIR_MULTI)/.claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 10)"
-	@echo ".claude/skills/      -> $$(ls -d $(TESTDIR_MULTI)/.claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 7)"
+	@echo ".opencode/agents/  -> $$(ls $(TESTDIR_MULTI)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_MULTI)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
+	@echo ".claude/agents/    -> $$(ls $(TESTDIR_MULTI)/.claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".claude/skills/    -> $$(ls -d $(TESTDIR_MULTI)/.claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
 
 # --- Test update after init ---
 test-update: test-init
 	$(BIN) update --path $(TESTDIR) --force
 	@echo ""
 	@echo "=== After update --force: counts should be unchanged ==="
-	@echo ".opencode/commands/  -> $$(ls $(TESTDIR)/.opencode/commands/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 32)"
-	@echo ".opencode/agents/    -> $$(ls $(TESTDIR)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 10)"
+	@echo ".opencode/agents/  -> $$(ls $(TESTDIR)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
 
 # --- Test config commands ---
 test-config: build

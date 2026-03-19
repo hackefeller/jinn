@@ -81,6 +81,13 @@ describe("generateAgentForTool — opencode (has getAgentPath and formatAgent)",
   });
 });
 
+describe("generateAgentForTool — cursor (no native agent support)", () => {
+  it("returns no files for tools without agent support", () => {
+    const result = generateAgentForTool(testAgent, testAgent.name, cursorAdapter, "1.0.0");
+    expect(result).toHaveLength(0);
+  });
+});
+
 describe("generateAgentsForTool", () => {
   const templates = [testAgent, testAgent2];
 
@@ -106,9 +113,9 @@ describe("generateAgentsForAllTools", () => {
   const templates = [testAgent, testAgent2];
   const adapters = [opencodeAdapter, claudeAdapter, cursorAdapter];
 
-  it("returns templates.length × adapters.length files", () => {
+  it("skips tools without native agent support", () => {
     const results = generateAgentsForAllTools(templates, adapters, "1.0.0");
-    expect(results).toHaveLength(9);
+    expect(results).toHaveLength(6);
   });
 
   it("returns empty array when adapters is empty", () => {

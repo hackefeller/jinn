@@ -175,6 +175,12 @@ describe("Generator integration — cursor", () => {
     const count = await countDirsInDir(path.join(tmpDir, ".cursor", "skills"));
     expect(count).toBeGreaterThan(0);
   });
+
+  it("does not create agent files for skills-only tools", async () => {
+    await generateFiles(config, tmpDir);
+    const ok = await dirExists(path.join(tmpDir, ".cursor", "agents"));
+    expect(ok).toBe(false);
+  });
 });
 
 // ============================================================================
@@ -315,13 +321,14 @@ describe("Generator integration — multi-tool", () => {
     delivery: "both",
   };
 
-  it("creates all three tool directories with skills and agents", async () => {
+  it("creates skills for all tools and agents only for native-agent tools", async () => {
     await generateFiles(config, tmpDir);
     expect(await dirExists(path.join(tmpDir, ".opencode", "skills"))).toBe(true);
     expect(await dirExists(path.join(tmpDir, ".claude", "skills"))).toBe(true);
     expect(await dirExists(path.join(tmpDir, ".cursor", "skills"))).toBe(true);
     expect(await dirExists(path.join(tmpDir, ".opencode", "agents"))).toBe(true);
     expect(await dirExists(path.join(tmpDir, ".claude", "agents"))).toBe(true);
+    expect(await dirExists(path.join(tmpDir, ".cursor", "agents"))).toBe(false);
   });
 
   it("no cross-contamination between tool directories", async () => {

@@ -260,9 +260,9 @@ describe("ConfigSchema", () => {
 
   it("accepts all valid tool IDs", () => {
     const result = ConfigSchema.parse({
-      tools: ["opencode", "claude", "cursor", "github-copilot"],
+      tools: ["opencode", "claude", "codex", "github-copilot", "gemini", "cursor"],
     });
-    expect(result.tools).toHaveLength(4);
+    expect(result.tools).toHaveLength(6);
   });
 
   it("rejects invalid profile", () => {
@@ -271,5 +271,9 @@ describe("ConfigSchema", () => {
 
   it("rejects invalid delivery", () => {
     expect(() => ConfigSchema.parse({ tools: ["opencode"], delivery: "invalid" })).toThrow();
+  });
+
+  it("rejects deprecated commands delivery mode", () => {
+    expect(() => ConfigSchema.parse({ tools: ["opencode"], delivery: "commands" })).toThrow();
   });
 });

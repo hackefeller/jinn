@@ -6,7 +6,7 @@
  */
 
 /**
- * Skill template - defines agent skill content
+ * Skill template - defines reusable skill content
  * Skills are installed to <tool>/skills/<name>/SKILL.md
  */
 export interface SkillTemplate {
@@ -48,13 +48,13 @@ export interface SkillTemplate {
   /** Other skill names this skill orchestrates or depends on */
   dependencies?: string[];
 
-  /** Agent role category (e.g. 'Orchestration', 'Specialist', 'Reviewer') */
+  /** Template role category (e.g. 'Workflow', 'Specialist', 'Reviewer') */
   role?: string;
 
-  /** What this skill/agent is capable of when acting as an orchestrator */
+  /** What this template is capable of */
   capabilities?: string[];
 
-  /** Skills this skill/agent can reference or delegate to */
+  /** Skills this template can reference, preload, or delegate to depending on platform */
   availableSkills?: string[];
 
   /** Routing key for intent-based dispatch (e.g. 'plan', 'do', 'research') */
@@ -85,7 +85,7 @@ export interface TemplateReference {
 }
 
 /**
- * Agent template - special skill for reasoning entities that orchestrate workflows
+ * Agent template - native agent persona with additional execution metadata
  */
 export interface AgentTemplate extends SkillTemplate {
   /** Default tools available to agent */

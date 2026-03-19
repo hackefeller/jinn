@@ -40,7 +40,7 @@ export interface ToolCommandAdapter {
 
   /**
    * Optional: Returns the file path for an agent.
-   * Defaults to getSkillPath(agentName) if not implemented.
+    * If omitted, this tool does not support native agent generation.
    * @param agentName - The agent name (e.g., 'jinn-plan')
    * @returns Path from project root (e.g., '.claude/agents/jinn-plan.md')
    */
@@ -48,7 +48,7 @@ export interface ToolCommandAdapter {
 
   /**
    * Optional: Formats agent file content with tool-native agent frontmatter.
-   * Defaults to formatSkill(template, version) if not implemented.
+    * If omitted, this tool does not support native agent generation.
    * @param template - The agent template
    * @param version - Jinn version
    * @returns Complete file content ready to write

@@ -65,7 +65,7 @@ export const opencodeAdapter: ToolCommandAdapter = {
 
     if (template.availableSkills && template.availableSkills.length > 0) {
       bodySections.push(
-        `## Related skills\n\n${template.availableSkills.map((s) => `- ${s}`).join("\n")}`,
+        `## Available skills\n\n${template.availableSkills.map((s) => `- ${s}`).join("\n")}`,
       );
     }
 

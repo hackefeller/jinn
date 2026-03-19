@@ -1,16 +1,16 @@
-# Ghostwire Architecture
+# Jinn Architecture
 
 ## Overview
 
-Ghostwire uses a harness-agnostic architecture that allows it to work across 24+ AI coding assistants.
+Jinn uses a harness-agnostic architecture that works across the AI coding tools it currently supports by separating reusable skills from native agent formats.
 
 ## Core Components
 
 ### 1. Adapters (`src/core/adapters/`)
 
-Adapters format ghostwire content for specific AI tools:
+Adapters format jinn content for specific AI tools:
 
-```
+```text
 src/core/adapters/
 ├── index.ts        # Exports all adapters
 ├── registry.ts    # Adapter registry
@@ -18,25 +18,24 @@ src/core/adapters/
 ├── opencode.ts    # OpenCode adapter
 ├── cursor.ts      # Cursor adapter
 ├── claude.ts      # Claude Code adapter
-└── ... (24 total)
+└── ... (6 total)
 ```
 
 Each adapter implements `ToolCommandAdapter`:
 
 - `toolId` - Unique identifier
 - `skillsDir` - Tool's skills directory
-- `getCommandPath()` - Generate command file path
 - `getSkillPath()` - Generate skill file path
-- `formatCommand()` - Format command content
 - `formatSkill()` - Format skill content
+- `getAgentPath()` - Generate native agent file path when the tool supports agents
+- `formatAgent()` - Format native agent content when the tool supports agents
 
 ### 2. Templates (`src/templates/`)
 
 Tool-agnostic content templates:
 
-```
+```text
 src/templates/
-├── commands/      # Command templates
 ├── skills/        # Skill templates
 └── agents/        # Agent templates
 ```
@@ -46,33 +45,30 @@ src/templates/
 Generates files for all configured tools:
 
 ```typescript
-// Generate commands for all tools
-generateCommandsForAllTools(template, commandId, adapters, version);
-
 // Generate skills for all tools
 generateSkillsForAllTools(templates, adapters, version);
 
-// Generate agents for all tools
+// Generate native agents for tools that support them
 generateAgentsForAllTools(templates, adapters, version);
 ```
 
-### 4. CLI (`src/cli/ghostwire/`)
+### 4. CLI (`src/cli/jinn/`)
 
 Command-line interface:
 
-- `init` - Initialize ghostwire
+- `init` - Initialize jinn
 - `update` - Regenerate files
 - `config` - Manage configuration
 - `detect` - Detect available tools
 
 ## Data Flow
 
-```
+```text
 User runs CLI → Config Loader → Generator → Adapters → Files
 ```
 
-1. User runs `ghostwire init`
-2. Config loader reads `.ghostwire/config.yaml`
+1. User runs `jinn init`
+2. Config loader reads `.jinn/config.yaml`
 3. Generator creates templates for each tool
 4. Adapters format content for specific tools
 5. Files written to tool-specific directories
@@ -90,47 +86,41 @@ delivery: both
 
 - `tools` - Which AI tools to generate for
 - `profile` - Which templates to include (core/extended)
-- `delivery` - What to generate (commands/skills/both)
+- `delivery` - What to generate (`skills` or `both`)
 
 ## File Structure
 
 Generated files follow each tool's conventions:
 
-```
+```text
 .opencode/
-├── commands/
-│   ├── ghostwire-propose.md
-│   └── ghostwire-apply.md
+├── agents/
+│   ├── jinn-plan.md
+│   └── jinn-review.md
+├── skills-index.md
 └── skills/
-    ├── ghostwire-planner/
+    ├── jinn-propose/
     │   └── SKILL.md
-    └── ghostwire-architect/
+    └── jinn-frontend-design/
         └── SKILL.md
 
 .cursor/
-├── commands/
-│   └── ghostwire-propose.md
 └── skills/
-    └── ghostwire-planner/
+    └── jinn-propose/
         └── SKILL.md
 ```
 
 ## Extension Points
 
-### Adding New Commands
-
-1. Create template in `src/templates/commands/`
-2. Register in generator
-3. Files auto-generated for all tools
-
 ### Adding New Tools
 
 1. Create adapter in `src/core/adapters/`
 2. Register in `src/core/adapters/index.ts`
-3. Works with all existing commands/skills/agents
+3. Implement native agent methods only if the tool actually supports agents
+4. Works with all existing skills and native agents
 
 ### Adding New Agents
 
 1. Create template in `src/templates/agents/`
-2. Include in profile
-3. Auto-generated for all tools
+2. Include in the generator's agent template set
+3. Auto-generated only for tools with native agent support

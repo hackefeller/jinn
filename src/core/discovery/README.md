@@ -8,7 +8,7 @@ Detects which AI coding assistants are installed in a project by scanning for th
 
 ## Tool Definitions
 
-Defines metadata for 24 AI tools including:
+Defines metadata for the currently supported AI tools including:
 
 - Tool ID and name
 - Skills directory location

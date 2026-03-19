@@ -3,12 +3,9 @@
 ## Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-repo/jinn.git
-cd jinn
-
-# Install dependencies (if needed)
-bun install
+npm install -g @hackefeller/jinn
+# or
+bunx jinn init
 ```
 
 ## Quick Start
@@ -23,19 +20,12 @@ cd your-project
 jinn init --yes
 
 # Or specify tools manually
-jinn init --tools opencode,cursor
+jinn init --tools opencode,claude,cursor
 ```
 
-### 2. Use Jinn Commands
+### 2. Use The Installed Workflows
 
-In your AI tool, use these commands:
-
-```
-/jinn:propose - Start a new change
-/jinn:explore - Explore a problem space
-/jinn:apply - Implement changes
-/jinn:archive - Complete and document work
-```
+In your AI tool, invoke the generated workflows and agents for planning, exploration, execution, and review.
 
 ### 3. Update Generated Files
 
@@ -62,46 +52,45 @@ delivery: both
 
 ### Profiles
 
-- **core** - Essential commands and agents
-- **extended** - Full command set
+- **core** - Essential skills and agents
+- **extended** - Full skills and agents
 
 ### Delivery Modes
 
-- **commands** - Only commands
 - **skills** - Only skills
-- **both** - Commands and skills
+- **both** - Skills and native agents where supported
 
 ## Supported Tools
 
 Jinn supports 6 AI coding tools:
 
-| Tool           | ID               | Directory   |
-| -------------- | ---------------- | ----------- |
+| Tool           | ID               | Directory    |
+| -------------- | ---------------- | ------------ |
 | OpenCode       | `opencode`       | `.opencode/` |
-| Claude Code    | `claude`         | `.claude/`  |
-| OpenAI Codex   | `codex`          | `.agents/`  |
-| GitHub Copilot | `github-copilot` | `.github/`  |
-| Google Gemini  | `gemini`         | `.gemini/`  |
-| Cursor         | `cursor`         | `.cursor/`  |
+| Claude Code    | `claude`         | `.claude/`   |
+| OpenAI Codex   | `codex`          | `.agents/`   |
+| GitHub Copilot | `github-copilot` | `.github/`   |
+| Google Gemini  | `gemini`         | `.gemini/`   |
+| Cursor         | `cursor`         | `.cursor/`   |
 
 ## Example Workflows
 
 ### Starting New Work
 
-1. Use `/jinn:propose` to define the change
-2. Use `/jinn:explore` if you need to research
-3. Use `/jinn:apply` to implement
-4. Use `/jinn:archive` when done
+1. Use the propose workflow to define the change
+2. Use the explore workflow if you need to research
+3. Use the apply workflow to implement
+4. Use the archive workflow when done
 
 ### Code Review
 
-1. Use `/jinn:code:review` to review changes
-2. Agents will analyze and provide feedback
+1. Invoke the review workflow or review agent
+2. The generated review system will analyze and provide feedback
 
 ### Performance Optimization
 
-1. Use `/jinn:code:optimize` with target
-2. Agents will profile and optimize
+1. Use the planning or execution workflow to scope the optimization
+2. Delegate to the relevant specialist or skill
 
 ## Troubleshooting
 

@@ -1,17 +1,17 @@
-# Ghostwire Migration Guide
+# Jinn Migration Guide
 
 ## Overview
 
-This guide helps you migrate to the new harness-agnostic architecture.
+This guide helps you migrate to the current jinn architecture.
 
 ## What's New
 
-The new architecture:
+The current architecture:
 
-- Works across 24+ AI tools (not just OpenCode)
+- Works across the supported AI tools in this repository
 - Uses template-based generation
-- Has a unified command interface
-- Supports profiles (core, extended)
+- Separates reusable skills from native agent files
+- Supports profiles (`core`, `extended`)
 
 ## Migration Steps
 
@@ -24,12 +24,11 @@ Old way:
 npm install ghostwire
 ```
 
-New way:
+Current way:
 
 ```bash
-# Clone and use CLI directly
-git clone https://github.com/your-repo/ghostwire.git
-cd ghostwire
+# Install jinn
+npm install -g @hackefeller/jinn
 ```
 
 ### 2. Initialize New Project
@@ -38,44 +37,32 @@ cd ghostwire
 # Navigate to your project
 cd your-project
 
-# Initialize ghostwire
-bun run /path/to/ghostwire/src/cli/ghostwire/index.ts init --yes
+# Initialize jinn
+jinn init --yes
 ```
 
 This creates:
 
-- `.ghostwire/config.yaml` - Configuration file
-- Tool-specific directories with commands
-- Skills and agents
+- `.jinn/config.yaml` - Configuration file
+- Tool-specific skill directories
+- Native agent files for tools that support them
 
 ### 3. Update AI Tool Configuration
 
 Each AI tool has its own configuration directory:
 
-| Tool           | Directory    |
-| -------------- | ------------ |
-| OpenCode       | `.opencode/` |
-| Cursor         | `.cursor/`   |
-| Claude         | `.claude/`   |
-| GitHub Copilot | `.github/`   |
+| Tool           | Directory                |
+| -------------- | ------------------------ |
+| OpenCode       | `.opencode/`             |
+| Cursor         | `.cursor/`               |
+| Claude Code    | `.claude/`               |
+| GitHub Copilot | `.github/`               |
+| OpenAI Codex   | `.agents/` and `.codex/` |
+| Gemini         | `.gemini/`               |
 
-### 4. Update Commands
+### 4. Update Workflow Entry Points
 
-Old format:
-
-```
-# Old command
-/do something
-```
-
-New format:
-
-```
-/ghostwire:propose
-/ghostwire:explore
-/ghostwire:apply
-/ghostwire:archive
-```
+Move from ad hoc tool-specific prompts to the generated jinn skills and native agents for planning, exploration, execution, and review.
 
 ### 5. Update Configuration
 
@@ -83,9 +70,8 @@ Old config (if any):
 
 ```yaml
 # Old config format
-commands:
-  - propose
-  - apply
+tools:
+  - opencode
 ```
 
 New config:
@@ -100,71 +86,56 @@ profile: core
 delivery: both
 ```
 
-## Command Mapping
-
-| Old         | New                        |
-| ----------- | -------------------------- |
-| `/do`       | `/ghostwire:apply`         |
-| `/plan`     | `/ghostwire:propose`       |
-| `/review`   | `/ghostwire:code:review`   |
-| `/refactor` | `/ghostwire:code:refactor` |
-
 ## Profiles
 
 ### Core Profile
 
-Essential commands:
+Essential skills and agents:
 
-- Workflow: propose, explore, apply, archive
-- Code: format, refactor, review, optimize
-- Git: smart-commit, branch, cleanup, merge
+- Workflow skills: propose, explore, apply, archive, review
+- Domain skills: git, frontend-design, code-quality, docs, build, deploy
+- Native agents: plan, do, review, architect, designer, git, search
 
 ### Extended Profile
 
-All commands plus:
-
-- Docs commands
-- Project commands
-- Utility commands
-- Work commands
+Extended profile adds the broader skill and agent set used across the repository.
 
 ## Updating
 
 To update generated files:
 
 ```bash
-bun run /path/to/ghostwire/src/cli/ghostwire/index.ts update
+jinn update
 ```
 
 ## Troubleshooting
 
 ### Commands not found
 
-1. Run init: `ghostwire init --yes`
-2. Check config: `ghostwire config show`
-3. Update: `ghostwire update --force`
+1. Run init: `jinn init --yes`
+2. Check config: `jinn config show`
+3. Update: `jinn update --force`
 
 ### Tool not supported
 
 Check supported tools:
 
 ```bash
-ghostwire detect
+jinn detect
 ```
 
 ## Rollback
 
-To remove ghostwire:
+To remove jinn-managed output:
 
 ```bash
-rm -rf .ghostwire
-rm -rf .opencode .cursor .claude .github
+rm -rf .jinn .opencode .claude .github .gemini .cursor .agents .codex
 ```
 
 ## Support
 
 For issues, check:
 
-- `ghostwire config show` - View config
-- `ghostwire detect` - Check tools
-- `ghostwire update --force` - Regenerate files
+- `jinn config show` - View config
+- `jinn detect` - Check tools
+- `jinn update --force` - Regenerate files

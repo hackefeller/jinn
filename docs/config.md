@@ -53,37 +53,34 @@ tools:
 Which template profile to use.
 
 ```yaml
-profile: core    # Core commands and agents
+profile: core      # Core skills and agents
 # or
-profile: extended # All commands and agents
+profile: extended  # Full skills and agents
 ```
 
 #### Profiles
 
-| Profile    | Description                   |
-| ---------- | ----------------------------- |
-| `core`     | Essential commands and agents |
-| `extended` | Full command and agent set    |
+| Profile    | Description                  |
+| ---------- | ---------------------------- |
+| `core`     | Essential skills and agents  |
+| `extended` | Full skills and agent set    |
 
 ### delivery
 
 What types of content to generate.
 
 ```yaml
-delivery: both    # Commands and skills
-# or
-delivery: commands  # Only commands
+delivery: both      # Skills + native agents where supported
 # or
 delivery: skills    # Only skills
 ```
 
 #### Delivery Modes
 
-| Mode       | Description                  |
-| ---------- | ---------------------------- |
-| `both`     | Generate commands and skills |
-| `commands` | Only generate commands       |
-| `skills`   | Only generate skills         |
+| Mode       | Description                                         |
+| ---------- | --------------------------------------------------- |
+| `both`     | Generate skills and native agents where supported   |
+| `skills`   | Only generate skills                                |
 
 ## Examples
 
@@ -156,5 +153,5 @@ The configuration is validated using Zod schemas:
 
 - Tool IDs must be from the supported list
 - Profile must be `core` or `extended`
-- Delivery must be `commands`, `skills`, or `both`
+- Delivery must be `skills` or `both`
 - Version must be a valid semver string

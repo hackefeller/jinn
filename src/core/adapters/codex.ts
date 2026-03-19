@@ -3,8 +3,8 @@
  *
  * Formats skills and agents for OpenAI Codex.
  *
- * Directory conventions (open agent skills standard + Codex-native):
- * - Skills:         .agents/skills/<name>/SKILL.md
+ * Directory conventions (Codex-native):
+ * - Skills:         .codex/skills/<name>/SKILL.md
  * - Agents:         .codex/agents/<name>.toml  (TOML config file)
  *
  * Agent TOML fields (https://developers.openai.com/codex/subagents):
@@ -43,14 +43,14 @@ function toTomlMultilineString(value: string): string {
 export const codexAdapter: ToolCommandAdapter = {
   toolId: "codex",
   toolName: "OpenAI Codex",
-  skillsDir: ".agents",
+  skillsDir: ".codex",
 
   getAgentPath(agentName: string): string {
     return path.join(".codex", "agents", `${agentName}.toml`);
   },
 
   getSkillPath(skillName: string): string {
-    return path.join(".agents", "skills", skillName, "SKILL.md");
+    return path.join(".codex", "skills", skillName, "SKILL.md");
   },
 
   formatAgent(template: AgentTemplate, version: string): string {
@@ -74,7 +74,7 @@ export const codexAdapter: ToolCommandAdapter = {
       for (const skill of template.availableSkills) {
         lines.push("");
         lines.push(`[[skills.config]]`);
-        lines.push(`path = ${escapeTomlString(path.join(".agents", "skills", skill, "SKILL.md"))}`);
+        lines.push(`path = ${escapeTomlString(path.join(".codex", "skills", skill, "SKILL.md"))}`);
       }
     }
 

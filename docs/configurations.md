@@ -1,5 +1,10 @@
 # Ghostwire Configuration
 
+This document is historical Ghostwire/OpenCode runtime configuration reference material.
+It is not the configuration reference for jinn itself.
+
+For jinn project configuration, use [config.md](./config.md).
+
 Highly opinionated, but adjustable to taste.
 
 ## Quick Start
@@ -137,17 +142,19 @@ If you encounter `JSON Parse error: Unexpected EOF`:
 1. **Verify `stream: false` is set** in your agent configuration
 2. **Check Ollama is running**: `curl http://localhost:11434/api/tags`
 3. **Test with curl**:
+
    ```bash
    curl -s http://localhost:11434/api/chat \
      -d '{"model": "qwen3-coder", "messages": [{"role": "user", "content": "Hello"}], "stream": false}'
    ```
+
 4. **Inspect transport shape**: confirm response is a single JSON object (not NDJSON chunks)
 
 ### Future SDK Fix
 
 The proper long-term fix requires Claude Code SDK to parse NDJSON responses correctly. Until then, use `stream: false` as a workaround.
 
-**Tracking**: https://github.com/hackefeller/ghostwire/issues/1124
+**Tracking**: [hackefeller/ghostwire#1124](https://github.com/hackefeller/ghostwire/issues/1124)
 
 ## Agents
 
@@ -171,15 +178,15 @@ Each agent supports: `model`, `temperature`, `top_p`, `prompt`, `prompt_append`,
 
 ### Additional Agent Options
 
-| Option            | Type   | Description                                                                                            |
-| ----------------- | ------ | ------------------------------------------------------------------------------------------------------ |
-| `category`        | string | Category name to inherit model and other settings from category defaults                               |
-| `variant`         | string | Model variant (e.g., `max`, `high`, `medium`, `low`, `xhigh`)                                          |
-| `maxTokens`       | number | Maximum tokens for response. Passed directly to OpenCode SDK.                                          |
-| `thinking`        | object | Extended thinking configuration for Anthropic models. See [Thinking Options](#thinking-options) below. |
-| `reasoningEffort` | string | OpenAI reasoning effort level. Values: `low`, `medium`, `high`, `xhigh`.                               |
-| `textVerbosity`   | string | Text verbosity level. Values: `low`, `medium`, `high`.                                                 |
-| `providerOptions` | object | Provider-specific options passed directly to OpenCode SDK.                                             |
+| Option | Type | Description |
+| --- | --- | --- |
+| `category` | string | Category name to inherit model and other settings from category defaults |
+| `variant` | string | Model variant (e.g., `max`, `high`, `medium`, `low`, `xhigh`) |
+| `maxTokens` | number | Maximum tokens for response. Passed directly to OpenCode SDK. |
+| `thinking` | object | Extended thinking configuration for Anthropic models. See [Thinking Options](#thinking-options-anthropic) below. |
+| `reasoningEffort` | string | OpenAI reasoning effort level. Values: `low`, `medium`, `high`, `xhigh`. |
+| `textVerbosity` | string | Text verbosity level. Values: `low`, `medium`, `high`. |
+| `providerOptions` | object | Provider-specific options passed directly to OpenCode SDK. |
 
 #### Thinking Options (Anthropic)
 
@@ -370,7 +377,7 @@ Define custom skills directly in your config:
 | `metadata`      | -       | Additional metadata as key-value pairs      |
 | `allowed-tools` | -       | Array of tools this skill is allowed to use |
 
-**Example: Custom skill**
+#### Example: Custom skill
 
 ```json
 {
@@ -502,7 +509,7 @@ opencode --port 4096
 # Now background agents will appear in separate panes
 ```
 
-**Recommended: Shell Function**
+#### Recommended: Shell Function
 
 For convenience, create a shell function that automatically handles tmux sessions and port allocation. Here's an example for Fish shell:
 
@@ -761,7 +768,7 @@ All 7 categories come with optimal model defaults, but **you must configure them
 
 **Categories DO NOT use their built-in defaults unless configured.** Model resolution follows this priority:
 
-```
+```text
 1. User-configured model (in ghostwire.json)
 2. Category's built-in default (if you add category to config)
 3. System default model (from opencode.json)
@@ -872,7 +879,7 @@ At runtime, Ghostwire uses a 3-step resolution process to determine which model 
 
 ### Resolution Flow
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                     MODEL RESOLUTION FLOW                        │
 ├─────────────────────────────────────────────────────────────────┤

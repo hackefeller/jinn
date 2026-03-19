@@ -44,6 +44,15 @@ const testAgentTemplate: AgentTemplate = {
   availableSkills: ["jinn-git-master", "jinn-frontend-design"],
 };
 
+const nativeAgentSupport: Record<string, boolean> = {
+  opencode: true,
+  claude: true,
+  codex: true,
+  "github-copilot": true,
+  gemini: true,
+  cursor: false,
+};
+
 describe("Adapter Registry", () => {
   it("has all 6 adapters", () => {
     expect(allAdapters).toHaveLength(6);
@@ -53,6 +62,19 @@ describe("Adapter Registry", () => {
     const toolIds = allAdapters.map((a) => a.toolId);
     const uniqueIds = new Set(toolIds);
     expect(uniqueIds.size).toBe(6);
+  });
+
+  it("native agent support is explicit and consistent", () => {
+    for (const adapter of allAdapters) {
+      const supportsAgents = Boolean(adapter.getAgentPath && adapter.formatAgent);
+      expect(supportsAgents).toBe(nativeAgentSupport[adapter.toolId]);
+    }
+  });
+
+  it("never exposes only one half of native agent support", () => {
+    for (const adapter of allAdapters) {
+      expect(Boolean(adapter.getAgentPath)).toBe(Boolean(adapter.formatAgent));
+    }
   });
 });
 
@@ -84,10 +106,10 @@ describe("OpenCode Adapter", () => {
     expect(frontmatter).toContain("Pre-implementation planning agent");
   });
 
-  it("maps availableSkills to ## Related skills in body", () => {
+  it("maps availableSkills to ## Available skills in body", () => {
     const result = opencodeAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     const body = result.split("---")[2];
-    expect(body).toContain("## Related skills");
+    expect(body).toContain("## Available skills");
     expect(body).toContain("- jinn-git-master");
     expect(body).toContain("- jinn-frontend-design");
   });
@@ -99,7 +121,7 @@ describe("OpenCode Adapter", () => {
     );
     const body = result.split("---")[2];
     expect(body).not.toContain("## Available commands");
-    expect(body).not.toContain("## Related skills");
+    expect(body).not.toContain("## Available skills");
   });
 });
 
@@ -237,11 +259,11 @@ describe("Claude formatAgent", () => {
     expect(frontmatter).toContain("jinn-frontend-design");
   });
 
-  it("does not add ## Related skills section to agent body", () => {
+  it("does not add ## Available skills section to agent body", () => {
     // skills are preloaded via skills: frontmatter; a body section is redundant
     const result = claudeAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     const body = result.split("---")[2];
-    expect(body).not.toContain("## Related skills");
+    expect(body).not.toContain("## Available skills");
   });
 
   it("omits skills: frontmatter when availableSkills is empty", () => {
@@ -304,8 +326,8 @@ describe("Codex formatAgent", () => {
   it("maps availableSkills to [[skills.config]] entries", () => {
     const result = codexAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     expect(result).toContain("[[skills.config]]");
-    expect(result).toContain(".agents/skills/jinn-git-master/SKILL.md");
-    expect(result).toContain(".agents/skills/jinn-frontend-design/SKILL.md");
+    expect(result).toContain(".codex/skills/jinn-git-master/SKILL.md");
+    expect(result).toContain(".codex/skills/jinn-frontend-design/SKILL.md");
   });
 
   it("omits [[skills.config]] when availableSkills is empty", () => {
@@ -318,9 +340,9 @@ describe("Codex formatAgent", () => {
 });
 
 describe("Codex formatSkill", () => {
-  it("uses .agents/skills/<name>/SKILL.md path", () => {
+  it("uses .codex/skills/<name>/SKILL.md path", () => {
     expect(codexAdapter.getSkillPath("jinn-git-master")).toBe(
-      ".agents/skills/jinn-git-master/SKILL.md",
+      ".codex/skills/jinn-git-master/SKILL.md",
     );
   });
 
@@ -353,20 +375,20 @@ describe("GitHub Copilot formatAgent", () => {
     expect(frontmatter).toContain("description:");
   });
 
-  it("maps availableSkills to ## Related skills in body", () => {
+  it("maps availableSkills to ## Available skills in body", () => {
     const result = githubCopilotAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     const body = result.split("---")[2];
-    expect(body).toContain("## Related skills");
+    expect(body).toContain("## Available skills");
     expect(body).toContain("- jinn-git-master");
     expect(body).toContain("- jinn-frontend-design");
   });
 
-  it("omits ## Related skills when availableSkills is empty", () => {
+  it("omits ## Available skills when availableSkills is empty", () => {
     const result = githubCopilotAdapter.formatAgent!(
       { ...testAgentTemplate, availableSkills: [] },
       "1.0.0",
     );
     const body = result.split("---")[2];
-    expect(body).not.toContain("## Related skills");
+    expect(body).not.toContain("## Available skills");
   });
 });

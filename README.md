@@ -1,8 +1,8 @@
 # Jinn
 
-**Harness-agnostic AI agent distribution for any coding assistant.**
+**Harness-agnostic AI workflow distribution for any coding assistant.**
 
-Jinn is a CLI that generates agents, skills, and commands for 6 AI coding tools from a single source of truth. Run `jinn init` once and get a complete AI workflow suite installed across every tool in your project — OpenCode, Cursor, Claude Code, GitHub Copilot, Codex, and Gemini.
+Jinn is a CLI that generates skills and native agents for 6 AI coding tools from a single source of truth. Run `jinn init` once and get a complete AI workflow suite installed across every tool in your project — OpenCode, Cursor, Claude Code, GitHub Copilot, Codex, and Gemini.
 
 You write the templates once. Jinn makes them work everywhere.
 
@@ -57,23 +57,22 @@ Initialize jinn in a project. Detects installed tools, writes `.jinn/config.yaml
 ```bash
 jinn init [options]
 
-  -t, --tools <tools>      Tool IDs to configure: opencode, claude, cursor, "all"
+  -t, --tools <tools>      Tool IDs to configure: opencode, claude, codex, github-copilot, gemini, cursor, "all"
                            (default: all detected)
   -p, --profile <profile>  Profile: core | extended  (default: core)
-  -d, --delivery <mode>    What to generate: skills | commands | both  (default: both)
+  -d, --delivery <mode>    What to generate: skills | both  (default: both)
   -y, --yes                Use all detected tools without prompting
       --path <path>        Project path (default: current directory)
 ```
 
 **Delivery modes:**
 
-| Mode             | Commands | Skills | Agents |
-| ---------------- | -------- | ------ | ------ |
-| `both` (default) | Yes      | Yes    | Yes    |
-| `commands`       | Yes      | No     | Yes    |
-| `skills`         | No       | Yes    | No     |
+| Mode             | Skills | Native Agents |
+| ---------------- | ------ | ------------- |
+| `both` (default) | Yes    | Yes           |
+| `skills`         | Yes    | No            |
 
-Agents live alongside commands unless you explicitly choose `skills`-only mode. Because agents are enhanced command wrappers, not a separate feature — you almost always want them.
+When you choose `both`, jinn generates skills for every configured tool and native agents only for tools that support them. Skills-only tools such as Cursor still receive the full skill set.
 
 ### `jinn update`
 
@@ -126,7 +125,7 @@ jinn vault compile [options]
 
 **Vault structure:**
 
-```
+```text
 ~/.codex/skills/
   my-secret-weapon/
     SKILL.md              # YAML frontmatter + markdown body
@@ -160,8 +159,8 @@ metadata:
 | ----------- | ---------------------------- | -------------------------------------- |
 | `version`   | `"1.0.0"`                    | Config schema version                  |
 | `tools`     | 6 tool IDs                   | Which AI tools to generate files for   |
-| `profile`   | `core`, `extended`           | Which command set to install           |
-| `delivery`  | `skills`, `commands`, `both` | What to generate                       |
+| `profile`   | `core`, `extended`           | Which workflow set to install          |
+| `delivery`  | `skills`, `both`             | What to generate                       |
 | `vaultPath` | path string                  | Path to your personal vault (optional) |
 
 ---
@@ -170,24 +169,24 @@ metadata:
 
 Jinn generates files for 6 AI coding tools:
 
-| Tool           | ID               | Directory   | Notes                                                        |
-| -------------- | ---------------- | ----------- | ------------------------------------------------------------ |
-| OpenCode       | `opencode`       | `.opencode/` |                                                             |
-| Claude Code    | `claude`         | `.claude/`  | Native agent format, `skills:` YAML, `## Available commands` |
-| OpenAI Codex   | `codex`          | `.agents/`  | TOML agent format, `[[skills.config]]`                       |
-| GitHub Copilot | `github-copilot` | `.github/`  | `.prompt.md` extension, `.agent.md` format                   |
-| Google Gemini  | `gemini`         | `.gemini/`  |                                                              |
-| Cursor         | `cursor`         | `.cursor/`  | YAML frontmatter, skills only                                |
+| Tool           | ID               | Directory    | Notes                                                 |
+| -------------- | ---------------- | ------------ | ----------------------------------------------------- |
+| OpenCode       | `opencode`       | `.opencode/` | Native agent files plus skills discovery manifest     |
+| Claude Code    | `claude`         | `.claude/`   | Native agent format with `skills:` preloading         |
+| OpenAI Codex   | `codex`          | `.agents/`   | TOML agent format with `[[skills.config]]` references |
+| GitHub Copilot | `github-copilot` | `.github/`   | `.agent.md` format, skill discovery via skill tool    |
+| Google Gemini  | `gemini`         | `.gemini/`   | Native agent files, skills discovered by description  |
+| Cursor         | `cursor`         | `.cursor/`   | Skills only                                           |
 
 ---
 
 ## What Gets Generated
 
-### Agents (10)
+### Agents
 
-Agents are autonomous task specialists. On Claude Code they become native subagents (`.claude/agents/*.md` with YAML frontmatter). On other tools they're installed as skills.
+Agents are autonomous task specialists. On tools with native agent support they are emitted as native agent files. On skills-only tools, jinn does not coerce agents into skills.
 
-**Orchestrators — coordinate the workflow**
+#### Orchestrators
 
 | Agent    | When to use                                                                       |
 | -------- | --------------------------------------------------------------------------------- |
@@ -195,7 +194,7 @@ Agents are autonomous task specialists. On Claude Code they become native subage
 | `do`     | Execution: work through a plan step by step, delegate to specialists              |
 | `review` | Quality gate: correctness, security, performance, and code quality review         |
 
-**Specialists — domain experts**
+#### Specialists
 
 | Agent       | When to use                                                               |
 | ----------- | ------------------------------------------------------------------------- |
@@ -203,7 +202,7 @@ Agents are autonomous task specialists. On Claude Code they become native subage
 | `designer`  | Frontend: UI components, design implementation, user flow mapping         |
 | `git`       | Advanced git: branch strategy, commit hygiene, conflict resolution        |
 
-**Researchers — fast, read-only information gathering**
+#### Researchers
 
 | Agent              | When to use                                                     |
 | ------------------ | --------------------------------------------------------------- |
@@ -212,90 +211,17 @@ Agents are autonomous task specialists. On Claude Code they become native subage
 | `search-history`   | Analyze git history to understand why code changed over time    |
 | `search-learnings` | Surface past solutions and documented lessons from the project  |
 
-### Skills (7)
+### Skills
 
-**Workflow skills**
+Jinn installs a broader skill catalog that covers:
 
-| Skill     | Description                                                                   |
-| --------- | ----------------------------------------------------------------------------- |
-| `propose` | Create a Linear project and seed it with issues and sub-issues via Linear MCP |
-| `explore` | Explore tradeoffs using Linear project and issue context via Linear MCP       |
-| `apply`   | Execute implementation work from Linear sub-issues via Linear MCP             |
-| `archive` | Close out completed Linear projects and issues via Linear MCP                 |
-| `ready`   | Pre-deployment checklist: code quality, security, testing, documentation      |
+- workflow execution and project-state handling (`propose`, `explore`, `apply`, `archive`, `review`, `check`, `sync`, `triage`, `unblock`, `ready-for-prod`)
+- engineering support (`git-master`, `frontend-design`, `code-quality`, `docs-workflow`, `dev-environment`)
+- project lifecycle work (`project-init`, `build`, `deploy`, `conventions`, `map-codebase`)
 
-**Domain skills**
+### Workflow Entry Points
 
-| Skill             | Description                                                                       |
-| ----------------- | --------------------------------------------------------------------------------- |
-| `git`             | Advanced git workflows: branching, commit hygiene, conflict resolution            |
-| `frontend-design` | Frontend best practices: component architecture, accessibility, responsive design |
-
-### Commands (32)
-
-Commands are slash-command prompts your AI tool executes on demand.
-
-**Workflow**
-
-```
-/propose              Create a Linear project with seeded issues
-/explore              Think through tradeoffs with Linear context
-/apply                Execute from Linear sub-issues
-/archive              Close out completed Linear work
-/workflows:plan       Create a detailed work plan
-/workflows:execute     Execute a work plan
-/workflows:review      Review completed work
-/workflows:status      Check current workflow status
-/workflows:stop        Stop the current workflow
-/workflows:complete    Mark work as complete
-/workflows:create      Create a new workflow
-/workflows:brainstorm  Brainstorm ideas and approaches
-/workflows:learnings   Document lessons learned
-```
-
-**Code**
-
-```
-/code:format          Format code consistently
-/code:refactor        Refactor for readability and maintainability
-/code:review           Review code for correctness, security, and quality
-/code:optimize         Optimize for performance
-```
-
-**Git**
-
-```
-/git:smart-commit     Craft a well-structured commit message
-/git:branch           Create and manage branches
-/git:cleanup          Clean up stale branches and history
-/git:merge            Merge with conflict resolution guidance
-```
-
-**Documentation**
-
-```
-/docs:deploy          Generate deployment documentation
-/docs:feature-video   Create feature demo scripts
-/docs:release         Write release notes
-/docs:test-browser    Document browser testing steps
-```
-
-**Project**
-
-```
-/project:build        Run and troubleshoot the build
-/project:deploy       Deploy the project
-/project:constitution Define project rules and conventions
-/project:init        Initialize a new project
-/project:map          Map the project structure and architecture
-```
-
-**Utility**
-
-```
-/util:clean           Clean build artifacts and temp files
-/util:doctor          Diagnose project configuration issues
-```
+Workflow entrypoints such as `/propose`, `/explore`, `/apply`, and `/archive` are delivered through skills and native agents in the current architecture rather than as a separate generated command layer.
 
 ---
 
@@ -303,17 +229,16 @@ Commands are slash-command prompts your AI tool executes on demand.
 
 Jinn uses a **generator-adapter pattern**. Three moving parts:
 
-1. **Templates** — Tool-agnostic definitions of agents, skills, and commands
+1. **Templates** — Tool-agnostic definitions of agents and skills
 2. **Adapters** — Per-tool translators that know where files go and how to format them
 3. **Generator** — Reads your config, runs templates through adapters, writes files
 
-```
+```text
 .jinn/config.yaml
   └── Generator
         ├── For each configured tool
-        │     ├── Adapter formats commands → .opencode/commands/
         │     ├── Adapter formats skills  → .claude/skills/
-        │     └── Adapter formats agents   → .claude/agents/ (on capable tools)
+  │     └── Adapter formats agents  → .claude/agents/ (on capable tools)
 ```
 
 Every AI tool gets its own adapter. Adding a new tool means writing one file:

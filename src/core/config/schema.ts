@@ -18,7 +18,7 @@ export type Profile = z.infer<typeof ProfileSchema>;
 /**
  * Delivery mode: what gets installed
  * - skills: Skills only
- * - both: Skills and agents
+ * - both: Skills plus native agents where the selected tool supports them
  *
  * @deprecated 'commands' — removed in favour of skill-first delivery.
  */
@@ -27,7 +27,7 @@ export type Delivery = z.infer<typeof DeliverySchema>;
 
 /**
  * Supported AI tool identifiers
- * This list covers 25 popular AI coding assistants
+ * This list covers the AI coding tools currently supported by jinn
  */
 export const ToolIdSchema = z.enum([
   "opencode",

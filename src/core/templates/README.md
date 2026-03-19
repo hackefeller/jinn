@@ -6,7 +6,7 @@ Type definitions and registry for jinn templates.
 
 ### SkillTemplate
 
-Defines an agent skill with instructions and metadata.
+Defines a reusable skill with instructions and metadata.
 
 ### CommandTemplate
 
@@ -14,7 +14,7 @@ Defines a slash command with content and metadata.
 
 ### AgentTemplate
 
-Extends SkillTemplate for AI personas with additional capabilities.
+Extends SkillTemplate for native agent personas with additional execution metadata.
 
 ## Registry
 

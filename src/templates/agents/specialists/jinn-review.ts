@@ -1,15 +1,8 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-
 import type { AgentTemplate } from "../../../core/templates/types.js";
 import { SKILL_NAMES } from "../../constants.js";
+import { createTemplateReferenceReader } from "../reference-loader.js";
 
-const REVIEW_REFERENCE_DIR = dirname(fileURLToPath(import.meta.url));
-
-function readReviewReference(filename: string): string {
-  return readFileSync(join(REVIEW_REFERENCE_DIR, "../refs/common", filename), "utf-8");
-}
+const readReviewReference = createTemplateReferenceReader(import.meta.url, "../refs/common");
 
 export function getReviewAgentTemplate(): AgentTemplate {
   return {
@@ -21,7 +14,7 @@ export function getReviewAgentTemplate(): AgentTemplate {
     metadata: {
       author: "jinn",
       version: "1.0",
-      category: "Orchestration",
+      category: "Reviewer",
       tags: ["review", "quality", "security"],
     },
     instructions: `# Jinn Review Agent
@@ -39,7 +32,7 @@ Invoke \`jinn-review\` for the review protocol, findings format, and the approve
 `,
     capabilities: ["Code review", "Security analysis", "Performance review", "Quality assessment"],
     availableSkills: [SKILL_NAMES.JINN_REVIEW, SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.JINN_SYNC, SKILL_NAMES.GIT_MASTER],
-    role: "Orchestration",
+    role: "Reviewer",
     route: "review",
     defaultTools: ["read", "search"],
     acceptanceChecks: [

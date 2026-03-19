@@ -11,7 +11,7 @@ jinn export --target <copilot|codex|all> [--groups <csv>] [--strict] [--force] [
 ## Targets
 
 - `copilot`: emits GitHub Copilot customization artifacts.
-- `codex`: emits `AGENTS.md` plus canonical `.agents/skills/*/SKILL.md` artifacts.
+- `codex`: emits Codex-native `.codex/skills/*/SKILL.md` and `.codex/agents/*.toml` artifacts.
 - `all`: emits both target outputs.
 
 ## Copilot Artifact Topology
@@ -29,17 +29,16 @@ jinn export --target <copilot|codex|all> [--groups <csv>] [--strict] [--force] [
 
 `jinn export --target codex` emits:
 
-- `AGENTS.md`
-- `.agents/skills/*/SKILL.md`
+- `.codex/skills/*/SKILL.md`
+- `.codex/agents/*.toml`
 
-Codex commands and agents are cataloged in `AGENTS.md`.
-Jinn does not emit `.agents/commands` or `.agents/agents`, because `.agents/skills` is the only canonical filesystem discovery surface in this repo's Codex model.
+Codex skills are emitted into `.codex/skills` and native agents are emitted into `.codex/agents`.
 
 ## Runtime Parity Semantics
 
 Codex skill export is aligned to runtime skill resolution semantics:
 
-- canonical scoped discovery rooted at `.agents/skills`
+- canonical scoped discovery rooted at `.codex/skills`
 - deterministic first-wins collision handling
 - built-in skills merged as fallback after scoped resolution
 

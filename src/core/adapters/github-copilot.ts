@@ -18,7 +18,7 @@
  * Agent body:
  * - Markdown instructions (system prompt)
  * - ## Available commands  (informational; no YAML field exists)
- * - ## Related skills     (informational; Copilot discovers skills via the skill tool)
+ * - ## Available skills    (informational; Copilot discovers skills via the skill tool)
  *
  * Skills are NOT preloaded in Copilot agents — they are discovered and invoked
  * via the native skill tool based on description matching. There is no skills:
@@ -58,7 +58,7 @@ export const githubCopilotAdapter: ToolCommandAdapter = {
 
     if (template.availableSkills && template.availableSkills.length > 0) {
       bodySections.push(
-        `## Related skills\n\n${template.availableSkills.map((s) => `- ${s}`).join("\n")}`,
+        `## Available skills\n\n${template.availableSkills.map((s) => `- ${s}`).join("\n")}`,
       );
     }
 

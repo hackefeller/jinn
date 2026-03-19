@@ -37,7 +37,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     id: "codex",
     name: "OpenAI Codex",
-    skillsDir: ".agents",
+    skillsDir: ".codex",
     available: true,
     successLabel: "OpenAI Codex",
     notes: "OpenAI CLI tool with native TOML agent format",

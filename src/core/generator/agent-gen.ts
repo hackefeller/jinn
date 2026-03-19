@@ -2,7 +2,8 @@
  * Agent generator
  *
  * Generates agent files for all configured tools.
- * Agents are special skills with additional metadata.
+ * Agents are distinct templates and are only emitted for tools with native
+ * agent support.
  */
 
 import * as path from "path";
@@ -15,14 +16,13 @@ export function generateAgentForTool(
   adapter: ToolCommandAdapter,
   version: string,
 ): GeneratedFile[] {
-  const filePath = adapter.getAgentPath
-    ? adapter.getAgentPath(template.name)
-    : adapter.getSkillPath(template.name);
-  const fileDirectory = path.dirname(filePath);
+  if (!adapter.getAgentPath || !adapter.formatAgent) {
+    return [];
+  }
 
-  const fileContent = adapter.formatAgent
-    ? adapter.formatAgent(template, version)
-    : adapter.formatSkill(template, version);
+  const filePath = adapter.getAgentPath(template.name);
+  const fileDirectory = path.dirname(filePath);
+  const fileContent = adapter.formatAgent(template, version);
 
   const files: GeneratedFile[] = [
     {

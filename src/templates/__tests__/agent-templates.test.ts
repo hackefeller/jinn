@@ -30,7 +30,13 @@ describe("agent templates", () => {
   it("do not duplicate capability sections in instructions (added by formatAgent)", () => {
     for (const template of templates) {
       expect(template.instructions).not.toContain("## Available commands");
-      expect(template.instructions).not.toContain("## Related skills");
+      expect(template.instructions).not.toContain("## Available skills");
     }
+  });
+
+  it("keeps review agent classified separately from orchestrators", () => {
+    const review = getReviewAgentTemplate();
+    expect(review.metadata?.category).toBe("Reviewer");
+    expect(review.role).toBe("Reviewer");
   });
 });

@@ -1,4 +1,4 @@
-# Ghostwire Constitution
+# Jinn Constitution
 
 **Version**: 1.0.0 | **Ratified**: 2026-02-23
 
@@ -69,11 +69,11 @@ Text I/O ensures debuggability.
 
 ## Development Workflow
 
-1. Create feature spec with /ghostwire:spec:create
-2. Plan implementation with /ghostwire:spec:plan
-3. Generate tasks with /ghostwire:spec:tasks
-4. Implement with /ghostwire:spec:implement
-5. Validate with /ghostwire:spec:analyze
+1. Clarify the goal and constraints before implementation
+2. Create or update the relevant skills, agents, or templates
+3. Implement with tests
+4. Validate the generated output for supported tools
+5. Update documentation when behavior or public guidance changes
 
 ---
 

@@ -4,7 +4,7 @@ Core infrastructure for harness-agnostic architecture.
 
 ## Directory Structure
 
-- **adapters/** - Tool-specific format adapters for 24 AI tools
+- **adapters/** - Tool-specific format adapters for the supported AI tools
 - **config/** - Configuration management (loading, validation, defaults)
 - **discovery/** - Tool detection and registry
 - **generator/** - File generation orchestration

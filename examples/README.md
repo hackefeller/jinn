@@ -8,7 +8,7 @@ This directory contains example jinn configurations.
 
 - Single tool (OpenCode)
 - Core profile
-- Basic commands
+- Basic skills
 
 ### 2. Multi-Tool (`multi-tool/`)
 
@@ -18,8 +18,8 @@ This directory contains example jinn configurations.
 
 ### 3. Commands Only (`commands-only/`)
 
-- Commands only, no skills
-- Lightweight setup
+- Historical skills-only example
+- Lightweight setup without native agents
 
 ## Usage
 

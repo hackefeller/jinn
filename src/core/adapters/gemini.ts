@@ -23,7 +23,7 @@ import type { ToolCommandAdapter } from "./types.js";
 import type { AgentTemplate, SkillTemplate } from "../templates/types.js";
 
 function escapeYamlValue(value: string): string {
-  const needsQuoting = /[:\n\r#{}\[\],&*!|>'"%@`]|^\s|\s$/.test(value);
+  const needsQuoting = /[:\n\r#{}[\],&*!|>'"%@`]|^\s|\s$/.test(value);
   if (needsQuoting) {
     const escaped = value.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n");
     return `"${escaped}"`;
@@ -44,12 +44,12 @@ export const geminiAdapter: ToolCommandAdapter = {
     return path.join(".gemini", "skills", skillName, "SKILL.md");
   },
 
-  formatAgent(template: AgentTemplate, version: string): string {
+  formatAgent(template: AgentTemplate, _version: string): string {
     const bodySections: string[] = [template.instructions];
 
     if (template.availableSkills && template.availableSkills.length > 0) {
       bodySections.push(
-        `## Related skills\n\n${template.availableSkills.map((s) => `- ${s}`).join("\n")}`,
+        `## Available skills\n\n${template.availableSkills.map((s) => `- ${s}`).join("\n")}`,
       );
     }
 
