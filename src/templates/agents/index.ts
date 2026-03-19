@@ -1,5 +1,5 @@
 import type { AgentTemplate } from '../../core/templates/types.js';
-import { COMMAND_IDS, prefixCommand, SKILL_NAMES } from '../constants.js';
+import { COMMAND_IDS, SKILL_NAMES } from '../constants.js';
 
 // ============================================================================
 // Orchestrators — top-level coordinators, call these first
@@ -42,13 +42,13 @@ A clear work plan with:
 - Risks and open questions
 `,
     capabilities: ['Intent analysis', 'Requirement discovery', 'Risk identification', 'Work breakdown', 'Task sequencing'],
-    availableCommands: [prefixCommand(COMMAND_IDS.JINN_PROPOSE), prefixCommand(COMMAND_IDS.JINN_EXPLORE)],
+    availableCommands: [COMMAND_IDS.JINN_PROPOSE, COMMAND_IDS.JINN_EXPLORE],
     availableSkills: [SKILL_NAMES.GIT_MASTER, SKILL_NAMES.FRONTEND_DESIGN, SKILL_NAMES.JINN_READY_FOR_PROD],
     role: 'Orchestration',
     route: 'plan',
     defaultTools: ['read', 'search'],
     acceptanceChecks: ['Intent is well understood', 'Requirements are explicit', 'Tasks are sequenced and concrete', 'Success criteria are defined'],
-    defaultCommand: prefixCommand(COMMAND_IDS.JINN_PROPOSE),
+    defaultCommand: COMMAND_IDS.JINN_PROPOSE,
   };
 }
 
@@ -79,13 +79,13 @@ You execute work plans and coordinate implementation. You work through tasks seq
 - An implementation reveals a design issue — surface it before continuing
 `,
     capabilities: ['Execution coordination', 'Task delegation', 'Progress tracking', 'Blocker identification'],
-    availableCommands: [prefixCommand(COMMAND_IDS.JINN_APPLY), prefixCommand(COMMAND_IDS.CODE_FORMAT), prefixCommand(COMMAND_IDS.GIT_SMART_COMMIT)],
+    availableCommands: [COMMAND_IDS.JINN_APPLY, COMMAND_IDS.CODE_FORMAT, COMMAND_IDS.GIT_SMART_COMMIT],
     availableSkills: [SKILL_NAMES.GIT_MASTER, SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.FRONTEND_DESIGN],
     role: 'Orchestration',
     route: 'do',
     defaultTools: ['edit', 'read', 'search', 'task'],
     acceptanceChecks: ['All tasks complete', 'Tests pass', 'Requirements met'],
-    defaultCommand: prefixCommand(COMMAND_IDS.JINN_APPLY),
+    defaultCommand: COMMAND_IDS.JINN_APPLY,
   };
 }
 
@@ -118,13 +118,13 @@ A structured review with:
 - Go / no-go recommendation
 `,
     capabilities: ['Code review', 'Security analysis', 'Performance review', 'Quality assessment'],
-    availableCommands: [prefixCommand(COMMAND_IDS.CODE_REVIEW)],
+    availableCommands: [COMMAND_IDS.CODE_REVIEW],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.GIT_MASTER],
     role: 'Orchestration',
     route: 'review',
     defaultTools: ['read', 'search'],
     acceptanceChecks: ['All dimensions reviewed', 'Issues are prioritized', 'Suggestions are actionable'],
-    defaultCommand: prefixCommand(COMMAND_IDS.CODE_REVIEW),
+    defaultCommand: COMMAND_IDS.CODE_REVIEW,
   };
 }
 
@@ -160,13 +160,13 @@ You review code architecture and design decisions, identify patterns and anti-pa
 - Structural improvement roadmap
 `,
     capabilities: ['Architecture review', 'Pattern recognition', 'Anti-pattern detection', 'Dependency analysis'],
-    availableCommands: [prefixCommand(COMMAND_IDS.CODE_REVIEW), prefixCommand(COMMAND_IDS.CODE_REFACTOR)],
+    availableCommands: [COMMAND_IDS.CODE_REVIEW, COMMAND_IDS.CODE_REFACTOR],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.GIT_MASTER],
     role: 'Specialist',
     route: 'do',
     defaultTools: ['read', 'search'],
     acceptanceChecks: ['Architecture assessed', 'Patterns identified', 'Recommendations are concrete'],
-    defaultCommand: prefixCommand(COMMAND_IDS.CODE_REVIEW),
+    defaultCommand: COMMAND_IDS.CODE_REVIEW,
   };
 }
 
@@ -208,13 +208,13 @@ You build production-grade frontend interfaces and verify implementation against
 - Performance-conscious (lazy loading, optimized assets)
 `,
     capabilities: ['UI implementation', 'Component architecture', 'User flow analysis', 'Design verification', 'Figma sync', 'Accessibility'],
-    availableCommands: [prefixCommand(COMMAND_IDS.CODE_FORMAT), prefixCommand(COMMAND_IDS.CODE_REFACTOR)],
+    availableCommands: [COMMAND_IDS.CODE_FORMAT, COMMAND_IDS.CODE_REFACTOR],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.GIT_MASTER],
     role: 'Specialist',
     route: 'do',
     defaultTools: ['edit', 'read', 'search'],
     acceptanceChecks: ['Design is production-ready', 'Implementation matches specs', 'Accessible', 'Responsive'],
-    defaultCommand: prefixCommand(COMMAND_IDS.CODE_FORMAT),
+    defaultCommand: COMMAND_IDS.CODE_FORMAT,
   };
 }
 
@@ -248,13 +248,13 @@ You handle advanced git workflows, branch strategy, commit organization, and con
 5. Regular integration — merge main into feature branches often
 `,
     capabilities: ['Branch strategy', 'Commit hygiene', 'Conflict resolution', 'History analysis', 'Cherry-picking'],
-    availableCommands: [prefixCommand(COMMAND_IDS.GIT_SMART_COMMIT), prefixCommand(COMMAND_IDS.GIT_BRANCH), prefixCommand(COMMAND_IDS.GIT_MERGE)],
+    availableCommands: [COMMAND_IDS.GIT_SMART_COMMIT, COMMAND_IDS.GIT_BRANCH, COMMAND_IDS.GIT_MERGE],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD],
     role: 'Specialist',
     route: 'do',
     defaultTools: ['read', 'search'],
     acceptanceChecks: ['Git operation completed safely', 'History is clean', 'Branch strategy is sound'],
-    defaultCommand: prefixCommand(COMMAND_IDS.GIT_SMART_COMMIT),
+    defaultCommand: COMMAND_IDS.GIT_SMART_COMMIT,
   };
 }
 
@@ -291,13 +291,13 @@ Always return:
 - Summary of what you found and why it's relevant
 `,
     capabilities: ['File search', 'Code location', 'Pattern finding', 'Architecture mapping'],
-    availableCommands: [prefixCommand(COMMAND_IDS.JINN_EXPLORE)],
+    availableCommands: [COMMAND_IDS.JINN_EXPLORE],
     availableSkills: [SKILL_NAMES.GIT_MASTER],
     role: 'Research',
     route: 'research',
     defaultTools: ['search', 'read'],
     acceptanceChecks: ['Code located accurately', 'Context provided', 'File paths and line numbers included'],
-    defaultCommand: prefixCommand(COMMAND_IDS.JINN_EXPLORE),
+    defaultCommand: COMMAND_IDS.JINN_EXPLORE,
   };
 }
 
@@ -338,13 +338,13 @@ You research external documentation, best practices, and industry standards to a
 - Recommendations based on findings
 `,
     capabilities: ['Documentation research', 'Best practice identification', 'API reference lookup', 'Standards research', 'Media analysis'],
-    availableCommands: [prefixCommand(COMMAND_IDS.JINN_EXPLORE), prefixCommand(COMMAND_IDS.JINN_PROPOSE)],
+    availableCommands: [COMMAND_IDS.JINN_EXPLORE, COMMAND_IDS.JINN_PROPOSE],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD],
     role: 'Research',
     route: 'research',
     defaultTools: ['web', 'search', 'read'],
     acceptanceChecks: ['Sources cited', 'Information is current', 'Findings are actionable'],
-    defaultCommand: prefixCommand(COMMAND_IDS.JINN_EXPLORE),
+    defaultCommand: COMMAND_IDS.JINN_EXPLORE,
   };
 }
 
@@ -386,13 +386,13 @@ Use git commands:
 - Any relevant patterns in the history
 `,
     capabilities: ['Git history analysis', 'Commit tracing', 'Change attribution', 'Context recovery'],
-    availableCommands: [prefixCommand(COMMAND_IDS.JINN_EXPLORE)],
+    availableCommands: [COMMAND_IDS.JINN_EXPLORE],
     availableSkills: [SKILL_NAMES.GIT_MASTER],
     role: 'Research',
     route: 'research',
     defaultTools: ['read', 'search'],
     acceptanceChecks: ['History analyzed thoroughly', 'Context is clear', 'Relevant commits identified'],
-    defaultCommand: prefixCommand(COMMAND_IDS.JINN_EXPLORE),
+    defaultCommand: COMMAND_IDS.JINN_EXPLORE,
   };
 }
 
@@ -432,13 +432,13 @@ You search institutional knowledge — past solutions, documented lessons, and a
 - Recommendations based on institutional knowledge
 `,
     capabilities: ['Knowledge search', 'Pattern identification', 'Past solution finding', 'Lesson retrieval'],
-    availableCommands: [prefixCommand(COMMAND_IDS.JINN_EXPLORE), prefixCommand(COMMAND_IDS.JINN_PROPOSE)],
+    availableCommands: [COMMAND_IDS.JINN_EXPLORE, COMMAND_IDS.JINN_PROPOSE],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.GIT_MASTER],
     role: 'Research',
     route: 'research',
     defaultTools: ['search', 'read'],
     acceptanceChecks: ['Relevant knowledge found', 'Past solutions surfaced', 'Lessons clearly articulated'],
-    defaultCommand: prefixCommand(COMMAND_IDS.JINN_EXPLORE),
+    defaultCommand: COMMAND_IDS.JINN_EXPLORE,
   };
 }
 
