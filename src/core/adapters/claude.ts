@@ -8,15 +8,33 @@
  * - Commands:       .claude/commands/jinn/<id>.md  (also creates /jinn-<id> slash command)
  * - Agents:         .claude/agents/<name>.md  (YAML frontmatter + markdown body)
  *
- * Agent frontmatter fields:
- * - name           display name (used in @ mentions)
- * - description    when/why to use this agent
- * - tools          explicit allowlist (e.g. Read, Grep, Glob, Bash)
- * - model          model override (default: sonnet)
- * - skills         YAML list of skills to preload at agent startup
+ * Agent frontmatter fields (https://code.claude.com/docs/en/sub-agents):
+ * - name             unique identifier (required)
+ * - description      when Claude should delegate (required)
+ * - tools            comma-separated allowlist; inherits all if omitted
+ * - disallowedTools  tools to deny; removed from inherited or specified list
+ * - model            sonnet | opus | haiku | <full-id> | inherit  (default: inherit)
+ * - permissionMode   default | acceptEdits | dontAsk | bypassPermissions | plan
+ * - maxTurns         max agentic turns before agent stops
+ * - skills           skill names to FULLY INJECT into agent context at startup
+ * - memory           user | project | local
+ * - background       true to always run as background task
+ * - mcpServers       MCP servers scoped to this agent
+ * - hooks            lifecycle hooks scoped to this agent
  *
- * Skills are referenced by their bare name (e.g. skills: [jinn-git-master]).
- * Claude Code resolves skill paths as .claude/skills/<name>/SKILL.md.
+ * IMPORTANT: skills listed in the `skills:` frontmatter have their full SKILL.md
+ * content injected at startup — they are preloaded, not just made available.
+ *
+ * Skill frontmatter fields (https://code.claude.com/docs/en/skills):
+ * - name                      display name
+ * - description               when to use; always in context
+ * - disable-model-invocation  true = only user can invoke; removed from model context
+ * - user-invocable            false = hide from / menu; model-only
+ * - allowed-tools             tools agent can use without per-use approval
+ * - model                     model override when skill is active
+ * - context                   fork = run in isolated subagent
+ * - agent                     which agent to use with context: fork
+ * - hooks                     hooks scoped to skill lifecycle
  */
 
 import path from "path";
@@ -31,8 +49,8 @@ function resolveClaudeTools(defaultTools: string[] = []): string {
     edit: ["Edit", "Write"],
     web: ["WebSearch", "WebFetch"],
     task: ["Bash"],
-    look_at: ["Read"],
-    delegate_task: ["Bash"],
+    look_at: ["Read", "Glob"],
+    delegate_task: ["Agent"],
   };
   const resolved = new Set<string>();
   for (const tool of defaultTools) {
@@ -81,18 +99,34 @@ export const claudeAdapter: ToolCommandAdapter = {
       `name: ${template.name}`,
       `description: ${escapeYamlValue(template.description)}`,
       `tools: ${tools}`,
-      `model: sonnet`,
     ];
+
+    if (template.disallowedTools && template.disallowedTools.length > 0) {
+      frontmatterLines.push(`disallowedTools: ${template.disallowedTools.join(", ")}`);
+    }
+
+    // model defaults to inherit; only emit if template explicitly sets one
+    if (template.model) {
+      frontmatterLines.push(`model: ${template.model}`);
+    }
+
+    if (template.permissionMode) {
+      frontmatterLines.push(`permissionMode: ${template.permissionMode}`);
+    }
+
+    if (template.maxTurns !== undefined) {
+      frontmatterLines.push(`maxTurns: ${template.maxTurns}`);
+    }
+
+    if (template.memory) {
+      frontmatterLines.push(`memory: ${template.memory}`);
+    }
+
     if (template.availableSkills && template.availableSkills.length > 0) {
       frontmatterLines.push(`skills:\n  - ${template.availableSkills.join("\n  - ")}`);
     }
-    const bodySections: string[] = [template.instructions];
-    if (template.availableSkills && template.availableSkills.length > 0) {
-      bodySections.push(
-        `## Related skills\n\n${template.availableSkills.map((s) => `- ${s}`).join("\n")}`,
-      );
-    }
-    return `---\n${frontmatterLines.join("\n")}\n---\n\n${bodySections.join("\n\n")}`;
+
+    return `---\n${frontmatterLines.join("\n")}\n---\n\n${template.instructions}`;
   },
 
   formatSkill(template: SkillTemplate, version: string): string {
@@ -133,6 +167,10 @@ export const claudeAdapter: ToolCommandAdapter = {
 
     if (template.dependencies && template.dependencies.length > 0) {
       metadataLines.push(formatYamlList("dependencies", template.dependencies));
+    }
+
+    if (template.disableModelInvocation) {
+      metadataLines.push("disable-model-invocation: true");
     }
 
     return `---\n${metadataLines.join("\n")}\n---\n\n${template.instructions}`;

@@ -59,6 +59,29 @@ export interface SkillTemplate {
 
   /** Routing key for intent-based dispatch (e.g. 'plan', 'do', 'research') */
   route?: string;
+
+  /** Additional reference files to emit alongside the main template */
+  references?: TemplateReference[];
+
+  /**
+   * When true, prevents the platform from auto-invoking this skill based on context.
+   * Use for action skills with side-effects (deploy, apply, sync) that should only
+   * run when the user explicitly invokes them.
+   * Claude Code: disable-model-invocation: true
+   * Codex: allow_implicit_invocation: false in agents/openai.yaml
+   */
+  disableModelInvocation?: boolean;
+}
+
+/**
+ * Additional markdown files emitted alongside a skill or agent template.
+ */
+export interface TemplateReference {
+  /** Reference filename, e.g. 'python.md' */
+  filename: string;
+
+  /** File content */
+  content: string;
 }
 
 /**
@@ -73,4 +96,40 @@ export interface AgentTemplate extends SkillTemplate {
 
   /** Additional prompt content */
   promptAppend?: string;
+
+  /**
+   * Model override.
+   * Claude Code: sonnet | opus | haiku | inherit | full model ID. Default: inherit.
+   * Codex: model name string.
+   */
+  model?: string;
+
+  /**
+   * Claude Code permission mode.
+   * default | acceptEdits | dontAsk | bypassPermissions | plan
+   */
+  permissionMode?: "default" | "acceptEdits" | "dontAsk" | "bypassPermissions" | "plan";
+
+  /**
+   * Codex sandbox mode.
+   * read-only | workspace-write | danger-full-access
+   */
+  sandboxMode?: "read-only" | "workspace-write" | "danger-full-access";
+
+  /**
+   * Tools to deny access to (Claude Code disallowedTools).
+   * Removed from the inherited or specified tool list.
+   */
+  disallowedTools?: string[];
+
+  /**
+   * Maximum agentic turns before the agent stops (Claude Code maxTurns).
+   */
+  maxTurns?: number;
+
+  /**
+   * Persistent memory scope (Claude Code memory field).
+   * user | project | local
+   */
+  memory?: "user" | "project" | "local";
 }

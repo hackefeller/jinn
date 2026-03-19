@@ -7,10 +7,7 @@ import {
   getArchitectAgentTemplate,
   getDesignerAgentTemplate,
   getGitAgentTemplate,
-  getSearchCodeAgentTemplate,
-  getSearchDocsAgentTemplate,
-  getSearchHistoryAgentTemplate,
-  getSearchLearningsAgentTemplate,
+  getSearchAgentTemplate,
 } from "../agents/index.js";
 
 const templates = [
@@ -20,10 +17,7 @@ const templates = [
   getArchitectAgentTemplate(),
   getDesignerAgentTemplate(),
   getGitAgentTemplate(),
-  getSearchCodeAgentTemplate(),
-  getSearchDocsAgentTemplate(),
-  getSearchHistoryAgentTemplate(),
-  getSearchLearningsAgentTemplate(),
+  getSearchAgentTemplate(),
 ];
 
 describe("agent templates", () => {

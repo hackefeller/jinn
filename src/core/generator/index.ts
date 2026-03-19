@@ -18,27 +18,26 @@ import { generateSkillsForAllTools } from "./skill-gen.js";
 import { generateAgentsForAllTools } from "./agent-gen.js";
 import { generateManifestsForAllTools } from "./manifest-gen.js";
 
-import {
-  getGitMasterSkillTemplate,
-  getFrontendDesignSkillTemplate,
-} from "../../templates/skills/index.js";
-
-import {
-  getJinnProposeSkillTemplate,
-  getJinnExploreSkillTemplate,
-  getJinnApplySkillTemplate,
-  getJinnArchiveSkillTemplate,
-  getReadyForProdSkillTemplate,
-  getJinnSyncSkillTemplate,
-  getJinnTriageSkillTemplate,
-  getJinnUnblockSkillTemplate,
-} from "../../templates/skills/skills.js";
-
-import { getCodeQualitySkillTemplate } from "../../templates/skills/code.js";
-import { getProjectWorkflowSkillTemplate } from "../../templates/skills/project.js";
-import { getDocsWorkflowSkillTemplate } from "../../templates/skills/docs.js";
-import { getDevEnvironmentSkillTemplate } from "../../templates/skills/dev.js";
-import { getWorkflowPrimitivesSkillTemplate } from "../../templates/skills/workflow.js";
+import { getFrontendDesignSkillTemplate } from "../../templates/skills/code/jinn-frontend-design.js";
+import { getGitMasterSkillTemplate } from "../../templates/skills/git/jinn-git-master.js";
+import { getJinnApplySkillTemplate } from "../../templates/skills/workflow/jinn-apply.js";
+import { getJinnArchiveSkillTemplate } from "../../templates/skills/workflow/jinn-archive.js";
+import { getCodeQualitySkillTemplate } from "../../templates/skills/code/jinn-code-quality.js";
+import { getDevEnvironmentSkillTemplate } from "../../templates/skills/code/jinn-dev-environment.js";
+import { getDocsWorkflowSkillTemplate } from "../../templates/skills/docs/jinn-docs-workflow.js";
+import { getProjectInitSkillTemplate } from "../../templates/skills/code/jinn-project-init.js";
+import { getProjectBuildSkillTemplate } from "../../templates/skills/code/jinn-build.js";
+import { getProjectDeploySkillTemplate } from "../../templates/skills/code/jinn-deploy.js";
+import { getProjectConventionsSkillTemplate } from "../../templates/skills/code/jinn-conventions.js";
+import { getMapCodebaseSkillTemplate } from "../../templates/skills/code/jinn-map-codebase.js";
+import { getJinnExploreSkillTemplate } from "../../templates/skills/workflow/jinn-explore.js";
+import { getJinnProposeSkillTemplate } from "../../templates/skills/workflow/jinn-propose.js";
+import { getReadyForProdSkillTemplate } from "../../templates/skills/workflow/jinn-ready-for-prod.js";
+import { getJinnSyncSkillTemplate } from "../../templates/skills/workflow/jinn-sync.js";
+import { getJinnTriageSkillTemplate } from "../../templates/skills/workflow/jinn-triage.js";
+import { getJinnUnblockSkillTemplate } from "../../templates/skills/support/jinn-unblock.js";
+import { getJinnCheckSkillTemplate } from "../../templates/skills/workflow/jinn-check.js";
+import { getJinnReviewSkillTemplate } from "../../templates/skills/workflow/jinn-review.js";
 
 import { ALL_AGENTS } from "../../templates/agents/index.js";
 
@@ -53,11 +52,16 @@ const DEFAULT_SKILL_TEMPLATES: SkillTemplate[] = [
   getJinnSyncSkillTemplate(),
   getJinnTriageSkillTemplate(),
   getJinnUnblockSkillTemplate(),
+  getJinnCheckSkillTemplate(),
+  getJinnReviewSkillTemplate(),
   getCodeQualitySkillTemplate(),
-  getProjectWorkflowSkillTemplate(),
   getDocsWorkflowSkillTemplate(),
   getDevEnvironmentSkillTemplate(),
-  getWorkflowPrimitivesSkillTemplate(),
+  getProjectInitSkillTemplate(),
+  getProjectBuildSkillTemplate(),
+  getProjectDeploySkillTemplate(),
+  getProjectConventionsSkillTemplate(),
+  getMapCodebaseSkillTemplate(),
 ];
 
 const DEFAULT_AGENT_TEMPLATES: AgentTemplate[] = ALL_AGENTS.map((fn) => fn());

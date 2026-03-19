@@ -299,12 +299,20 @@ describe("Phind Adapter", () => {
 // ============================================================================
 
 describe("Claude formatAgent", () => {
-  it("includes name, description, tools, model fields", () => {
+  it("includes name, description, and tools fields", () => {
     const result = claudeAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     expect(result).toContain("name:");
     expect(result).toContain("description:");
     expect(result).toContain("tools:");
-    expect(result).toContain("model: sonnet");
+    // model defaults to inherit — not emitted unless template sets it
+    expect(result).not.toContain("model: sonnet");
+  });
+
+  it("emits model field only when template specifies one", () => {
+    const withModel = claudeAdapter.formatAgent!({ ...testAgentTemplate, model: "sonnet" }, "1.0.0");
+    expect(withModel).toContain("model: sonnet");
+    const withoutModel = claudeAdapter.formatAgent!(testAgentTemplate, "1.0.0");
+    expect(withoutModel).not.toContain("model:");
   });
 
   it("maps read → Read", () => {
@@ -374,12 +382,11 @@ describe("Claude formatAgent", () => {
     expect(frontmatter).toContain("jinn-frontend-design");
   });
 
-  it("maps availableSkills to ## Related skills in body", () => {
+  it("does not add ## Related skills section to agent body", () => {
+    // skills are preloaded via skills: frontmatter; a body section is redundant
     const result = claudeAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     const body = result.split("---")[2];
-    expect(body).toContain("## Related skills");
-    expect(body).toContain("- jinn-git-master");
-    expect(body).toContain("- jinn-frontend-design");
+    expect(body).not.toContain("## Related skills");
   });
 
   it("omits skills: frontmatter when availableSkills is empty", () => {
@@ -391,13 +398,20 @@ describe("Claude formatAgent", () => {
     expect(frontmatter).not.toContain("skills:");
   });
 
-  it("omits Related skills section when availableSkills is empty", () => {
+  it("emits permissionMode when set", () => {
     const result = claudeAdapter.formatAgent!(
-      { ...testAgentTemplate, availableSkills: [] },
+      { ...testAgentTemplate, permissionMode: "acceptEdits" },
       "1.0.0",
     );
-    const body = result.split("---")[2];
-    expect(body).not.toContain("## Related skills");
+    expect(result).toContain("permissionMode: acceptEdits");
+  });
+
+  it("emits disallowedTools when set", () => {
+    const result = claudeAdapter.formatAgent!(
+      { ...testAgentTemplate, disallowedTools: ["Write", "Edit"] },
+      "1.0.0",
+    );
+    expect(result).toContain("disallowedTools: Write, Edit");
   });
 });
 
@@ -424,9 +438,11 @@ describe("Codex formatAgent", () => {
     expect(result).toContain('description = "Pre-implementation planning agent"');
   });
 
-  it("wraps instructions in ``` code fence as developer_instructions", () => {
+  it("outputs instructions as TOML developer_instructions multiline string", () => {
     const result = codexAdapter.formatAgent!(testAgentTemplate, "1.0.0");
-    expect(result).toContain("```");
+    // Must be valid TOML — no backtick fences
+    expect(result).not.toContain("```");
+    expect(result).toContain('developer_instructions = """');
     expect(result).toContain("You are a planning agent.");
   });
 

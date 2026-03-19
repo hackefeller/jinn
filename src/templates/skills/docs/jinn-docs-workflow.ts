@@ -1,8 +1,8 @@
-import type { SkillTemplate } from "../../core/templates/types.js";
+import type { SkillTemplate } from "../../../core/templates/types.js";
 
 export function getDocsWorkflowSkillTemplate(): SkillTemplate {
   return {
-    name: "docs-workflow",
+    name: "jinn-docs-workflow",
     description:
       "Documentation publishing: deploy docs, create versioned releases, record feature demos, and validate doc sites.",
     license: "MIT",

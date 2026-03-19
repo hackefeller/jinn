@@ -17,7 +17,7 @@ export type Profile = z.infer<typeof ProfileSchema>;
 
 /**
  * Delivery mode: what gets installed
- * - skills: Skills only (default)
+ * - skills: Skills only
  * - both: Skills and agents
  *
  * @deprecated 'commands' — removed in favour of skill-first delivery.
@@ -76,7 +76,7 @@ export const ConfigSchema = z.object({
   customWorkflows: z.array(z.string()).optional(),
 
   /** What to install: skills or both (skills + agents) */
-  delivery: DeliverySchema.default("skills"),
+  delivery: DeliverySchema.default("both"),
 
   /** Feature flags for experimental features */
   featureFlags: z.record(z.string(), z.boolean()).optional(),

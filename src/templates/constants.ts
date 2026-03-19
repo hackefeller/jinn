@@ -18,10 +18,25 @@ export const SKILL_NAMES = {
   // Frontend skills
   FRONTEND_DESIGN: "jinn-frontend-design",
 
+  // Engineering skills
+  CODE_QUALITY: "jinn-code-quality",
+  DEV_ENVIRONMENT: "jinn-dev-environment",
+  DOCS_WORKFLOW: "jinn-docs-workflow",
+  PROJECT_INIT: "jinn-project-init",
+  BUILD: "jinn-build",
+  DEPLOY: "jinn-deploy",
+  CONVENTIONS: "jinn-conventions",
+  MAP_CODEBASE: "jinn-map-codebase",
+
   // Jinn workflow skills
+  JINN_CHECK: "jinn-check",
+  JINN_REVIEW: "jinn-review",
   JINN_PROPOSE: "jinn-propose",
   JINN_EXPLORE: "jinn-explore",
   JINN_APPLY: "jinn-apply",
   JINN_ARCHIVE: "jinn-archive",
+  JINN_SYNC: "jinn-sync",
+  JINN_TRIAGE: "jinn-triage",
+  JINN_UNBLOCK: "jinn-unblock",
   JINN_READY_FOR_PROD: "jinn-ready-for-prod",
 } as const;

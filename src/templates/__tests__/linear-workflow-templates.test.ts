@@ -1,11 +1,9 @@
 import { describe, expect, it } from "bun:test";
 
-import {
-  getJinnApplySkillTemplate,
-  getJinnArchiveSkillTemplate,
-  getJinnExploreSkillTemplate,
-  getJinnProposeSkillTemplate,
-} from "../skills/skills.js";
+import { getJinnApplySkillTemplate } from "../skills/workflow/jinn-apply.js";
+import { getJinnArchiveSkillTemplate } from "../skills/workflow/jinn-archive.js";
+import { getJinnExploreSkillTemplate } from "../skills/workflow/jinn-explore.js";
+import { getJinnProposeSkillTemplate } from "../skills/workflow/jinn-propose.js";
 
 const templates = [
   getJinnProposeSkillTemplate().instructions,

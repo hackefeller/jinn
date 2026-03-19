@@ -5,19 +5,20 @@
  *
  * Directory conventions (open agent skills standard + Codex-native):
  * - Skills:         .agents/skills/<name>/SKILL.md
- * - Agents:         .codex/agents/<name>.toml  (TOML, not Markdown)
+ * - Agents:         .codex/agents/<name>.toml  (TOML config file)
  *
- * Agent TOML fields:
- * - name                   agent identifier (source of truth; filename is convention)
- * - description            when/why to use this agent
- * - developer_instructions markdown instructions (wrapped in ``` code fence)
- * - nickname_candidates    optional display name pool
- * - model                 model override
- * - sandbox_mode          read-only | workspace-write | danger-full-access
- * - [[skills.config]]      TOML array of skill path references
+ * Agent TOML fields (https://developers.openai.com/codex/subagents):
+ * - name                    agent identifier (source of truth; filename is convention)
+ * - description             when/why to use this agent
+ * - developer_instructions  TOML multiline string (""" ... """)
+ * - nickname_candidates     optional display name pool (string array)
+ * - model                   model override
+ * - model_reasoning_effort  low | medium | high
+ * - sandbox_mode            read-only | workspace-write | danger-full-access
+ * - [[skills.config]]       TOML array of { path, enabled? } skill references
  *
- * Codex resolves [[skills.config]] paths as .agents/skills/<name>/SKILL.md.
- * Skills are NOT preloaded at startup — agents invoke them via the skill tool.
+ * Skills are NOT preloaded at startup — Codex loads full SKILL.md on demand.
+ * Only skill metadata (name, description) is always in context.
  *
  * Reference: https://developers.openai.com/codex/subagents
  */
@@ -26,11 +27,17 @@ import path from "path";
 import type { ToolCommandAdapter } from "./types.js";
 import type { AgentTemplate, SkillTemplate } from "../templates/types.js";
 
+/** Escape a string value for a TOML basic string (single-line) */
 function escapeTomlString(value: string): string {
-  if (/[\\"]/.test(value)) {
-    return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
-  }
-  return `"${value}"`;
+  const escaped = value.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n");
+  return `"${escaped}"`;
+}
+
+/** Escape content for a TOML multiline literal string (triple-quote) */
+function toTomlMultilineString(value: string): string {
+  // TOML multiline basic strings: """ ... """ — escape any \" sequences inside
+  const escaped = value.replace(/\\/g, "\\\\").replace(/"""/g, '\\"\\"\\"');
+  return `"""\n${escaped}\n"""`;
 }
 
 export const codexAdapter: ToolCommandAdapter = {
@@ -50,11 +57,18 @@ export const codexAdapter: ToolCommandAdapter = {
     const lines: string[] = [
       `name = ${escapeTomlString(template.name)}`,
       `description = ${escapeTomlString(template.description)}`,
-      "",
-      "```",
-      template.instructions.trim(),
-      "```",
     ];
+
+    if (template.model) {
+      lines.push(`model = ${escapeTomlString(template.model)}`);
+    }
+
+    if (template.sandboxMode) {
+      lines.push(`sandbox_mode = ${escapeTomlString(template.sandboxMode)}`);
+    }
+
+    lines.push("");
+    lines.push(`developer_instructions = ${toTomlMultilineString(template.instructions.trim())}`);
 
     if (template.availableSkills && template.availableSkills.length > 0) {
       for (const skill of template.availableSkills) {

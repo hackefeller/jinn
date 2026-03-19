@@ -79,17 +79,17 @@ describe("Generator integration — opencode, delivery: both", () => {
 
   it("generates skill directories under .opencode/skills/", async () => {
     await generateFiles(config, tmpDir);
-    // 7 skill templates
+    // 20 skill templates
     const count = await countDirsInDir(path.join(tmpDir, ".opencode", "skills"));
-    expect(count).toBe(7);
+    expect(count).toBe(20);
   });
 
   it("generates agent files under .opencode/agents/", async () => {
     await generateFiles(config, tmpDir);
-    // 10 agent templates → 10 .md files
+    // 8 agent templates → 8 .md files
     const agentDir = path.join(tmpDir, ".opencode", "agents");
     const count = await countFilesInDir(agentDir);
-    expect(count).toBe(10);
+    expect(count).toBe(8);
   });
 
   it('skill SKILL.md files contain generatedBy: "1.0.0"', async () => {
@@ -126,24 +126,24 @@ describe("Generator integration — claude, delivery: both", () => {
     delivery: "both",
   };
 
-  it("generates 10 agent files under .claude/agents/", async () => {
+  it("generates 8 agent files under .claude/agents/", async () => {
     await generateFiles(config, tmpDir);
     const count = await countFilesInDir(path.join(tmpDir, ".claude", "agents"));
-    expect(count).toBe(10);
+    expect(count).toBe(8);
   });
 
-  it("agent files contain tools: and model: sonnet", async () => {
+  it("agent files contain tools: field (model omitted, defaults to inherit)", async () => {
     await generateFiles(config, tmpDir);
     const agentsDir = path.join(tmpDir, ".claude", "agents");
     const files = await fs.readdir(agentsDir);
     const content = await readFileContent(path.join(agentsDir, files[0]));
     expect(content).toContain("tools:");
-    expect(content).toContain("model: sonnet");
+    expect(content).not.toContain("model: sonnet");
   });
 
-  it("specific agent file exists at .claude/agents/plan.md", async () => {
+  it("specific agent file exists at .claude/agents/jinn-plan.md", async () => {
     await generateFiles(config, tmpDir);
-    const ok = await fileExists(path.join(tmpDir, ".claude", "agents", "plan.md"));
+    const ok = await fileExists(path.join(tmpDir, ".claude", "agents", "jinn-plan.md"));
     expect(ok).toBe(true);
   });
 });
@@ -371,7 +371,7 @@ describe("Generator integration — idempotency", () => {
 
     expect(skillCountFirst).toBe(skillCountSecond);
     expect(agentCountFirst).toBe(agentCountSecond);
-    expect(skillCountFirst).toBe(7);
-    expect(agentCountFirst).toBe(10);
+    expect(skillCountFirst).toBe(20);
+    expect(agentCountFirst).toBe(8);
   });
 });

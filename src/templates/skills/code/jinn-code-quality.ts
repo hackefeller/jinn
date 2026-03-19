@@ -1,8 +1,8 @@
-import type { SkillTemplate } from "../../core/templates/types.js";
+import type { SkillTemplate } from "../../../core/templates/types.js";
 
 export function getCodeQualitySkillTemplate(): SkillTemplate {
   return {
-    name: "code-quality",
+    name: "jinn-code-quality",
     description:
       "Code review, formatting, refactoring, optimization, and linting across any language or stack.",
     license: "MIT",
