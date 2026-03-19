@@ -21,7 +21,6 @@ You review code architecture and design decisions, identify patterns and anti-pa
 - Specific refactoring recommendations
 - Structural improvement roadmap
 
-
 ## Available commands
 
 - jinn-code-review

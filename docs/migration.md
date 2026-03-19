@@ -7,6 +7,7 @@ This guide helps you migrate to the new harness-agnostic architecture.
 ## What's New
 
 The new architecture:
+
 - Works across 24+ AI tools (not just OpenCode)
 - Uses template-based generation
 - Has a unified command interface
@@ -17,12 +18,14 @@ The new architecture:
 ### 1. Update Installation
 
 Old way:
+
 ```bash
 # Old installation
 npm install ghostwire
 ```
 
 New way:
+
 ```bash
 # Clone and use CLI directly
 git clone https://github.com/your-repo/ghostwire.git
@@ -40,6 +43,7 @@ bun run /path/to/ghostwire/src/cli/ghostwire/index.ts init --yes
 ```
 
 This creates:
+
 - `.ghostwire/config.yaml` - Configuration file
 - Tool-specific directories with commands
 - Skills and agents
@@ -48,22 +52,24 @@ This creates:
 
 Each AI tool has its own configuration directory:
 
-| Tool | Directory |
-|------|-----------|
-| OpenCode | `.opencode/` |
-| Cursor | `.cursor/` |
-| Claude | `.claude/` |
-| GitHub Copilot | `.github/` |
+| Tool           | Directory    |
+| -------------- | ------------ |
+| OpenCode       | `.opencode/` |
+| Cursor         | `.cursor/`   |
+| Claude         | `.claude/`   |
+| GitHub Copilot | `.github/`   |
 
 ### 4. Update Commands
 
 Old format:
+
 ```
 # Old command
 /do something
 ```
 
 New format:
+
 ```
 /ghostwire:propose
 /ghostwire:explore
@@ -74,6 +80,7 @@ New format:
 ### 5. Update Configuration
 
 Old config (if any):
+
 ```yaml
 # Old config format
 commands:
@@ -82,6 +89,7 @@ commands:
 ```
 
 New config:
+
 ```yaml
 # New config format
 version: "1.0.0"
@@ -94,23 +102,27 @@ delivery: both
 
 ## Command Mapping
 
-| Old | New |
-|-----|-----|
-| `/do` | `/ghostwire:apply` |
-| `/plan` | `/ghostwire:propose` |
-| `/review` | `/ghostwire:code:review` |
+| Old         | New                        |
+| ----------- | -------------------------- |
+| `/do`       | `/ghostwire:apply`         |
+| `/plan`     | `/ghostwire:propose`       |
+| `/review`   | `/ghostwire:code:review`   |
 | `/refactor` | `/ghostwire:code:refactor` |
 
 ## Profiles
 
 ### Core Profile
+
 Essential commands:
+
 - Workflow: propose, explore, apply, archive
 - Code: format, refactor, review, optimize
 - Git: smart-commit, branch, cleanup, merge
 
 ### Extended Profile
+
 All commands plus:
+
 - Docs commands
 - Project commands
 - Utility commands
@@ -135,6 +147,7 @@ bun run /path/to/ghostwire/src/cli/ghostwire/index.ts update
 ### Tool not supported
 
 Check supported tools:
+
 ```bash
 ghostwire detect
 ```
@@ -151,6 +164,7 @@ rm -rf .opencode .cursor .claude .github
 ## Support
 
 For issues, check:
+
 - `ghostwire config show` - View config
 - `ghostwire detect` - Check tools
 - `ghostwire update --force` - Regenerate files

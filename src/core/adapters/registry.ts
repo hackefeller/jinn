@@ -4,7 +4,7 @@
  * Central registry for managing tool adapters.
  */
 
-import type { ToolCommandAdapter, AdapterRegistry } from './types.js';
+import type { ToolCommandAdapter, AdapterRegistry } from "./types.js";
 
 /**
  * Implementation of the adapter registry

@@ -7,28 +7,28 @@
 
 ## Families
 
-| Family | Prefix | Function |
-| --- | --- | --- |
+| Family    | Prefix             | Function                         |
+| --------- | ------------------ | -------------------------------- |
 | Workflows | `jinn:workflows:*` | planning and execution lifecycle |
-| Work Loop | `jinn:work:*` | loop control |
-| Code | `jinn:code:*` | review/refactor/optimize/format |
-| Git | `jinn:git:*` | commit/branch/merge/cleanup |
-| Project | `jinn:project:*` | init/map/build/deploy/test |
-| Docs | `jinn:docs:*` | documentation workflows |
-| Util | `jinn:util:*` | maintenance utilities |
+| Work Loop | `jinn:work:*`      | loop control                     |
+| Code      | `jinn:code:*`      | review/refactor/optimize/format  |
+| Git       | `jinn:git:*`       | commit/branch/merge/cleanup      |
+| Project   | `jinn:project:*`   | init/map/build/deploy/test       |
+| Docs      | `jinn:docs:*`      | documentation workflows          |
+| Util      | `jinn:util:*`      | maintenance utilities            |
 
 ## High-Use Commands
 
-| Command | Output Class |
-| --- | --- |
-| `/jinn:workflows:plan` | plan document |
-| `/jinn:workflows:create` | multi-mode artifact generation (`tasks|analyze|checklist|issues`) |
-| `/jinn:workflows:execute` | execution state transitions |
-| `/jinn:workflows:status` | progress snapshot |
-| `/jinn:workflows:complete` | completion artifact |
-| `/jinn:work:loop` | loop session start |
-| `/jinn:work:cancel` | loop termination |
-| `/jinn:project:map` | project topology artifact |
+| Command                    | Output Class                           |
+| -------------------------- | -------------------------------------- | ------- | --------- | -------- |
+| `/jinn:workflows:plan`     | plan document                          |
+| `/jinn:workflows:create`   | multi-mode artifact generation (`tasks | analyze | checklist | issues`) |
+| `/jinn:workflows:execute`  | execution state transitions            |
+| `/jinn:workflows:status`   | progress snapshot                      |
+| `/jinn:workflows:complete` | completion artifact                    |
+| `/jinn:work:loop`          | loop session start                     |
+| `/jinn:work:cancel`        | loop termination                       |
+| `/jinn:project:map`        | project topology artifact              |
 
 ## Removed Commands
 

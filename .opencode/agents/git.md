@@ -23,7 +23,6 @@ You handle advanced git workflows, branch strategy, commit organization, and con
 4. Feature branches — isolate work from main
 5. Regular integration — merge main into feature branches often
 
-
 ## Available commands
 
 - jinn-git-smart-commit

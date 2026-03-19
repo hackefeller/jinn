@@ -32,7 +32,7 @@ In your AI tool, use these commands:
 
 ```
 /jinn:propose - Start a new change
-/jinn:explore - Explore a problem space  
+/jinn:explore - Explore a problem space
 /jinn:apply - Implement changes
 /jinn:archive - Complete and document work
 ```
@@ -75,16 +75,16 @@ delivery: both
 
 Jinn supports 24 AI coding assistants:
 
-| Tool | Command Format |
-|------|----------------|
-| OpenCode | `/jinn:command` |
-| Cursor | `/jinn:command` |
-| Claude Code | `/jinn:command` |
+| Tool           | Command Format   |
+| -------------- | ---------------- |
+| OpenCode       | `/jinn:command`  |
+| Cursor         | `/jinn:command`  |
+| Claude Code    | `/jinn:command`  |
 | GitHub Copilot | `@jinn /command` |
-| Continue | `/jinn:command` |
-| Cline | `/jinn:command` |
-| Amazon Q | `/jinn:command` |
-| Windsurf | `/jinn:command` |
+| Continue       | `/jinn:command`  |
+| Cline          | `/jinn:command`  |
+| Amazon Q       | `/jinn:command`  |
+| Windsurf       | `/jinn:command`  |
 
 ## Example Workflows
 

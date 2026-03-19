@@ -627,8 +627,8 @@ Configure git-master skill behavior:
 }
 ```
 
-| Option                   | Default | Description                                                                          |
-| ------------------------ | ------- | ------------------------------------------------------------------------------------ |
+| Option                   | Default | Description                                                                   |
+| ------------------------ | ------- | ----------------------------------------------------------------------------- |
 | `commit_footer`          | `true`  | Adds "Ultraworked with Operator" footer to commit messages.                   |
 | `include_co_authored_by` | `true`  | Adds `Co-authored-by: Operator <clio-agent@ghostwire.ai>` trailer to commits. |
 
@@ -700,7 +700,7 @@ You can also customize Operator agents like other agents:
 
 | Option                    | Default | Description                                                                                                                  |
 | ------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `disabled`                | `false` | When `true`, disables all Operator orchestration and restores original build/plan as primary.                         |
+| `disabled`                | `false` | When `true`, disables all Operator orchestration and restores original build/plan as primary.                                |
 | `default_builder_enabled` | `false` | When `true`, enables OpenCode-Builder agent (same as OpenCode build, renamed due to SDK limitations). Disabled by default.   |
 | `planner_enabled`         | `true`  | When `true`, enables planner agent with work-planner methodology. Enabled by default.                                        |
 | `replace_plan`            | `true`  | When `true`, demotes default planner agent to subagent mode. Set to `false` to keep both planner and default plan available. |
@@ -916,8 +916,8 @@ Each agent has a defined provider priority chain. The system tries providers in 
 | Agent                   | Model (no prefix) | Provider Priority Chain |
 | ----------------------- | ----------------- | ----------------------- |
 | **operator**            | `kimi-k2.5`       | opencode                |
-| **plan**               | `kimi-k2.5`       | opencode                |
-| **researcher-world**     | `kimi-k2.5`       | opencode                |
+| **plan**                | `kimi-k2.5`       | opencode                |
+| **researcher-world**    | `kimi-k2.5`       | opencode                |
 | **researcher-codebase** | `kimi-k2.5`       | opencode                |
 | **analyzer-media**      | `kimi-k2.5`       | opencode                |
 | **planner**             | `kimi-k2.5`       | opencode                |
@@ -1064,17 +1064,17 @@ Configure ghost Tasks and Swarm systems for advanced task management and multi-a
 
 | Option               | Default            | Description                                       |
 | -------------------- | ------------------ | ------------------------------------------------- |
-| `enabled`            | `false`            | Enable Operator Tasks system               |
+| `enabled`            | `false`            | Enable Operator Tasks system                      |
 | `storage_path`       | `.ghostwire/tasks` | Storage path for tasks (relative to project root) |
 | `claude_code_compat` | `false`            | Enable Claude Code path compatibility mode        |
 
 ### Swarm Configuration
 
-| Option         | Default            | Description                                                       |
-| -------------- | ------------------ | ----------------------------------------------------------------- |
-| `enabled`      | `false`            | Enable Operator Swarm system for multi-agent orchestration |
-| `storage_path` | `.ghostwire/teams` | Storage path for teams (relative to project root)                 |
-| `ui_mode`      | `toast`            | UI mode: `toast` (notifications), `tmux` (panes), or `both`       |
+| Option         | Default            | Description                                                 |
+| -------------- | ------------------ | ----------------------------------------------------------- |
+| `enabled`      | `false`            | Enable Operator Swarm system for multi-agent orchestration  |
+| `storage_path` | `.ghostwire/teams` | Storage path for teams (relative to project root)           |
+| `ui_mode`      | `toast`            | UI mode: `toast` (notifications), `tmux` (panes), or `both` |
 
 ## MCPs
 

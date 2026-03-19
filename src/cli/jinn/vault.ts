@@ -11,14 +11,14 @@
  *   jinn vault compile --dry-run
  */
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import * as os from 'os';
+import * as fs from "fs/promises";
+import * as path from "path";
+import * as os from "os";
 
-import { loadConfig } from '../../core/config/loader.js';
-import { createPopulatedAdapterRegistry } from '../../core/adapters/index.js';
-import { loadVaultSkills, compileVaultSkills } from '../../core/vault/index.js';
-import type { GeneratedFile } from '../../core/adapters/types.js';
+import { loadConfig } from "../../core/config/loader.js";
+import { createPopulatedAdapterRegistry } from "../../core/adapters/index.js";
+import { loadVaultSkills, compileVaultSkills } from "../../core/vault/index.js";
+import type { GeneratedFile } from "../../core/adapters/types.js";
 
 export interface VaultCompileCommandOptions {
   vault?: string;
@@ -28,7 +28,7 @@ export interface VaultCompileCommandOptions {
 
 /** Expand ~ in paths */
 function expandHome(filePath: string): string {
-  if (filePath.startsWith('~/') || filePath === '~') {
+  if (filePath.startsWith("~/") || filePath === "~") {
     return path.join(os.homedir(), filePath.slice(1));
   }
   return filePath;
@@ -37,7 +37,7 @@ function expandHome(filePath: string): string {
 async function writeFilesBatch(
   files: GeneratedFile[],
   projectPath: string,
-  dryRun: boolean
+  dryRun: boolean,
 ): Promise<{ written: string[]; failed: Array<{ path: string; error: string }> }> {
   const written: string[] = [];
   const failed: Array<{ path: string; error: string }> = [];
@@ -52,12 +52,12 @@ async function writeFilesBatch(
   await Promise.all(
     files.map(async (file) => {
       try {
-        await fs.writeFile(path.join(projectPath, file.path), file.content, 'utf-8');
+        await fs.writeFile(path.join(projectPath, file.path), file.content, "utf-8");
         written.push(file.path);
       } catch (err) {
         failed.push({ path: file.path, error: String(err) });
       }
-    })
+    }),
   );
 
   return { written, failed };
@@ -70,7 +70,7 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
   // 1. Load jinn config
   const config = await loadConfig(projectPath);
   if (!config) {
-    console.error('No .jinn/config.yaml found. Run `jinn init` first.');
+    console.error("No .jinn/config.yaml found. Run `jinn init` first.");
     process.exit(1);
   }
 
@@ -78,7 +78,7 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
   const rawVaultPath = options.vault ?? config.vaultPath;
   if (!rawVaultPath) {
     console.error(
-      'No vault path found. Either pass --vault <path> or set vaultPath in .jinn/config.yaml.'
+      "No vault path found. Either pass --vault <path> or set vaultPath in .jinn/config.yaml.",
     );
     process.exit(1);
   }
@@ -86,7 +86,7 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
 
   // 3. Determine which tools to compile for
   const requestedTools = options.tools
-    ? options.tools.split(',').map((t) => t.trim())
+    ? options.tools.split(",").map((t) => t.trim())
     : config.tools;
 
   const registry = createPopulatedAdapterRegistry();
@@ -101,7 +101,7 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
     .map((id) => registry.get(id));
 
   if (adapters.length === 0) {
-    console.error('No valid adapters found for the requested tools.');
+    console.error("No valid adapters found for the requested tools.");
     process.exit(1);
   }
 
@@ -115,7 +115,7 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
   }
 
   if (skills.length === 0) {
-    console.log('No skills found in vault.');
+    console.log("No skills found in vault.");
     return;
   }
 
@@ -129,11 +129,11 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
   console.log(`\nVault skill compilation (dry-run=${dryRun})\n`);
   console.log(`  Vault:           ${vaultPath}`);
   console.log(`  Skills loaded:   ${skills.length}`);
-  console.log(`  Tools targeted:  ${adapters.map((a) => a.toolId).join(', ')}`);
-  console.log(`  Files ${dryRun ? 'would write' : 'wrote'}: ${written.length}`);
+  console.log(`  Tools targeted:  ${adapters.map((a) => a.toolId).join(", ")}`);
+  console.log(`  Files ${dryRun ? "would write" : "wrote"}: ${written.length}`);
 
   if (dryRun) {
-    console.log('\nFiles that would be written:');
+    console.log("\nFiles that would be written:");
     for (const p of written) {
       console.log(`  ${p}`);
     }
@@ -148,6 +148,8 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
   }
 
   if (!dryRun) {
-    console.log('\nDone. Run `jinn update` to regenerate jinn-native skills alongside vault skills.');
+    console.log(
+      "\nDone. Run `jinn update` to regenerate jinn-native skills alongside vault skills.",
+    );
   }
 }

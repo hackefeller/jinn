@@ -9,6 +9,7 @@ Detects which AI coding assistants are installed in a project by scanning for th
 ## Tool Definitions
 
 Defines metadata for 24 AI tools including:
+
 - Tool ID and name
 - Skills directory location
 - Capabilities
@@ -17,8 +18,8 @@ Defines metadata for 24 AI tools including:
 ## Usage
 
 ```typescript
-import { detectAvailableTools } from './detector.js';
-import { TOOL_DEFINITIONS } from './definitions.js';
+import { detectAvailableTools } from "./detector.js";
+import { TOOL_DEFINITIONS } from "./definitions.js";
 
-const tools = await detectAvailableTools('/path/to/project');
+const tools = await detectAvailableTools("/path/to/project");
 ```

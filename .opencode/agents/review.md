@@ -17,11 +17,11 @@ You conduct comprehensive reviews of completed work, covering correctness, secur
 ## Output
 
 A structured review with:
+
 - Summary of findings
 - Issues by priority (must-fix, should-fix, nice-to-have)
 - Specific, actionable suggestions
 - Go / no-go recommendation
-
 
 ## Available commands
 

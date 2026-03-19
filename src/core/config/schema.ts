@@ -4,7 +4,7 @@
  * Uses Zod for runtime validation and TypeScript type inference.
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * Profile determines which commands/skills are installed
@@ -12,16 +12,17 @@ import { z } from 'zod';
  * - extended: All workflows
  * - custom: User-selected subset
  */
-export const ProfileSchema = z.enum(['core', 'extended', 'custom']);
+export const ProfileSchema = z.enum(["core", "extended", "custom"]);
 export type Profile = z.infer<typeof ProfileSchema>;
 
 /**
  * Delivery mode: what gets installed
- * - skills: Skills only
- * - commands: Commands only
- * - both: Both skills and commands
+ * - skills: Skills only (default)
+ * - both: Skills and agents
+ *
+ * @deprecated 'commands' — removed in favour of skill-first delivery.
  */
-export const DeliverySchema = z.enum(['skills', 'commands', 'both']);
+export const DeliverySchema = z.enum(["skills", "both"]);
 export type Delivery = z.infer<typeof DeliverySchema>;
 
 /**
@@ -29,31 +30,31 @@ export type Delivery = z.infer<typeof DeliverySchema>;
  * This list covers 25 popular AI coding assistants
  */
 export const ToolIdSchema = z.enum([
-  'opencode',
-  'cursor',
-  'claude',
-  'codex',
-  'github-copilot',
-  'continue',
-  'cline',
-  'amazon-q',
-  'windsurf',
-  'augment',
-  'supermaven',
-  'tabnine',
-  'codeium',
-  'sourcegraph-cody',
-  'gemini',
-  'mistral',
-  'ollama',
-  'lm-studio',
-  'text-generation-webui',
-  'koboldcpp',
-  'tabby',
-  'gpt4all',
-  'jan',
-  'huggingface-chat',
-  'phind',
+  "opencode",
+  "cursor",
+  "claude",
+  "codex",
+  "github-copilot",
+  "continue",
+  "cline",
+  "amazon-q",
+  "windsurf",
+  "augment",
+  "supermaven",
+  "tabnine",
+  "codeium",
+  "sourcegraph-cody",
+  "gemini",
+  "mistral",
+  "ollama",
+  "lm-studio",
+  "text-generation-webui",
+  "koboldcpp",
+  "tabby",
+  "gpt4all",
+  "jan",
+  "huggingface-chat",
+  "phind",
 ]);
 export type ToolId = z.infer<typeof ToolIdSchema>;
 
@@ -63,19 +64,19 @@ export type ToolId = z.infer<typeof ToolIdSchema>;
  */
 export const ConfigSchema = z.object({
   /** Configuration schema version */
-  version: z.string().default('1.0.0'),
+  version: z.string().default("1.0.0"),
 
   /** Which AI tools to configure */
-  tools: z.array(ToolIdSchema).min(1, 'At least one tool must be configured'),
+  tools: z.array(ToolIdSchema).min(1, "At least one tool must be configured"),
 
   /** Which profile of commands/skills to install */
-  profile: ProfileSchema.default('core'),
+  profile: ProfileSchema.default("core"),
 
   /** Custom workflows (when profile is 'custom') */
   customWorkflows: z.array(z.string()).optional(),
 
-  /** What to install: skills, commands, or both */
-  delivery: DeliverySchema.default('both'),
+  /** What to install: skills or both (skills + agents) */
+  delivery: DeliverySchema.default("skills"),
 
   /** Feature flags for experimental features */
   featureFlags: z.record(z.string(), z.boolean()).optional(),
@@ -88,11 +89,13 @@ export const ConfigSchema = z.object({
   vaultPath: z.string().optional(),
 
   /** Project-specific metadata */
-  metadata: z.object({
-    name: z.string().optional(),
-    description: z.string().optional(),
-    version: z.string().optional(),
-  }).optional(),
+  metadata: z
+    .object({
+      name: z.string().optional(),
+      description: z.string().optional(),
+      version: z.string().optional(),
+    })
+    .optional(),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;
@@ -135,4 +138,4 @@ export interface ValidationResult {
 /**
  * Configuration file paths
  */
-export const CONFIG_FILENAME = 'config.yaml';
+export const CONFIG_FILENAME = "config.yaml";

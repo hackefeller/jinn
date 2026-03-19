@@ -1,10 +1,10 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 
 export interface LinearImportSubIssue {
   title: string;
   description: string;
-  state: 'pending' | 'completed';
+  state: "pending" | "completed";
 }
 
 export interface LinearImportIssue {
@@ -24,38 +24,42 @@ export interface LinearImportProject {
 }
 
 function readIfExists(path: string): string {
-  return existsSync(path) ? readFileSync(path, 'utf-8').trim() : '';
+  return existsSync(path) ? readFileSync(path, "utf-8").trim() : "";
 }
 
 function parseTaskSubIssues(tasksContent: string, sourcePath: string): LinearImportSubIssue[] {
   return tasksContent
-    .split('\n')
+    .split("\n")
     .map((line) => line.trim())
     .filter((line) => /^- \[[ x]\] /.test(line))
     .map((line) => ({
-      title: line.replace(/^- \[[ x]\] /, '').trim(),
+      title: line.replace(/^- \[[ x]\] /, "").trim(),
       description: `Imported from ${sourcePath}`,
-      state: line.startsWith('- [x]') ? 'completed' : 'pending',
+      state: line.startsWith("- [x]") ? "completed" : "pending",
     }));
 }
 
-function buildIssueDescription(specContent: string, designContent: string, sourcePath: string): string {
+function buildIssueDescription(
+  specContent: string,
+  designContent: string,
+  sourcePath: string,
+): string {
   const parts = [specContent, designContent].filter(Boolean);
   parts.push(`Imported from ${sourcePath}`);
-  return parts.join('\n\n');
+  return parts.join("\n\n");
 }
 
 function buildIssues(changeRoot: string, designContent: string): LinearImportIssue[] {
-  const specsRoot = join(changeRoot, 'specs');
-  const tasksPath = join(changeRoot, 'tasks.md');
+  const specsRoot = join(changeRoot, "specs");
+  const tasksPath = join(changeRoot, "tasks.md");
   const tasksContent = readIfExists(tasksPath);
   const taskSubIssues = parseTaskSubIssues(tasksContent, tasksPath);
 
   if (!existsSync(specsRoot)) {
     return [
       {
-        title: 'Implementation',
-        description: buildIssueDescription('', designContent, tasksPath || changeRoot),
+        title: "Implementation",
+        description: buildIssueDescription("", designContent, tasksPath || changeRoot),
         sourcePath: tasksPath || changeRoot,
         subIssues: taskSubIssues,
       },
@@ -70,8 +74,8 @@ function buildIssues(changeRoot: string, designContent: string): LinearImportIss
   if (capabilityDirs.length === 0) {
     return [
       {
-        title: 'Implementation',
-        description: buildIssueDescription('', designContent, tasksPath || changeRoot),
+        title: "Implementation",
+        description: buildIssueDescription("", designContent, tasksPath || changeRoot),
         sourcePath: tasksPath || changeRoot,
         subIssues: taskSubIssues,
       },
@@ -79,7 +83,7 @@ function buildIssues(changeRoot: string, designContent: string): LinearImportIss
   }
 
   return capabilityDirs.map((capability, index) => {
-    const specPath = join(specsRoot, capability, 'spec.md');
+    const specPath = join(specsRoot, capability, "spec.md");
     return {
       title: capability,
       description: buildIssueDescription(readIfExists(specPath), designContent, specPath),
@@ -90,30 +94,30 @@ function buildIssues(changeRoot: string, designContent: string): LinearImportIss
 }
 
 export async function importLegacyChanges(projectRoot: string): Promise<LinearImportProject[]> {
-  const changesRoot = join(projectRoot, 'openspec', 'changes');
+  const changesRoot = join(projectRoot, "openspec", "changes");
   if (!existsSync(changesRoot)) {
     return [];
   }
 
   const changeDirs = readdirSync(changesRoot, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && entry.name !== 'archive')
+    .filter((entry) => entry.isDirectory() && entry.name !== "archive")
     .map((entry) => entry.name)
     .sort((a, b) => a.localeCompare(b));
 
   return changeDirs.map((changeName) => {
     const changeRoot = join(changesRoot, changeName);
-    const proposalPath = join(changeRoot, 'proposal.md');
-    const designPath = join(changeRoot, 'design.md');
+    const proposalPath = join(changeRoot, "proposal.md");
+    const designPath = join(changeRoot, "design.md");
     const proposalContent = readIfExists(proposalPath);
     const designContent = readIfExists(designPath);
 
     return {
       externalRef: `legacy:change:${changeName}`,
       name: changeName,
-      summary: proposalContent.split('\n').find((line) => line.trim()) ?? changeName,
+      summary: proposalContent.split("\n").find((line) => line.trim()) ?? changeName,
       description: [proposalContent, designContent, `Imported from ${proposalPath}`]
         .filter(Boolean)
-        .join('\n\n'),
+        .join("\n\n"),
       sourcePath: changeRoot,
       issues: buildIssues(changeRoot, designContent),
     };

@@ -85,6 +85,7 @@ The hard cut said: this is done. The complexity is paid. Move forward.
 ## The Configuration Block
 
 Before:
+
 ```json
 {
   "agents": {
@@ -100,6 +101,7 @@ Before:
 ```
 
 After:
+
 ```json
 {
   "agents": {

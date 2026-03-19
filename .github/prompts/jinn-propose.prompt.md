@@ -9,7 +9,7 @@ Create a new Linear-backed change. Use Linear MCP to create and manage issues.
 ## Prerequisites
 
 - Linear MCP must be configured in your environment
-- Verify Linear MCP is available by checking for linear_* tools
+- Verify Linear MCP is available by checking for linear\_\* tools
 
 ## Steps
 

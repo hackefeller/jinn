@@ -4,10 +4,10 @@
  * Detects which AI coding assistants are installed in a project.
  */
 
-import * as path from 'path';
-import { directoryExists } from '../utils/file-system.js';
-import { TOOL_DEFINITIONS } from './definitions.js';
-import type { ToolId } from '../config/schema.js';
+import * as path from "path";
+import { directoryExists } from "../utils/file-system.js";
+import { TOOL_DEFINITIONS } from "./definitions.js";
+import type { ToolId } from "../config/schema.js";
 
 /**
  * Detect which AI tools are available in a project
@@ -45,4 +45,3 @@ export async function isToolAvailable(projectPath: string, toolId: string): Prom
   const toolDir = path.join(projectPath, tool.skillsDir);
   return directoryExists(toolDir);
 }
-

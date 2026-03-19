@@ -7,12 +7,12 @@ Location: `.jinn/config.yaml`
 ## Schema
 
 ```yaml
-version: "string"      # Config version (required)
-tools:                # List of tools (required)
+version: "string" # Config version (required)
+tools: # List of tools (required)
   - "opencode"
   - "cursor"
-profile: "string"     # Profile name (optional, default: core)
-delivery: "string"    # What to generate (optional, default: both)
+profile: "string" # Profile name (optional, default: core)
+delivery: "string" # What to generate (optional, default: both)
 ```
 
 ## Properties
@@ -39,32 +39,32 @@ tools:
 
 #### Available Tools
 
-| Tool ID | Description |
-|---------|-------------|
-| `opencode` | OpenCode |
-| `cursor` | Cursor |
-| `claude` | Claude Code |
-| `github-copilot` | GitHub Copilot |
-| `continue` | Continue |
-| `cline` | Cline |
-| `amazon-q` | Amazon Q Developer |
-| `windsurf` | Windsurf |
-| `augment` | Augment |
-| `supermaven` | Supermaven |
-| `tabnine` | Tabnine |
-| `codeium` | Codeium |
-| `sourcegraph-cody` | Sourcegraph Cody |
-| `gemini` | Google Gemini |
-| `mistral` | Mistral |
-| `ollama` | Ollama |
-| `lm-studio` | LM Studio |
+| Tool ID                 | Description           |
+| ----------------------- | --------------------- |
+| `opencode`              | OpenCode              |
+| `cursor`                | Cursor                |
+| `claude`                | Claude Code           |
+| `github-copilot`        | GitHub Copilot        |
+| `continue`              | Continue              |
+| `cline`                 | Cline                 |
+| `amazon-q`              | Amazon Q Developer    |
+| `windsurf`              | Windsurf              |
+| `augment`               | Augment               |
+| `supermaven`            | Supermaven            |
+| `tabnine`               | Tabnine               |
+| `codeium`               | Codeium               |
+| `sourcegraph-cody`      | Sourcegraph Cody      |
+| `gemini`                | Google Gemini         |
+| `mistral`               | Mistral               |
+| `ollama`                | Ollama                |
+| `lm-studio`             | LM Studio             |
 | `text-generation-webui` | Text Generation WebUI |
-| `koboldcpp` | KoboldCpp |
-| `tabby` | Tabby |
-| `gpt4all` | GPT4All |
-| `jan` | Jan |
-| `huggingface-chat` | Hugging Face Chat |
-| `phind` | Phind |
+| `koboldcpp`             | KoboldCpp             |
+| `tabby`                 | Tabby                 |
+| `gpt4all`               | GPT4All               |
+| `jan`                   | Jan                   |
+| `huggingface-chat`      | Hugging Face Chat     |
+| `phind`                 | Phind                 |
 
 ### profile
 
@@ -78,10 +78,10 @@ profile: extended # All commands and agents
 
 #### Profiles
 
-| Profile | Description |
-|---------|-------------|
-| `core` | Essential commands and agents |
-| `extended` | Full command and agent set |
+| Profile    | Description                   |
+| ---------- | ----------------------------- |
+| `core`     | Essential commands and agents |
+| `extended` | Full command and agent set    |
 
 ### delivery
 
@@ -97,11 +97,11 @@ delivery: skills    # Only skills
 
 #### Delivery Modes
 
-| Mode | Description |
-|------|-------------|
-| `both` | Generate commands and skills |
-| `commands` | Only generate commands |
-| `skills` | Only generate skills |
+| Mode       | Description                  |
+| ---------- | ---------------------------- |
+| `both`     | Generate commands and skills |
+| `commands` | Only generate commands       |
+| `skills`   | Only generate skills         |
 
 ## Examples
 

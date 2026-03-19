@@ -32,56 +32,44 @@ export interface SkillTemplate {
     category?: string;
     tags?: string[];
   };
-}
 
-/**
- * Command template - defines slash command content
- * Commands are installed to <tool>/commands/<name>.md (varies by tool)
- */
-export interface CommandTemplate {
-  /** Command display name */
-  name: string;
+  /** Natural-language trigger conditions — when this skill should be invoked */
+  when?: string[];
 
-  /** Brief description */
-  description: string;
+  /** Conditions under which this skill applies */
+  applicability?: string[];
 
-  /** Grouping category */
-  category: string;
+  /** Deterministic completion signals — when this skill's intent is fulfilled */
+  termination?: string[];
 
-  /** Search tags */
-  tags: string[];
+  /** Artifacts or results this skill produces */
+  outputs?: string[];
 
-  /** The command body/instructions */
-  content: string;
+  /** Other skill names this skill orchestrates or depends on */
+  dependencies?: string[];
+
+  /** Agent role category (e.g. 'Orchestration', 'Specialist', 'Reviewer') */
+  role?: string;
+
+  /** What this skill/agent is capable of when acting as an orchestrator */
+  capabilities?: string[];
+
+  /** Skills this skill/agent can reference or delegate to */
+  availableSkills?: string[];
+
+  /** Routing key for intent-based dispatch (e.g. 'plan', 'do', 'research') */
+  route?: string;
 }
 
 /**
  * Agent template - special skill for reasoning entities that orchestrate workflows
  */
 export interface AgentTemplate extends SkillTemplate {
-  /** Agent capabilities */
-  capabilities?: string[];
-
-  /** Commands this agent can invoke */
-  availableCommands?: string[];
-
-  /** Skills this agent can reference */
-  availableSkills?: string[];
-
-  /** Agent role category */
-  role?: string;
-
-  /** Route for agent execution */
-  route?: string;
-
   /** Default tools available to agent */
   defaultTools?: string[];
 
   /** Acceptance criteria for agent completion */
   acceptanceChecks?: string[];
-
-  /** Default command to invoke */
-  defaultCommand?: string;
 
   /** Additional prompt content */
   promptAppend?: string;

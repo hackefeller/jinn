@@ -37,12 +37,12 @@ jinn update
 
 **propose → explore → apply → archive** — all powered by Linear via Linear MCP.
 
-| Command | What it does |
-|---|---|
+| Command    | What it does                                                                          |
+| ---------- | ------------------------------------------------------------------------------------- |
 | `/propose` | Create a Linear project with top-level issues and sub-issues for implementation tasks |
-| `/explore` | Read Linear project state, explore tradeoffs, write decisions back to Linear |
-| `/apply` | Pick up the next unblocked sub-issue from Linear, implement it, update Linear |
-| `/archive` | Close out the Linear project, finish remaining issues, report deferred work |
+| `/explore` | Read Linear project state, explore tradeoffs, write decisions back to Linear          |
+| `/apply`   | Pick up the next unblocked sub-issue from Linear, implement it, update Linear         |
+| `/archive` | Close out the Linear project, finish remaining issues, report deferred work           |
 
 Linear is the source of truth. No local `proposal.md` files. No sticky notes. No "I'll just jot this down in a text file." The issue tracker IS the plan.
 
@@ -67,11 +67,11 @@ jinn init [options]
 
 **Delivery modes:**
 
-| Mode | Commands | Skills | Agents |
-|---|---|---|---|
-| `both` (default) | Yes | Yes | Yes |
-| `commands` | Yes | No | Yes |
-| `skills` | No | Yes | No |
+| Mode             | Commands | Skills | Agents |
+| ---------------- | -------- | ------ | ------ |
+| `both` (default) | Yes      | Yes    | Yes    |
+| `commands`       | Yes      | No     | Yes    |
+| `skills`         | No       | Yes    | No     |
 
 Agents live alongside commands unless you explicitly choose `skills`-only mode. Because agents are enhanced command wrappers, not a separate feature — you almost always want them.
 
@@ -150,19 +150,19 @@ tools:
   - claude
 profile: core
 delivery: both
-vaultPath: ~/.codex        # optional — for jinn vault compile
+vaultPath: ~/.codex # optional — for jinn vault compile
 metadata:
   name: my-project
   description: Important work
 ```
 
-| Field | Values | Description |
-|---|---|---|
-| `version` | `"1.0.0"` | Config schema version |
-| `tools` | 25 tool IDs | Which AI tools to generate files for |
-| `profile` | `core`, `extended` | Which command set to install |
-| `delivery` | `skills`, `commands`, `both` | What to generate |
-| `vaultPath` | path string | Path to your personal vault (optional) |
+| Field       | Values                       | Description                            |
+| ----------- | ---------------------------- | -------------------------------------- |
+| `version`   | `"1.0.0"`                    | Config schema version                  |
+| `tools`     | 25 tool IDs                  | Which AI tools to generate files for   |
+| `profile`   | `core`, `extended`           | Which command set to install           |
+| `delivery`  | `skills`, `commands`, `both` | What to generate                       |
+| `vaultPath` | path string                  | Path to your personal vault (optional) |
 
 ---
 
@@ -170,33 +170,33 @@ metadata:
 
 Jinn generates files for 25 AI coding tools:
 
-| Tool | ID | Directory | Notes |
-|---|---|---|---|
-| OpenCode | `opencode` | `.opencode/` | |
-| Cursor | `cursor` | `.cursor/` | YAML frontmatter |
-| Claude Code | `claude` | `.claude/` | Native agent format, `skills:` YAML, `## Available commands` |
-| OpenAI Codex | `codex` | `.codex/` + `.agents/` | TOML agent format, `[[skills.config]]` |
-| GitHub Copilot | `github-copilot` | `.github/` | `.prompt.md` extension, `.agent.md` format |
-| Continue | `continue` | `.continue/prompts/` | `.prompt` extension (no `.md`) |
-| Cline | `cline` | `.cline/` | |
-| Amazon Q Developer | `amazon-q` | `.amazonq/` | |
-| Windsurf | `windsurf` | `.windsurf/` | |
-| Augment | `augment` | `.augment/` | |
-| Supermaven | `supermaven` | `.supermaven/` | |
-| Tabnine | `tabnine` | `.tabnine/` | |
-| Codeium | `codeium` | `.codeium/` | |
-| Sourcegraph Cody | `sourcegraph-cody` | `.cody/` | |
-| Gemini | `gemini` | `.gemini/` | |
-| Mistral | `mistral` | `.mistral/` | |
-| Ollama | `ollama` | `.ollama/` | |
-| LM Studio | `lm-studio` | `.lmstudio/` | |
-| Text Generation WebUI | `text-generation-webui` | `.webui/` | |
-| KoboldCPP | `koboldcpp` | `.koboldcpp/` | |
-| Tabby | `tabby` | `.tabby/` | |
-| GPT4All | `gpt4all` | `.gpt4all/` | |
-| Jan | `jan` | `.jan/` | |
-| Hugging Face Chat | `huggingface-chat` | `.hfchat/` | |
-| Phind | `phind` | `.phind/` | |
+| Tool                  | ID                      | Directory              | Notes                                                        |
+| --------------------- | ----------------------- | ---------------------- | ------------------------------------------------------------ |
+| OpenCode              | `opencode`              | `.opencode/`           |                                                              |
+| Cursor                | `cursor`                | `.cursor/`             | YAML frontmatter                                             |
+| Claude Code           | `claude`                | `.claude/`             | Native agent format, `skills:` YAML, `## Available commands` |
+| OpenAI Codex          | `codex`                 | `.codex/` + `.agents/` | TOML agent format, `[[skills.config]]`                       |
+| GitHub Copilot        | `github-copilot`        | `.github/`             | `.prompt.md` extension, `.agent.md` format                   |
+| Continue              | `continue`              | `.continue/prompts/`   | `.prompt` extension (no `.md`)                               |
+| Cline                 | `cline`                 | `.cline/`              |                                                              |
+| Amazon Q Developer    | `amazon-q`              | `.amazonq/`            |                                                              |
+| Windsurf              | `windsurf`              | `.windsurf/`           |                                                              |
+| Augment               | `augment`               | `.augment/`            |                                                              |
+| Supermaven            | `supermaven`            | `.supermaven/`         |                                                              |
+| Tabnine               | `tabnine`               | `.tabnine/`            |                                                              |
+| Codeium               | `codeium`               | `.codeium/`            |                                                              |
+| Sourcegraph Cody      | `sourcegraph-cody`      | `.cody/`               |                                                              |
+| Gemini                | `gemini`                | `.gemini/`             |                                                              |
+| Mistral               | `mistral`               | `.mistral/`            |                                                              |
+| Ollama                | `ollama`                | `.ollama/`             |                                                              |
+| LM Studio             | `lm-studio`             | `.lmstudio/`           |                                                              |
+| Text Generation WebUI | `text-generation-webui` | `.webui/`              |                                                              |
+| KoboldCPP             | `koboldcpp`             | `.koboldcpp/`          |                                                              |
+| Tabby                 | `tabby`                 | `.tabby/`              |                                                              |
+| GPT4All               | `gpt4all`               | `.gpt4all/`            |                                                              |
+| Jan                   | `jan`                   | `.jan/`                |                                                              |
+| Hugging Face Chat     | `huggingface-chat`      | `.hfchat/`             |                                                              |
+| Phind                 | `phind`                 | `.phind/`              |                                                              |
 
 ---
 
@@ -208,46 +208,46 @@ Agents are autonomous task specialists. On Claude Code they become native subage
 
 **Orchestrators — coordinate the workflow**
 
-| Agent | When to use |
-|---|---|
-| `plan` | Pre-implementation: analyze intent, surface requirements, create a sequenced plan |
-| `do` | Execution: work through a plan step by step, delegate to specialists |
-| `review` | Quality gate: correctness, security, performance, and code quality review |
+| Agent    | When to use                                                                       |
+| -------- | --------------------------------------------------------------------------------- |
+| `plan`   | Pre-implementation: analyze intent, surface requirements, create a sequenced plan |
+| `do`     | Execution: work through a plan step by step, delegate to specialists              |
+| `review` | Quality gate: correctness, security, performance, and code quality review         |
 
 **Specialists — domain experts**
 
-| Agent | When to use |
-|---|---|
+| Agent       | When to use                                                               |
+| ----------- | ------------------------------------------------------------------------- |
 | `architect` | Architecture review: patterns, anti-patterns, structural design decisions |
-| `designer` | Frontend: UI components, design implementation, user flow mapping |
-| `git` | Advanced git: branch strategy, commit hygiene, conflict resolution |
+| `designer`  | Frontend: UI components, design implementation, user flow mapping         |
+| `git`       | Advanced git: branch strategy, commit hygiene, conflict resolution        |
 
 **Researchers — fast, read-only information gathering**
 
-| Agent | When to use |
-|---|---|
-| `search-code` | Locate files, functions, and patterns in the local codebase |
-| `search-docs` | Find external documentation, API references, and best practices |
-| `search-history` | Analyze git history to understand why code changed over time |
-| `search-learnings` | Surface past solutions and documented lessons from the project |
+| Agent              | When to use                                                     |
+| ------------------ | --------------------------------------------------------------- |
+| `search-code`      | Locate files, functions, and patterns in the local codebase     |
+| `search-docs`      | Find external documentation, API references, and best practices |
+| `search-history`   | Analyze git history to understand why code changed over time    |
+| `search-learnings` | Surface past solutions and documented lessons from the project  |
 
 ### Skills (7)
 
 **Workflow skills**
 
-| Skill | Description |
-|---|---|
+| Skill     | Description                                                                   |
+| --------- | ----------------------------------------------------------------------------- |
 | `propose` | Create a Linear project and seed it with issues and sub-issues via Linear MCP |
-| `explore` | Explore tradeoffs using Linear project and issue context via Linear MCP |
-| `apply` | Execute implementation work from Linear sub-issues via Linear MCP |
-| `archive` | Close out completed Linear projects and issues via Linear MCP |
-| `ready` | Pre-deployment checklist: code quality, security, testing, documentation |
+| `explore` | Explore tradeoffs using Linear project and issue context via Linear MCP       |
+| `apply`   | Execute implementation work from Linear sub-issues via Linear MCP             |
+| `archive` | Close out completed Linear projects and issues via Linear MCP                 |
+| `ready`   | Pre-deployment checklist: code quality, security, testing, documentation      |
 
 **Domain skills**
 
-| Skill | Description |
-|---|---|
-| `git` | Advanced git workflows: branching, commit hygiene, conflict resolution |
+| Skill             | Description                                                                       |
+| ----------------- | --------------------------------------------------------------------------------- |
+| `git`             | Advanced git workflows: branching, commit hygiene, conflict resolution            |
 | `frontend-design` | Frontend best practices: component architecture, accessibility, responsive design |
 
 ### Commands (32)
@@ -339,11 +339,11 @@ Every AI tool gets its own adapter. Adding a new tool means writing one file:
 
 ```typescript
 // src/core/adapters/my-tool.ts
-import { createAdapter } from './base.js';
+import { createAdapter } from "./base.js";
 export const myToolAdapter = createAdapter({
-  toolId: 'my-tool',
-  toolName: 'My Tool',
-  skillsDir: '.my-tool',
+  toolId: "my-tool",
+  toolName: "My Tool",
+  skillsDir: ".my-tool",
 });
 ```
 

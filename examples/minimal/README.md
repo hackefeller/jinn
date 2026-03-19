@@ -5,6 +5,7 @@ Minimal jinn setup with just OpenCode.
 ## Files
 
 ### .jinn/config.yaml
+
 ```yaml
 version: "1.0.0"
 tools:

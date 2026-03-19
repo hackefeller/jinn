@@ -7,7 +7,7 @@ Implement work from Linear using Linear MCP.
 ## Prerequisites
 
 - Linear MCP must be configured in your environment
-- Verify Linear MCP is available by checking for linear_* tools
+- Verify Linear MCP is available by checking for linear\_\* tools
 
 ## Steps
 

@@ -13,13 +13,14 @@ metadata:
 
 Explore with Linear context using Linear MCP.
 
-1. Verify Linear MCP is available (check for linear_* tools).
+1. Verify Linear MCP is available (check for linear\_\* tools).
 2. Use Linear MCP to identify the relevant Linear project or Linear issue.
 3. Use Linear MCP to read the current Linear descriptions, dependencies, and status.
 4. Explore options, risks, and missing context.
 5. Use Linear MCP to write clarified decisions back into the relevant Linear project or Linear issue.
 
 Guardrails:
+
 - Always use Linear MCP tools to read and write Linear data.
 - Explore before implementation.
 - Keep recommendations grounded in both the codebase and Linear state.

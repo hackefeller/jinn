@@ -1,5 +1,5 @@
-import type { AgentTemplate } from '../../core/templates/types.js';
-import { COMMAND_IDS, SKILL_NAMES } from '../constants.js';
+import type { AgentTemplate } from "../../core/templates/types.js";
+import { SKILL_NAMES } from "../constants.js";
 
 // ============================================================================
 // Orchestrators — top-level coordinators, call these first
@@ -7,12 +7,17 @@ import { COMMAND_IDS, SKILL_NAMES } from '../constants.js';
 
 export function getPlanAgentTemplate(): AgentTemplate {
   return {
-    name: 'plan',
+    name: "plan",
     description:
-      'Pre-implementation planning: analyze intent, surface hidden requirements, break work into a sequenced plan with clear tasks. Use before starting any non-trivial work.',
-    license: 'MIT',
-    compatibility: 'Works with all jinn workflows',
-    metadata: { author: 'jinn', version: '1.0', category: 'Orchestration', tags: ['planning', 'strategy', 'requirements'] },
+      "Pre-implementation planning: analyze intent, surface hidden requirements, break work into a sequenced plan with clear tasks. Use before starting any non-trivial work.",
+    license: "MIT",
+    compatibility: "Works with all jinn workflows",
+    metadata: {
+      author: "jinn",
+      version: "1.0",
+      category: "Orchestration",
+      tags: ["planning", "strategy", "requirements"],
+    },
     instructions: `# Jinn Plan Agent
 
 You are a pre-implementation planning specialist. Before any work begins, you ensure the goal is well understood, requirements are explicit, and a clear sequenced plan exists.
@@ -41,25 +46,43 @@ A clear work plan with:
 - Success criteria
 - Risks and open questions
 `,
-    capabilities: ['Intent analysis', 'Requirement discovery', 'Risk identification', 'Work breakdown', 'Task sequencing'],
-    availableCommands: [COMMAND_IDS.JINN_PROPOSE, COMMAND_IDS.JINN_EXPLORE],
-    availableSkills: [SKILL_NAMES.GIT_MASTER, SKILL_NAMES.FRONTEND_DESIGN, SKILL_NAMES.JINN_READY_FOR_PROD],
-    role: 'Orchestration',
-    route: 'plan',
-    defaultTools: ['read', 'search'],
-    acceptanceChecks: ['Intent is well understood', 'Requirements are explicit', 'Tasks are sequenced and concrete', 'Success criteria are defined'],
-    defaultCommand: COMMAND_IDS.JINN_PROPOSE,
+    capabilities: [
+      "Intent analysis",
+      "Requirement discovery",
+      "Risk identification",
+      "Work breakdown",
+      "Task sequencing",
+    ],
+    availableSkills: [
+      SKILL_NAMES.GIT_MASTER,
+      SKILL_NAMES.FRONTEND_DESIGN,
+      SKILL_NAMES.JINN_READY_FOR_PROD,
+    ],
+    role: "Orchestration",
+    route: "plan",
+    defaultTools: ["read", "search"],
+    acceptanceChecks: [
+      "Intent is well understood",
+      "Requirements are explicit",
+      "Tasks are sequenced and concrete",
+      "Success criteria are defined",
+    ],
   };
 }
 
 export function getDoAgentTemplate(): AgentTemplate {
   return {
-    name: 'do',
+    name: "do",
     description:
-      'Execution coordinator: implements a work plan step by step, delegates to specialists when needed, verifies completion. Use when there is a clear plan ready to execute.',
-    license: 'MIT',
-    compatibility: 'Works with all jinn workflows',
-    metadata: { author: 'jinn', version: '1.0', category: 'Orchestration', tags: ['execution', 'implementation', 'coordination'] },
+      "Execution coordinator: implements a work plan step by step, delegates to specialists when needed, verifies completion. Use when there is a clear plan ready to execute.",
+    license: "MIT",
+    compatibility: "Works with all jinn workflows",
+    metadata: {
+      author: "jinn",
+      version: "1.0",
+      category: "Orchestration",
+      tags: ["execution", "implementation", "coordination"],
+    },
     instructions: `# Jinn Do Agent
 
 You execute work plans and coordinate implementation. You work through tasks sequentially, delegate to specialist agents when appropriate, and verify completion before moving on.
@@ -78,25 +101,37 @@ You execute work plans and coordinate implementation. You work through tasks seq
 - A blocker is discovered — report it and wait for guidance
 - An implementation reveals a design issue — surface it before continuing
 `,
-    capabilities: ['Execution coordination', 'Task delegation', 'Progress tracking', 'Blocker identification'],
-    availableCommands: [COMMAND_IDS.JINN_APPLY, COMMAND_IDS.CODE_FORMAT, COMMAND_IDS.GIT_SMART_COMMIT],
-    availableSkills: [SKILL_NAMES.GIT_MASTER, SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.FRONTEND_DESIGN],
-    role: 'Orchestration',
-    route: 'do',
-    defaultTools: ['edit', 'read', 'search', 'task'],
-    acceptanceChecks: ['All tasks complete', 'Tests pass', 'Requirements met'],
-    defaultCommand: COMMAND_IDS.JINN_APPLY,
+    capabilities: [
+      "Execution coordination",
+      "Task delegation",
+      "Progress tracking",
+      "Blocker identification",
+    ],
+    availableSkills: [
+      SKILL_NAMES.GIT_MASTER,
+      SKILL_NAMES.JINN_READY_FOR_PROD,
+      SKILL_NAMES.FRONTEND_DESIGN,
+    ],
+    role: "Orchestration",
+    route: "do",
+    defaultTools: ["edit", "read", "search", "task"],
+    acceptanceChecks: ["All tasks complete", "Tests pass", "Requirements met"],
   };
 }
 
 export function getReviewAgentTemplate(): AgentTemplate {
   return {
-    name: 'review',
+    name: "review",
     description:
-      'Quality reviewer: reviews completed work for correctness, security, performance, and code quality. Use after implementation is complete before merging or deploying.',
-    license: 'MIT',
-    compatibility: 'Works with all projects',
-    metadata: { author: 'jinn', version: '1.0', category: 'Orchestration', tags: ['review', 'quality', 'security'] },
+      "Quality reviewer: reviews completed work for correctness, security, performance, and code quality. Use after implementation is complete before merging or deploying.",
+    license: "MIT",
+    compatibility: "Works with all projects",
+    metadata: {
+      author: "jinn",
+      version: "1.0",
+      category: "Orchestration",
+      tags: ["review", "quality", "security"],
+    },
     instructions: `# Jinn Review Agent
 
 You conduct comprehensive reviews of completed work, covering correctness, security, performance, and code quality.
@@ -117,14 +152,16 @@ A structured review with:
 - Specific, actionable suggestions
 - Go / no-go recommendation
 `,
-    capabilities: ['Code review', 'Security analysis', 'Performance review', 'Quality assessment'],
-    availableCommands: [COMMAND_IDS.CODE_REVIEW],
+    capabilities: ["Code review", "Security analysis", "Performance review", "Quality assessment"],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.GIT_MASTER],
-    role: 'Orchestration',
-    route: 'review',
-    defaultTools: ['read', 'search'],
-    acceptanceChecks: ['All dimensions reviewed', 'Issues are prioritized', 'Suggestions are actionable'],
-    defaultCommand: COMMAND_IDS.CODE_REVIEW,
+    role: "Orchestration",
+    route: "review",
+    defaultTools: ["read", "search"],
+    acceptanceChecks: [
+      "All dimensions reviewed",
+      "Issues are prioritized",
+      "Suggestions are actionable",
+    ],
   };
 }
 
@@ -134,12 +171,17 @@ A structured review with:
 
 export function getArchitectAgentTemplate(): AgentTemplate {
   return {
-    name: 'architect',
+    name: "architect",
     description:
-      'Architecture specialist: reviews design decisions, identifies patterns and anti-patterns, ensures scalable and maintainable structure. Use for architectural questions or after significant structural changes.',
-    license: 'MIT',
-    compatibility: 'Works with all projects',
-    metadata: { author: 'jinn', version: '1.0', category: 'Specialist', tags: ['architecture', 'patterns', 'design'] },
+      "Architecture specialist: reviews design decisions, identifies patterns and anti-patterns, ensures scalable and maintainable structure. Use for architectural questions or after significant structural changes.",
+    license: "MIT",
+    compatibility: "Works with all projects",
+    metadata: {
+      author: "jinn",
+      version: "1.0",
+      category: "Specialist",
+      tags: ["architecture", "patterns", "design"],
+    },
     instructions: `# Jinn Architect Agent
 
 You review code architecture and design decisions, identify patterns and anti-patterns, and ensure the codebase is structured for scalability and maintainability.
@@ -159,25 +201,37 @@ You review code architecture and design decisions, identify patterns and anti-pa
 - Specific refactoring recommendations
 - Structural improvement roadmap
 `,
-    capabilities: ['Architecture review', 'Pattern recognition', 'Anti-pattern detection', 'Dependency analysis'],
-    availableCommands: [COMMAND_IDS.CODE_REVIEW, COMMAND_IDS.CODE_REFACTOR],
+    capabilities: [
+      "Architecture review",
+      "Pattern recognition",
+      "Anti-pattern detection",
+      "Dependency analysis",
+    ],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.GIT_MASTER],
-    role: 'Specialist',
-    route: 'do',
-    defaultTools: ['read', 'search'],
-    acceptanceChecks: ['Architecture assessed', 'Patterns identified', 'Recommendations are concrete'],
-    defaultCommand: COMMAND_IDS.CODE_REVIEW,
+    role: "Specialist",
+    route: "do",
+    defaultTools: ["read", "search"],
+    acceptanceChecks: [
+      "Architecture assessed",
+      "Patterns identified",
+      "Recommendations are concrete",
+    ],
   };
 }
 
 export function getDesignerAgentTemplate(): AgentTemplate {
   return {
-    name: 'designer',
+    name: "designer",
     description:
-      'Frontend designer: builds production-grade UIs, implements components, maps user flows, iterates on design quality, and verifies implementation against design specs. Use for all frontend and UI work.',
-    license: 'MIT',
-    compatibility: 'Works with frontend projects',
-    metadata: { author: 'jinn', version: '1.0', category: 'Specialist', tags: ['frontend', 'ui', 'ux', 'design', 'figma'] },
+      "Frontend designer: builds production-grade UIs, implements components, maps user flows, iterates on design quality, and verifies implementation against design specs. Use for all frontend and UI work.",
+    license: "MIT",
+    compatibility: "Works with frontend projects",
+    metadata: {
+      author: "jinn",
+      version: "1.0",
+      category: "Specialist",
+      tags: ["frontend", "ui", "ux", "design", "figma"],
+    },
     instructions: `# Jinn Designer Agent
 
 You build production-grade frontend interfaces and verify implementation against design specifications.
@@ -207,25 +261,40 @@ You build production-grade frontend interfaces and verify implementation against
 - Accessible by default (ARIA, keyboard navigation)
 - Performance-conscious (lazy loading, optimized assets)
 `,
-    capabilities: ['UI implementation', 'Component architecture', 'User flow analysis', 'Design verification', 'Figma sync', 'Accessibility'],
-    availableCommands: [COMMAND_IDS.CODE_FORMAT, COMMAND_IDS.CODE_REFACTOR],
+    capabilities: [
+      "UI implementation",
+      "Component architecture",
+      "User flow analysis",
+      "Design verification",
+      "Figma sync",
+      "Accessibility",
+    ],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.GIT_MASTER],
-    role: 'Specialist',
-    route: 'do',
-    defaultTools: ['edit', 'read', 'search'],
-    acceptanceChecks: ['Design is production-ready', 'Implementation matches specs', 'Accessible', 'Responsive'],
-    defaultCommand: COMMAND_IDS.CODE_FORMAT,
+    role: "Specialist",
+    route: "do",
+    defaultTools: ["edit", "read", "search"],
+    acceptanceChecks: [
+      "Design is production-ready",
+      "Implementation matches specs",
+      "Accessible",
+      "Responsive",
+    ],
   };
 }
 
 export function getGitAgentTemplate(): AgentTemplate {
   return {
-    name: 'git',
+    name: "git",
     description:
-      'Git specialist: branch strategy, commit hygiene, merge conflict resolution, and history analysis. Use for complex git operations or when you need to understand the history of a codebase.',
-    license: 'MIT',
-    compatibility: 'Works with git repositories',
-    metadata: { author: 'jinn', version: '1.0', category: 'Specialist', tags: ['git', 'version-control', 'history'] },
+      "Git specialist: branch strategy, commit hygiene, merge conflict resolution, and history analysis. Use for complex git operations or when you need to understand the history of a codebase.",
+    license: "MIT",
+    compatibility: "Works with git repositories",
+    metadata: {
+      author: "jinn",
+      version: "1.0",
+      category: "Specialist",
+      tags: ["git", "version-control", "history"],
+    },
     instructions: `# Jinn Git Agent
 
 You handle advanced git workflows, branch strategy, commit organization, and conflict resolution.
@@ -247,14 +316,22 @@ You handle advanced git workflows, branch strategy, commit organization, and con
 4. Feature branches — isolate work from main
 5. Regular integration — merge main into feature branches often
 `,
-    capabilities: ['Branch strategy', 'Commit hygiene', 'Conflict resolution', 'History analysis', 'Cherry-picking'],
-    availableCommands: [COMMAND_IDS.GIT_SMART_COMMIT, COMMAND_IDS.GIT_BRANCH, COMMAND_IDS.GIT_MERGE],
+    capabilities: [
+      "Branch strategy",
+      "Commit hygiene",
+      "Conflict resolution",
+      "History analysis",
+      "Cherry-picking",
+    ],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD],
-    role: 'Specialist',
-    route: 'do',
-    defaultTools: ['read', 'search'],
-    acceptanceChecks: ['Git operation completed safely', 'History is clean', 'Branch strategy is sound'],
-    defaultCommand: COMMAND_IDS.GIT_SMART_COMMIT,
+    role: "Specialist",
+    route: "do",
+    defaultTools: ["read", "search"],
+    acceptanceChecks: [
+      "Git operation completed safely",
+      "History is clean",
+      "Branch strategy is sound",
+    ],
   };
 }
 
@@ -264,12 +341,17 @@ You handle advanced git workflows, branch strategy, commit organization, and con
 
 export function getSearchCodeAgentTemplate(): AgentTemplate {
   return {
-    name: 'search-code',
+    name: "search-code",
     description:
-      'Codebase searcher: finds files, functions, classes, and patterns in the local repository. Use when you need to locate specific code or understand the structure of a codebase.',
-    license: 'MIT',
-    compatibility: 'Works with all projects',
-    metadata: { author: 'jinn', version: '1.0', category: 'Research', tags: ['search', 'codebase', 'discovery'] },
+      "Codebase searcher: finds files, functions, classes, and patterns in the local repository. Use when you need to locate specific code or understand the structure of a codebase.",
+    license: "MIT",
+    compatibility: "Works with all projects",
+    metadata: {
+      author: "jinn",
+      version: "1.0",
+      category: "Research",
+      tags: ["search", "codebase", "discovery"],
+    },
     instructions: `# Jinn Search Code Agent
 
 You search the local codebase to answer questions about where code lives and how it's organized.
@@ -290,25 +372,32 @@ Always return:
 - Relevant code excerpts for context
 - Summary of what you found and why it's relevant
 `,
-    capabilities: ['File search', 'Code location', 'Pattern finding', 'Architecture mapping'],
-    availableCommands: [COMMAND_IDS.JINN_EXPLORE],
+    capabilities: ["File search", "Code location", "Pattern finding", "Architecture mapping"],
     availableSkills: [SKILL_NAMES.GIT_MASTER],
-    role: 'Research',
-    route: 'research',
-    defaultTools: ['search', 'read'],
-    acceptanceChecks: ['Code located accurately', 'Context provided', 'File paths and line numbers included'],
-    defaultCommand: COMMAND_IDS.JINN_EXPLORE,
+    role: "Research",
+    route: "research",
+    defaultTools: ["search", "read"],
+    acceptanceChecks: [
+      "Code located accurately",
+      "Context provided",
+      "File paths and line numbers included",
+    ],
   };
 }
 
 export function getSearchDocsAgentTemplate(): AgentTemplate {
   return {
-    name: 'search-docs',
+    name: "search-docs",
     description:
-      'Documentation researcher: finds external documentation, best practices, framework guides, API references, and industry standards. Use when you need knowledge from outside the codebase.',
-    license: 'MIT',
-    compatibility: 'Works with all projects',
-    metadata: { author: 'jinn', version: '1.0', category: 'Research', tags: ['docs', 'research', 'external', 'best-practices'] },
+      "Documentation researcher: finds external documentation, best practices, framework guides, API references, and industry standards. Use when you need knowledge from outside the codebase.",
+    license: "MIT",
+    compatibility: "Works with all projects",
+    metadata: {
+      author: "jinn",
+      version: "1.0",
+      category: "Research",
+      tags: ["docs", "research", "external", "best-practices"],
+    },
     instructions: `# Jinn Search Docs Agent
 
 You research external documentation, best practices, and industry standards to answer technical questions.
@@ -337,25 +426,34 @@ You research external documentation, best practices, and industry standards to a
 - Relevant code examples
 - Recommendations based on findings
 `,
-    capabilities: ['Documentation research', 'Best practice identification', 'API reference lookup', 'Standards research', 'Media analysis'],
-    availableCommands: [COMMAND_IDS.JINN_EXPLORE, COMMAND_IDS.JINN_PROPOSE],
+    capabilities: [
+      "Documentation research",
+      "Best practice identification",
+      "API reference lookup",
+      "Standards research",
+      "Media analysis",
+    ],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD],
-    role: 'Research',
-    route: 'research',
-    defaultTools: ['web', 'search', 'read'],
-    acceptanceChecks: ['Sources cited', 'Information is current', 'Findings are actionable'],
-    defaultCommand: COMMAND_IDS.JINN_EXPLORE,
+    role: "Research",
+    route: "research",
+    defaultTools: ["web", "search", "read"],
+    acceptanceChecks: ["Sources cited", "Information is current", "Findings are actionable"],
   };
 }
 
 export function getSearchHistoryAgentTemplate(): AgentTemplate {
   return {
-    name: 'search-history',
+    name: "search-history",
     description:
       'History analyst: analyzes git history to understand why code changed over time, trace the origin of decisions, and find context for current code. Use when you need to understand the "why" behind existing code.',
-    license: 'MIT',
-    compatibility: 'Works with git repositories',
-    metadata: { author: 'jinn', version: '1.0', category: 'Research', tags: ['git', 'history', 'context', 'blame'] },
+    license: "MIT",
+    compatibility: "Works with git repositories",
+    metadata: {
+      author: "jinn",
+      version: "1.0",
+      category: "Research",
+      tags: ["git", "history", "context", "blame"],
+    },
     instructions: `# Jinn Search History Agent
 
 You analyze git history to understand the evolution of code and the context behind decisions.
@@ -385,25 +483,37 @@ Use git commands:
 - Summary of how/why the code evolved
 - Any relevant patterns in the history
 `,
-    capabilities: ['Git history analysis', 'Commit tracing', 'Change attribution', 'Context recovery'],
-    availableCommands: [COMMAND_IDS.JINN_EXPLORE],
+    capabilities: [
+      "Git history analysis",
+      "Commit tracing",
+      "Change attribution",
+      "Context recovery",
+    ],
     availableSkills: [SKILL_NAMES.GIT_MASTER],
-    role: 'Research',
-    route: 'research',
-    defaultTools: ['read', 'search'],
-    acceptanceChecks: ['History analyzed thoroughly', 'Context is clear', 'Relevant commits identified'],
-    defaultCommand: COMMAND_IDS.JINN_EXPLORE,
+    role: "Research",
+    route: "research",
+    defaultTools: ["read", "search"],
+    acceptanceChecks: [
+      "History analyzed thoroughly",
+      "Context is clear",
+      "Relevant commits identified",
+    ],
   };
 }
 
 export function getSearchLearningsAgentTemplate(): AgentTemplate {
   return {
-    name: 'search-learnings',
+    name: "search-learnings",
     description:
-      'Learnings searcher: searches institutional knowledge, past solutions, and documented lessons learned. Use when you want to know if this problem has been solved before or what was learned from past attempts.',
-    license: 'MIT',
-    compatibility: 'Works with all projects',
-    metadata: { author: 'jinn', version: '1.0', category: 'Research', tags: ['learnings', 'knowledge', 'institutional', 'past-solutions'] },
+      "Learnings searcher: searches institutional knowledge, past solutions, and documented lessons learned. Use when you want to know if this problem has been solved before or what was learned from past attempts.",
+    license: "MIT",
+    compatibility: "Works with all projects",
+    metadata: {
+      author: "jinn",
+      version: "1.0",
+      category: "Research",
+      tags: ["learnings", "knowledge", "institutional", "past-solutions"],
+    },
     instructions: `# Jinn Search Learnings Agent
 
 You search institutional knowledge — past solutions, documented lessons, and accumulated wisdom — to avoid reinventing the wheel.
@@ -431,14 +541,21 @@ You search institutional knowledge — past solutions, documented lessons, and a
 - Patterns to follow or avoid
 - Recommendations based on institutional knowledge
 `,
-    capabilities: ['Knowledge search', 'Pattern identification', 'Past solution finding', 'Lesson retrieval'],
-    availableCommands: [COMMAND_IDS.JINN_EXPLORE, COMMAND_IDS.JINN_PROPOSE],
+    capabilities: [
+      "Knowledge search",
+      "Pattern identification",
+      "Past solution finding",
+      "Lesson retrieval",
+    ],
     availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.GIT_MASTER],
-    role: 'Research',
-    route: 'research',
-    defaultTools: ['search', 'read'],
-    acceptanceChecks: ['Relevant knowledge found', 'Past solutions surfaced', 'Lessons clearly articulated'],
-    defaultCommand: COMMAND_IDS.JINN_EXPLORE,
+    role: "Research",
+    route: "research",
+    defaultTools: ["search", "read"],
+    acceptanceChecks: [
+      "Relevant knowledge found",
+      "Past solutions surfaced",
+      "Lessons clearly articulated",
+    ],
   };
 }
 

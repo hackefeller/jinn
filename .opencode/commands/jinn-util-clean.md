@@ -10,8 +10,8 @@ Clean up temporary and generated files.
 
 - Build artifacts (dist/, build/)
 - Cache files (.cache/, node_modules/.cache)
-- Temporary files (*.tmp, *.log)
-- IDE files (.idea/, *.swp)
+- Temporary files (_.tmp, _.log)
+- IDE files (.idea/, \*.swp)
 - Dependency caches
 
 ## Process

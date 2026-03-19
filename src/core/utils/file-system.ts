@@ -4,9 +4,9 @@
  * Async wrappers around Node.js fs operations with proper error handling.
  */
 
-import * as fs from 'fs/promises';
-import type { Stats } from 'fs';
-import * as path from 'path';
+import * as fs from "fs/promises";
+import type { Stats } from "fs";
+import * as path from "path";
 
 /**
  * Check if a directory exists
@@ -44,14 +44,14 @@ export async function ensureDir(dirPath: string): Promise<void> {
  */
 export async function writeFile(filePath: string, content: string): Promise<void> {
   await ensureDir(path.dirname(filePath));
-  await fs.writeFile(filePath, content, 'utf-8');
+  await fs.writeFile(filePath, content, "utf-8");
 }
 
 /**
  * Read a file as UTF-8 string
  */
 export async function readFile(filePath: string): Promise<string> {
-  return fs.readFile(filePath, 'utf-8');
+  return fs.readFile(filePath, "utf-8");
 }
 
 /**
@@ -74,9 +74,7 @@ export async function removeFile(filePath: string): Promise<void> {
 export async function listDirs(dirPath: string): Promise<string[]> {
   try {
     const entries = await fs.readdir(dirPath, { withFileTypes: true });
-    return entries
-      .filter((entry) => entry.isDirectory())
-      .map((entry) => entry.name);
+    return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
   } catch {
     return [];
   }

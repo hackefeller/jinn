@@ -6,34 +6,7 @@
  * requirements while the core templates remain tool-agnostic.
  */
 
-import type { AgentTemplate, SkillTemplate } from '../templates/types.js';
-
-/**
- * Tool-agnostic command content
- * Generated from CommandTemplate, fed to adapters for formatting
- */
-export interface CommandContent {
-  /** Command identifier (e.g., 'propose', 'code-format') */
-  id: string;
-
-  /** Full command name with namespace (e.g., 'jinn:propose') */
-  fullId: string;
-
-  /** Human-readable name */
-  name: string;
-
-  /** Brief description */
-  description: string;
-
-  /** Grouping category */
-  category: string;
-
-  /** Search tags */
-  tags: string[];
-
-  /** The instruction content (body text) */
-  body: string;
-}
+import type { AgentTemplate, SkillTemplate } from "../templates/types.js";
 
 /**
  * Per-tool formatting strategy.
@@ -51,25 +24,11 @@ export interface ToolCommandAdapter {
   skillsDir: string;
 
   /**
-   * Returns the file path for a command.
-   * @param commandId - The command identifier (e.g., 'propose')
-   * @returns Path from project root (e.g., '.opencode/commands/jinn-propose.md')
-   */
-  getCommandPath(commandId: string): string;
-
-  /**
    * Returns the skill directory path.
    * @param skillName - The skill name (e.g., 'jinn-planner')
    * @returns Path from project root (e.g., '.opencode/skills/jinn-planner/SKILL.md')
    */
   getSkillPath(skillName: string): string;
-
-  /**
-   * Formats command file content including frontmatter.
-   * @param content - The tool-agnostic command content
-   * @returns Complete file content ready to write
-   */
-  formatCommand(content: CommandContent): string;
 
   /**
    * Formats skill file content including frontmatter.
@@ -97,12 +56,18 @@ export interface ToolCommandAdapter {
   formatAgent?(template: AgentTemplate, version: string): string;
 
   /**
-   * Optional: Transform command references for this tool.
-   * E.g., OpenCode uses /jinn:propose, others might use different syntax.
-   * @param text - The text to transform
-   * @returns Transformed text with tool-appropriate command references
+   * Optional: Returns the file path for the skills discovery manifest.
+   * @returns Path from project root (e.g., '.claude/skills-index.md')
    */
-  transformCommandReferences?(text: string): string;
+  getManifestPath?(): string;
+
+  /**
+   * Optional: Formats the skills discovery manifest content.
+   * @param skills - All skill templates to index
+   * @param version - Jinn version
+   * @returns Complete manifest file content
+   */
+  formatManifest?(skills: SkillTemplate[], version: string): string;
 }
 
 /**

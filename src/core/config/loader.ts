@@ -4,11 +4,11 @@
  * Load and save jinn configuration files.
  */
 
-import * as path from 'path';
-import * as yaml from 'yaml';
-import { fileExists, readFile, writeFile, ensureDir } from '../utils/file-system.js';
-import { ConfigSchema, type Config } from './schema.js';
-import { DEFAULT_CONFIG, DEFAULT_CONFIG_FILENAME, JINN_DIR_NAME } from './defaults.js';
+import * as path from "path";
+import * as yaml from "yaml";
+import { fileExists, readFile, writeFile, ensureDir } from "../utils/file-system.js";
+import { ConfigSchema, type Config } from "./schema.js";
+import { DEFAULT_CONFIG, DEFAULT_CONFIG_FILENAME, JINN_DIR_NAME } from "./defaults.js";
 
 /**
  * Get the jinn configuration directory path
@@ -73,7 +73,7 @@ export async function saveConfig(config: Config, projectPath: string): Promise<v
  */
 export async function createDefaultConfig(
   projectPath: string,
-  overrides: Pick<Config, 'tools'> & Partial<Config>
+  overrides: Pick<Config, "tools"> & Partial<Config>,
 ): Promise<Config> {
   const config: Config = {
     ...DEFAULT_CONFIG,
@@ -102,14 +102,11 @@ export async function hasConfig(projectPath: string): Promise<boolean> {
  * @param updates - Configuration updates
  * @returns Updated configuration
  */
-export async function updateConfig(
-  projectPath: string,
-  updates: Partial<Config>
-): Promise<Config> {
+export async function updateConfig(projectPath: string, updates: Partial<Config>): Promise<Config> {
   const current = await loadConfig(projectPath);
 
   if (!current) {
-    throw new Error('No existing configuration found. Run init first.');
+    throw new Error("No existing configuration found. Run init first.");
   }
 
   const updated: Config = {

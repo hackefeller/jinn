@@ -30,7 +30,6 @@ You research external documentation, best practices, and industry standards to a
 - Relevant code examples
 - Recommendations based on findings
 
-
 ## Available commands
 
 - jinn-explore

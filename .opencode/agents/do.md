@@ -20,10 +20,11 @@ You execute work plans and coordinate implementation. You work through tasks seq
 - A blocker is discovered — report it and wait for guidance
 - An implementation reveals a design issue — surface it before continuing
 
-
 ## Available commands
 
 - jinn-apply
+- jinn-sync
+- jinn-unblock
 - jinn-code-format
 - jinn-git-smart-commit
 

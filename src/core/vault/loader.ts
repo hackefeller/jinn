@@ -5,16 +5,16 @@
  * (frontmatter + body) and discovers its reference files.
  */
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import * as yaml from 'yaml';
-import type { VaultSkill, VaultReference } from './types.js';
+import * as fs from "fs/promises";
+import * as path from "path";
+import * as yaml from "yaml";
+import type { VaultSkill, VaultReference } from "./types.js";
 
 /** Relative path inside the vault where skills live */
-const SKILLS_DIR = path.join('.codex', 'skills');
+const SKILLS_DIR = path.join(".codex", "skills");
 
 /** Delimiter used by SKILL.md YAML frontmatter */
-const FM_DELIMITER = '---';
+const FM_DELIMITER = "---";
 
 /**
  * Parse a SKILL.md string into frontmatter and body.
@@ -50,13 +50,13 @@ export function parseFrontmatter(content: string): {
  * Load all reference files from a skill's references/ subdirectory.
  */
 async function loadReferences(skillDir: string): Promise<VaultReference[]> {
-  const refsDir = path.join(skillDir, 'references');
+  const refsDir = path.join(skillDir, "references");
 
   let entries: string[];
   try {
     const dirents = await fs.readdir(refsDir, { withFileTypes: true });
     entries = dirents
-      .filter((d) => d.isFile() && d.name.endsWith('.md'))
+      .filter((d) => d.isFile() && d.name.endsWith(".md"))
       .map((d) => d.name)
       .sort();
   } catch {
@@ -68,7 +68,7 @@ async function loadReferences(skillDir: string): Promise<VaultReference[]> {
   for (const filename of entries) {
     const filePath = path.join(refsDir, filename);
     try {
-      const content = await fs.readFile(filePath, 'utf-8');
+      const content = await fs.readFile(filePath, "utf-8");
       refs.push({
         filename,
         relativePath: `references/${filename}`,
@@ -87,21 +87,18 @@ async function loadReferences(skillDir: string): Promise<VaultReference[]> {
  * Returns null if SKILL.md is missing or unreadable.
  */
 async function loadSkill(skillDir: string): Promise<VaultSkill | null> {
-  const skillPath = path.join(skillDir, 'SKILL.md');
+  const skillPath = path.join(skillDir, "SKILL.md");
 
   let raw: string;
   try {
-    raw = await fs.readFile(skillPath, 'utf-8');
+    raw = await fs.readFile(skillPath, "utf-8");
   } catch {
     return null;
   }
 
   const { frontmatter, body } = parseFrontmatter(raw);
   const name = path.basename(skillDir);
-  const description =
-    typeof frontmatter.description === 'string'
-      ? frontmatter.description
-      : '';
+  const description = typeof frontmatter.description === "string" ? frontmatter.description : "";
 
   const references = await loadReferences(skillDir);
 
@@ -119,7 +116,9 @@ export async function loadVaultSkills(vaultPath: string): Promise<VaultSkill[]> 
 
   let dirents: Awaited<ReturnType<typeof fs.readdir>>;
   try {
-    dirents = (await fs.readdir(skillsDir, { withFileTypes: true })) as unknown as Awaited<ReturnType<typeof fs.readdir>>;
+    dirents = (await fs.readdir(skillsDir, { withFileTypes: true })) as unknown as Awaited<
+      ReturnType<typeof fs.readdir>
+    >;
   } catch {
     throw new Error(`Cannot read vault skills directory: ${skillsDir}`);
   }

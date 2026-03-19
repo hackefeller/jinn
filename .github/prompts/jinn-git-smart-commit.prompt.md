@@ -15,21 +15,21 @@ Create well-structured commits with clear, conventional messages.
 ## Process
 
 1. **Review Changes**
-   
+
    Check what files have changed and what they contain
 
 2. **Stage Strategically**
-   
+
    Group related changes into logical commits
 
 3. **Write Messages**
-   
+
    Use conventional commit format:
    - type: description
    - Body explaining what and why
 
 4. **Verify**
-   
+
    Review the commit before finalizing
 
 ## Commit Message Format

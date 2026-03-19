@@ -5,6 +5,7 @@ Multiple AI tools with extended profile.
 ## Files
 
 ### .jinn/config.yaml
+
 ```yaml
 version: "1.0.0"
 tools:

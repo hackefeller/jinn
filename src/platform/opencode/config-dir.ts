@@ -1,5 +1,5 @@
-import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { homedir } from "node:os";
+import { join } from "node:path";
 
 interface OpenCodeConfigDirOptions {
   binary: string;
@@ -10,7 +10,7 @@ interface OpenCodeConfigPathOptions extends OpenCodeConfigDirOptions {
 }
 
 export function getOpenCodeConfigDir(_: OpenCodeConfigDirOptions): string {
-  return join(homedir(), '.config', 'opencode');
+  return join(homedir(), ".config", "opencode");
 }
 
 export function getOpenCodeConfigPaths(options: OpenCodeConfigPathOptions): {
@@ -22,7 +22,7 @@ export function getOpenCodeConfigPaths(options: OpenCodeConfigPathOptions): {
 
   return {
     dir,
-    configJson: join(dir, 'opencode.json'),
-    configJsonc: join(dir, 'opencode.jsonc'),
+    configJson: join(dir, "opencode.json"),
+    configJsonc: join(dir, "opencode.jsonc"),
   };
 }

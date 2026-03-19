@@ -4,8 +4,8 @@
  * Detects available AI tools in the project.
  */
 
-import { detectAvailableTools } from '../../core/discovery/detector.js';
-import { getAllToolDefinitions } from '../../core/discovery/definitions.js';
+import { detectAvailableTools } from "../../core/discovery/detector.js";
+import { getAllToolDefinitions } from "../../core/discovery/definitions.js";
 
 export interface DetectOptions {
   projectPath?: string;
@@ -23,18 +23,18 @@ export async function executeDetect(options: DetectOptions): Promise<void> {
   const notDetected = allTools.filter((t) => !availableTools.includes(t.id));
 
   if (detected.length > 0) {
-    console.log('✓ Installed');
+    console.log("✓ Installed");
     for (const tool of detected) {
       console.log(`  ✓ ${tool.name} (${tool.skillsDir})`);
     }
   }
 
   if (notDetected.length > 0) {
-    console.log('\n○ Not installed');
+    console.log("\n○ Not installed");
     for (const tool of notDetected) {
       console.log(`  ○ ${tool.name} (${tool.skillsDir})`);
     }
   }
 
-  console.log('');
+  console.log("");
 }

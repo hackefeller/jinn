@@ -12,9 +12,9 @@
  * to `#file:<workspace-path>` so the IDE auto-attaches them.
  */
 
-import * as path from 'path';
-import type { GeneratedFile, ToolCommandAdapter } from '../adapters/types.js';
-import type { VaultSkill, VaultReference } from './types.js';
+import * as path from "path";
+import type { GeneratedFile, ToolCommandAdapter } from "../adapters/types.js";
+import type { VaultSkill, VaultReference } from "./types.js";
 
 // ---------------------------------------------------------------------------
 // Reference path rewriting (syntax only — not a gating condition for copying)
@@ -30,33 +30,28 @@ function rewriteReferencePaths(
   body: string,
   references: VaultReference[],
   toolId: string,
-  skillOutputDir: string // e.g. ".github/skills/writer-agent"
+  skillOutputDir: string, // e.g. ".github/skills/writer-agent"
 ): string {
   if (references.length === 0) return body;
 
-  if (toolId === 'github-copilot') {
+  if (toolId === "github-copilot") {
     // Copilot prompt files support `#file:<workspace-relative-path>` which
     // auto-attaches the file when the user loads the prompt.
     let rewritten = body;
     for (const ref of references) {
       const workspacePath = path
-        .join(skillOutputDir, 'references', ref.filename)
-        .replace(/\\/g, '/');
-      rewritten = rewritten.replaceAll(
-        `\`${ref.relativePath}\``,
-        `\`#file:${workspacePath}\``
-      );
+        .join(skillOutputDir, "references", ref.filename)
+        .replace(/\\/g, "/");
+      rewritten = rewritten.replaceAll(`\`${ref.relativePath}\``, `\`#file:${workspacePath}\``);
     }
 
     // Append an explicit #file: block so Copilot pre-loads every reference.
     const attachments = references
       .map((r) => {
-        const wp = path
-          .join(skillOutputDir, 'references', r.filename)
-          .replace(/\\/g, '/');
+        const wp = path.join(skillOutputDir, "references", r.filename).replace(/\\/g, "/");
         return `#file:${wp}`;
       })
-      .join('\n');
+      .join("\n");
 
     return `${rewritten}\n\n<!-- vault-references -->\n${attachments}`;
   }
@@ -72,16 +67,14 @@ function rewriteReferencePaths(
 function buildSkillContent(skill: VaultSkill, body: string): string {
   const fmLines: string[] = [];
   for (const [key, value] of Object.entries(skill.frontmatter)) {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       fmLines.push(`${key}: ${value}`);
     } else if (value !== null && value !== undefined) {
       fmLines.push(`${key}: ${JSON.stringify(value)}`);
     }
   }
 
-  const frontmatterBlock = fmLines.length > 0
-    ? `---\n${fmLines.join('\n')}\n---\n\n`
-    : '';
+  const frontmatterBlock = fmLines.length > 0 ? `---\n${fmLines.join("\n")}\n---\n\n` : "";
 
   return `${frontmatterBlock}${body}`;
 }
@@ -96,7 +89,7 @@ function buildSkillContent(skill: VaultSkill, body: string): string {
  */
 export function compileSkillForAdapter(
   skill: VaultSkill,
-  adapter: ToolCommandAdapter
+  adapter: ToolCommandAdapter,
 ): GeneratedFile[] {
   const skillOutputPath = adapter.getSkillPath(skill.name);
   const skillOutputDir = path.dirname(skillOutputPath);
@@ -105,7 +98,7 @@ export function compileSkillForAdapter(
     skill.body,
     skill.references,
     adapter.toolId,
-    skillOutputDir
+    skillOutputDir,
   );
 
   const files: GeneratedFile[] = [
@@ -117,7 +110,7 @@ export function compileSkillForAdapter(
 
   for (const ref of skill.references) {
     files.push({
-      path: path.join(skillOutputDir, 'references', ref.filename),
+      path: path.join(skillOutputDir, "references", ref.filename),
       content: ref.content,
     });
   }
@@ -130,7 +123,7 @@ export function compileSkillForAdapter(
  */
 export function compileVaultSkills(
   skills: VaultSkill[],
-  adapters: ToolCommandAdapter[]
+  adapters: ToolCommandAdapter[],
 ): GeneratedFile[] {
   const files: GeneratedFile[] = [];
   for (const skill of skills) {

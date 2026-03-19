@@ -22,6 +22,7 @@ src/core/adapters/
 ```
 
 Each adapter implements `ToolCommandAdapter`:
+
 - `toolId` - Unique identifier
 - `skillsDir` - Tool's skills directory
 - `getCommandPath()` - Generate command file path
@@ -46,13 +47,13 @@ Generates files for all configured tools:
 
 ```typescript
 // Generate commands for all tools
-generateCommandsForAllTools(template, commandId, adapters, version)
+generateCommandsForAllTools(template, commandId, adapters, version);
 
-// Generate skills for all tools  
-generateSkillsForAllTools(templates, adapters, version)
+// Generate skills for all tools
+generateSkillsForAllTools(templates, adapters, version);
 
 // Generate agents for all tools
-generateAgentsForAllTools(templates, adapters, version)
+generateAgentsForAllTools(templates, adapters, version);
 ```
 
 ### 4. CLI (`src/cli/ghostwire/`)

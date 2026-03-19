@@ -27,6 +27,7 @@ You search the local codebase to answer questions about where code lives and how
 ## Output
 
 Always return:
+
 - Exact file paths and line numbers
 - Relevant code excerpts for context
 - Summary of what you found and why it's relevant

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it } from "bun:test";
 
 import {
   getPlanAgentTemplate,
@@ -11,7 +11,7 @@ import {
   getSearchDocsAgentTemplate,
   getSearchHistoryAgentTemplate,
   getSearchLearningsAgentTemplate,
-} from '../agents/index.js';
+} from "../agents/index.js";
 
 const templates = [
   getPlanAgentTemplate(),
@@ -26,23 +26,17 @@ const templates = [
   getSearchLearningsAgentTemplate(),
 ];
 
-describe('agent templates', () => {
-  it('expose available commands', () => {
-    for (const template of templates) {
-      expect(template.availableCommands?.length ?? 0).toBeGreaterThan(0);
-    }
-  });
-
-  it('expose available skills', () => {
+describe("agent templates", () => {
+  it("expose available skills", () => {
     for (const template of templates) {
       expect(template.availableSkills?.length ?? 0).toBeGreaterThan(0);
     }
   });
 
-  it('do not duplicate capability sections in instructions (added by formatAgent)', () => {
+  it("do not duplicate capability sections in instructions (added by formatAgent)", () => {
     for (const template of templates) {
-      expect(template.instructions).not.toContain('## Available commands');
-      expect(template.instructions).not.toContain('## Related skills');
+      expect(template.instructions).not.toContain("## Available commands");
+      expect(template.instructions).not.toContain("## Related skills");
     }
   });
 });

@@ -18,19 +18,19 @@ Conduct comprehensive code reviews.
 ## Process
 
 1. **Understand Context**
-   
+
    Read the code and understand what it's trying to do
 
 2. **Identify Issues**
-   
+
    Look for bugs, security issues, performance problems
 
 3. **Suggest Improvements**
-   
+
    Offer constructive suggestions for better code
 
 4. **Prioritize**
-   
+
    Distinguish must-fix from nice-to-have
 
 ## Output

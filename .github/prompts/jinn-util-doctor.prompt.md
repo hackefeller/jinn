@@ -9,21 +9,25 @@ Diagnose project health issues.
 ## Diagnostics to Run
 
 ### Environment
+
 - Node/Python version
 - Package manager
 - Environment variables
 
 ### Dependencies
+
 - Outdated packages
 - Security vulnerabilities
 - Unused dependencies
 
 ### Code Quality
+
 - Lint errors
 - Type errors
 - Test coverage
 
 ### Build
+
 - Build success
 - Bundle size
 - Performance

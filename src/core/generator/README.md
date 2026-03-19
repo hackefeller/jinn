@@ -23,8 +23,8 @@ Orchestrates generation of jinn files across all configured AI tools.
 ## Usage
 
 ```typescript
-import { Generator } from './generator/index.js';
-import { loadConfig } from './config/loader.js';
+import { Generator } from "./generator/index.js";
+import { loadConfig } from "./config/loader.js";
 
 const config = await loadConfig(projectPath);
 const generator = new Generator(config);

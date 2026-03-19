@@ -6,28 +6,28 @@
  * Harness-agnostic AI agent distribution platform.
  */
 
-import { Command } from 'commander';
-import { executeInit } from './init.js';
-import { executeUpdate } from './update.js';
-import { executeConfig } from './config.js';
-import { executeDetect } from './detect.js';
-import { executeVaultCompile } from './vault.js';
+import { Command } from "commander";
+import { executeInit } from "./init.js";
+import { executeUpdate } from "./update.js";
+import { executeConfig } from "./config.js";
+import { executeDetect } from "./detect.js";
+import { executeVaultCompile } from "./vault.js";
 
 const program = new Command();
 
 program
-  .name('jinn')
-  .description('AI-native development workflows for any coding assistant')
-  .version('1.0.0');
+  .name("jinn")
+  .description("AI-native development workflows for any coding assistant")
+  .version("1.0.0");
 
 program
-  .command('init')
-  .description('Initialize jinn in the current project')
-  .option('-t, --tools <tools>', 'Comma-separated list of tools (or "all")')
-  .option('-p, --profile <profile>', 'Profile to use (core, extended)', 'core')
-  .option('-d, --delivery <delivery>', 'What to install (skills, commands, both)', 'both')
-  .option('-y, --yes', 'Skip prompts and use defaults')
-  .option('--path <path>', 'Project path to initialize (default: current directory)')
+  .command("init")
+  .description("Initialize jinn in the current project")
+  .option("-t, --tools <tools>", 'Comma-separated list of tools (or "all")')
+  .option("-p, --profile <profile>", "Profile to use (core, extended)", "core")
+  .option("-d, --delivery <delivery>", "What to install (skills, commands, both)", "both")
+  .option("-y, --yes", "Skip prompts and use defaults")
+  .option("--path <path>", "Project path to initialize (default: current directory)")
   .action(async (options) => {
     await executeInit({
       tools: options.tools,
@@ -39,11 +39,11 @@ program
   });
 
 program
-  .command('update')
-  .description('Update/regenerate jinn files')
-  .option('-f, --force', 'Force regeneration')
-  .option('-t, --tool <tool>', 'Update specific tool only')
-  .option('--path <path>', 'Project path (default: current directory)')
+  .command("update")
+  .description("Update/regenerate jinn files")
+  .option("-f, --force", "Force regeneration")
+  .option("-t, --tool <tool>", "Update specific tool only")
+  .option("--path <path>", "Project path (default: current directory)")
   .action(async (options) => {
     await executeUpdate({
       force: options.force,
@@ -53,15 +53,15 @@ program
   });
 
 program
-  .command('config')
-  .description('Manage jinn configuration')
-  .option('--path <path>', 'Project path (default: current directory)')
-  .argument('[action]', 'Action: show, add-tool, remove-tool, set')
-  .argument('[key]', 'Config key (for set)')
-  .argument('[value]', 'Config value (for set)')
+  .command("config")
+  .description("Manage jinn configuration")
+  .option("--path <path>", "Project path (default: current directory)")
+  .argument("[action]", "Action: show, add-tool, remove-tool, set")
+  .argument("[key]", "Config key (for set)")
+  .argument("[value]", "Config value (for set)")
   .action(async (options, action, key, value) => {
-    const validActions = ['show', 'add-tool', 'remove-tool', 'set'];
-    const actualAction = validActions.includes(action) ? action : 'show';
+    const validActions = ["show", "add-tool", "remove-tool", "set"];
+    const actualAction = validActions.includes(action) ? action : "show";
 
     await executeConfig({
       action: actualAction as any,
@@ -72,23 +72,24 @@ program
   });
 
 program
-  .command('detect')
-  .description('Detect available AI tools in the project')
-  .option('--path <path>', 'Project path (default: current directory)')
+  .command("detect")
+  .description("Detect available AI tools in the project")
+  .option("--path <path>", "Project path (default: current directory)")
   .action(async (options) => {
     await executeDetect({ projectPath: options.path });
   });
 
-const vault = program
-  .command('vault')
-  .description('Manage personal knowledge vault skills');
+const vault = program.command("vault").description("Manage personal knowledge vault skills");
 
 vault
-  .command('compile')
-  .description('Compile vault skills into each configured AI tool\'s native format')
-  .option('-v, --vault <path>', 'Path to vault root — overrides vaultPath in .jinn/config.yaml')
-  .option('-t, --tools <tools>', 'Comma-separated tool IDs to compile for (default: all configured tools)')
-  .option('--dry-run', 'Show what would be written without writing any files')
+  .command("compile")
+  .description("Compile vault skills into each configured AI tool's native format")
+  .option("-v, --vault <path>", "Path to vault root — overrides vaultPath in .jinn/config.yaml")
+  .option(
+    "-t, --tools <tools>",
+    "Comma-separated tool IDs to compile for (default: all configured tools)",
+  )
+  .option("--dry-run", "Show what would be written without writing any files")
   .action(async (options) => {
     await executeVaultCompile({
       vault: options.vault,

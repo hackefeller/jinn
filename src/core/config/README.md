@@ -21,9 +21,9 @@ Default configuration values.
 ## Usage
 
 ```typescript
-import { loadConfig } from './loader.js';
-import { validateConfig } from './validation.js';
+import { loadConfig } from "./loader.js";
+import { validateConfig } from "./validation.js";
 
-const config = await loadConfig('/path/to/project');
+const config = await loadConfig("/path/to/project");
 const result = validateConfig(config);
 ```

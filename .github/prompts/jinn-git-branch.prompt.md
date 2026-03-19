@@ -15,6 +15,7 @@ Create properly named feature branches.
 ## Branch Naming
 
 Use descriptive names with type prefix:
+
 - feature/user-authentication
 - fix/login-redirect-bug
 - docs/api-documentation
@@ -23,13 +24,13 @@ Use descriptive names with type prefix:
 ## Process
 
 1. **Update Main**
-   
+
    Pull latest main branch
 
 2. **Create Branch**
-   
+
    Checkout new branch with descriptive name
 
 3. **Verify**
-   
+
    Ensure you're on the right branch

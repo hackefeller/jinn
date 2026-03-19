@@ -5,14 +5,14 @@
  * Agents are special skills with additional metadata.
  */
 
-import type { ToolCommandAdapter, GeneratedFile } from '../adapters/types.js';
-import type { AgentTemplate } from '../templates/types.js';
+import type { ToolCommandAdapter, GeneratedFile } from "../adapters/types.js";
+import type { AgentTemplate } from "../templates/types.js";
 
 export function generateAgentForTool(
   template: AgentTemplate,
   agentId: string,
   adapter: ToolCommandAdapter,
-  version: string
+  version: string,
 ): GeneratedFile {
   const filePath = adapter.getAgentPath
     ? adapter.getAgentPath(template.name)
@@ -31,17 +31,17 @@ export function generateAgentForTool(
 export function generateAgentsForTool(
   templates: AgentTemplate[],
   adapter: ToolCommandAdapter,
-  version: string
+  version: string,
 ): GeneratedFile[] {
   return templates.map((template) =>
-    generateAgentForTool(template, template.name, adapter, version)
+    generateAgentForTool(template, template.name, adapter, version),
   );
 }
 
 export function generateAgentsForAllTools(
   templates: AgentTemplate[],
   adapters: ToolCommandAdapter[],
-  version: string
+  version: string,
 ): GeneratedFile[] {
   const results: GeneratedFile[] = [];
 

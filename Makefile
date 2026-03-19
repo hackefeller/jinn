@@ -34,6 +34,7 @@ help:
 
 build:
 	bun build ./src/cli/main.ts --compile --outfile ./dist/jinn
+	ln -sf $(PWD)/dist/jinn /usr/local/bin/jinn
 
 # --- Test init with --delivery commands (the bug fix: agents should now exist) ---
 test-init: build

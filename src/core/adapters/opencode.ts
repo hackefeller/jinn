@@ -24,11 +24,6 @@
  * - temperature    randomness 0.0–1.0
  * - color          hex or theme color for UI
  *
- * Agent body:
- * - Markdown instructions (system prompt; overrides prompt: field)
- * - ## Available commands  (informational; no YAML field exists)
- * - ## Related skills     (informational; OpenCode discovers skills via skill tool)
- *
  * Skills are NOT preloaded at agent startup — they are discovered and invoked
  * via the native `skill` tool based on description matching.
  * No `skills:` frontmatter field exists in OpenCode agents.
@@ -37,72 +32,56 @@
  * Reference: https://opencode.ai/docs/skills
  */
 
-import path from 'path';
-import type { ToolCommandAdapter, CommandContent } from './types.js';
-import type { AgentTemplate, SkillTemplate } from '../templates/types.js';
+import path from "path";
+import type { ToolCommandAdapter } from "./types.js";
+import type { AgentTemplate, SkillTemplate } from "../templates/types.js";
 
 function escapeYamlValue(value: string): string {
   const needsQuoting = /[:\n\r#{}\[\],&*!|>'"%@`]|^\s|\s$/.test(value);
   if (needsQuoting) {
-    const escaped = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
+    const escaped = value.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n");
     return `"${escaped}"`;
   }
   return value;
 }
-
+function formatYamlList(key: string, items: string[]): string {
+  return `${key}:\n${items.map((item) => `  - ${item}`).join("\n")}`;
+}
 export const opencodeAdapter: ToolCommandAdapter = {
-  toolId: 'opencode',
-  toolName: 'OpenCode',
-  skillsDir: '.opencode',
-
-  getCommandPath(commandId: string): string {
-    return path.join('.opencode', 'commands', `jinn-${commandId}.md`);
-  },
+  toolId: "opencode",
+  toolName: "OpenCode",
+  skillsDir: ".opencode",
 
   getAgentPath(agentName: string): string {
-    return path.join('.opencode', 'agents', `${agentName}.md`);
+    return path.join(".opencode", "agents", `${agentName}.md`);
   },
 
   getSkillPath(skillName: string): string {
-    return path.join('.opencode', 'skills', skillName, 'SKILL.md');
-  },
-
-  formatCommand(content: CommandContent): string {
-    return `---
-description: ${escapeYamlValue(content.description)}
----
-
-${content.body}`;
+    return path.join(".opencode", "skills", skillName, "SKILL.md");
   },
 
   formatAgent(template: AgentTemplate, version: string): string {
     const bodySections: string[] = [template.instructions];
 
-    if (template.availableCommands && template.availableCommands.length > 0) {
-      bodySections.push(
-        `## Available commands\n\n${template.availableCommands.map((c) => `- ${c}`).join('\n')}`,
-      );
-    }
-
     if (template.availableSkills && template.availableSkills.length > 0) {
       bodySections.push(
-        `## Related skills\n\n${template.availableSkills.map((s) => `- ${s}`).join('\n')}`,
+        `## Related skills\n\n${template.availableSkills.map((s) => `- ${s}`).join("\n")}`,
       );
     }
 
-    return `---\ndescription: ${escapeYamlValue(template.description)}\n---\n\n${bodySections.join('\n\n')}`;
+    return `---\ndescription: ${escapeYamlValue(template.description)}\n---\n\n${bodySections.join("\n\n")}`;
   },
 
   formatSkill(template: SkillTemplate, version: string): string {
     const lines = [
-      '---',
+      "---",
       `name: ${template.name}`,
       `description: ${template.description}`,
-      `license: ${template.license || 'MIT'}`,
-      `compatibility: ${template.compatibility || 'Requires jinn CLI.'}`,
-      'metadata:',
-      `  author: ${template.metadata?.author || 'jinn'}`,
-      `  version: "${template.metadata?.version || '1.0'}"`,
+      `license: ${template.license || "MIT"}`,
+      `compatibility: ${template.compatibility || "Requires jinn CLI."}`,
+      "metadata:",
+      `  author: ${template.metadata?.author || "jinn"}`,
+      `  version: "${template.metadata?.version || "1.0"}"`,
       `  generatedBy: "${version}"`,
     ];
 
@@ -111,13 +90,76 @@ ${content.body}`;
     }
 
     if (template.metadata?.tags && template.metadata.tags.length > 0) {
-      lines.push(`  tags: [${template.metadata.tags.join(', ')}]`);
+      lines.push(`  tags: [${template.metadata.tags.join(", ")}]`);
     }
 
-    lines.push('---');
-    lines.push('');
+    if (template.when && template.when.length > 0) {
+      lines.push(formatYamlList("when", template.when));
+    }
+
+    if (template.applicability && template.applicability.length > 0) {
+      lines.push(formatYamlList("applicability", template.applicability));
+    }
+
+    if (template.termination && template.termination.length > 0) {
+      lines.push(formatYamlList("termination", template.termination));
+    }
+
+    if (template.outputs && template.outputs.length > 0) {
+      lines.push(formatYamlList("outputs", template.outputs));
+    }
+
+    if (template.dependencies && template.dependencies.length > 0) {
+      lines.push(formatYamlList("dependencies", template.dependencies));
+    }
+
+    lines.push("---");
+    lines.push("");
     lines.push(template.instructions);
 
-    return lines.join('\n');
+    return lines.join("\n");
+  },
+
+  getManifestPath(): string {
+    return path.join(".opencode", "skills-index.md");
+  },
+
+  formatManifest(skills: SkillTemplate[], version: string): string {
+    const lines = [
+      "---",
+      "generated: true",
+      `version: "${version}"`,
+      "---",
+      "",
+      "# Skills Index",
+      "",
+      "This file is auto-generated by jinn. Agents can read it at session start",
+      "to discover available skills and route user goals without slash commands.",
+      "",
+    ];
+
+    for (const skill of skills) {
+      lines.push(`## ${skill.name}`);
+      lines.push("");
+      lines.push(`**Description**: ${skill.description}`);
+      if (skill.when && skill.when.length > 0) {
+        lines.push(`**When**: ${skill.when.join("; ")}`);
+      }
+      if (skill.applicability && skill.applicability.length > 0) {
+        lines.push(`**Applicability**: ${skill.applicability.join("; ")}`);
+      }
+      if (skill.outputs && skill.outputs.length > 0) {
+        lines.push(`**Outputs**: ${skill.outputs.join(", ")}`);
+      }
+      if (skill.termination && skill.termination.length > 0) {
+        lines.push(`**Done when**: ${skill.termination.join("; ")}`);
+      }
+      if (skill.dependencies && skill.dependencies.length > 0) {
+        lines.push(`**Depends on**: ${skill.dependencies.join(", ")}`);
+      }
+      lines.push("");
+    }
+
+    return lines.join("\n");
   },
 };

@@ -28,6 +28,7 @@ jinn config profile extended
 ## Implementation
 
 Each command is implemented as a separate module:
+
 - **init.ts** - Initialization logic
 - **update.ts** - Update logic
 - **config.ts** - Configuration commands

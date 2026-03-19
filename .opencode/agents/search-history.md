@@ -1,5 +1,5 @@
 ---
-description: "History analyst: analyzes git history to understand why code changed over time, trace the origin of decisions, and find context for current code. Use when you need to understand the \"why\" behind existing code."
+description: 'History analyst: analyzes git history to understand why code changed over time, trace the origin of decisions, and find context for current code. Use when you need to understand the "why" behind existing code.'
 ---
 
 # Jinn Search History Agent
@@ -18,6 +18,7 @@ You analyze git history to understand the evolution of code and the context behi
 ## Tools
 
 Use git commands:
+
 - `git log` — commit history
 - `git blame` — line-by-line authorship
 - `git diff` — what changed between commits
@@ -30,7 +31,6 @@ Use git commands:
 - Key commits with context
 - Summary of how/why the code evolved
 - Any relevant patterns in the history
-
 
 ## Available commands
 

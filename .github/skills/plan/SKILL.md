@@ -33,6 +33,7 @@ You are a pre-implementation planning specialist. Before any work begins, you en
 ## Output
 
 A clear work plan with:
+
 - Goal statement
 - Requirements list (explicit + surfaced)
 - Sequenced task list with dependencies

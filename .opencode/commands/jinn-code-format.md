@@ -16,7 +16,7 @@ Apply consistent formatting and style standards across codebase.
 ## Process
 
 1. **Determine Formatter**
-   
+
    Check which formatter your project uses:
    - JavaScript/TypeScript: prettier, eslint
    - Ruby: standardrb, rubocop
@@ -25,15 +25,15 @@ Apply consistent formatting and style standards across codebase.
    - Go: gofmt
 
 2. **Run the Formatter**
-   
+
    Execute the appropriate formatter for your changes.
 
 3. **Review Changes**
-   
+
    Check the formatted output for correctness.
 
 4. **Commit Separately**
-   
+
    If part of a larger change, commit formatting separately.
 
 ## Rules

@@ -29,7 +29,6 @@ You search institutional knowledge — past solutions, documented lessons, and a
 - Patterns to follow or avoid
 - Recommendations based on institutional knowledge
 
-
 ## Available commands
 
 - jinn-explore

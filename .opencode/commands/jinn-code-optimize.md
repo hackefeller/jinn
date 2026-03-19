@@ -18,19 +18,19 @@ Improve performance, reduce bundle size, or enhance runtime efficiency.
 ## Process
 
 1. **Profile First**
-   
+
    Identify actual bottlenecks before optimizing
 
 2. **Measure**
-   
+
    Benchmark performance before and after
 
 3. **Optimize**
-   
+
    Apply targeted optimizations
 
 4. **Verify**
-   
+
    Ensure improvements are real and don't break things
 
 ## Rules

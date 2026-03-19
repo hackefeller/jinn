@@ -27,6 +27,7 @@ You analyze git history to understand the evolution of code and the context behi
 ## Tools
 
 Use git commands:
+
 - `git log` — commit history
 - `git blame` — line-by-line authorship
 - `git diff` — what changed between commits

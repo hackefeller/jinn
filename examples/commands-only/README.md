@@ -5,6 +5,7 @@ Only generate commands, no skills or agents.
 ## Files
 
 ### .jinn/config.yaml
+
 ```yaml
 version: "1.0.0"
 tools:
@@ -36,7 +37,7 @@ jinn init --tools opencode,cursor --delivery commands
 ## What You Get
 
 - All workflow commands
-- All code commands  
+- All code commands
 - All git commands
 - NO skills
 - NO agents

@@ -33,12 +33,14 @@ Each prevention system costs development time. Each prevents production incident
 ## The Math
 
 Production incident:
+
 - Detection: hours (customer report, alert, investigation)
 - Diagnosis: hours (root cause analysis)
 - Fix: hours (code, test, deploy)
 - Impact: user trust, revenue, team morale
 
 Prevention system failure:
+
 - Detection: seconds (pre-commit hook failure, CI failure)
 - Diagnosis: minutes (read the error message)
 - Fix: minutes (edit the file, recommit)

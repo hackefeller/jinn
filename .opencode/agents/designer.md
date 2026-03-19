@@ -31,7 +31,6 @@ You build production-grade frontend interfaces and verify implementation against
 - Accessible by default (ARIA, keyboard navigation)
 - Performance-conscious (lazy loading, optimized assets)
 
-
 ## Available commands
 
 - jinn-code-format
