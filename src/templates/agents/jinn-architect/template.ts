@@ -1,5 +1,5 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { SKILL_NAMES } from "../../constants.js";
+import { ARCHITECT_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions } from "../../.generated/templates.js";
 
 export function getArchitectAgentTemplate(): AgentTemplate {
@@ -22,7 +22,7 @@ export function getArchitectAgentTemplate(): AgentTemplate {
       "Anti-pattern detection",
       "Dependency analysis",
     ],
-    availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.GIT_MASTER],
+    availableSkills: ARCHITECT_AGENT_AVAILABLE_SKILLS,
     role: "Specialist",
     route: "do",
     defaultTools: ["read", "search"],

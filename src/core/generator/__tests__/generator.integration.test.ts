@@ -88,16 +88,15 @@ describe("Generator integration — opencode, delivery: both", () => {
 
   it("generates skill directories under .opencode/skills/", async () => {
     await generateFiles(config, tmpDir);
-    // 21 skill templates
     const count = await countDirsInDir(path.join(tmpDir, ".opencode", "skills"));
-    expect(count).toBe(21);
+    expect(count).toBe(20);
   });
 
   it("generates agent files under .opencode/agents/", async () => {
     await generateFiles(config, tmpDir);
     const agentDir = path.join(tmpDir, ".opencode", "agents");
     const count = await countFilesInDirBySuffix(agentDir, ".md");
-    expect(count).toBe(3);
+    expect(count).toBe(8);
   });
 
   it('skill SKILL.md files contain generatedBy: "1.0.0"', async () => {
@@ -137,7 +136,7 @@ describe("Generator integration — claude, delivery: both", () => {
   it("generates 8 agent files under .claude/agents/", async () => {
     await generateFiles(config, tmpDir);
     const count = await countFilesInDirBySuffix(path.join(tmpDir, ".claude", "agents"), ".md");
-    expect(count).toBe(3);
+    expect(count).toBe(8);
   });
 
   it("agent files contain tools: field (model omitted, defaults to inherit)", async () => {
@@ -386,7 +385,7 @@ describe("Generator integration — idempotency", () => {
 
     expect(skillCountFirst).toBe(skillCountSecond);
     expect(agentCountFirst).toBe(agentCountSecond);
-    expect(skillCountFirst).toBe(21);
-    expect(agentCountFirst).toBe(3);
+    expect(skillCountFirst).toBe(20);
+    expect(agentCountFirst).toBe(8);
   });
 });

@@ -41,7 +41,7 @@ const testAgentTemplate: AgentTemplate = {
   compatibility: "Works with all jinn workflows",
   metadata: { author: "jinn", version: "1.0", category: "Orchestration", tags: ["planning"] },
   defaultTools: ["read", "search"],
-  availableSkills: ["jinn-git-master", "jinn-frontend-design"],
+  availableSkills: ["jinn-git-master", "jinn-design"],
 };
 
 const nativeAgentSupport: Record<string, boolean> = {
@@ -111,7 +111,7 @@ describe("OpenCode Adapter", () => {
     const body = result.split("---")[2];
     expect(body).toContain("## Available skills");
     expect(body).toContain("- jinn-git-master");
-    expect(body).toContain("- jinn-frontend-design");
+    expect(body).toContain("- jinn-design");
   });
 
   it("omits ## sections when fields are empty", () => {
@@ -256,7 +256,7 @@ describe("Claude formatAgent", () => {
     const frontmatter = result.split("---")[1];
     expect(frontmatter).toContain("skills:");
     expect(frontmatter).toContain("jinn-git-master");
-    expect(frontmatter).toContain("jinn-frontend-design");
+    expect(frontmatter).toContain("jinn-design");
   });
 
   it("does not add ## Available skills section to agent body", () => {
@@ -327,7 +327,7 @@ describe("Codex formatAgent", () => {
     const result = codexAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     expect(result).toContain("[[skills.config]]");
     expect(result).toContain(".codex/skills/jinn-git-master/SKILL.md");
-    expect(result).toContain(".codex/skills/jinn-frontend-design/SKILL.md");
+    expect(result).toContain(".codex/skills/jinn-design/SKILL.md");
   });
 
   it("omits [[skills.config]] when availableSkills is empty", () => {
@@ -380,7 +380,7 @@ describe("GitHub Copilot formatAgent", () => {
     const body = result.split("---")[2];
     expect(body).toContain("## Available skills");
     expect(body).toContain("- jinn-git-master");
-    expect(body).toContain("- jinn-frontend-design");
+    expect(body).toContain("- jinn-design");
   });
 
   it("omits ## Available skills when availableSkills is empty", () => {

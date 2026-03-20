@@ -1,5 +1,5 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { SKILL_NAMES } from "../../constants.js";
+import { DESIGNER_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions } from "../../.generated/templates.js";
 
 export function getDesignerAgentTemplate(): AgentTemplate {
@@ -24,7 +24,7 @@ export function getDesignerAgentTemplate(): AgentTemplate {
       "Figma sync",
       "Accessibility",
     ],
-    availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.GIT_MASTER],
+    availableSkills: DESIGNER_AGENT_AVAILABLE_SKILLS,
     role: "Specialist",
     route: "do",
     defaultTools: ["edit", "read", "search"],

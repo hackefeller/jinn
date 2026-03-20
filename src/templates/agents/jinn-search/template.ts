@@ -1,5 +1,5 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { SKILL_NAMES } from "../../constants.js";
+import { SEARCH_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getSearchAgentTemplate(): AgentTemplate {
@@ -17,7 +17,7 @@ export function getSearchAgentTemplate(): AgentTemplate {
     },
     instructions: getAgentInstructions("jinn-search"),
     capabilities: ["Code search", "Documentation research", "History analysis", "Knowledge retrieval"],
-    availableSkills: [SKILL_NAMES.GIT_MASTER, SKILL_NAMES.JINN_READY_FOR_PROD],
+    availableSkills: SEARCH_AGENT_AVAILABLE_SKILLS,
     role: "Research",
     route: "research",
     defaultTools: ["search", "read", "web"],

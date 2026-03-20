@@ -1,5 +1,5 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { SKILL_NAMES } from "../../constants.js";
+import { DO_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getDoAgentTemplate(): AgentTemplate {
@@ -23,22 +23,7 @@ export function getDoAgentTemplate(): AgentTemplate {
       "Specialist delegation",
       "Project lifecycle coordination",
     ],
-    availableSkills: [
-      SKILL_NAMES.GIT_MASTER,
-      SKILL_NAMES.FRONTEND_DESIGN,
-      SKILL_NAMES.JINN_CHECK,
-      SKILL_NAMES.JINN_REVIEW,
-      SKILL_NAMES.JINN_APPLY,
-      SKILL_NAMES.JINN_SYNC,
-      SKILL_NAMES.JINN_TRIAGE,
-      SKILL_NAMES.JINN_UNBLOCK,
-      SKILL_NAMES.JINN_READY_FOR_PROD,
-      SKILL_NAMES.PROJECT_INIT,
-      SKILL_NAMES.BUILD,
-      SKILL_NAMES.DEPLOY,
-      SKILL_NAMES.CONVENTIONS,
-      SKILL_NAMES.MAP_CODEBASE,
-    ],
+    availableSkills: DO_AGENT_AVAILABLE_SKILLS,
     role: "Orchestration",
     route: "do",
     defaultTools: ["edit", "read", "search", "task"],

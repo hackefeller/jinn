@@ -1,6 +1,11 @@
-delivery: commands
+delivery: skills
 featureFlags: {}
 profile: core
 tools:
   - opencode
+  - claude
+  - codex
+  - github-copilot
+  - gemini
+  - cursor
 version: 1.0.0

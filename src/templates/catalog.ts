@@ -1,9 +1,8 @@
 import type { AgentTemplate, SkillTemplate } from "../core/templates/types.js";
-import { getDoAgentTemplate, getPlanAgentTemplate, getCaptureAgentTemplate } from "./agents/index.js";
+import { ALL_AGENTS } from "./agents/index.js";
 
 // Code skills
-import { getDesignSystemSkillTemplate } from "./skills/design-system/template.js";
-import { getFrontendDesignSkillTemplate } from "./skills/jinn-frontend-design/template.js";
+import { getDesignSkillTemplate } from "./skills/jinn-design/template.js";
 import { getCodeQualitySkillTemplate } from "./skills/jinn-code-quality/template.js";
 import { getDevEnvironmentSkillTemplate } from "./skills/jinn-dev-environment/template.js";
 import { getProjectInitSkillTemplate } from "./skills/jinn-project-init/template.js";
@@ -35,8 +34,7 @@ import { getJinnUnblockSkillTemplate } from "./skills/jinn-unblock/template.js";
 export function getDefaultSkillTemplates(): SkillTemplate[] {
   return [
     // Design
-    getDesignSystemSkillTemplate(),
-    getFrontendDesignSkillTemplate(),
+    getDesignSkillTemplate(),
 
     // Code quality and tooling
     getCodeQualitySkillTemplate(),
@@ -70,5 +68,5 @@ export function getDefaultSkillTemplates(): SkillTemplate[] {
 }
 
 export function getDefaultAgentTemplates(): AgentTemplate[] {
-  return [getDoAgentTemplate(), getPlanAgentTemplate(), getCaptureAgentTemplate()];
+  return ALL_AGENTS.map((getAgentTemplate) => getAgentTemplate());
 }

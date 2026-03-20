@@ -16,8 +16,7 @@ export const SKILL_NAMES = {
   GIT_MASTER: "jinn-git-master",
 
   // Frontend skills
-  FRONTEND_DESIGN: "jinn-frontend-design",
-  DESIGN_SYSTEM: "design-system",
+  DESIGN: "jinn-design",
 
   // Engineering skills
   CODE_QUALITY: "jinn-code-quality",

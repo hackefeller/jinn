@@ -1,5 +1,5 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { SKILL_NAMES } from "../../constants.js";
+import { PLAN_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getPlanAgentTemplate(): AgentTemplate {
@@ -23,13 +23,7 @@ export function getPlanAgentTemplate(): AgentTemplate {
       "Risk identification",
       "Work breakdown and task sequencing",
     ],
-    availableSkills: [
-      SKILL_NAMES.GIT_MASTER,
-      SKILL_NAMES.FRONTEND_DESIGN,
-      SKILL_NAMES.JINN_EXPLORE,
-      SKILL_NAMES.JINN_PROPOSE,
-      SKILL_NAMES.JINN_TRIAGE,
-    ],
+    availableSkills: PLAN_AGENT_AVAILABLE_SKILLS,
     role: "Orchestration",
     route: "plan",
     defaultTools: ["read", "search"],

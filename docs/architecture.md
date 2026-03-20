@@ -101,7 +101,7 @@ Generated files follow each tool's conventions:
 └── skills/
     ├── jinn-propose/
     │   └── SKILL.md
-    └── jinn-frontend-design/
+    └── jinn-design/
         └── SKILL.md
 
 .cursor/

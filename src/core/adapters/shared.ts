@@ -33,7 +33,7 @@ export function formatBaseSkillFrontmatter(template: SkillTemplate, version: str
   const lines = [
     "---",
     `name: ${template.name}`,
-    `description: ${template.description}`,
+    `description: ${escapeYamlValue(template.description)}`,
     `license: ${template.license || "MIT"}`,
     `compatibility: ${template.compatibility || "Requires jinn CLI."}`,
     "metadata:",

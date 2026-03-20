@@ -1,5 +1,5 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { SKILL_NAMES } from "../../constants.js";
+import { REVIEW_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getReviewAgentTemplate(): AgentTemplate {
@@ -17,7 +17,7 @@ export function getReviewAgentTemplate(): AgentTemplate {
     },
     instructions: getAgentInstructions("jinn-review"),
     capabilities: ["Code review", "Security analysis", "Performance review", "Quality assessment"],
-    availableSkills: [SKILL_NAMES.JINN_REVIEW, SKILL_NAMES.JINN_READY_FOR_PROD, SKILL_NAMES.JINN_SYNC, SKILL_NAMES.GIT_MASTER],
+    availableSkills: REVIEW_AGENT_AVAILABLE_SKILLS,
     role: "Reviewer",
     route: "review",
     defaultTools: ["read", "search"],

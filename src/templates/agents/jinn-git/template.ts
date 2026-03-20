@@ -1,5 +1,5 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { SKILL_NAMES } from "../../constants.js";
+import { GIT_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions } from "../../.generated/templates.js";
 
 export function getGitAgentTemplate(): AgentTemplate {
@@ -23,7 +23,7 @@ export function getGitAgentTemplate(): AgentTemplate {
       "History analysis",
       "Cherry-picking",
     ],
-    availableSkills: [SKILL_NAMES.JINN_READY_FOR_PROD],
+    availableSkills: GIT_AGENT_AVAILABLE_SKILLS,
     role: "Specialist",
     route: "do",
     defaultTools: ["read", "search"],

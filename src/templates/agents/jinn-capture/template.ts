@@ -1,5 +1,5 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { SKILL_NAMES } from "../../constants.js";
+import { CAPTURE_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getCaptureAgentTemplate(): AgentTemplate {
@@ -22,7 +22,7 @@ export function getCaptureAgentTemplate(): AgentTemplate {
       "Decision rationale capture",
       "Process improvement identification",
     ],
-    availableSkills: [SKILL_NAMES.GIT_MASTER, SKILL_NAMES.JINN_ARCHIVE],
+    availableSkills: CAPTURE_AGENT_AVAILABLE_SKILLS,
     role: "Orchestration",
     route: "capture",
     defaultTools: ["read", "write"],
