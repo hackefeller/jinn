@@ -1,6 +1,6 @@
-import type { AgentTemplate } from "../../../core/templates/types';
-import { ARCHITECT_AGENT_AVAILABLE_SKILLS } from "../available-skills';
-import { getAgentInstructions } from "../../.generated/templates';
+import type { AgentTemplate } from "../../../core/templates/types.js";
+import { ARCHITECT_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+import { getAgentInstructions } from "../../.generated/templates.js";
 
 export function getKernelArchitectAgentTemplate(): AgentTemplate {
   return {

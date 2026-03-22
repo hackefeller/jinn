@@ -1,6 +1,6 @@
-import type { AgentTemplate } from "../../../core/templates/types';
-import { GIT_AGENT_AVAILABLE_SKILLS } from "../available-skills';
-import { getAgentInstructions } from "../../.generated/templates';
+import type { AgentTemplate } from "../../../core/templates/types.js";
+import { GIT_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+import { getAgentInstructions } from "../../.generated/templates.js";
 
 export function getKernelGitAgentTemplate(): AgentTemplate {
   return {

@@ -1,6 +1,6 @@
-import type { AgentTemplate } from "../../../core/templates/types';
-import { PLAN_AGENT_AVAILABLE_SKILLS } from "../available-skills';
-import { getAgentInstructions, getAgentReferences } from "../../.generated/templates';
+import type { AgentTemplate } from "../../../core/templates/types.js";
+import { PLAN_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getKernelPlanAgentTemplate(): AgentTemplate {
   return {

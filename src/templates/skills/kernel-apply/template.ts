@@ -1,5 +1,5 @@
-import type { SkillTemplate } from "../../../core/templates/types';
-import { getSkillInstructions } from "../../.generated/templates';
+import type { SkillTemplate } from "../../../core/templates/types.js";
+import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getKernelApplySkillTemplate(): SkillTemplate {
   return {

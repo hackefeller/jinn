@@ -1,6 +1,6 @@
-import type { AgentTemplate } from "../../../core/templates/types';
-import { CAPTURE_AGENT_AVAILABLE_SKILLS } from "../available-skills';
-import { getAgentInstructions, getAgentReferences } from "../../.generated/templates';
+import type { AgentTemplate } from "../../../core/templates/types.js";
+import { CAPTURE_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getKernelCaptureAgentTemplate(): AgentTemplate {
   return {
