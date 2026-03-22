@@ -25,7 +25,22 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts
 
-      - name: Release
+      - name: Read package version
+        id: version
+        run: echo "version=$(node -p \"JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version\")" >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="v${{ steps.version.outputs.version }}"
+
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists."
+            exit 0
+          fi
+
+          gh release create "$tag" \
+            --title "$tag" \
+            --target "$GITHUB_SHA" \
+            --notes "Kernel ${{ steps.version.outputs.version }}"
