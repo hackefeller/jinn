@@ -110,8 +110,8 @@ let outputDir: string;
 
 beforeAll(async () => {
   const tmp = os.tmpdir();
-  vaultDir = path.join(tmp, `spec-vault-test-${Date.now()}`);
-  outputDir = path.join(tmp, `spec-output-test-${Date.now()}`);
+  vaultDir = path.join(tmp, `vault-test-${Date.now()}`);
+  outputDir = path.join(tmp, `output-test-${Date.now()}`);
 
   // writer-agent skill with 3 references
   const writerSkillDir = path.join(vaultDir, ".codex", "skills", "writer-agent");

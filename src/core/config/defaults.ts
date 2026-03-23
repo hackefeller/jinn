@@ -23,7 +23,12 @@ export const DEFAULT_CONFIG_FILENAME = "config.yaml";
 /**
  * Config directory name
  */
-export const JINN_DIR_NAME = ".spec";
+export const CONFIG_DIR_NAME = ".kernel";
+
+/**
+ * Legacy config directory name retained for backward compatibility.
+ */
+export const LEGACY_CONFIG_DIR_NAME = ".spec";
 
 /**
  * Current configuration schema version

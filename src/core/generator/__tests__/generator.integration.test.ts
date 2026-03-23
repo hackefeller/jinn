@@ -12,7 +12,7 @@ const defaultAgentFileNames = getDefaultAgentTemplates()
 
 // Helpers
 async function mkTmpDir(): Promise<string> {
-  return fs.mkdtemp(path.join(os.tmpdir(), "spec-integ-"));
+  return fs.mkdtemp(path.join(os.tmpdir(), "template-integ-"));
 }
 
 async function countFilesInDir(dir: string): Promise<number> {
@@ -169,9 +169,9 @@ describe("Generator integration — claude, delivery: both", () => {
     expect(content).not.toContain("model: sonnet");
   });
 
-  it("specific agent file exists at .claude/agents/spec-plan.md", async () => {
+  it("specific planning agent file exists at .claude/agents/plan.md", async () => {
     await generateFiles(config, tmpDir);
-    const ok = await fileExists(path.join(tmpDir, ".claude", "agents", "spec-plan.md"));
+    const ok = await fileExists(path.join(tmpDir, ".claude", "agents", "plan.md"));
     expect(ok).toBe(true);
   });
 });

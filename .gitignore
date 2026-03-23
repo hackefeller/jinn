@@ -1,22 +1,12 @@
 # Dependencies
-.openspec-repo
 node_modules/
 
 # Build output
 dist/
 
-# Platform binaries (built, not committed)
-packages/*/bin/jinn
-packages/*/bin/jinn.exe
 # Block ALL binaries in packages bin directories
 packages/*/bin/*
 !packages/*/bin/.gitkeep
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
 
 # OS
 .DS_Store
@@ -30,7 +20,7 @@ npm-debug.log*
 .tmp/
 .worktrees/
 
-# Lock files (use bun.lockb instead)
+# Lock files (use bun.lock instead)
 package-lock.json
 yarn.lock
 

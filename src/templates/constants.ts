@@ -13,30 +13,30 @@
 // =============================================================================
 export const SKILL_NAMES = {
   // Git skills
-  GIT_MASTER: "spec-git-master",
+  GIT_MASTER: "git-master",
 
   // Frontend skills
-  DESIGN: "spec-design",
+  DESIGN: "design",
 
   // Engineering skills
-  CODE_QUALITY: "spec-code-quality",
-  DEV_ENVIRONMENT: "spec-dev-environment",
-  DOCS_WORKFLOW: "spec-docs-workflow",
-  PROJECT_INIT: "spec-project-init",
-  BUILD: "spec-build",
-  DEPLOY: "spec-deploy",
-  CONVENTIONS: "spec-conventions",
-  MAP_CODEBASE: "spec-map-codebase",
+  CODE_QUALITY: "code-quality",
+  DEV_ENVIRONMENT: "dev-environment",
+  DOCS_WORKFLOW: "docs-workflow",
+  PROJECT_INIT: "project-init",
+  BUILD: "build",
+  DEPLOY: "deploy",
+  CONVENTIONS: "conventions",
+  MAP_CODEBASE: "map-codebase",
 
-  // Spec workflow skills
-  JINN_CHECK: "spec-check",
-  JINN_REVIEW: "spec-review",
-  JINN_PROPOSE: "spec-propose",
-  JINN_EXPLORE: "spec-explore",
-  JINN_APPLY: "spec-apply",
-  JINN_ARCHIVE: "spec-archive",
-  JINN_SYNC: "spec-sync",
-  JINN_TRIAGE: "spec-triage",
-  JINN_UNBLOCK: "spec-unblock",
-  JINN_READY_FOR_PROD: "spec-ready-for-prod",
+  // Workflow skills
+  CHECK: "check",
+  REVIEW: "review",
+  PROPOSE: "propose",
+  EXPLORE: "explore",
+  APPLY: "apply",
+  ARCHIVE: "archive",
+  SYNC: "sync",
+  TRIAGE: "triage",
+  UNBLOCK: "unblock",
+  READY_FOR_PROD: "ready-for-prod",
 } as const;

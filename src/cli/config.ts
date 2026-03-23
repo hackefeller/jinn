@@ -1,7 +1,7 @@
 /**
  * Config command
  *
- * Manages kernel configuration.
+ * Manages project configuration.
  */
 
 import * as fs from "fs/promises";
@@ -33,7 +33,7 @@ async function showConfig(projectPath: string): Promise<void> {
     const content = await fs.readFile(getConfigPath(projectPath), "utf-8");
     console.log(content);
   } catch {
-    console.log("No kernel configuration found.");
+    console.log("No project configuration found.");
     console.log('Run "kernel init" to initialize.');
   }
 }
@@ -45,7 +45,7 @@ async function modifyTools(
 ): Promise<void> {
   const config = await loadConfig(projectPath);
   if (!config) {
-    console.log('No kernel configuration found. Run "kernel init" to initialize.');
+    console.log('No project configuration found. Run "kernel init" to initialize.');
     return;
   }
 
@@ -71,7 +71,7 @@ async function modifyTools(
 async function setConfig(projectPath: string, key: string, value: string): Promise<void> {
   const config = await loadConfig(projectPath);
   if (!config) {
-    console.log('No kernel configuration found. Run "kernel init" to initialize.');
+    console.log('No project configuration found. Run "kernel init" to initialize.');
     return;
   }
 

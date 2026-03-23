@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 /**
- * Kernel CLI
+ * Command-line interface
  *
  * Harness-agnostic AI agent distribution platform.
  */
@@ -39,7 +39,7 @@ program
 
 program
   .command("init")
-  .description("Initialize kernel in the current project")
+  .description("Initialize the current project")
   .option("-t, --tools <tools>", 'Comma-separated list of tools (or "all")')
   .option("-p, --profile <profile>", "Profile to use (core, extended)", "core")
   .option("-d, --delivery <delivery>", "What to install (skills, both)", "both")
@@ -57,7 +57,7 @@ program
 
 program
   .command("update")
-  .description("Update/regenerate kernel files")
+  .description("Update and regenerate project files")
   .option("-f, --force", "Force regeneration")
   .option("-t, --tool <tool>", "Update specific tool only")
   .option("--path <path>", "Project path (default: current directory)")
@@ -71,7 +71,7 @@ program
 
 program
   .command("config")
-  .description("Manage kernel configuration")
+  .description("Manage project configuration")
   .option("--path <path>", "Project path (default: current directory)")
   .argument("[action]", "Action: show, add-tool, remove-tool, set")
   .argument("[key]", "Config key (for set)")
@@ -101,7 +101,10 @@ const vault = program.command("vault").description("Manage personal knowledge va
 vault
   .command("compile")
   .description("Compile vault skills into each configured AI tool's native format")
-  .option("-v, --vault <path>", "Path to vault root — overrides vaultPath in .agents/kernel.config.yaml")
+  .option(
+    "-v, --vault <path>",
+    "Path to vault root — overrides vaultPath in .kernel/config.yaml or legacy .spec/config.yaml",
+  )
   .option(
     "-t, --tools <tools>",
     "Comma-separated tool IDs to compile for (default: all configured tools)",
@@ -115,4 +118,4 @@ vault
     });
   });
 
-export { program as kernelProgram };
+export { program };

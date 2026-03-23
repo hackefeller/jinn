@@ -1,7 +1,7 @@
 /**
  * Update command
  *
- * Updates/regenerates kernel files.
+ * Updates and regenerates project files.
  */
 
 import type { Config } from "../core/config/schema.js";
@@ -18,14 +18,14 @@ export interface UpdateOptions {
 export async function executeUpdate(options: UpdateOptions): Promise<void> {
   const projectPath = options.projectPath || process.cwd();
 
-  console.log("Updating kernel...\n");
+  console.log("Updating project files...\n");
 
   try {
     const loaded = await loadConfig(projectPath);
 
     if (!loaded) {
-      console.log("No kernel configuration found.");
-      console.log('\nRun "kernel init" first to initialize kernel.');
+      console.log("No project configuration found.");
+      console.log('\nRun "kernel init" first to initialize the project.');
       return;
     }
 
@@ -46,9 +46,9 @@ export async function executeUpdate(options: UpdateOptions): Promise<void> {
       }
     }
 
-    console.log("\n✓ Kernel updated successfully!");
+    console.log("\n✓ Project files updated successfully!");
   } catch (error) {
     console.error("Error:", error);
-    console.log('\nRun "kernel init" first to initialize kernel.');
+    console.log('\nRun "kernel init" first to initialize the project.');
   }
 }

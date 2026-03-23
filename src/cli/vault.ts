@@ -67,7 +67,7 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
   const projectPath = process.cwd();
   const dryRun = options.dryRun ?? false;
 
-  // 1. Load kernel config
+  // 1. Load project config
   const config = await loadConfig(projectPath);
   if (!config) {
     console.error("No .kernel/config.yaml found. Run `kernel init` first.");
@@ -149,7 +149,7 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
 
   if (!dryRun) {
     console.log(
-      "\nDone. Run `kernel update` to regenerate kernel-native skills alongside vault skills.",
+      "\nDone. Run `kernel update` to regenerate project skills alongside vault skills.",
     );
   }
 }

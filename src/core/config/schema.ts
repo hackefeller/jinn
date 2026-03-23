@@ -1,5 +1,5 @@
 /**
- * Configuration schema and types for spec.
+ * Configuration schema and types for the project.
  *
  * Uses Zod for runtime validation and TypeScript type inference.
  */
@@ -27,7 +27,7 @@ export type Delivery = z.infer<typeof DeliverySchema>;
 
 /**
  * Supported AI tool identifiers
- * This list covers the AI coding tools currently supported by spec
+ * This list covers the AI coding tools currently supported by the project.
  */
 export const ToolIdSchema = z.enum([
   "opencode",
@@ -41,7 +41,8 @@ export type ToolId = z.infer<typeof ToolIdSchema>;
 
 /**
  * Main configuration schema
- * This defines the structure of .spec/config.yaml
+ * This defines the project configuration file structure.
+ * The loader also reads .spec/config.yaml for backward compatibility.
  */
 export const ConfigSchema = z.object({
   /** Configuration schema version */
@@ -64,7 +65,7 @@ export const ConfigSchema = z.object({
 
   /**
    * Path to the personal knowledge vault containing .codex/skills/.
-   * Used by `spec vault compile` when --vault is not passed explicitly.
+   * Used by the vault compile command when --vault is not passed explicitly.
    * Supports ~ for home directory.
    */
   vaultPath: z.string().optional(),

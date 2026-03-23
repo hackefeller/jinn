@@ -13,11 +13,11 @@ import {
   updateConfig,
 } from "../loader.js";
 import { ConfigSchema } from "../schema.js";
-import { JINN_DIR_NAME, DEFAULT_CONFIG_FILENAME } from "../defaults.js";
+import { CONFIG_DIR_NAME, DEFAULT_CONFIG_FILENAME } from "../defaults.js";
 import type { Config } from "../schema.js";
 
 async function mkTmpDir(): Promise<string> {
-  return fs.mkdtemp(path.join(os.tmpdir(), "spec-config-"));
+  return fs.mkdtemp(path.join(os.tmpdir(), "config-test-"));
 }
 
 // ============================================================================
@@ -25,9 +25,9 @@ async function mkTmpDir(): Promise<string> {
 // ============================================================================
 
 describe("getConfigPath", () => {
-  it("returns <projectPath>/.spec/config.yaml", () => {
+  it("returns the project config path", () => {
     const result = getConfigPath("/some/project");
-    expect(result).toBe(path.join("/some/project", JINN_DIR_NAME, DEFAULT_CONFIG_FILENAME));
+    expect(result).toBe(path.join("/some/project", CONFIG_DIR_NAME, DEFAULT_CONFIG_FILENAME));
   });
 
   it("always ends with config.yaml", () => {

@@ -55,7 +55,7 @@ describe("agent templates", () => {
       SKILL_NAMES.CODE_QUALITY,
       SKILL_NAMES.CONVENTIONS,
       SKILL_NAMES.MAP_CODEBASE,
-      SKILL_NAMES.JINN_READY_FOR_PROD,
+      SKILL_NAMES.READY_FOR_PROD,
     ]);
 
     expect(getGitAgentTemplate().availableSkills).toEqual([SKILL_NAMES.GIT_MASTER]);
@@ -63,13 +63,13 @@ describe("agent templates", () => {
     expect(getSearchAgentTemplate().availableSkills).toEqual([
       SKILL_NAMES.GIT_MASTER,
       SKILL_NAMES.MAP_CODEBASE,
-      SKILL_NAMES.JINN_EXPLORE,
+      SKILL_NAMES.EXPLORE,
     ]);
 
     expect(getReviewAgentTemplate().availableSkills).toEqual([
       SKILL_NAMES.CODE_QUALITY,
-      SKILL_NAMES.JINN_REVIEW,
-      SKILL_NAMES.JINN_READY_FOR_PROD,
+      SKILL_NAMES.REVIEW,
+      SKILL_NAMES.READY_FOR_PROD,
       SKILL_NAMES.GIT_MASTER,
     ]);
   });
@@ -80,22 +80,22 @@ describe("agent templates", () => {
       SKILL_NAMES.DESIGN,
       SKILL_NAMES.CONVENTIONS,
       SKILL_NAMES.MAP_CODEBASE,
-      SKILL_NAMES.JINN_EXPLORE,
-      SKILL_NAMES.JINN_PROPOSE,
-      SKILL_NAMES.JINN_TRIAGE,
+      SKILL_NAMES.EXPLORE,
+      SKILL_NAMES.PROPOSE,
+      SKILL_NAMES.TRIAGE,
     ]);
 
     expect(getDoAgentTemplate().availableSkills).toEqual([
       SKILL_NAMES.GIT_MASTER,
       SKILL_NAMES.DESIGN,
       SKILL_NAMES.CODE_QUALITY,
-      SKILL_NAMES.JINN_CHECK,
-      SKILL_NAMES.JINN_REVIEW,
-      SKILL_NAMES.JINN_APPLY,
-      SKILL_NAMES.JINN_SYNC,
-      SKILL_NAMES.JINN_TRIAGE,
-      SKILL_NAMES.JINN_UNBLOCK,
-      SKILL_NAMES.JINN_READY_FOR_PROD,
+      SKILL_NAMES.CHECK,
+      SKILL_NAMES.REVIEW,
+      SKILL_NAMES.APPLY,
+      SKILL_NAMES.SYNC,
+      SKILL_NAMES.TRIAGE,
+      SKILL_NAMES.UNBLOCK,
+      SKILL_NAMES.READY_FOR_PROD,
       SKILL_NAMES.PROJECT_INIT,
       SKILL_NAMES.BUILD,
       SKILL_NAMES.DEPLOY,
@@ -105,7 +105,7 @@ describe("agent templates", () => {
 
     expect(getCaptureAgentTemplate().availableSkills).toEqual([
       SKILL_NAMES.GIT_MASTER,
-      SKILL_NAMES.JINN_ARCHIVE,
+      SKILL_NAMES.ARCHIVE,
     ]);
   });
 

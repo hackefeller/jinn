@@ -1,7 +1,7 @@
 /**
  * Init command
  *
- * Initializes kernel in the current project.
+ * Initializes the project in the current workspace.
  */
 
 import type { Config } from "../core/config/schema.js";
@@ -20,7 +20,7 @@ export interface InitOptions {
 export async function executeInit(options: InitOptions): Promise<void> {
   const projectPath = options.projectPath || process.cwd();
 
-  console.log("Initializing kernel...\n");
+  console.log("Initializing project...\n");
 
   const availableTools = await detectAvailableTools(projectPath);
 
@@ -34,7 +34,7 @@ export async function executeInit(options: InitOptions): Promise<void> {
     }
   } else if (availableTools.length === 0) {
     console.log("No AI tools detected. Install a tool first (e.g., OpenCode, Cursor).");
-    console.log("\nKernel supports:");
+    console.log("\nSupported tool layouts:");
     console.log("  - OpenCode (.opencode/)");
     console.log("  - Cursor (.cursor/)");
     console.log("  - Claude Code (.claude/)");
@@ -45,12 +45,12 @@ export async function executeInit(options: InitOptions): Promise<void> {
     selectedTools = availableTools;
   } else {
     console.log("Available tools:", availableTools.join(", "));
-    console.log("Use --tools to kernelify or --yes to use all detected.");
+    console.log("Use --tools to specify or --yes to use all detected.");
     selectedTools = availableTools;
   }
 
   if (selectedTools.length === 0) {
-    console.log("No tools kernelified. Use --tools to kernelify tools to configure.");
+    console.log("No tools specified. Use --tools to specify tools to configure.");
     return;
   }
 
@@ -62,7 +62,7 @@ export async function executeInit(options: InitOptions): Promise<void> {
     delivery: (options.delivery as any) || "both",
   });
 
-  console.log("Generating kernel files...");
+  console.log("Generating project files...");
   const result = await generateFiles(config, projectPath);
 
   console.log(`\nGenerated ${result.generated.length} files`);
@@ -74,7 +74,7 @@ export async function executeInit(options: InitOptions): Promise<void> {
     }
   }
 
-  console.log("\n✓ Kernel initialized successfully!");
+  console.log("\n✓ Project initialized successfully!");
   console.log(`\nConfigured tools: ${selectedTools.join(", ")}`);
   console.log(`Profile: ${config.profile}`);
   console.log("\nTry running one of these commands in your AI tool:");

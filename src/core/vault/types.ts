@@ -48,7 +48,8 @@ export interface VaultCompileOptions {
   outputPath: string;
   /**
    * Subset of tool IDs to compile for.
-   * If omitted, uses whatever tools are in the project's .spec/config.yaml.
+   * If omitted, uses whatever tools are configured for the project.
+   * The config loader also supports legacy .spec/config.yaml.
    */
   tools?: string[];
 }

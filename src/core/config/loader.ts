@@ -1,20 +1,32 @@
 /**
  * Configuration loader
  *
- * Load and save spec configuration files.
+ * Load and save project configuration files.
  */
 
 import * as path from "path";
 import * as yaml from "yaml";
 import { fileExists, readFile, writeFile, ensureDir } from "../utils/file-system.js";
 import { ConfigSchema, type Config } from "./schema.js";
-import { DEFAULT_CONFIG, DEFAULT_CONFIG_FILENAME, JINN_DIR_NAME } from "./defaults.js";
+import {
+  DEFAULT_CONFIG,
+  DEFAULT_CONFIG_FILENAME,
+  CONFIG_DIR_NAME,
+  LEGACY_CONFIG_DIR_NAME,
+} from "./defaults.js";
 
 /**
- * Get the spec configuration directory path
+ * Get the primary configuration directory path.
  */
 export function getConfigDir(projectPath: string): string {
-  return path.join(projectPath, JINN_DIR_NAME);
+  return path.join(projectPath, CONFIG_DIR_NAME);
+}
+
+/**
+ * Get the legacy spec configuration directory path.
+ */
+export function getLegacyConfigDir(projectPath: string): string {
+  return path.join(projectPath, LEGACY_CONFIG_DIR_NAME);
 }
 
 /**
@@ -25,13 +37,22 @@ export function getConfigPath(projectPath: string): string {
 }
 
 /**
+ * Get the legacy spec config path.
+ */
+export function getLegacyConfigPath(projectPath: string): string {
+  return path.join(getLegacyConfigDir(projectPath), DEFAULT_CONFIG_FILENAME);
+}
+
+/**
  * Load configuration from file
  *
  * @param projectPath - Path to project root
  * @returns Configuration object or null if not found
  */
 export async function loadConfig(projectPath: string): Promise<Config | null> {
-  const configPath = getConfigPath(projectPath);
+  const primaryConfigPath = getConfigPath(projectPath);
+  const configPath =
+    (await fileExists(primaryConfigPath)) ? primaryConfigPath : getLegacyConfigPath(projectPath);
 
   if (!(await fileExists(configPath))) {
     return null;
@@ -85,14 +106,13 @@ export async function createDefaultConfig(
 }
 
 /**
- * Check if spec is configured in a project
+ * Check if configuration exists in a project
  *
  * @param projectPath - Path to project root
  * @returns True if configuration exists
  */
 export async function hasConfig(projectPath: string): Promise<boolean> {
-  const configPath = getConfigPath(projectPath);
-  return fileExists(configPath);
+  return (await fileExists(getConfigPath(projectPath))) || fileExists(getLegacyConfigPath(projectPath));
 }
 
 /**

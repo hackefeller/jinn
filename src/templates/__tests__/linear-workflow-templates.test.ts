@@ -1,15 +1,15 @@
 import { describe, expect, it } from "bun:test";
 
-import { getSpecApplySkillTemplate } from "../skills/spec-apply/template.js";
-import { getSpecArchiveSkillTemplate } from "../skills/spec-archive/template.js";
-import { getSpecExploreSkillTemplate } from "../skills/spec-explore/template.js";
-import { getSpecProposeSkillTemplate } from "../skills/spec-propose/template.js";
+import { getApplySkillTemplate } from "../skills/apply/template.js";
+import { getArchiveSkillTemplate } from "../skills/archive/template.js";
+import { getExploreSkillTemplate } from "../skills/explore/template.js";
+import { getProposeSkillTemplate } from "../skills/propose/template.js";
 
 const templates = [
-  getSpecProposeSkillTemplate().instructions,
-  getSpecExploreSkillTemplate().instructions,
-  getSpecApplySkillTemplate().instructions,
-  getSpecArchiveSkillTemplate().instructions,
+  getProposeSkillTemplate().instructions,
+  getExploreSkillTemplate().instructions,
+  getApplySkillTemplate().instructions,
+  getArchiveSkillTemplate().instructions,
 ];
 
 describe("linear workflow templates", () => {
@@ -19,7 +19,7 @@ describe("linear workflow templates", () => {
     }
   });
 
-  it("do not depend on local spec artifacts", () => {
+  it("do not depend on local planning artifacts", () => {
     for (const template of templates) {
       expect(template.includes("tasks.md")).toBe(false);
       expect(template.includes("spec.md")).toBe(false);

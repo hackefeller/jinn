@@ -1,5 +1,5 @@
 /**
- * Kernel detect command
+ * Detect command
  *
  * Detects available AI tools in the project.
  */
