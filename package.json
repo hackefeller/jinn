@@ -1,6 +1,6 @@
 {
   "name": "@hackefeller/kernel",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Upgrade an AI agent with stronger workflows, templates, and execution guidance.",
   "keywords": [
     "agent",
