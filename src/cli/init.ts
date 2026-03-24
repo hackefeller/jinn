@@ -68,7 +68,7 @@ export async function executeInit(options: InitOptions): Promise<void> {
     });
   } catch (err) {
     if (err instanceof ZodError) {
-      console.error("Invalid option:", err.issues.map((i) => i.message).join(", "));
+      console.error(err.issues.map((i) => i.message).join(", "));
       process.exit(1);
     }
     throw err;

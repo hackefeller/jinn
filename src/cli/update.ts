@@ -8,6 +8,7 @@ import { ToolIdSchema } from "../core/config/schema.js";
 import type { Config } from "../core/config/schema.js";
 import { loadConfig } from "../core/config/loader.js";
 import { generateFiles } from "../core/generator/index.js";
+import { ZodError } from "zod";
 
 export interface UpdateOptions {
   force?: boolean;
@@ -51,7 +52,11 @@ export async function executeUpdate(options: UpdateOptions): Promise<void> {
 
     console.log("\n✓ Project files updated successfully!");
   } catch (error) {
-    console.error("Error:", error);
+    if (error instanceof ZodError) {
+      console.error(error.issues.map((i) => i.message).join(", "));
+    } else {
+      console.error("Error:", error);
+    }
     console.log('\nRun "kernel init" first to initialize kernel.');
   }
 }
