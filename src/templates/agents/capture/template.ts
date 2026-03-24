@@ -1,10 +1,11 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { AGENT_NAMES } from "../../constants.js";
 import { CAPTURE_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getCaptureAgentTemplate(): AgentTemplate {
   return {
-    name: "capture",
+    name: AGENT_NAMES.CAPTURE,
     description:
       "Learnings and retrospective specialist: documents what happened, what worked, what didn't, and what to change. Use at the end of a project, sprint, or significant session.",
     license: "MIT",

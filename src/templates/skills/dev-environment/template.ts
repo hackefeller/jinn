@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getDevEnvironmentSkillTemplate(): SkillTemplate {
   return {
-    name: "dev-environment",
+    name: SKILL_NAMES.DEV_ENVIRONMENT,
     description:
       "Developer environment maintenance: health checks, cleanup, backup, restore, and session management.",
     license: "MIT",

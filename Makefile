@@ -31,9 +31,10 @@ help:
 	@echo "  make test-all          Run all CLI integration tests"
 	@echo "  make clean             Remove test directories"
 	@echo ""
-	@echo "File count expectations:"
-	@echo "  --delivery both:       8 agents + 20 skills"
-	@echo "  --delivery skills:    0 agents + 20 skills"
+	@echo "File count expectations (default --profile core):"
+	@echo "  --delivery both:       8 agents + 8 skills"
+	@echo "  --delivery skills:    0 agents + 8 skills"
+	@echo "  (use --profile extended for all 20 skills)"
 
 build:
 	bun ./src/templates/.generated/generate.ts
@@ -51,7 +52,7 @@ test-init: build
 	@echo ""
 	@echo "=== File counts ==="
 	@echo ".opencode/agents/  -> $$(ls $(TESTDIR)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
-	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
+	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 	@echo ""
 	@echo "=== Spot-check: global config exists ==="
 	@{ test -f $(TESTHOME)/.kernel/config.yaml && echo "PASS: ~/.kernel/config.yaml created" || echo "FAIL: ~/.kernel/config.yaml missing"; }
@@ -66,7 +67,7 @@ test-init-both: build
 	@echo ""
 	@echo "=== File counts ==="
 	@echo ".opencode/agents/  -> $$(ls $(TESTDIR_DELIVERY_BOTH)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
-	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_DELIVERY_BOTH)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
+	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_DELIVERY_BOTH)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 
 # --- Test init with --delivery skills (agents should NOT exist) ---
 test-init-skills: build
@@ -78,7 +79,7 @@ test-init-skills: build
 	@echo ""
 	@echo "=== File counts ==="
 	@echo ".opencode/agents/  -> $$(ls $(TESTDIR_DELIVERY_SKILLS)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 0)"
-	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_DELIVERY_SKILLS)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
+	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_DELIVERY_SKILLS)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 
 # --- Test init with multiple tools ---
 test-init-multi: build
@@ -90,9 +91,9 @@ test-init-multi: build
 	@echo ""
 	@echo "=== File counts ==="
 	@echo ".opencode/agents/  -> $$(ls $(TESTDIR_MULTI)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
-	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_MULTI)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
+	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_MULTI)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 	@echo ".claude/agents/    -> $$(ls $(TESTDIR_MULTI)/.claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
-	@echo ".claude/skills/    -> $$(ls -d $(TESTDIR_MULTI)/.claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
+	@echo ".claude/skills/    -> $$(ls -d $(TESTDIR_MULTI)/.claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 
 # --- Test update after init ---
 test-update: test-init
@@ -100,7 +101,7 @@ test-update: test-init
 	@echo ""
 	@echo "=== After update --force: counts should be unchanged ==="
 	@echo ".opencode/agents/  -> $$(ls $(TESTDIR)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
-	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 20)"
+	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 
 # --- Test config commands ---
 test-config: build

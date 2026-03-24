@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getArchiveSkillTemplate(): SkillTemplate {
   return {
-    name: "archive",
+    name: SKILL_NAMES.ARCHIVE,
     description:
       "Use when closing or cleaning up completed Linear projects, issues, and follow-up work.",
     license: "MIT",
@@ -28,7 +29,7 @@ export function getArchiveSkillTemplate(): SkillTemplate {
       "All open issues resolved, deferred, or captured as follow-up",
     ],
     outputs: ["Completed Linear project", "Follow-up issues for deferred work"],
-    dependencies: ["apply"],
+    dependencies: [SKILL_NAMES.APPLY],
     disableModelInvocation: true,
     instructions: getSkillInstructions("archive"),
   };

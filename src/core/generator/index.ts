@@ -4,13 +4,9 @@
  * Main generator that orchestrates file generation across all configured tools.
  */
 
-import * as fs from "fs/promises";
-import * as path from "path";
-
 import type { Config } from "../config/schema.js";
 import type { GenerationResult } from "./types.js";
 import type { ToolCommandAdapter } from "../adapters/types.js";
-import type { SkillTemplate, AgentTemplate } from "../templates/types.js";
 
 import { CONFIG_VERSION } from "../config/defaults.js";
 import { createPopulatedAdapterRegistry } from "../adapters/index.js";
@@ -19,9 +15,7 @@ import { generateAgentsForAllTools } from "./agent-gen.js";
 import { generateManifestsForAllTools } from "./manifest-gen.js";
 
 import { getDefaultSkillTemplates, getDefaultAgentTemplates } from "../../templates/catalog.js";
-
-const DEFAULT_SKILL_TEMPLATES: SkillTemplate[] = getDefaultSkillTemplates();
-const DEFAULT_AGENT_TEMPLATES: AgentTemplate[] = getDefaultAgentTemplates();
+import { writeFilesBatch } from "../utils/batch-writer.js";
 
 export class Generator {
   private config: Config;
@@ -41,18 +35,21 @@ export class Generator {
       return result;
     }
 
-    const skillFiles = generateSkillsForAllTools(DEFAULT_SKILL_TEMPLATES, adapters, this.version);
-    const manifestFiles = generateManifestsForAllTools(DEFAULT_SKILL_TEMPLATES, adapters, this.version);
+    const skillTemplates = getDefaultSkillTemplates(this.config.profile);
+    const agentTemplates = getDefaultAgentTemplates(this.config.profile);
+
+    const skillFiles = generateSkillsForAllTools(skillTemplates, adapters, this.version);
+    const manifestFiles = generateManifestsForAllTools(skillTemplates, adapters, this.version);
     const agentFiles =
       this.config.delivery !== "skills"
-        ? generateAgentsForAllTools(DEFAULT_AGENT_TEMPLATES, adapters, this.version)
+        ? generateAgentsForAllTools(agentTemplates, adapters, this.version)
         : [];
 
-    const { generated, failed } = await this.writeFilesBatch(
+    const { written, failed } = await writeFilesBatch(
       [...skillFiles, ...manifestFiles, ...agentFiles],
       projectPath,
     );
-    result.generated = generated;
+    result.generated = written;
     result.failed = failed;
 
     return result;
@@ -70,32 +67,6 @@ export class Generator {
     return adapters;
   }
 
-  private async writeFilesBatch(
-    files: Array<{ path: string; content: string }>,
-    projectPath: string,
-  ): Promise<{ generated: string[]; failed: Array<{ path: string; error: string }> }> {
-    if (files.length === 0) return { generated: [], failed: [] };
-
-    // Create all required directories up-front in parallel
-    const uniqueDirs = [...new Set(files.map((f) => path.dirname(path.join(projectPath, f.path))))];
-    await Promise.all(uniqueDirs.map((dir) => fs.mkdir(dir, { recursive: true }).catch(() => {})));
-
-    const generated: string[] = [];
-    const failed: Array<{ path: string; error: string }> = [];
-
-    await Promise.all(
-      files.map(async (file) => {
-        try {
-          await fs.writeFile(path.join(projectPath, file.path), file.content, "utf-8");
-          generated.push(file.path);
-        } catch (error) {
-          failed.push({ path: file.path, error: String(error) });
-        }
-      }),
-    );
-
-    return { generated, failed };
-  }
 }
 
 export async function generateFiles(

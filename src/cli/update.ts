@@ -4,8 +4,8 @@
  * Updates and regenerates project files.
  */
 
+import { ToolIdSchema } from "../core/config/schema.js";
 import type { Config } from "../core/config/schema.js";
-
 import { loadConfig } from "../core/config/loader.js";
 import { generateFiles } from "../core/generator/index.js";
 
@@ -30,7 +30,9 @@ export async function executeUpdate(options: UpdateOptions): Promise<void> {
       return;
     }
 
-    const config: Config = options.tool ? { ...loaded, tools: [options.tool] as any } : loaded;
+    const config: Config = options.tool
+      ? { ...loaded, tools: ToolIdSchema.array().parse([options.tool]) }
+      : loaded;
 
     console.log(`Tools: ${config.tools.join(", ")}`);
     console.log(`Profile: ${config.profile}`);

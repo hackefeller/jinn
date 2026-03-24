@@ -1,10 +1,11 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { AGENT_NAMES } from "../../constants.js";
 import { ARCHITECT_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions } from "../../.generated/templates.js";
 
 export function getArchitectAgentTemplate(): AgentTemplate {
   return {
-    name: "architect",
+    name: AGENT_NAMES.ARCHITECT,
     description:
       "Architecture specialist: reviews design decisions, identifies patterns and anti-patterns, ensures scalable and maintainable structure. Use for architectural questions or after significant structural changes.",
     license: "MIT",

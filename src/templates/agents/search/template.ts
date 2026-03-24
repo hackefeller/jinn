@@ -1,10 +1,11 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { AGENT_NAMES } from "../../constants.js";
 import { SEARCH_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getSearchAgentTemplate(): AgentTemplate {
   return {
-    name: "search",
+    name: AGENT_NAMES.SEARCH,
     description:
       "Search specialist: locates code, finds documentation, traces history, and retrieves prior learnings. Use when you need targeted research across the codebase or external sources.",
     license: "MIT",

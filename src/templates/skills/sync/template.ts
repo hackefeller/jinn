@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getSyncSkillTemplate(): SkillTemplate {
   return {
-    name: "sync",
+    name: SKILL_NAMES.SYNC,
     description:
       "Use when Linear state has drifted from reality — stale In Progress issues, work completed without updates, or issues missing from the board. Reconciles Linear with what actually happened.",
     license: "MIT",

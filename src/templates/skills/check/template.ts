@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getCheckSkillTemplate(): SkillTemplate {
   return {
-    name: "check",
+    name: SKILL_NAMES.CHECK,
     description:
       "Use mid-execution to report current state: what's done, what's in progress, what's blocked, and what happens next. Surfaces blockers and recommends the next action.",
     license: "MIT",

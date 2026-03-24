@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions, getSkillReferences } from "../../.generated/templates.js";
 
 export function getDesignSkillTemplate(): SkillTemplate {
   return {
-    name: "design",
+    name: SKILL_NAMES.DESIGN,
     description:
       "Apply when designing, writing, reviewing, or modifying any frontend UI code. Combines implementation guidance with the Ponti Studios design system: strict tokens, accessibility, responsive layout, purposeful motion, and performance.",
     license: "MIT",

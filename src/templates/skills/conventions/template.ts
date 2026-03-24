@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getConventionsSkillTemplate(): SkillTemplate {
   return {
-    name: "conventions",
+    name: SKILL_NAMES.CONVENTIONS,
     description:
       "Use when defining, reviewing, or documenting the standards that govern how a project is built and maintained.",
     license: "MIT",

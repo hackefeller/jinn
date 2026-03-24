@@ -9,6 +9,10 @@ import {
   type ToolCommandAdapter,
 } from "../index.js";
 import type { AgentTemplate } from "../../templates/types.js";
+import {
+  AGENT_NAMES,
+  SKILL_NAMES,
+} from "../../../templates/constants.js";
 
 const allAdapters: ToolCommandAdapter[] = [
   opencodeAdapter,
@@ -34,14 +38,14 @@ const testSkillTemplate = {
 };
 
 const testAgentTemplate: AgentTemplate = {
-  name: "plan",
+  name: AGENT_NAMES.PLAN,
   description: "Pre-implementation planning agent",
   instructions: "You are a planning agent.",
   license: "MIT",
   compatibility: "Works with all workflows",
   metadata: { author: "project", version: "1.0", category: "Orchestration", tags: ["planning"] },
   defaultTools: ["read", "search"],
-  availableSkills: ["git-master", "design"],
+  availableSkills: [SKILL_NAMES.GIT_MASTER, SKILL_NAMES.DESIGN],
 };
 
 const nativeAgentSupport: Record<string, boolean> = {
@@ -96,7 +100,7 @@ describe("OpenCode Adapter", () => {
   });
 
   it("uses .opencode/agents/<name>.md path for agents", () => {
-    expect(opencodeAdapter.getAgentPath!("plan")).toBe(".opencode/agents/plan.md");
+    expect(opencodeAdapter.getAgentPath!(AGENT_NAMES.PLAN)).toBe(".opencode/agents/kernel-plan.md");
   });
 
   it("generates YAML frontmatter with description for agents", () => {
@@ -110,8 +114,8 @@ describe("OpenCode Adapter", () => {
     const result = opencodeAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     const body = result.split("---")[2];
     expect(body).toContain("## Available skills");
-    expect(body).toContain("- git-master");
-    expect(body).toContain("- design");
+    expect(body).toContain(`- ${SKILL_NAMES.GIT_MASTER}`);
+    expect(body).toContain(`- ${SKILL_NAMES.DESIGN}`);
   });
 
   it("omits ## sections when fields are empty", () => {
@@ -153,9 +157,7 @@ describe("Cursor Adapter", () => {
   });
 
   it("generates correct skill path", () => {
-    expect(cursorAdapter.getSkillPath("planner")).toBe(
-      ".cursor/skills/planner/SKILL.md",
-    );
+    expect(cursorAdapter.getSkillPath("planner")).toBe(".cursor/skills/planner/SKILL.md");
   });
 });
 
@@ -165,13 +167,11 @@ describe("Gemini Adapter", () => {
   });
 
   it("generates correct skill path", () => {
-    expect(geminiAdapter.getSkillPath("planner")).toBe(
-      ".gemini/skills/planner/SKILL.md",
-    );
+    expect(geminiAdapter.getSkillPath("planner")).toBe(".gemini/skills/planner/SKILL.md");
   });
 
   it("generates correct agent path", () => {
-    expect(geminiAdapter.getAgentPath!("plan")).toBe(".gemini/agents/plan.md");
+    expect(geminiAdapter.getAgentPath!(AGENT_NAMES.PLAN)).toBe(".gemini/agents/kernel-plan.md");
   });
 });
 
@@ -259,8 +259,8 @@ describe("Claude formatAgent", () => {
     const result = claudeAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     const frontmatter = result.split("---")[1];
     expect(frontmatter).toContain("skills:");
-    expect(frontmatter).toContain("git-master");
-    expect(frontmatter).toContain("design");
+    expect(frontmatter).toContain(SKILL_NAMES.GIT_MASTER);
+    expect(frontmatter).toContain(SKILL_NAMES.DESIGN);
   });
 
   it("does not add ## Available skills section to agent body", () => {
@@ -298,8 +298,8 @@ describe("Claude formatAgent", () => {
 
 describe("Claude getAgentPath", () => {
   it("returns .claude/agents/<name>.md", () => {
-    expect(claudeAdapter.getAgentPath!("plan")).toBe(".claude/agents/plan.md");
-    expect(claudeAdapter.getAgentPath!("review")).toBe(".claude/agents/review.md");
+    expect(claudeAdapter.getAgentPath!(AGENT_NAMES.PLAN)).toBe(".claude/agents/kernel-plan.md");
+    expect(claudeAdapter.getAgentPath!(AGENT_NAMES.REVIEW)).toBe(".claude/agents/kernel-review.md");
   });
 });
 
@@ -309,13 +309,13 @@ describe("Claude getAgentPath", () => {
 
 describe("Codex formatAgent", () => {
   it("uses .codex/agents/<name>.toml path", () => {
-    expect(codexAdapter.getAgentPath!("plan")).toBe(".codex/agents/plan.toml");
-    expect(codexAdapter.getAgentPath!("review")).toBe(".codex/agents/review.toml");
+    expect(codexAdapter.getAgentPath!(AGENT_NAMES.PLAN)).toBe(".codex/agents/kernel-plan.toml");
+    expect(codexAdapter.getAgentPath!(AGENT_NAMES.REVIEW)).toBe(".codex/agents/kernel-review.toml");
   });
 
   it("generates TOML with name and description", () => {
     const result = codexAdapter.formatAgent!(testAgentTemplate, "1.0.0");
-    expect(result).toContain('name = "plan"');
+    expect(result).toContain(`name = "${AGENT_NAMES.PLAN}"`);
     expect(result).toContain('description = "Pre-implementation planning agent"');
   });
 
@@ -330,8 +330,8 @@ describe("Codex formatAgent", () => {
   it("maps availableSkills to [[skills.config]] entries", () => {
     const result = codexAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     expect(result).toContain("[[skills.config]]");
-    expect(result).toContain(".codex/skills/git-master/SKILL.md");
-    expect(result).toContain(".codex/skills/design/SKILL.md");
+    expect(result).toContain(`.codex/skills/${SKILL_NAMES.GIT_MASTER}/SKILL.md`);
+    expect(result).toContain(`.codex/skills/${SKILL_NAMES.DESIGN}/SKILL.md`);
   });
 
   it("omits [[skills.config]] when availableSkills is empty", () => {
@@ -345,9 +345,7 @@ describe("Codex formatAgent", () => {
 
 describe("Codex formatSkill", () => {
   it("uses .codex/skills/<name>/SKILL.md path", () => {
-    expect(codexAdapter.getSkillPath("git-master")).toBe(
-      ".codex/skills/git-master/SKILL.md",
-    );
+    expect(codexAdapter.getSkillPath(SKILL_NAMES.GIT_MASTER)).toBe(".codex/skills/kernel-git-master/SKILL.md");
   });
 
   it("includes name and description in frontmatter", () => {
@@ -368,14 +366,18 @@ describe("Codex formatSkill", () => {
 
 describe("GitHub Copilot formatAgent", () => {
   it("uses .github/agents/<name>.agent.md path", () => {
-    expect(githubCopilotAdapter.getAgentPath!("plan")).toBe(".github/agents/plan.agent.md");
-    expect(githubCopilotAdapter.getAgentPath!("review")).toBe(".github/agents/review.agent.md");
+    expect(githubCopilotAdapter.getAgentPath!(AGENT_NAMES.PLAN)).toBe(
+      ".github/agents/kernel-plan.agent.md",
+    );
+    expect(githubCopilotAdapter.getAgentPath!(AGENT_NAMES.REVIEW)).toBe(
+      ".github/agents/kernel-review.agent.md",
+    );
   });
 
   it("generates YAML frontmatter with name and description", () => {
     const result = githubCopilotAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     const frontmatter = result.split("---")[1];
-    expect(frontmatter).toContain("name: plan");
+    expect(frontmatter).toContain(`name: ${AGENT_NAMES.PLAN}`);
     expect(frontmatter).toContain("description:");
   });
 
@@ -383,8 +385,8 @@ describe("GitHub Copilot formatAgent", () => {
     const result = githubCopilotAdapter.formatAgent!(testAgentTemplate, "1.0.0");
     const body = result.split("---")[2];
     expect(body).toContain("## Available skills");
-    expect(body).toContain("- git-master");
-    expect(body).toContain("- design");
+    expect(body).toContain(`- ${SKILL_NAMES.GIT_MASTER}`);
+    expect(body).toContain(`- ${SKILL_NAMES.DESIGN}`);
   });
 
   it("omits ## Available skills when availableSkills is empty", () => {

@@ -1,10 +1,11 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { AGENT_NAMES } from "../../constants.js";
 import { DO_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getDoAgentTemplate(): AgentTemplate {
   return {
-    name: "do",
+    name: AGENT_NAMES.DO,
     description:
       "Execution coordinator: works through a plan task by task, handles status checks mid-execution, delegates to specialists, and stops on blockers. Requires a plan to exist before starting.",
     license: "MIT",

@@ -104,24 +104,14 @@ export async function copyFile(srcPath: string, destPath: string): Promise<void>
  * Check if path is a directory
  */
 export async function isDirectory(filePath: string): Promise<boolean> {
-  try {
-    const stats = await fs.stat(filePath);
-    return stats.isDirectory();
-  } catch {
-    return false;
-  }
+  return directoryExists(filePath);
 }
 
 /**
  * Check if path is a file
  */
 export async function isFile(filePath: string): Promise<boolean> {
-  try {
-    const stats = await fs.stat(filePath);
-    return stats.isFile();
-  } catch {
-    return false;
-  }
+  return fileExists(filePath);
 }
 
 /**

@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getMapCodebaseSkillTemplate(): SkillTemplate {
   return {
-    name: "map-codebase",
+    name: SKILL_NAMES.MAP_CODEBASE,
     description:
       "Use when exploring an unfamiliar codebase — to understand its structure, trace how data flows, or answer 'where do I start if I need to change X?'",
     license: "MIT",

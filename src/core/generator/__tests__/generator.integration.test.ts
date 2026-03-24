@@ -5,6 +5,7 @@ import * as os from "os";
 import { generateFiles } from "../index.js";
 import type { Config } from "../../config/schema.js";
 import { getDefaultAgentTemplates } from "../../../templates/catalog.js";
+import { AGENT_NAMES } from "../../../templates/constants.js";
 
 const defaultAgentFileNames = getDefaultAgentTemplates()
   .map((template) => `${template.name}.md`)
@@ -82,7 +83,7 @@ describe("Generator integration — opencode, delivery: both", () => {
   const config: Config = {
     version: "1.0.0",
     tools: ["opencode"],
-    profile: "core",
+    profile: "extended",
     delivery: "both",
   };
 
@@ -148,7 +149,10 @@ describe("Generator integration — claude, delivery: both", () => {
 
   it("generates 8 agent files under .claude/agents/", async () => {
     await generateFiles(config, tmpDir);
-    const count = await countFilesInDirBySuffix(path.join(tmpDir, ".claude", "agents"), ".md");
+    const count = await countFilesInDirBySuffix(
+      path.join(tmpDir, ".claude", "agents"),
+      ".md",
+    );
     expect(count).toBe(8);
   });
 
@@ -169,9 +173,11 @@ describe("Generator integration — claude, delivery: both", () => {
     expect(content).not.toContain("model: sonnet");
   });
 
-  it("specific planning agent file exists at .claude/agents/plan.md", async () => {
+  it("specific planning agent file exists at .claude/agents/kernel-plan.md", async () => {
     await generateFiles(config, tmpDir);
-    const ok = await fileExists(path.join(tmpDir, ".claude", "agents", "plan.md"));
+    const ok = await fileExists(
+      path.join(tmpDir, ".claude", "agents", `${AGENT_NAMES.PLAN}.md`),
+    );
     expect(ok).toBe(true);
   });
 });
@@ -392,17 +398,23 @@ describe("Generator integration — idempotency", () => {
     const config: Config = {
       version: "1.0.0",
       tools: ["opencode"],
-      profile: "core",
+      profile: "extended",
       delivery: "both",
     };
 
     await generateFiles(config, tmpDir);
     const skillCountFirst = await countDirsInDir(path.join(tmpDir, ".opencode", "skills"));
-    const agentCountFirst = await countFilesInDirBySuffix(path.join(tmpDir, ".opencode", "agents"), ".md");
+    const agentCountFirst = await countFilesInDirBySuffix(
+      path.join(tmpDir, ".opencode", "agents"),
+      ".md",
+    );
 
     await generateFiles(config, tmpDir);
     const skillCountSecond = await countDirsInDir(path.join(tmpDir, ".opencode", "skills"));
-    const agentCountSecond = await countFilesInDirBySuffix(path.join(tmpDir, ".opencode", "agents"), ".md");
+    const agentCountSecond = await countFilesInDirBySuffix(
+      path.join(tmpDir, ".opencode", "agents"),
+      ".md",
+    );
 
     expect(skillCountFirst).toBe(skillCountSecond);
     expect(agentCountFirst).toBe(agentCountSecond);

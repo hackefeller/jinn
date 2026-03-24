@@ -4,10 +4,12 @@
  * Initializes the project in the current workspace.
  */
 
+import { ToolIdSchema, ProfileSchema, DeliverySchema } from "../core/config/schema.js";
 import type { Config } from "../core/config/schema.js";
 import { createDefaultConfig } from "../core/config/loader.js";
 import { generateFiles } from "../core/generator/index.js";
 import { detectAvailableTools } from "../core/discovery/detector.js";
+import { ZodError } from "zod";
 
 export interface InitOptions {
   tools?: string;
@@ -57,11 +59,20 @@ export async function executeInit(options: InitOptions): Promise<void> {
 
   console.log(`Configured tools: ${selectedTools.join(", ")}\n`);
 
-  const config: Config = await createDefaultConfig(options.configRootPath, {
-    tools: selectedTools as any,
-    profile: (options.profile as any) || "core",
-    delivery: (options.delivery as any) || "both",
-  });
+  let config: Config;
+  try {
+    config = await createDefaultConfig(options.configRootPath, {
+      tools: ToolIdSchema.array().parse(selectedTools),
+      profile: ProfileSchema.parse(options.profile ?? "core"),
+      delivery: DeliverySchema.parse(options.delivery ?? "both"),
+    });
+  } catch (err) {
+    if (err instanceof ZodError) {
+      console.error("Invalid option:", err.issues.map((i) => i.message).join(", "));
+      process.exit(1);
+    }
+    throw err;
+  }
 
   console.log("Generating project files...");
   const result = await generateFiles(config, projectPath);

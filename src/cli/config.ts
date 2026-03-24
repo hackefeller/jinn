@@ -6,6 +6,8 @@
 
 import * as fs from "fs/promises";
 import { loadConfig, saveConfig, getConfigPath } from "../core/config/loader.js";
+import { ToolIdSchema, ConfigSchema } from "../core/config/schema.js";
+import { ZodError } from "zod";
 
 export interface ConfigOptions {
   action: "show" | "get" | "set" | "add-tool" | "remove-tool";
@@ -47,22 +49,33 @@ async function modifyTools(
     return;
   }
 
-  const tools = config.tools as string[];
+  let validatedTool: ReturnType<typeof ToolIdSchema.parse>;
+  try {
+    validatedTool = ToolIdSchema.parse(tool);
+  } catch (err) {
+    if (err instanceof ZodError) {
+      console.error(`Unknown tool: "${tool}". Valid tools: ${ToolIdSchema.options.join(", ")}`);
+      return;
+    }
+    throw err;
+  }
+
+  const tools = config.tools;
 
   if (action === "add") {
-    if (tools.includes(tool)) {
-      console.log(`Tool already configured: ${tool}`);
+    if (tools.includes(validatedTool)) {
+      console.log(`Tool already configured: ${validatedTool}`);
       return;
     }
-    await saveConfig({ ...config, tools: [...tools, tool] as any }, configRootPath);
-    console.log(`Added tool: ${tool}`);
+    await saveConfig({ ...config, tools: [...tools, validatedTool] }, configRootPath);
+    console.log(`Added tool: ${validatedTool}`);
   } else {
-    if (!tools.includes(tool)) {
-      console.log(`Tool not found: ${tool}`);
+    if (!tools.includes(validatedTool)) {
+      console.log(`Tool not found: ${validatedTool}`);
       return;
     }
-    await saveConfig({ ...config, tools: tools.filter((t) => t !== tool) as any }, configRootPath);
-    console.log(`Removed tool: ${tool}`);
+    await saveConfig({ ...config, tools: tools.filter((t) => t !== validatedTool) }, configRootPath);
+    console.log(`Removed tool: ${validatedTool}`);
   }
 }
 
@@ -79,6 +92,16 @@ async function setConfig(configRootPath: string | undefined, key: string, value:
     return;
   }
 
-  await saveConfig({ ...config, [key]: value }, configRootPath);
-  console.log(`Set ${key} = ${value}`);
+  const updated = { ...config, [key]: value };
+  try {
+    const validated = ConfigSchema.parse(updated);
+    await saveConfig(validated, configRootPath);
+    console.log(`Set ${key} = ${value}`);
+  } catch (err) {
+    if (err instanceof ZodError) {
+      console.error(`Invalid value for "${key}":`, err.issues.map((i) => i.message).join(", "));
+      return;
+    }
+    throw err;
+  }
 }

@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getDeploySkillTemplate(): SkillTemplate {
   return {
-    name: "deploy",
+    name: SKILL_NAMES.DEPLOY,
     description:
       "Use when deploying to any environment — staging, production, or otherwise — or when diagnosing a deployment failure.",
     license: "MIT",

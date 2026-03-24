@@ -6,9 +6,10 @@ import {
 } from "../agent-gen.js";
 import { opencodeAdapter, claudeAdapter, cursorAdapter } from "../../adapters/index.js";
 import type { AgentTemplate } from "../../templates/types.js";
+import { AGENT_NAMES } from "../../../templates/constants.js";
 
 const testAgent: AgentTemplate = {
-  name: "plan",
+  name: AGENT_NAMES.PLAN,
   description: "Pre-implementation planning agent",
   instructions: "You are a planning agent.",
   license: "MIT",
@@ -18,7 +19,7 @@ const testAgent: AgentTemplate = {
 };
 
 const testAgent2: AgentTemplate = {
-  name: "review",
+  name: AGENT_NAMES.REVIEW,
   description: "Quality review agent",
   instructions: "You are a review agent.",
   license: "MIT",
@@ -36,7 +37,7 @@ describe("generateAgentForTool — claude (has getAgentPath + formatAgent)", () 
 
   it("claude agents land at .claude/agents/<name>.md", () => {
     const result = generateAgentForTool(testAgent, claudeAdapter, "1.0.0");
-    expect(result[0].path).toBe(".claude/agents/plan.md");
+    expect(result[0].path).toBe(".claude/agents/kernel-plan.md");
   });
 
   it("uses formatAgent for the file content", () => {
@@ -64,7 +65,7 @@ describe("generateAgentForTool — opencode (has getAgentPath and formatAgent)",
 
   it("opencode agent path is in .opencode/agents/", () => {
     const result = generateAgentForTool(testAgent, opencodeAdapter, "1.0.0");
-    expect(result[0].path).toBe(".opencode/agents/plan.md");
+    expect(result[0].path).toBe(".opencode/agents/kernel-plan.md");
   });
 
   it("opencode agent content includes description frontmatter", () => {
@@ -98,8 +99,8 @@ describe("generateAgentsForTool", () => {
 
   it("each claude agent file has correct path", () => {
     const results = generateAgentsForTool(templates, claudeAdapter, "1.0.0");
-    expect(results[0].path).toBe(".claude/agents/plan.md");
-    expect(results[1].path).toBe(".claude/agents/review.md");
+    expect(results[0].path).toBe(".claude/agents/kernel-plan.md");
+    expect(results[1].path).toBe(".claude/agents/kernel-review.md");
     expect(results[2].path).toBe(".claude/agents/references/common/python.md");
   });
 

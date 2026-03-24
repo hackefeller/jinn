@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getGitMasterSkillTemplate(): SkillTemplate {
   return {
-    name: "git-master",
+    name: SKILL_NAMES.GIT_MASTER,
     description: "Advanced git workflows, branch management, and collaboration patterns",
     license: "MIT",
     compatibility: "Works with any git repository",

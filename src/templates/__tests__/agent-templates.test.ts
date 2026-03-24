@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 
-import { SKILL_NAMES } from "../constants.js";
+import { AGENT_NAMES, SKILL_NAMES } from "../constants.js";
 import { getDefaultAgentTemplates } from "../catalog.js";
 
 import {
@@ -26,6 +26,17 @@ const templates = [
 ];
 
 describe("agent templates", () => {
+  it("use kernel-prefixed agent identifiers", () => {
+    expect(getPlanAgentTemplate().name).toBe(AGENT_NAMES.PLAN);
+    expect(getDoAgentTemplate().name).toBe(AGENT_NAMES.DO);
+    expect(getCaptureAgentTemplate().name).toBe(AGENT_NAMES.CAPTURE);
+    expect(getReviewAgentTemplate().name).toBe(AGENT_NAMES.REVIEW);
+    expect(getArchitectAgentTemplate().name).toBe(AGENT_NAMES.ARCHITECT);
+    expect(getDesignerAgentTemplate().name).toBe(AGENT_NAMES.DESIGNER);
+    expect(getGitAgentTemplate().name).toBe(AGENT_NAMES.GIT);
+    expect(getSearchAgentTemplate().name).toBe(AGENT_NAMES.SEARCH);
+  });
+
   it("expose available skills", () => {
     for (const template of templates) {
       expect(template.availableSkills?.length ?? 0).toBeGreaterThan(0);

@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getReadyForProdSkillTemplate(): SkillTemplate {
   return {
-    name: "ready-for-prod",
+    name: SKILL_NAMES.READY_FOR_PROD,
     description:
       "Use when validating production readiness before a release, deployment, or launch decision.",
     license: "MIT",

@@ -11,7 +11,7 @@ export { githubCopilotAdapter } from "./github-copilot.js";
 export { geminiAdapter } from "./gemini.js";
 export { cursorAdapter } from "./cursor.js";
 
-export { createAdapterRegistry, adapterRegistry } from "./registry.js";
+export { createAdapterRegistry } from "./registry.js";
 export type { ToolCommandAdapter, GeneratedFile, AdapterRegistry } from "./types.js";
 
 import { createAdapterRegistry } from "./registry.js";

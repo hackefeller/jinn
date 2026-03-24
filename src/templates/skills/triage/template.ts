@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getTriageSkillTemplate(): SkillTemplate {
   return {
-    name: "triage",
+    name: SKILL_NAMES.TRIAGE,
     description:
       "Use when a bug report, ad-hoc request, or unplanned issue arrives and needs to be assessed, sized, and placed into the correct position in the Linear hierarchy before work begins.",
     license: "MIT",
@@ -29,7 +30,7 @@ export function getTriageSkillTemplate(): SkillTemplate {
       "Triage report delivered with issue URL and position in hierarchy",
     ],
     outputs: ["New Linear issue with parentId, priority, and relations set", "Triage report"],
-    dependencies: ["explore", "propose"],
+    dependencies: [SKILL_NAMES.EXPLORE, SKILL_NAMES.PROPOSE],
     instructions: getSkillInstructions("triage"),
   };
 }

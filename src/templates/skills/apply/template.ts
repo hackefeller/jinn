@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getApplySkillTemplate(): SkillTemplate {
   return {
-    name: "apply",
+    name: SKILL_NAMES.APPLY,
     description: "Use when executing implementation work from Linear issues and sub-issues.",
     license: "MIT",
     compatibility: "Requires the CLI and a configured Linear MCP server.",
@@ -27,7 +28,7 @@ export function getApplySkillTemplate(): SkillTemplate {
       "Linear issue status updated to reflect completion or blockers",
     ],
     outputs: ["Implemented code changes", "Updated Linear issue statuses"],
-    dependencies: ["explore", "propose"],
+    dependencies: [SKILL_NAMES.EXPLORE, SKILL_NAMES.PROPOSE],
     disableModelInvocation: true,
     instructions: getSkillInstructions("apply"),
   };

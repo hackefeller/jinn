@@ -48,7 +48,3 @@ export function createAdapterRegistry(): AdapterRegistry {
   return new AdapterRegistryImpl();
 }
 
-/**
- * Singleton adapter registry instance
- */
-export const adapterRegistry = createAdapterRegistry();

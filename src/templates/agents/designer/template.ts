@@ -1,10 +1,11 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { AGENT_NAMES } from "../../constants.js";
 import { DESIGNER_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions } from "../../.generated/templates.js";
 
 export function getDesignerAgentTemplate(): AgentTemplate {
   return {
-    name: "designer",
+    name: AGENT_NAMES.DESIGNER,
     description:
       "Frontend designer: builds production-grade UIs, implements components, maps user flows, iterates on design quality, and verifies implementation against design specs. Use for all frontend and UI work.",
     license: "MIT",

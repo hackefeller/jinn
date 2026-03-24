@@ -6,12 +6,22 @@
  */
 
 /**
+ * Which distribution tier this template belongs to.
+ * - "core": essential workflow skills installed for all profiles
+ * - "extended": full skill set, installed for "extended" and "custom" profiles
+ */
+export type TemplateProfile = "core" | "extended";
+
+/**
  * Skill template - defines reusable skill content
  * Skills are installed to <tool>/skills/<name>/SKILL.md
  */
 export interface SkillTemplate {
-  /** Unique skill identifier (e.g., 'git-master') */
+  /** Unique skill identifier (e.g., 'kernel-git-master') */
   name: string;
+
+  /** Distribution tier — omit to include in all profiles */
+  profile?: TemplateProfile;
 
   /** Human-readable description */
   description: string;

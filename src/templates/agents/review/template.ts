@@ -1,10 +1,11 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { AGENT_NAMES } from "../../constants.js";
 import { REVIEW_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getReviewAgentTemplate(): AgentTemplate {
   return {
-    name: "review",
+    name: AGENT_NAMES.REVIEW,
     description:
       "Quality reviewer: reviews completed work for correctness, security, performance, and code quality. Use after implementation is complete before merging or deploying.",
     license: "MIT",

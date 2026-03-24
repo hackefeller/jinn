@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getCodeQualitySkillTemplate(): SkillTemplate {
   return {
-    name: "code-quality",
+    name: SKILL_NAMES.CODE_QUALITY,
     description:
       "Code review, formatting, refactoring, optimization, and linting across any language or stack.",
     license: "MIT",

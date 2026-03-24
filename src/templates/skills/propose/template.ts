@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getProposeSkillTemplate(): SkillTemplate {
   return {
-    name: "propose",
+    name: SKILL_NAMES.PROPOSE,
     description:
       "Use when turning a change request into a Linear project with seeded issues and sub-issues.",
     license: "MIT",
@@ -29,7 +30,7 @@ export function getProposeSkillTemplate(): SkillTemplate {
       "Sub-issues created for immediately actionable tasks",
     ],
     outputs: ["Linear project", "Linear issues and sub-issues"],
-    dependencies: ["explore"],
+    dependencies: [SKILL_NAMES.EXPLORE],
     instructions: getSkillInstructions("propose"),
   };
 }

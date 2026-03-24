@@ -1,10 +1,11 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { AGENT_NAMES } from "../../constants.js";
 import { PLAN_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getPlanAgentTemplate(): AgentTemplate {
   return {
-    name: "plan",
+    name: AGENT_NAMES.PLAN,
     description:
       "Pre-implementation planning: interrogates intent, surfaces hidden requirements, maps dependencies, and produces a sequenced plan before any work begins. Do not skip this when the goal is unclear.",
     license: "MIT",

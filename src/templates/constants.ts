@@ -8,35 +8,52 @@
  *   - Defined with full prefix as they appear in generated files
  */
 
+export const KERNEL_TEMPLATE_PREFIX = "kernel-";
+
+export function prefixKernelTemplateName(name: string): string {
+  return name.startsWith(KERNEL_TEMPLATE_PREFIX) ? name : `${KERNEL_TEMPLATE_PREFIX}${name}`;
+}
+
 // =============================================================================
 // Skill Names (must include prefix as defined in skill templates)
 // =============================================================================
 export const SKILL_NAMES = {
   // Git skills
-  GIT_MASTER: "git-master",
+  GIT_MASTER: prefixKernelTemplateName("git-master"),
 
   // Frontend skills
-  DESIGN: "design",
+  DESIGN: prefixKernelTemplateName("design"),
 
   // Engineering skills
-  CODE_QUALITY: "code-quality",
-  DEV_ENVIRONMENT: "dev-environment",
-  DOCS_WORKFLOW: "docs-workflow",
-  PROJECT_INIT: "project-init",
-  BUILD: "build",
-  DEPLOY: "deploy",
-  CONVENTIONS: "conventions",
-  MAP_CODEBASE: "map-codebase",
+  CODE_QUALITY: prefixKernelTemplateName("code-quality"),
+  DEV_ENVIRONMENT: prefixKernelTemplateName("dev-environment"),
+  DOCS_WORKFLOW: prefixKernelTemplateName("docs-workflow"),
+  PROJECT_INIT: prefixKernelTemplateName("project-init"),
+  BUILD: prefixKernelTemplateName("build"),
+  DEPLOY: prefixKernelTemplateName("deploy"),
+  CONVENTIONS: prefixKernelTemplateName("conventions"),
+  MAP_CODEBASE: prefixKernelTemplateName("map-codebase"),
 
   // Workflow skills
-  CHECK: "check",
-  REVIEW: "review",
-  PROPOSE: "propose",
-  EXPLORE: "explore",
-  APPLY: "apply",
-  ARCHIVE: "archive",
-  SYNC: "sync",
-  TRIAGE: "triage",
-  UNBLOCK: "unblock",
-  READY_FOR_PROD: "ready-for-prod",
+  CHECK: prefixKernelTemplateName("check"),
+  REVIEW: prefixKernelTemplateName("review"),
+  PROPOSE: prefixKernelTemplateName("propose"),
+  EXPLORE: prefixKernelTemplateName("explore"),
+  APPLY: prefixKernelTemplateName("apply"),
+  ARCHIVE: prefixKernelTemplateName("archive"),
+  SYNC: prefixKernelTemplateName("sync"),
+  TRIAGE: prefixKernelTemplateName("triage"),
+  UNBLOCK: prefixKernelTemplateName("unblock"),
+  READY_FOR_PROD: prefixKernelTemplateName("ready-for-prod"),
+} as const;
+
+export const AGENT_NAMES = {
+  ARCHITECT: prefixKernelTemplateName("architect"),
+  CAPTURE: prefixKernelTemplateName("capture"),
+  DESIGNER: prefixKernelTemplateName("designer"),
+  DO: prefixKernelTemplateName("do"),
+  GIT: prefixKernelTemplateName("git"),
+  PLAN: prefixKernelTemplateName("plan"),
+  REVIEW: prefixKernelTemplateName("review"),
+  SEARCH: prefixKernelTemplateName("search"),
 } as const;

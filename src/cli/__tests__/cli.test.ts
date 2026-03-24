@@ -93,7 +93,7 @@ describe("executeInit", () => {
     await executeInit({
       projectPath: tmpDir,
       tools: "opencode",
-      delivery: "commands",
+      delivery: "skills",
       configRootPath: configRootDir,
     });
     const generatedLine = logs.find((l) => l.includes("Generated"));

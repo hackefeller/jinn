@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getProjectInitSkillTemplate(): SkillTemplate {
   return {
-    name: "project-init",
+    name: SKILL_NAMES.PROJECT_INIT,
     description: "Use when setting up a new project from scratch or from a template.",
     license: "MIT",
     compatibility: "Works with any project.",

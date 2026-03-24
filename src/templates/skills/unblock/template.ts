@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getUnblockSkillTemplate(): SkillTemplate {
   return {
-    name: "unblock",
+    name: SKILL_NAMES.UNBLOCK,
     description:
       "Use when an issue is Blocked — either because implementation stopped on a blocker, or a blockedBy dependency hasn't resolved. Diagnoses the blocker, decides whether to resolve, defer, or split, and updates Linear accordingly.",
     license: "MIT",
@@ -33,7 +34,7 @@ export function getUnblockSkillTemplate(): SkillTemplate {
       "Comment explaining blocker resolution",
       "Unblock report",
     ],
-    dependencies: ["explore", "sync"],
+    dependencies: [SKILL_NAMES.EXPLORE, SKILL_NAMES.SYNC],
     instructions: getSkillInstructions("unblock"),
   };
 }

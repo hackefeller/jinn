@@ -11,14 +11,13 @@
  *   kernel vault compile --dry-run
  */
 
-import * as fs from "fs/promises";
 import * as path from "path";
 import * as os from "os";
 
 import { loadConfig } from "../core/config/loader.js";
 import { createPopulatedAdapterRegistry } from "../core/adapters/index.js";
 import { loadVaultSkills, compileVaultSkills } from "../core/vault/index.js";
-import type { GeneratedFile } from "../core/adapters/types.js";
+import { writeFilesBatch } from "../core/utils/batch-writer.js";
 
 export interface VaultCompileCommandOptions {
   vault?: string;
@@ -35,34 +34,6 @@ function expandHome(filePath: string): string {
   return filePath;
 }
 
-async function writeFilesBatch(
-  files: GeneratedFile[],
-  projectPath: string,
-  dryRun: boolean,
-): Promise<{ written: string[]; failed: Array<{ path: string; error: string }> }> {
-  const written: string[] = [];
-  const failed: Array<{ path: string; error: string }> = [];
-
-  if (dryRun) {
-    return { written: files.map((f) => f.path), failed };
-  }
-
-  const dirs = [...new Set(files.map((f) => path.dirname(path.join(projectPath, f.path))))];
-  await Promise.all(dirs.map((d) => fs.mkdir(d, { recursive: true })));
-
-  await Promise.all(
-    files.map(async (file) => {
-      try {
-        await fs.writeFile(path.join(projectPath, file.path), file.content, "utf-8");
-        written.push(file.path);
-      } catch (err) {
-        failed.push({ path: file.path, error: String(err) });
-      }
-    }),
-  );
-
-  return { written, failed };
-}
 
 export async function executeVaultCompile(options: VaultCompileCommandOptions): Promise<void> {
   const projectPath = process.cwd();
@@ -124,7 +95,7 @@ export async function executeVaultCompile(options: VaultCompileCommandOptions): 
   const files = compileVaultSkills(skills, adapters);
 
   // 6. Write (or dry-run)
-  const { written, failed } = await writeFilesBatch(files, projectPath, dryRun);
+  const { written, failed } = await writeFilesBatch(files, projectPath, { dryRun });
 
   // 7. Report
   console.log(`\nVault skill compilation (dry-run=${dryRun})\n`);

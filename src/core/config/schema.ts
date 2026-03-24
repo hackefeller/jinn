@@ -59,9 +59,6 @@ export const ConfigSchema = z.object({
   /** What to install: skills or both (skills + agents) */
   delivery: DeliverySchema.default("both"),
 
-  /** Feature flags for experimental features */
-  featureFlags: z.record(z.string(), z.boolean()).optional(),
-
   /**
    * Path to the personal knowledge vault containing .codex/skills/.
    * Used by the vault compile command when --vault is not passed explicitly.

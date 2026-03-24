@@ -6,7 +6,6 @@ import {
 } from "../skill-gen.js";
 import { opencodeAdapter, claudeAdapter, cursorAdapter } from "../../adapters/index.js";
 import type { SkillTemplate } from "../../templates/types.js";
-
 const testSkill: SkillTemplate = {
   name: "test-skill",
   description: "A test skill for unit testing",

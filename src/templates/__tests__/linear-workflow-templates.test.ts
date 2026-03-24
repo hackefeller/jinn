@@ -1,9 +1,9 @@
 import { describe, expect, it } from "bun:test";
 
-import { getApplySkillTemplate } from "../skills/apply/template.js";
-import { getArchiveSkillTemplate } from "../skills/archive/template.js";
-import { getExploreSkillTemplate } from "../skills/explore/template.js";
-import { getProposeSkillTemplate } from "../skills/propose/template.js";
+import { getApplySkillTemplate } from "../skills/kernel-apply/template.js";
+import { getArchiveSkillTemplate } from "../skills/kernel-archive/template.js";
+import { getExploreSkillTemplate } from "../skills/kernel-explore/template.js";
+import { getProposeSkillTemplate } from "../skills/kernel-propose/template.js";
 
 const templates = [
   getProposeSkillTemplate().instructions,

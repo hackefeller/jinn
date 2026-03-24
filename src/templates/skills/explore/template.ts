@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getExploreSkillTemplate(): SkillTemplate {
   return {
-    name: "explore",
+    name: SKILL_NAMES.EXPLORE,
     description:
       "Use when exploring tradeoffs, risks, or missing context inside an existing Linear project or issue.",
     license: "MIT",

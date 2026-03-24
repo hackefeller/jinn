@@ -25,8 +25,8 @@ export interface ToolCommandAdapter {
 
   /**
    * Returns the skill directory path.
-    * @param skillName - The skill name (e.g., 'planner')
-    * @returns Path from project root (e.g., '.opencode/skills/planner/SKILL.md')
+    * @param skillName - The skill name (e.g., 'kernel-planner')
+    * @returns Path from project root (e.g., '.opencode/skills/kernel-planner/SKILL.md')
    */
   getSkillPath(skillName: string): string;
 
@@ -41,8 +41,8 @@ export interface ToolCommandAdapter {
   /**
    * Optional: Returns the file path for an agent.
     * If omitted, this tool does not support native agent generation.
-    * @param agentName - The agent name (e.g., 'plan')
-    * @returns Path from project root (e.g., '.claude/agents/plan.md')
+    * @param agentName - The agent name (e.g., 'kernel-plan')
+    * @returns Path from project root (e.g., '.claude/agents/kernel-plan.md')
    */
   getAgentPath?(agentName: string): string;
 

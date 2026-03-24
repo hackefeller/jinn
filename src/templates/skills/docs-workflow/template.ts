@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getDocsWorkflowSkillTemplate(): SkillTemplate {
   return {
-    name: "docs-workflow",
+    name: SKILL_NAMES.DOCS_WORKFLOW,
     description:
       "Documentation publishing: deploy docs, create versioned releases, record feature demos, and validate doc sites.",
     license: "MIT",

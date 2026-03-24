@@ -1,10 +1,11 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { AGENT_NAMES } from "../../constants.js";
 import { GIT_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
 import { getAgentInstructions } from "../../.generated/templates.js";
 
 export function getGitAgentTemplate(): AgentTemplate {
   return {
-    name: "git",
+    name: AGENT_NAMES.GIT,
     description:
       "Git specialist: branch strategy, commit hygiene, merge conflict resolution, and history analysis. Use for complex git operations or when you need to understand the history of a codebase.",
     license: "MIT",

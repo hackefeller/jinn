@@ -13,6 +13,7 @@ import { fileURLToPath } from "node:url";
 import { executeInit } from "./init.js";
 import { executeUpdate } from "./update.js";
 import { executeConfig } from "./config.js";
+import type { ConfigOptions } from "./config.js";
 import { executeDetect } from "./detect.js";
 import { executeVaultCompile } from "./vault.js";
 
@@ -76,13 +77,13 @@ program
   .argument("[key]", "Config key (for set)")
   .argument("[value]", "Config value (for set)")
   .action(async (action, key, value) => {
-    const validActions = ["show", "add-tool", "remove-tool", "set"];
-    const actualAction = validActions.includes(action) ? action : "show";
+    const validActions: ConfigOptions["action"][] = ["show", "add-tool", "remove-tool", "set"];
+    const actualAction: ConfigOptions["action"] = validActions.includes(action) ? action : "show";
     const configKey = actualAction === "set" ? key : undefined;
     const configValue = actualAction === "set" ? value : key;
 
     await executeConfig({
-      action: actualAction as any,
+      action: actualAction,
       key: configKey,
       value: configValue,
     });

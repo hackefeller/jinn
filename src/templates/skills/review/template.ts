@@ -1,9 +1,10 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getReviewSkillTemplate(): SkillTemplate {
   return {
-    name: "review",
+    name: SKILL_NAMES.REVIEW,
     description:
       "Use after a deliverable is complete to assess whether work is ready to move forward. Evaluates correctness, completeness, quality, security, performance, and standards. Produces an approve / approve-with-changes / needs-rework recommendation.",
     license: "MIT",
