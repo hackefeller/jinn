@@ -7,7 +7,7 @@ export function getTriageSkillTemplate(): SkillTemplate {
     name: SKILL_NAMES.TRIAGE,
     profile: "extended",
     description:
-      "Use when a bug report, ad-hoc request, or unplanned issue arrives and needs to be assessed, sized, and placed into the correct position in the Linear hierarchy before work begins.",
+      "Assesses and classifies incoming bugs, ad-hoc requests, and unplanned issues before work begins. Use when a new bug report arrives, an unstructured request needs sizing, or work needs to be placed into the correct position in the Linear hierarchy.",
     license: "MIT",
     compatibility: "Requires the CLI and a configured Linear MCP server.",
     metadata: {
@@ -32,6 +32,7 @@ export function getTriageSkillTemplate(): SkillTemplate {
     ],
     outputs: ["New Linear issue with parentId, priority, and relations set", "Triage report"],
     dependencies: [SKILL_NAMES.EXPLORE, SKILL_NAMES.PROPOSE],
+    argumentHint: "bug description, issue URL, or request summary",
     instructions: getSkillInstructions(SKILL_NAMES.TRIAGE),
   };
 }

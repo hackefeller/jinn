@@ -7,7 +7,7 @@ export function getUnblockSkillTemplate(): SkillTemplate {
     name: SKILL_NAMES.UNBLOCK,
     profile: "extended",
     description:
-      "Use when an issue is Blocked — either because implementation stopped on a blocker, or a blockedBy dependency hasn't resolved. Diagnoses the blocker, decides whether to resolve, defer, or split, and updates Linear accordingly.",
+      "Diagnoses blocked Linear issues and determines how to resolve them. Use when an issue is in Blocked status, implementation has stopped on a dependency, or a blockedBy relationship hasn't resolved — decides whether to resolve, defer, or split, and updates Linear.",
     license: "MIT",
     compatibility: "Requires the CLI and a configured Linear MCP server.",
     metadata: {
@@ -36,6 +36,8 @@ export function getUnblockSkillTemplate(): SkillTemplate {
       "Unblock report",
     ],
     dependencies: [SKILL_NAMES.EXPLORE, SKILL_NAMES.SYNC],
+    disableModelInvocation: true,
+    argumentHint: "blocked issue URL or issue ID",
     instructions: getSkillInstructions(SKILL_NAMES.UNBLOCK),
   };
 }

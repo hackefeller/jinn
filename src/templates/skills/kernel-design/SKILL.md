@@ -1,7 +1,4 @@
-# Design Skill
-
-You are handling frontend design and UI implementation with the Ponti Studios design system as the operating spec.
-You do not separate "design" from "implementation". Component architecture, layout, styling, motion, accessibility, and polish are one job.
+You are enforcing the project design system. This is not a style guide — it is law. You do not separate "design" from "implementation". Component architecture, layout, styling, motion, accessibility, and polish are one job.
 
 Before writing any UI code, read all five reference files emitted alongside this skill:
 - `references/foundations.md` — tokens, typography, color, spacing, elevation, radii, grid, z-index, accessibility
@@ -12,13 +9,6 @@ Before writing any UI code, read all five reference files emitted alongside this
 
 If reference files do not exist in the current project, fall back to the canonical rules in this skill.
 Token files are the authoritative source of values. Never use a value that isn't in the token files.
-
-Use this skill whenever the work includes any of the following:
-- building or reviewing frontend UI components
-- CSS, layout, responsiveness, or accessibility work
-- design-system enforcement
-- animation and interaction design
-- visual polish, hierarchy, or user flow improvements
 
 ---
 
@@ -100,6 +90,62 @@ Every interactive element must implement all applicable states. Missing states a
 
 ---
 
+## Z-index scale
+
+Use only these values. Never hardcode a z-index.
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `z-base` | 0 | Static elements |
+| `z-raised` | 10 | Sticky headers, floating buttons |
+| `z-dropdown` | 100 | Dropdowns, popovers, tooltips |
+| `z-overlay` | 200 | Modal/sheet backdrop |
+| `z-modal` | 300 | Modals and sheets |
+| `z-toast` | 400 | Toast notifications |
+| `z-max` | 9999 | Emergency override only — justify in a comment |
+
+### Overlay stacking rules
+- Only one modal or sheet may be open at a time. Opening a second closes the first.
+- Toasts render above all modals.
+- Dropdowns and tooltips render above modals they are triggered from (`z-dropdown` = 100 is not above `z-modal` = 300, so portal them to document body).
+
+---
+
+## Breakpoints
+
+| Name | Min width | Usage |
+|------|-----------|-------|
+| `sm` | 640px | Large phones, phablets |
+| `md` | 768px | Tablets, split-view mobile |
+| `lg` | 1024px | Laptops, two-column layouts |
+| `xl` | 1280px | Desktops, max-width content |
+
+Mobile-first. All base styles are mobile. Use `md:`, `lg:`, `xl:` to layer up.
+Never use `max-width` media queries — never style down, always style up.
+
+---
+
+## Grid
+
+- 4-column grid on mobile, 8-column on `md`, 12-column on `lg`+.
+- Gutter: `spacing[4]` (16px) mobile, `spacing[5]` (24px) desktop.
+- Content max widths from tokens: 768px (body), 640px (search), 480px (modal).
+- Sidebar + main two-column: sidebar 240px fixed, main takes remaining width.
+
+---
+
+## Copy and writing style
+
+- **Button labels**: verb-first, sentence case. "Save note" not "Save Note" or "SAVE".
+- **Placeholder text**: describe the action, not the field. "Write a note or start a chat…" not "Enter text".
+- **Error messages**: plain language, tell the user what to do. "Name can't be empty" not "Required field".
+- **Empty state headlines**: active voice. "No notes yet" not "There are no notes".
+- **Confirmation labels**: match the destructive action. "Delete note" not "Confirm" or "OK".
+- **Loading labels**: progressive. "Saving…" not "Loading…" when saving.
+- Never use ellipsis in button labels unless the action opens a dialog for more info.
+
+---
+
 ## Chat-specific rules
 
 These rules apply to all chat UI components: web and mobile. Always consult `references/chat.md` for the full specification.
@@ -166,6 +212,30 @@ dataResolve => shimmerTween.kill()
 
 ---
 
+## Creative Direction
+
+Before writing any code, commit to a **bold, intentional aesthetic direction**:
+
+- **Purpose**: What problem does this interface solve? Who uses it?
+- **Tone**: Commit to an extreme — brutally minimal, maximalist, editorial, geometric, luxurious, playful, industrial. Decide before touching code.
+- **Differentiation**: What is the one thing a user will remember?
+
+Execute with precision. Bold maximalism and refined minimalism both work — intentionality matters, not intensity. Never produce a layout that looks like a default template. Never converge on common AI-generated aesthetics.
+
+### Where creativity lives
+
+**Layout and composition** — asymmetry, overlap, diagonal flow, grid-breaking elements; generous negative space OR controlled density, not the default 50/50.
+
+**Typography hierarchy** — use the full range of the type scale; create strong contrast between display and body levels; let whitespace do work.
+
+**Color within the token system** — use accent, surfaces, text tiers, and destructive with conviction; dominant color + sharp accent outperforms timid, evenly-distributed palettes.
+
+**Motion choreography** — one well-orchestrated page load with staggered reveals creates more impact than scattered micro-interactions; scroll-triggered reveals, hover states that surprise, active press feedback.
+
+**Depth and atmosphere** — shadows from the token elevation scale, blur effects, layered transparencies; gradient meshes, noise textures, or geometric patterns where they serve the aesthetic.
+
+---
+
 ## Review checklist
 
 Fail the review if any of the following are violated:
@@ -197,13 +267,13 @@ Fail the review if any of the following are violated:
 
 ### Accessibility
 - [ ] Touch targets ≥ 44px × 44px
-- [ ] Focus ring uses --color-ring (#1c1c1e), not accent, with border-radius: inherit
-- [ ] :focus shows nothing; :focus-visible shows the ring (keyboard only)
-- [ ] Modals/sheets trap focus with aria-modal
+- [ ] Focus ring uses `--color-ring` (#1c1c1e), not accent, with `border-radius: inherit`
+- [ ] `:focus` shows nothing; `:focus-visible` shows the ring (keyboard only)
+- [ ] Modals/sheets trap focus with `aria-modal`
 - [ ] Focus returns to trigger on close
-- [ ] No tabIndex > 0
+- [ ] No `tabIndex > 0`
 - [ ] Alt text on non-decorative images
-- [ ] aria-label on icon-only buttons
+- [ ] `aria-label` on icon-only buttons
 
 ### Components & states
 - [ ] All required interaction states implemented (hover, focus-visible, active, disabled)
@@ -237,6 +307,6 @@ Fail the review if any of the following are violated:
 - [ ] Shimmer tweens killed on data resolve (never left running)
 - [ ] Composer shadow upgrade on focus (shadows.low → shadows.medium)
 - [ ] Actions row has 44px minimum touch targets
-- [ ] aria-label on all icon-only buttons
+- [ ] `aria-label` on all icon-only buttons
 - [ ] No stub components returning `null`
 - [ ] Mobile composer clearance accounts for keyboard + safe area

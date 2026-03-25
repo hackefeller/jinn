@@ -21,17 +21,12 @@ export const SKILL_NAMES = {
   // Git skills
   GIT_MASTER: prefixKernelTemplateName("git-master"),
 
-  // Frontend skills
-  DESIGN: prefixKernelTemplateName("design"),
-
   // Engineering skills
-  CODE_QUALITY: prefixKernelTemplateName("code-quality"),
-  DEV_ENVIRONMENT: prefixKernelTemplateName("dev-environment"),
+  PROJECT_SETUP: prefixKernelTemplateName("project-setup"),
   DOCS_WORKFLOW: prefixKernelTemplateName("docs-workflow"),
   PROJECT_INIT: prefixKernelTemplateName("project-init"),
   BUILD: prefixKernelTemplateName("build"),
   DEPLOY: prefixKernelTemplateName("deploy"),
-  CONVENTIONS: prefixKernelTemplateName("conventions"),
   MAP_CODEBASE: prefixKernelTemplateName("map-codebase"),
 
   // Workflow skills
@@ -44,8 +39,25 @@ export const SKILL_NAMES = {
   SYNC: prefixKernelTemplateName("sync"),
   TRIAGE: prefixKernelTemplateName("triage"),
   UNBLOCK: prefixKernelTemplateName("unblock"),
-  READY_FOR_PROD: prefixKernelTemplateName("ready-for-prod"),
+  // Specialist skills
+  API_ENGINEERING: prefixKernelTemplateName("api-engineering"),
+  ASSET_INTEGRATION_SECURITY: prefixKernelTemplateName("asset-integration-security"),
+  AUTH_CONTRACT: prefixKernelTemplateName("auth-contract"),
+  DATABASE_WORKFLOW: prefixKernelTemplateName("database-workflow"),
+DOCKER_WORKFLOW: prefixKernelTemplateName("docker-workflow"),
+  REACT_PATTERNS: prefixKernelTemplateName("react-patterns"),
+  TESTING_STANDARDS: prefixKernelTemplateName("testing-standards"),
+  TYPE_ARCHITECTURE: prefixKernelTemplateName("type-architecture"),
+  // Mobile skills
+  REACT_NATIVE: prefixKernelTemplateName("react-native"),
+
+  // Design skills
+  DESIGN: prefixKernelTemplateName("design"),
+  // Ecosystem skills
+  SKILL_BUILDER: prefixKernelTemplateName("skill-builder"),
 } as const;
+
+export const EXTENDED_SKILL_NAMES: Record<string, never> = {} as const;
 
 export const AGENT_NAMES = {
   ARCHITECT: prefixKernelTemplateName("architect"),

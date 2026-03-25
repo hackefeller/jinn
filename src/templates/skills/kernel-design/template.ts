@@ -7,11 +7,11 @@ export function getDesignSkillTemplate(): SkillTemplate {
     name: SKILL_NAMES.DESIGN,
     profile: "extended",
     description:
-      "Apply when designing, writing, reviewing, or modifying any frontend UI code. Combines implementation guidance with the Ponti Studios design system: strict tokens, accessibility, responsive layout, purposeful motion, and performance.",
+      "Enforces the project design system when designing, writing, reviewing, or modifying any frontend UI code — tokens, animations, accessibility, responsive layout, performance, and chat UI. Use when building UI components, styling views, reviewing frontend code for design compliance, or when users ask about design system rules.",
     license: "MIT",
     compatibility: "Any frontend project using React (web or React Native)",
     metadata: {
-      author: "Ponti Studios",
+      author: "project",
       version: "2.1",
       category: "Frontend",
       tags: [
@@ -20,7 +20,6 @@ export function getDesignSkillTemplate(): SkillTemplate {
         "design-system",
         "design",
         "css",
-        "html",
         "tokens",
         "gsap",
         "animation",
@@ -32,6 +31,7 @@ export function getDesignSkillTemplate(): SkillTemplate {
         "performance",
         "responsive",
         "motion",
+        "chat",
       ],
     },
     when: [
@@ -47,6 +47,7 @@ export function getDesignSkillTemplate(): SkillTemplate {
       "user is implementing a form, input, or validation pattern",
       "user is implementing a modal, sheet, drawer, or overlay",
       "user is implementing a toast, notification, or alert",
+      "user is implementing or reviewing chat UI components",
       "UI code is being reviewed for correctness against the design system",
     ],
     applicability: [
@@ -58,6 +59,7 @@ export function getDesignSkillTemplate(): SkillTemplate {
       "Use when implementing responsive layouts, breakpoint-dependent behaviour, or grid systems",
       "Use when writing placeholder text, error messages, or button labels (copy rules apply)",
       "Use when implementing overlay stacking, z-index, or focus trapping",
+      "Use when implementing any chat UI surface (bubbles, composer, transcript, shimmer)",
     ],
     termination: [
       "Component implemented with all required states and correct tokens",

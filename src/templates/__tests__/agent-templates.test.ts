@@ -59,14 +59,13 @@ describe("agent templates", () => {
   it("assigns persona-aligned skills to specialist agents", () => {
     expect(getDesignerAgentTemplate().availableSkills).toEqual([
       SKILL_NAMES.DESIGN,
-      SKILL_NAMES.CODE_QUALITY,
+      SKILL_NAMES.REVIEW,
     ]);
 
     expect(getArchitectAgentTemplate().availableSkills).toEqual([
-      SKILL_NAMES.CODE_QUALITY,
-      SKILL_NAMES.CONVENTIONS,
+      SKILL_NAMES.REVIEW,
       SKILL_NAMES.MAP_CODEBASE,
-      SKILL_NAMES.READY_FOR_PROD,
+      SKILL_NAMES.DEPLOY,
     ]);
 
     expect(getGitAgentTemplate().availableSkills).toEqual([SKILL_NAMES.GIT_MASTER]);
@@ -78,9 +77,8 @@ describe("agent templates", () => {
     ]);
 
     expect(getReviewAgentTemplate().availableSkills).toEqual([
-      SKILL_NAMES.CODE_QUALITY,
       SKILL_NAMES.REVIEW,
-      SKILL_NAMES.READY_FOR_PROD,
+      SKILL_NAMES.DEPLOY,
       SKILL_NAMES.GIT_MASTER,
     ]);
   });
@@ -89,7 +87,6 @@ describe("agent templates", () => {
     expect(getPlanAgentTemplate().availableSkills).toEqual([
       SKILL_NAMES.GIT_MASTER,
       SKILL_NAMES.DESIGN,
-      SKILL_NAMES.CONVENTIONS,
       SKILL_NAMES.MAP_CODEBASE,
       SKILL_NAMES.EXPLORE,
       SKILL_NAMES.PROPOSE,
@@ -99,18 +96,15 @@ describe("agent templates", () => {
     expect(getDoAgentTemplate().availableSkills).toEqual([
       SKILL_NAMES.GIT_MASTER,
       SKILL_NAMES.DESIGN,
-      SKILL_NAMES.CODE_QUALITY,
-      SKILL_NAMES.CHECK,
       SKILL_NAMES.REVIEW,
+      SKILL_NAMES.CHECK,
       SKILL_NAMES.APPLY,
       SKILL_NAMES.SYNC,
       SKILL_NAMES.TRIAGE,
       SKILL_NAMES.UNBLOCK,
-      SKILL_NAMES.READY_FOR_PROD,
+      SKILL_NAMES.DEPLOY,
       SKILL_NAMES.PROJECT_INIT,
       SKILL_NAMES.BUILD,
-      SKILL_NAMES.DEPLOY,
-      SKILL_NAMES.CONVENTIONS,
       SKILL_NAMES.MAP_CODEBASE,
     ]);
 

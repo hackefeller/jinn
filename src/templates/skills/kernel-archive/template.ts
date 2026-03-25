@@ -7,7 +7,7 @@ export function getArchiveSkillTemplate(): SkillTemplate {
     name: SKILL_NAMES.ARCHIVE,
     profile: "extended",
     description:
-      "Use when closing or cleaning up completed Linear projects, issues, and follow-up work.",
+      "Closes and cleans up completed Linear projects, issues, and associated follow-up work. Use when a project milestone is done, stale work needs cleanup, or users ask to archive, close, or wrap up completed items.",
     license: "MIT",
     compatibility: "Requires the CLI and a configured Linear MCP server.",
     metadata: {
@@ -32,6 +32,7 @@ export function getArchiveSkillTemplate(): SkillTemplate {
     outputs: ["Completed Linear project", "Follow-up issues for deferred work"],
     dependencies: [SKILL_NAMES.APPLY],
     disableModelInvocation: true,
+    argumentHint: "project name or Linear project URL",
     instructions: getSkillInstructions(SKILL_NAMES.ARCHIVE),
   };
 }

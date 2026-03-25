@@ -1,59 +1,71 @@
-Run builds and tests, and debug failures in either.
+Run builds, type-checks, and tests using the prescribed toolchain. Diagnose and fix failures.
 
-## Building for Production
+## Prescribed Toolchain
+
+| Concern | Tool |
+|---|---|
+| Runtime | Bun |
+| Build | Vite (`bun run build`) |
+| Type-check | tsgo (`bun run typecheck`) |
+| Test | Vitest (`bun test`) |
+| Lint | ESLint (`bun run lint`) |
+
+Never use: `npm`, `npx`, `yarn`, `pnpm`, `tsc` (use tsgo), Jest, Webpack, or any other substitute.
+
+## Standard Commands
+
+```bash
+# Full pipeline — run in this order
+bun run typecheck   # TypeScript 7 / tsgo — zero errors required
+bun run build       # Vite production build — zero errors, zero warnings-as-errors
+bun test            # Vitest — all tests must pass
+bun run lint        # ESLint — zero violations
+```
+
+### Monorepo — targeting a specific package
+
+```bash
+bun run --filter @your-org/api build
+bun run --filter @your-org/web typecheck
+bun test --project packages/db
+```
 
 ### Before building
-- Confirm all dependencies are installed and up to date.
-- Set the correct environment (`NODE_ENV=production` or equivalent).
-- Clean previous artifacts: `dist/`, `build/`, `.cache/`, `__pycache__/`.
 
-### Build commands by stack
-
-| Stack | Command |
-|---|---|
-| Node.js | `npm run build` / `pnpm build` |
-| Python | `python -m build` / `poetry build` |
-| Go | `go build ./...` |
-| Rust | `cargo build --release` |
+- Confirm dependencies are installed: `bun install`
+- Clean previous artifacts if stale: `rm -rf dist/ .vite/ .turbo/`
+- Ensure `NODE_ENV=production` for production builds
 
 ### After building
-- Verify artifacts exist and sizes are plausible.
-- Run a smoke test or preview to confirm the build is functional.
-- Check build logs for warnings that should be treated as errors.
 
-## Testing
+- Verify artifacts exist in `dist/` and sizes are plausible
+- Run a smoke test or preview: `bun run preview`
+- Check build logs for warnings — treat all warnings as errors
 
-Run the right test level for the scope of change:
+## Debugging a Failure
 
-| Type | When to run |
-|---|---|
-| **Unit** | After every change to a function or component |
-| **Integration** | After changes that affect module boundaries or shared state |
-| **E2E** | Before deploying or merging to main |
-| **Performance** | After changes to hot paths, queries, or rendering |
-
-### Rules
-- Tests must pass before committing to the main branch.
-- Tests must pass before deploying to any environment.
-- A failing test is a blocker — do not work around it by skipping or marking expected.
-
-## Debugging a Failed Build or Test
-
-1. Read the full error — don't skim; the actual message is usually at the bottom.
-2. Identify whether it's a type error, a missing module, a config issue, or a logic failure.
-3. Check if the failure is local only (environment mismatch) or reproducible in CI.
-4. Fix the root cause — do not suppress warnings or errors to make the build pass.
-5. Re-run to confirm the fix didn't introduce a new failure.
+1. Read the full error — the actual message is usually at the bottom, not the top.
+2. Classify the failure:
+   - **Type error** — fix the type; never use `as any` or `@ts-ignore` to suppress
+   - **Missing module** — run `bun install`; check the import path and `tsconfig.json` paths
+   - **Config error** — check `vite.config.ts`, `tsconfig.json`, or the relevant config file
+   - **Logic failure** — read the test assertion; fix the code, not the test
+3. Check if the failure is local-only or reproducible in CI.
+4. Fix the root cause — never suppress errors or skip tests to make the pipeline pass.
+5. Re-run the full pipeline to confirm the fix didn't introduce a new failure.
 
 ### CI vs. local differences
 
-When a test passes locally but fails in CI (or vice versa):
-- **Environment variables** — CI may be missing something your shell sets.
-- **File paths** — CI may be case-sensitive where your local filesystem is not.
-- **Dependencies** — CI installs from lockfile; local may have drift.
-- **Timing** — CI may be slower; tests that assume fast I/O can be flaky.
+| Symptom | Likely cause |
+|---|---|
+| Passes locally, fails in CI | Missing env var; lockfile drift (`bun install --frozen-lockfile`); case-sensitive paths |
+| Fails locally, passes in CI | Stale local artifacts — clean and rebuild |
+| Flaky test | Timing assumption or shared state — isolate the test |
+| Type error only in CI | tsgo version mismatch — check `package.json` |
 
 ## Guardrails
-- Never suppress a warning or error to make a build pass — fix or explicitly justify it.
-- Do not ship or deploy from a build that produced warnings unless each one is reviewed and accepted.
 
+- Never use `as any`, `@ts-ignore`, or `// eslint-disable` to make a pipeline pass — fix the root cause.
+- Never skip or mark a test as expected-failing to unblock a build — fix or explicitly delete the test with a comment.
+- Never deploy from a build that produced warnings unless each one is reviewed and accepted.
+- Always run the full pipeline (`typecheck → build → test → lint`) before declaring a fix complete.

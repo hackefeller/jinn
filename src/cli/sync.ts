@@ -8,15 +8,18 @@ import type { Config } from "../core/config/schema.js";
 import { createDefaultConfig, loadConfig } from "../core/config/loader.js";
 import { generateFiles } from "../core/generator/index.js";
 import { detectAvailableTools } from "../core/discovery/detector.js";
-import { getDefaultSkillTemplates } from "../templates/catalog.js";
+import { githubCopilotAdapter } from "../core/adapters/github-copilot.js";
+import { CONFIG_VERSION } from "../core/config/defaults.js";
+import { getDefaultAgentTemplates, getDefaultSkillTemplates } from "../templates/catalog.js";
 import { ZodError } from "zod";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 
 export interface SyncOptions {
   projectPath?: string;
   configRootPath?: string;
+  homePath?: string;
 }
 
 export async function executeSync(options: SyncOptions): Promise<void> {
@@ -29,7 +32,7 @@ export async function executeSync(options: SyncOptions): Promise<void> {
     await runUpdate(loadedConfig, projectPath);
   }
 
-  await installGlobalSkills();
+  await installGlobalCatalog(projectPath, options.homePath);
 }
 
 async function runInit(projectPath: string, configRootPath?: string): Promise<void> {
@@ -103,27 +106,88 @@ async function runUpdate(
   }
 }
 
-async function installGlobalSkills(): Promise<void> {
-  const agentsDir = join(homedir(), ".agents", "skills");
+async function installGlobalCatalog(projectPath: string, homePath = homedir()): Promise<void> {
+  const agentsDir = join(homePath, ".agents", "agents");
+  const skillsDir = join(homePath, ".agents", "skills");
+
   if (!existsSync(agentsDir)) {
     mkdirSync(agentsDir, { recursive: true });
+  }
+
+  if (!existsSync(skillsDir)) {
+    mkdirSync(skillsDir, { recursive: true });
+  }
+
+  const claudeSkillsDir = join(homePath, ".claude", "skills");
+  if (!existsSync(claudeSkillsDir)) {
+    mkdirSync(claudeSkillsDir, { recursive: true });
+  }
+
+  const agents = getDefaultAgentTemplates("extended");
+  for (const agent of agents) {
+    const agentPath = join(agentsDir, `${agent.name}.agent.md`);
+    writeFileSync(agentPath, githubCopilotAdapter.formatAgent!(agent, CONFIG_VERSION));
   }
 
   const templates = getDefaultSkillTemplates("extended");
   let installedCount = 0;
 
   for (const template of templates) {
-    const skillDir = join(agentsDir, template.name);
+    const skillDir = join(skillsDir, template.name);
     if (!existsSync(skillDir)) {
       mkdirSync(skillDir, { recursive: true });
     }
 
     const skillPath = join(skillDir, "SKILL.md");
-    writeFileSync(skillPath, template.instructions);
+    writeFileSync(skillPath, githubCopilotAdapter.formatSkill!(template, CONFIG_VERSION));
+
+    const claudeSkillLink = join(claudeSkillsDir, template.name);
+    rmSync(claudeSkillLink, { force: true, recursive: true });
+    symlinkSync(skillDir, claudeSkillLink, "dir");
+
     installedCount++;
   }
 
+  const githubLinks = await linkGithubToolDirs(projectPath, homePath);
+
   if (installedCount > 0) {
-    console.log(`\n✓ Installed ${installedCount} skills to ~/.agents/skills/`);
+    console.log(`\n✓ Installed ${installedCount} skills to:`);
+    console.log("  - ~/.agents/skills/");
+    console.log("  - ~/.claude/skills/");
+    console.log(`✓ Installed ${agents.length} agents to:`);
+    console.log("  - ~/.agents/agents/");
+
+    if (githubLinks.length > 0) {
+      console.log("✓ Linked project .github directories to:");
+      for (const link of githubLinks) {
+        console.log(`  - ${link.from} -> ${link.to}`);
+      }
+    }
   }
+}
+
+async function linkGithubToolDirs(
+  projectPath: string,
+  homePath: string,
+): Promise<Array<{ from: string; to: string }>> {
+  const githubDir = join(projectPath, ".github");
+  if (!existsSync(githubDir)) {
+    return [];
+  }
+
+  const githubAgentsLink = join(githubDir, "agents");
+  const githubSkillsLink = join(githubDir, "skills");
+  const agentsTarget = join(homePath, ".agents", "agents");
+  const skillsTarget = join(homePath, ".agents", "skills");
+
+  rmSync(githubAgentsLink, { force: true, recursive: true });
+  rmSync(githubSkillsLink, { force: true, recursive: true });
+
+  symlinkSync(agentsTarget, githubAgentsLink, "dir");
+  symlinkSync(skillsTarget, githubSkillsLink, "dir");
+
+  return [
+    { from: ".github/agents", to: agentsTarget },
+    { from: ".github/skills", to: skillsTarget },
+  ];
 }

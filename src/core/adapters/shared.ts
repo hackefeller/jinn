@@ -80,6 +80,15 @@ export function formatFullSkillFrontmatter(template: SkillTemplate, version: str
   if (template.disableModelInvocation) {
     lines.push("disable-model-invocation: true");
   }
+  if (template.userInvocable === false) {
+    lines.push("user-invocable: false");
+  }
+  if (template.argumentHint) {
+    lines.push(`argument-hint: ${escapeYamlValue(template.argumentHint)}`);
+  }
+  if (template.allowedTools && template.allowedTools.length > 0) {
+    lines.push(`allowed-tools: ${template.allowedTools.join(", ")}`);
+  }
 
   return lines;
 }

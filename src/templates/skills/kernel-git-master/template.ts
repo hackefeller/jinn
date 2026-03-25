@@ -6,7 +6,8 @@ export function getGitMasterSkillTemplate(): SkillTemplate {
   return {
     name: SKILL_NAMES.GIT_MASTER,
     profile: "core",
-    description: "Advanced git workflows, branch management, and collaboration patterns",
+    description:
+      "Guides advanced git workflows, branch management, history rewriting, and collaboration patterns. Use when branching, merging, rebasing, resolving merge conflicts, cleaning up commit history, or when users ask about git collaboration.",
     license: "MIT",
     compatibility: "Works with any git repository",
     metadata: {

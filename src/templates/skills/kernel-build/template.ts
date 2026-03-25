@@ -6,14 +6,15 @@ export function getBuildSkillTemplate(): SkillTemplate {
   return {
     name: SKILL_NAMES.BUILD,
     profile: "extended",
-    description: "Use when running builds, running tests, or debugging failures in either.",
+    description:
+      "Runs and diagnoses the build, type-check, test, and lint pipeline using Bun, Vite, tsgo, and Vitest. Use when a build fails, tests are broken, CI is failing, or when running the full pipeline before a deploy or merge.",
     license: "MIT",
-    compatibility: "Works with any project.",
+    compatibility: "Bun + Vite + TypeScript 7 projects.",
     metadata: {
       author: "project",
-      version: "1.0",
+      version: "2.0",
       category: "Engineering",
-      tags: ["build", "test", "ci", "debug"],
+      tags: ["build", "test", "ci", "debug", "bun", "vite", "vitest", "tsgo", "typescript"],
     },
     when: [
       "running a production build",
@@ -32,6 +33,7 @@ export function getBuildSkillTemplate(): SkillTemplate {
     ],
     outputs: ["Passing build and test suite", "Root cause analysis if a failure was diagnosed"],
     dependencies: [],
+    argumentHint: "package name or test filter (optional)",
     instructions: getSkillInstructions(SKILL_NAMES.BUILD),
   };
 }

@@ -7,7 +7,7 @@ export function getSyncSkillTemplate(): SkillTemplate {
     name: SKILL_NAMES.SYNC,
     profile: "core",
     description:
-      "Use when Linear state has drifted from reality — stale In Progress issues, work completed without updates, or issues missing from the board. Reconciles Linear with what actually happened.",
+      "Reconciles Linear state with what actually happened — updates stale In Progress issues, marks completed work done, and fills in missing board entries. Use when Linear has drifted from reality, work was completed without updates, or users ask to sync or clean up the board.",
     license: "MIT",
     compatibility: "Requires the CLI and a configured Linear MCP server.",
     metadata: {

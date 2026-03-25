@@ -7,7 +7,7 @@ export function getExploreSkillTemplate(): SkillTemplate {
     name: SKILL_NAMES.EXPLORE,
     profile: "core",
     description:
-      "Use when exploring tradeoffs, risks, or missing context inside an existing Linear project or issue.",
+      "Investigates tradeoffs, risks, and missing context inside an existing Linear project or issue. Use when planning work that needs deeper investigation, technical decisions are unclear, or users ask to explore options before committing to an approach.",
     license: "MIT",
     compatibility: "Requires the CLI and a configured Linear MCP server.",
     metadata: {
@@ -34,6 +34,7 @@ export function getExploreSkillTemplate(): SkillTemplate {
       "Risk and tradeoff analysis",
     ],
     dependencies: [],
+    argumentHint: "Linear issue URL or topic to investigate",
     instructions: getSkillInstructions(SKILL_NAMES.EXPLORE),
   };
 }

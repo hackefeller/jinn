@@ -281,7 +281,7 @@ Each turn consists of layers in this order:
 
 ## Token summary
 
-Chat-specific tokens must be defined in the project's token files (e.g. `@hominem/ui/tokens/chat.ts`). Key tokens:
+Chat-specific tokens must be defined in the project's token files (e.g. `@your-org/ui/tokens/chat.ts`). Key tokens:
 
 | Token | Value | Purpose |
 |-------|-------|---------|

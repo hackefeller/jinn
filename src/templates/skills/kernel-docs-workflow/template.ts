@@ -7,7 +7,7 @@ export function getDocsWorkflowSkillTemplate(): SkillTemplate {
     name: SKILL_NAMES.DOCS_WORKFLOW,
     profile: "extended",
     description:
-      "Documentation publishing: deploy docs, create versioned releases, record feature demos, and validate doc sites.",
+      "Manages documentation publishing workflows: deploys docs, creates versioned releases, records feature demos, and validates doc sites. Use when publishing or updating documentation, cutting a release with docs, or when users ask how to deploy or validate a doc site.",
     license: "MIT",
     compatibility: "Works with any documentation platform",
     metadata: {
@@ -37,6 +37,7 @@ export function getDocsWorkflowSkillTemplate(): SkillTemplate {
       "Feature demo video or script",
     ],
     dependencies: [],
+    disableModelInvocation: true,
     instructions: getSkillInstructions(SKILL_NAMES.DOCS_WORKFLOW),
   };
 }

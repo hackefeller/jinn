@@ -95,7 +95,7 @@ describe("Generator integration — opencode, delivery: both", () => {
   it("generates skill directories under .opencode/skills/", async () => {
     await generateFiles(config, tmpDir);
     const count = await countDirsInDir(path.join(tmpDir, ".opencode", "skills"));
-    expect(count).toBe(20);
+    expect(count).toBe(27);
   });
 
   it("generates agent files under .opencode/agents/", async () => {
@@ -418,7 +418,7 @@ describe("Generator integration — idempotency", () => {
 
     expect(skillCountFirst).toBe(skillCountSecond);
     expect(agentCountFirst).toBe(agentCountSecond);
-    expect(skillCountFirst).toBe(20);
+    expect(skillCountFirst).toBe(27);
     expect(agentCountFirst).toBe(8);
   });
 });

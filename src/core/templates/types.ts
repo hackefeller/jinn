@@ -81,6 +81,26 @@ export interface SkillTemplate {
    * Codex: allow_implicit_invocation: false in agents/openai.yaml
    */
   disableModelInvocation?: boolean;
+
+  /**
+   * When false, hides this skill from the user's slash-command menu — model-only invocation.
+   * Only emitted when explicitly set to false. Default: true (user-visible).
+   * Claude Code: user-invocable: false
+   */
+  userInvocable?: boolean;
+
+  /**
+   * Autocomplete hint shown when the user invokes this skill with an argument.
+   * Example: "issue URL or description"
+   * Claude Code: argument-hint: <value>
+   */
+  argumentHint?: string;
+
+  /**
+   * Tools this skill may use without per-use approval prompts.
+   * Claude Code: allowed-tools: Read, Grep, Bash
+   */
+  allowedTools?: string[];
 }
 
 /**

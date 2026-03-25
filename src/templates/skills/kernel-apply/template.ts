@@ -6,7 +6,8 @@ export function getApplySkillTemplate(): SkillTemplate {
   return {
     name: SKILL_NAMES.APPLY,
     profile: "core",
-    description: "Use when executing implementation work from Linear issues and sub-issues.",
+    description:
+      "Executes implementation work from Linear issues and sub-issues, following the plan and updating issue status as work progresses. Use when tasks are ready to implement, sub-issues need execution, or users say 'start on this', 'do this', or 'implement'.",
     license: "MIT",
     compatibility: "Requires the CLI and a configured Linear MCP server.",
     metadata: {

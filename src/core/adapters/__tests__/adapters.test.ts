@@ -364,6 +364,93 @@ describe("Codex formatSkill", () => {
 // GitHub Copilot adapter — .agent.md format
 // ============================================================================
 
+// ============================================================================
+// Skill frontmatter — new behavioral fields
+// ============================================================================
+
+describe("formatSkill — userInvocable field", () => {
+  it("emits user-invocable: false when userInvocable is false", () => {
+    const result = claudeAdapter.formatSkill({ ...testSkillTemplate, userInvocable: false } as any, "1.0.0");
+    expect(result).toContain("user-invocable: false");
+  });
+
+  it("does not emit user-invocable when userInvocable is true", () => {
+    const result = claudeAdapter.formatSkill({ ...testSkillTemplate, userInvocable: true } as any, "1.0.0");
+    expect(result).not.toContain("user-invocable");
+  });
+
+  it("does not emit user-invocable when userInvocable is undefined", () => {
+    const result = claudeAdapter.formatSkill(testSkillTemplate as any, "1.0.0");
+    expect(result).not.toContain("user-invocable");
+  });
+
+  it("opencode also emits user-invocable: false", () => {
+    const result = opencodeAdapter.formatSkill({ ...testSkillTemplate, userInvocable: false } as any, "1.0.0");
+    expect(result).toContain("user-invocable: false");
+  });
+});
+
+describe("formatSkill — argumentHint field", () => {
+  it("emits argument-hint when argumentHint is set", () => {
+    const result = claudeAdapter.formatSkill({ ...testSkillTemplate, argumentHint: "issue URL or description" } as any, "1.0.0");
+    expect(result).toContain("argument-hint: issue URL or description");
+  });
+
+  it("does not emit argument-hint when argumentHint is absent", () => {
+    const result = claudeAdapter.formatSkill(testSkillTemplate as any, "1.0.0");
+    expect(result).not.toContain("argument-hint");
+  });
+
+  it("opencode also emits argument-hint", () => {
+    const result = opencodeAdapter.formatSkill({ ...testSkillTemplate, argumentHint: "feature description" } as any, "1.0.0");
+    expect(result).toContain("argument-hint: feature description");
+  });
+});
+
+describe("formatSkill — allowedTools field", () => {
+  it("emits allowed-tools as comma-separated list", () => {
+    const result = claudeAdapter.formatSkill({ ...testSkillTemplate, allowedTools: ["Read", "Grep", "Glob"] } as any, "1.0.0");
+    expect(result).toContain("allowed-tools: Read, Grep, Glob");
+  });
+
+  it("does not emit allowed-tools when allowedTools is empty array", () => {
+    const result = claudeAdapter.formatSkill({ ...testSkillTemplate, allowedTools: [] } as any, "1.0.0");
+    expect(result).not.toContain("allowed-tools");
+  });
+
+  it("does not emit allowed-tools when allowedTools is undefined", () => {
+    const result = claudeAdapter.formatSkill(testSkillTemplate as any, "1.0.0");
+    expect(result).not.toContain("allowed-tools");
+  });
+
+  it("opencode also emits allowed-tools", () => {
+    const result = opencodeAdapter.formatSkill({ ...testSkillTemplate, allowedTools: ["Read"] } as any, "1.0.0");
+    expect(result).toContain("allowed-tools: Read");
+  });
+});
+
+describe("formatSkill — field ordering", () => {
+  it("emits disable-model-invocation before user-invocable", () => {
+    const result = claudeAdapter.formatSkill(
+      { ...testSkillTemplate, disableModelInvocation: true, userInvocable: false } as any,
+      "1.0.0",
+    );
+    const dmiPos = result.indexOf("disable-model-invocation");
+    const uiPos = result.indexOf("user-invocable");
+    expect(dmiPos).toBeLessThan(uiPos);
+  });
+
+  it("cursor adapter does not emit new behavioral fields", () => {
+    const result = cursorAdapter.formatSkill(
+      { ...testSkillTemplate, userInvocable: false, argumentHint: "hint", allowedTools: ["Read"] } as any,
+      "1.0.0",
+    );
+    expect(result).not.toContain("user-invocable");
+    expect(result).not.toContain("argument-hint");
+    expect(result).not.toContain("allowed-tools");
+  });
+});
+
 describe("GitHub Copilot formatAgent", () => {
   it("uses .github/agents/<name>.agent.md path", () => {
     expect(githubCopilotAdapter.getAgentPath!(AGENT_NAMES.PLAN)).toBe(

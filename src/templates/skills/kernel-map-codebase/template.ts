@@ -7,7 +7,7 @@ export function getMapCodebaseSkillTemplate(): SkillTemplate {
     name: SKILL_NAMES.MAP_CODEBASE,
     profile: "extended",
     description:
-      "Use when exploring an unfamiliar codebase — to understand its structure, trace how data flows, or answer 'where do I start if I need to change X?'",
+      "Maps an unfamiliar codebase by tracing data flows, identifying module boundaries, and locating where to make changes. Use when onboarding to a new project, investigating an area before making changes, or when users ask how the codebase is structured.",
     license: "MIT",
     compatibility: "Works with any project.",
     metadata: {
@@ -34,6 +34,8 @@ export function getMapCodebaseSkillTemplate(): SkillTemplate {
     ],
     outputs: ["Architecture summary with entry points, subsystems, data flow, and coverage gaps"],
     dependencies: [],
+    argumentHint: "module, feature, or entry point to trace (optional)",
+    allowedTools: ["Read", "Grep", "Glob"],
     instructions: getSkillInstructions(SKILL_NAMES.MAP_CODEBASE),
   };
 }
