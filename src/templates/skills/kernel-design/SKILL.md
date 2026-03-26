@@ -1,7 +1,7 @@
 You are enforcing the project design system. This is not a style guide — it is law. You do not separate "design" from "implementation". Component architecture, layout, styling, motion, accessibility, and polish are one job.
 
 Before writing any UI code, read all five reference files emitted alongside this skill:
-- `references/foundations.md` — tokens, typography, color, spacing, elevation, radii, grid, z-index, accessibility
+- `references/foundations.md` — tokens, typography, color (light + dark), spacing, elevation, radii, grid, z-index, accessibility
 - `references/motion.md` — GSAP mandate, canonical sequences, timing, easing, reduced motion, mobile animation
 - `references/components.md` — button, input, card, sheet, badge, avatar, skeleton, toast, empty state, link, form, table, code block, markdown
 - `references/patterns.md` — responsive behaviour, overlay stacking, focus management, copy/writing style, image handling, gesture thresholds, route transitions, scrollbars, cursor rules, selection styles
@@ -12,12 +12,20 @@ Token files are the authoritative source of values. Never use a value that isn't
 
 ---
 
+## Identity
+
+This design system serves a product that is **Vercel for personal life management, powered by Anthropic Claude**. The aesthetic fuses Vercel's engineering precision and dark-mode-first identity with Claude's warmth, approachability, and quiet intelligence.
+
+The result: interfaces that feel like they were built by someone who reads both Hacker News and poetry. Technically uncompromising. Emotionally resonant. Never cold, never cute.
+
+---
+
 ## Philosophy
 
 Three obsessions drive every decision.
 
 1. **Performance.** Every pixel rendered, every byte shipped, every animation frame must earn its place. The UI must feel faster than the user expects.
-2. **Minimalism.** Remove everything that doesn't serve a purpose. Complexity is a bug. If a component can be expressed with less, it must be.
+2. **Warmth through restraint.** Remove everything that doesn't serve a purpose — then ensure what remains has texture, weight, and presence. Minimalism is not sterility. Warm neutrals, purposeful color, and considered typography create a space that feels inhabited, not empty.
 3. **Joyful motion.** Animation communicates state, confirms intent, and creates delight. Every transition is deliberate, purposeful, and physically believable.
 
 Deviation from this spec requires explicit justification. "It was easier" is not justification.
@@ -30,6 +38,11 @@ Deviation from this spec requires explicit justification. "It was easier" is not
 - All values come from tokens: colors, spacing, radii, shadows, durations, font sizes, z-indices. See `references/foundations.md`.
 - **Never hardcode** any of these values in a component or style file.
 - If a token doesn't exist, add it to the project's token files before using it.
+
+### Color mode
+- **Dark mode is a first-class citizen**, not an afterthought. Both light and dark tokens are defined in `references/foundations.md`.
+- Use CSS custom properties that resolve per-mode. Never branch with `dark:` utility classes for color — use semantic tokens that swap automatically.
+- Light mode is warm-neutral (stone palette). Dark mode is near-black (Vercel-inspired). Both share the same warm accent.
 
 ### Animation
 - **All interactive animations on web MUST use GSAP via the project's canonical sequences file.** See `references/motion.md`.
@@ -50,7 +63,7 @@ Deviation from this spec requires explicit justification. "It was easier" is not
 ### Color
 - All color references through CSS custom properties. Never raw Tailwind palette classes.
 - Text dimming: use the correct text tier token — never `opacity` on text.
-- Accent = `#007AFF`. Destructive = `#FF3B30`. Never swap these.
+- Accent = `#D4A574` (warm amber). Destructive = `#EF4444`. Never swap these.
 - WCAG AA minimum contrast ratio: 4.5:1 for body text, 3:1 for large text and UI components.
 
 ### Accessibility
@@ -70,7 +83,7 @@ Every interactive element must implement all applicable states. Missing states a
 - **Disabled**: `opacity: 0.4`, `cursor: not-allowed`, `pointer-events: none`
 - **Loading**: spinner replaces label
 - **Error**: destructive border + error message
-- **Selected**: accent background + accent foreground
+- **Selected**: accent background at 12% + accent foreground
 
 ### Performance
 - Lists > 50 items: virtualise (`react-window` web, `FlashList` mobile).
@@ -90,10 +103,10 @@ For chat UI specifics — see `references/chat.md`.
 Before writing any code, commit to a **bold, intentional aesthetic direction**:
 
 - **Purpose**: What problem does this interface solve? Who uses it?
-- **Tone**: Commit to an extreme — brutally minimal, maximalist, editorial, geometric, luxurious, playful, industrial. Decide before touching code.
-- **Differentiation**: What is the one thing a user will remember?
+- **Tone**: Warm precision. The confidence of a well-configured terminal. The comfort of a personal notebook. Never clinical, never whimsical.
+- **Differentiation**: What is the one thing a user will remember? The warmth of the palette. The speed of the response. The feeling that everything is exactly where it should be.
 
-Execute with precision. Bold maximalism and refined minimalism both work — intentionality matters, not intensity. Never produce a layout that looks like a default template. Never converge on common AI-generated aesthetics.
+Execute with precision. Never produce a layout that looks like a default template. Never converge on common AI-generated aesthetics (cold blues, gratuitous gradients, generic card grids).
 
 ### Where creativity lives
 
@@ -101,11 +114,11 @@ Execute with precision. Bold maximalism and refined minimalism both work — int
 
 **Typography hierarchy** — use the full range of the type scale; create strong contrast between display and body levels; let whitespace do work.
 
-**Color within the token system** — use accent, surfaces, text tiers, and destructive with conviction; dominant color + sharp accent outperforms timid, evenly-distributed palettes.
+**Color within the token system** — use accent, surfaces, text tiers, and destructive with conviction; the warm amber accent against dark surfaces creates a signature look. Dominant neutral + sharp warm accent outperforms timid, evenly-distributed palettes.
 
 **Motion choreography** — one well-orchestrated page load with staggered reveals creates more impact than scattered micro-interactions.
 
-**Depth and atmosphere** — shadows from the token elevation scale, blur effects, layered transparencies; gradient meshes, noise textures, or geometric patterns where they serve the aesthetic.
+**Depth and atmosphere** — borders for structure, shadows for elevation. In dark mode, subtle warm-tinted borders create depth without heavy shadows. Noise textures, geometric patterns, or grain overlays where they serve the aesthetic.
 
 ---
 
@@ -117,6 +130,7 @@ Fail the review if any of the following are violated:
 - [ ] No hardcoded colors, sizes, radii, durations, z-indices, or font values
 - [ ] Platform-correct token keys used (web vs. native)
 - [ ] New token added to token files if a value was missing
+- [ ] Both light and dark mode tokens defined for any new color
 
 ### Animation
 - [ ] All interactive animations use GSAP canonical sequences
@@ -137,6 +151,7 @@ Fail the review if any of the following are violated:
 - [ ] Text dimmed via tier token, not opacity
 - [ ] Accent and destructive never swapped
 - [ ] WCAG AA contrast met (4.5:1 body, 3:1 UI components)
+- [ ] Dark mode tested — not just light mode with `dark:` slapped on
 
 ### Accessibility
 - [ ] Touch targets ≥ 44px × 44px

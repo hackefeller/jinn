@@ -1,19 +1,21 @@
 # Design System — Component Specifications
 
+All components use tokens from `foundations.md`. Never hardcode values. All colors resolve per color mode (light/dark) via CSS custom properties.
+
 ## Button
 
 | Variant | Background | Text | Border | Radius | Min height | Padding X |
 |---------|-----------|------|--------|--------|-----------|-----------|
-| Primary | accent | white | none | md (10px) | 40px | 16px |
+| Primary | accent | white | none | md (8px) | 40px | 16px |
 | Secondary | bg-surface | text-primary | 1px border-default | md | 40px | 16px |
-| Destructive | semantic.destructive | white | none | md | 40px | 16px |
+| Destructive | destructive | white | none | md | 40px | 16px |
 | Ghost | transparent | text-secondary | none | md | 36px | 12px |
-| Icon | transparent | text-secondary | none | sm (6px) | 36px | 8px (square) |
+| Icon | transparent | text-secondary | none | sm (4px) | 36px | 8px (square) |
 
 Touch target minimum: 44px × 44px. Use padding to expand hit area invisibly.
 
 States:
-- Hover: CSS `transition-colors duration-150` — no border-color change (border stays static)
+- Hover: CSS `transition-colors duration-150` — no border-color change (border stays static). Primary darkens to accent-hover. Secondary shifts to emphasis.faint overlay.
 - Focus-visible: `outline: 2px solid var(--color-ring); outline-offset: 2px; border-radius: inherit`
 - Active/pressed: GSAP `scale(0.97)` on pointerdown, reversed on pointerup
 - Disabled primary: `bg-bg-surface text-text-tertiary` (muted surface, not filled foreground)
@@ -34,7 +36,7 @@ The composer is a fixed-bottom card (web) or floating input bar (mobile). Three 
 
 | Type | Size | Style | Use |
 |------|------|-------|-----|
-| ToolBtn | 38×38 | `bg-bg-surface border border-border rounded-full` | Left tool strip (plus, camera, mic) |
+| ToolBtn | 38×38 | `bg-bg-surface border border-default rounded-full` | Left tool strip (plus, camera, mic) |
 | SecondaryBtn | 38×38 | Same as ToolBtn | Right secondary action |
 | PrimaryBtn | 42×42 | `bg-foreground text-background rounded-full` (no border) | Right primary action |
 
@@ -58,12 +60,12 @@ position: fixed; bottom: 0; left: 0; right: 0;
 padding-horizontal: 8px;
 padding-bottom: max(env(safe-area-inset-bottom), 10px);
 
-border-radius: 30px;
-border: 1px solid var(--color-border-default);  /* full opacity, no /70 */
-background: var(--color-background);
+border-radius: 24px;
+border: 1px solid var(--color-border-default);
+background: var(--color-bg-elevated);
 gap: 12px;
 padding: 12px 12px 8px;
-box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.08);
+box-shadow: var(--shadow-low);
 overflow: hidden;
 ```
 
@@ -88,22 +90,22 @@ Route-derived — never imperative push from pages:
 
 | Property | Value |
 |----------|-------|
-| Background | bg-base |
+| Background | bg-inset |
 | Border (default) | `1px solid border-default` |
-| Border (focused) | `border-color: var(--color-border-focus)` — no accent blue |
+| Border (focused) | `border-color: var(--color-border-strong)` |
 | Background (focused) | `var(--color-bg-elevated)` |
-| Box-shadow (focused) | `0 0 0 3px rgba(28, 28, 30, 0.08)` — near-black glow, not blue |
-| Border (error) | `2px solid semantic.destructive` |
-| Box-shadow (error) | `0 0 0 2px var(--color-destructive), 0 0 0 4px rgba(255, 59, 48, 0.08)` |
-| Radius | md (10px) |
+| Box-shadow (focused) | `0 0 0 3px var(--color-accent-subtle)` — warm amber glow |
+| Border (error) | `2px solid var(--color-destructive)` |
+| Box-shadow (error) | `0 0 0 2px var(--color-destructive), 0 0 0 4px var(--color-destructive-subtle)` |
+| Radius | md (8px) |
 | Padding vertical | 12px |
 | Padding horizontal | 16px |
 | Min height | 44px |
 | Font size | body-1 (16px) — minimum 16px on mobile |
-| Transition | `border-color 150ms` (CSS only) |
+| Transition | `border-color 150ms, box-shadow 150ms` (CSS only) |
 
 States:
-- Focused: subtle near-black box-shadow only — no blue halo, no accent border
+- Focused: warm accent-subtle glow — not blue, not near-black
 - Error: destructive border + glow shadow, error message in body-4/destructive beneath field
 - Disabled: `opacity: 0.5; cursor: not-allowed; pointer-events: none`
 - Read-only: bg-surface border, no focus ring
@@ -131,13 +133,15 @@ Same rules as Input, plus:
 |----------|-------|
 | Background | bg-surface |
 | Border | `1px solid border-subtle` |
-| Radius | lg (14px) |
+| Radius | lg (12px) |
 | Shadow | shadows.low |
 | Padding | 16px |
 
 Hover: CSS `transition: background-color 120ms` to `emphasis.faint` overlay.
 No shadow change on hover — shadow transitions are expensive and visually noisy.
 Interactive cards get `cursor: pointer` and the pressed GSAP scale treatment.
+
+In dark mode, the border carries more visual weight than the shadow — this is intentional. The card should feel like a contained region, not a floating sheet.
 
 ---
 
@@ -146,10 +150,10 @@ Interactive cards get `cursor: pointer` and the pressed GSAP scale treatment.
 | Property | Value |
 |----------|-------|
 | Background | bg-elevated |
-| Radius (top corners) | xl (20px) |
+| Radius (top corners) | xl (16px) |
 | Radius (bottom) | 0 |
 | Shadow | shadows.high |
-| Backdrop | bg-overlay (rgba 0,0,0,0.4) |
+| Backdrop | bg-overlay |
 | Max height | 90dvh |
 | Min height | 30dvh |
 
@@ -165,7 +169,7 @@ Only one sheet open at a time.
 | Property | Value |
 |----------|-------|
 | Background | bg-elevated |
-| Radius | xl (20px) |
+| Radius | xl (16px) |
 | Shadow | shadows.high |
 | Backdrop | bg-overlay |
 | Max width | 480px |
@@ -175,6 +179,8 @@ Only one sheet open at a time.
 Animation: CSS `void-anim-*` via Radix `data-state` (fade + scale from 0.95).
 Same focus rules as Sheet. Only one modal open at a time. Never nest modals.
 
+In dark mode, add a `1px border-subtle` ring on the modal container for definition against the dark overlay.
+
 ---
 
 ## Badge / Pill
@@ -183,14 +189,16 @@ Same focus rules as Sheet. Only one modal open at a time. Never nest modals.
 |----------|-------|
 | Background | bg-surface |
 | Border | `1px solid border-subtle` |
-| Radius | sm (6px) |
+| Radius | sm (4px) |
 | Padding | 2px 8px |
 | Font | subheading-3 (12px / 500) |
 | Min height | 20px |
 
-Accent badge (counts, notifications): accent background, white text, no border.
-Destructive badge (errors, alerts): destructive background, white text.
+Accent badge (counts, notifications): accent-subtle background, accent text, no border.
+Destructive badge (errors, alerts): destructive-subtle background, destructive text.
 Never use badges for long text — truncate at 24 characters maximum.
+
+Note: badges no longer use solid filled backgrounds with white text. The subtle background + colored text pattern is more refined and works better in both color modes.
 
 ---
 
@@ -230,15 +238,16 @@ Skeleton rules:
 | Position | bottom-right (desktop), bottom-center (mobile) |
 | Z-index | z-toast (400) |
 | Width | 320px (desktop), calc(100vw - 32px) (mobile) |
-| Radius | lg (14px) |
+| Radius | lg (12px) |
 | Shadow | shadows.medium |
 | Background | bg-elevated |
+| Border | `1px solid border-subtle` |
 | Duration (info) | 4000ms auto-dismiss |
 | Duration (error) | 8000ms auto-dismiss |
 | Duration (success) | 3000ms auto-dismiss |
 | Max stacked | 3 (oldest dismisses when 4th appears) |
 
-Variants: success, error, warning, info.
+Variants: success, error, warning, info — indicated by a left-edge color bar (4px wide, semantic color), not a full background fill.
 Always include a manual dismiss (×) button.
 Never block the primary content with a toast.
 Toasts portal to `document.body`.
@@ -266,9 +275,9 @@ Rules:
 | State | Treatment |
 |-------|-----------|
 | Default | accent color, no underline |
-| Hover | underline |
+| Hover | underline, accent-hover color |
 | Visited | accent color (never change to grey — confuses with disabled) |
-| Focus-visible | `outline: 2px solid accent; outline-offset: 2px` |
+| Focus-visible | `outline: 2px solid var(--color-ring); outline-offset: 2px` |
 | Active | `scale(0.98)`, accent color |
 
 External links: always open in new tab with `rel="noopener noreferrer"`. Add `aria-label` indicating external.
@@ -280,9 +289,9 @@ Never use "click here" as link text. Link text must describe the destination.
 
 - Label above field always. Never placeholder-as-label.
 - Label: subheading-2 (13px / 500), text-secondary
-- Required indicator: asterisk (*) in `semantic.destructive` after the label, with `aria-required="true"` on the input
+- Required indicator: asterisk (*) in `var(--color-destructive)` after the label, with `aria-required="true"` on the input
 - Help text: body-4, text-tertiary, between label and input
-- Error message: body-4, `semantic.destructive`, below input
+- Error message: body-4, `var(--color-destructive)`, below input
 - Field gap: spacing[4] (16px)
 - Submit button: right-aligned on desktop, full-width on mobile
 
@@ -299,7 +308,7 @@ Never use "click here" as link text. Link text must describe the destination.
 | Row height | 48px min |
 | Border | `1px solid border-subtle` between rows |
 | Hover row | emphasis.faint background (CSS `transition: 120ms`) |
-| Radius | lg (14px) on the table container |
+| Radius | lg (12px) on the table container |
 
 Never use tables for layout. Tables are for tabular data only.
 Always include `aria-label` or `<caption>`.
@@ -310,14 +319,14 @@ Always include `aria-label` or `<caption>`.
 
 | Property | Value |
 |----------|-------|
-| Background | bg-surface |
+| Background | bg-inset |
 | Border | `1px solid border-subtle` |
-| Radius | md (10px) |
+| Radius | md (8px) |
 | Padding | 16px |
 | Font | fontFamily.mono (Geist Mono / system-mono), 13px |
 | Line height | 1.6 |
 
-Inline code: bg-surface, radii.sm, 2px 6px padding, same mono font.
+Inline code: bg-inset, radii.sm, 2px 6px padding, same mono font.
 Syntax highlighting: use the project's configured highlighter (react-syntax-highlighter or shiki).
 Language label: subheading-4 (11px), text-tertiary, top-right corner of block.
 Copy button: icon-only, 32px, appears on hover.

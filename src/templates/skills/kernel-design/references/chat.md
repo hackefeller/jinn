@@ -90,21 +90,24 @@ Each turn consists of layers in this order:
 | Property | Value |
 |----------|-------|
 | Max width | `chatTokens.userBubbleMaxWidth` (544px) |
-| Background | `chatTokens.surfaces.user` |
-| Border | `1px solid chatTokens.borders.user` |
-| Border radius | `chatTokens.radii.bubble` = `radii.md` (10px web, 10 native) |
+| Background | `var(--color-accent)` — warm amber |
+| Border | none |
+| Border radius | `chatTokens.radii.bubble` = `radii.md` (8px web, 8 native) |
 | Padding | 16px horizontal, 12px vertical |
-| Text color | `chatTokens.foregrounds.user` = `white` |
+| Text color | `#1c1917` (stone-900) — dark text on warm amber |
 | Font | `body-1` (16px web, 17px mobile) |
 | Line height | 1.6 web, 1.5 mobile |
 | Alignment | Right |
-| Shadow | `shadows.low` |
+| Shadow | none |
+
+The user bubble uses the warm amber accent as its background. Text is dark (stone-900) for maximum contrast against the amber surface. No shadow — the color itself provides visual separation.
 
 **Forbidden:**
 - Never put assistant messages in a bubble
 - Never show a user avatar
 - Never put "You" inside the user bubble
 - Never use `rounded-full` for message bubbles
+- Never use white text on the amber bubble — use dark text for contrast
 
 ---
 
@@ -130,13 +133,13 @@ Each turn consists of layers in this order:
 |----------|-------|
 | Font | `body-4` (12px) |
 | Color | `text-tertiary` |
-| Opacity | 0.7 |
 | Content | Sender label · Relative timestamp |
 | Alignment | Matches message alignment |
 
 - "You" for user, "AI Assistant" for assistant — never initials
 - Relative timestamp: "just now", "2m ago", "Yesterday"
 - Never show absolute timestamps in the transcript
+- No opacity dimming on metadata — use text-tertiary token directly
 
 ---
 
@@ -153,12 +156,12 @@ Each turn consists of layers in this order:
 
 | Action | User | Assistant |
 |--------|------|-----------|
-| Copy | ✅ | ✅ |
-| Edit | ✅ | ❌ |
-| Regenerate | ❌ | ✅ |
-| Delete | ✅ | ✅ |
-| Speak (TTS) | ❌ | ✅ |
-| Share | ❌ | ✅ |
+| Copy | yes | yes |
+| Edit | yes | no |
+| Regenerate | no | yes |
+| Delete | yes | yes |
+| Speak (TTS) | no | yes |
+| Share | no | yes |
 
 ---
 
@@ -207,12 +210,12 @@ Each turn consists of layers in this order:
 | Property | Value |
 |----------|-------|
 | Container | Full width up to 768px |
-| Background | `chatTokens.surfaces.composer` |
-| Border | `1px solid chatTokens.borders.composer` |
-| Border radius | `1.75rem` (28px) — **documented exception** |
-| Shadow | `shadows.low`, upgrades to `shadows.medium` on focus |
+| Background | `var(--color-bg-elevated)` |
+| Border | `1px solid var(--color-border-default)` |
+| Border radius | `24px` |
+| Shadow | `var(--shadow-low)`, upgrades to `var(--shadow-medium)` on focus |
 | Padding | 16px |
-| Submit button | 36×36px, circular, foreground background, white icon |
+| Submit button | 36×36px, circular, foreground background, background-color icon |
 
 ### Mobile
 
@@ -220,7 +223,7 @@ Each turn consists of layers in this order:
 |----------|-------|
 | Background | `bg-elevated` |
 | Border top | `1px solid border-default` |
-| Shadow | `shadows.low` (iOS only) |
+| Shadow | shadows.low (iOS only) |
 | Textarea | 17px font, `text-primary` |
 | Submit | 44×44px, accent background |
 | Clearance | 220px minimum from bottom (keyboard + safe area) |
@@ -229,8 +232,8 @@ Each turn consists of layers in this order:
 
 | Property | Value |
 |----------|-------|
-| Surface | `bg-base` |
-| Border | `1px solid border-default` |
+| Surface | `bg-surface` |
+| Border | `1px solid border-subtle` |
 | Radius | `radii.md` |
 | Font | `body-2` |
 | On tap | Insert suggestion text, focus textarea |
@@ -270,12 +273,12 @@ Each turn consists of layers in this order:
 
 | Property | Value |
 |----------|-------|
-| Surface | `bg-surface` with `1px border border-destructive/30` |
-| Background tint | `destructive` at 5% opacity |
+| Surface | `bg-surface` with `1px border var(--color-destructive-subtle)` |
+| Background tint | `var(--color-destructive-subtle)` |
 | Radius | `radii.md` |
 | Padding | 16px |
-| Headline | `body-2`, `fontWeight: 600`, `destructive` |
-| Body | `body-4`, `destructive` at 70% opacity |
+| Headline | `body-2`, `fontWeight: 600`, `var(--color-destructive)` |
+| Body | `body-4`, `text-secondary` |
 
 ---
 
@@ -291,12 +294,12 @@ Chat-specific tokens must be defined in the project's token files (e.g. `@your-o
 | `turnGap` | 20px | Gap between message turns |
 | `contentGap` | 8px | Gap between content blocks |
 | `metadataGap` | 4px | Gap in metadata row |
-| `surfaces.user` | `emphasis-highest` | User bubble background |
+| `surfaces.user` | `var(--color-accent)` | User bubble background (warm amber) |
 | `surfaces.assistant` | `transparent` | Assistant surface |
-| `surfaces.composer` | project token | Composer background |
-| `borders.user` | `border-subtle` | User bubble border |
-| `radii.bubble` | `radii.md` | Message bubble radius |
-| `foregrounds.user` | `white` | User bubble text |
+| `surfaces.composer` | `var(--color-bg-elevated)` | Composer background |
+| `borders.composer` | `var(--color-border-default)` | Composer border |
+| `radii.bubble` | `radii.md` (8px) | Message bubble radius |
+| `foregrounds.user` | `#1c1917` | User bubble text (dark on amber) |
 
 ---
 
@@ -305,11 +308,12 @@ Chat-specific tokens must be defined in the project's token files (e.g. `@your-o
 | Violation | Fix |
 |-----------|-----|
 | `bg-white` or `bg-bg-surface` in chat | Use `chatTokens.surfaces.*` |
-| `border-subtle` Tailwind class | Use `colors['border-subtle']` |
-| `rounded-[1.75rem]` | Document exception or use `radii.lg` |
-| `rounded-full` on message bubble | Use `radii.md` |
+| `border-subtle` Tailwind class | Use `colors['border-subtle']` token |
+| `rounded-[1.75rem]` | Use `24px` or `radii.xl` |
+| `rounded-full` on message bubble | Use `radii.md` (8px) |
 | Hardcoded font size (17, 18, 24) | Use `body-1` class or `fontSizes` token |
 | `rgba(0,0,0,0.35)` for muted text | Use `text-tertiary` |
+| White text on amber user bubble | Use dark text (`#1c1917`) for contrast |
 | `space-y-4` between messages | Use `chatTokens.turnGap` |
 | `animate-pulse` for streaming cursor | Custom CSS class or GSAP |
 | `Animated` from react-native | Use react-native-reanimated worklet |
@@ -319,3 +323,4 @@ Chat-specific tokens must be defined in the project's token files (e.g. `@your-o
 | Composer shadow not upgraded on focus | `shadows.low` → `shadows.medium` |
 | Actions row touch targets < 44px | Add invisible padding or `hitSlop` |
 | aria-label missing on icon-only buttons | Add descriptive `aria-label` |
+| Using `dark:` for chat colors | Use CSS custom properties that resolve per mode |

@@ -111,8 +111,8 @@ Mobile-first. All base styles are mobile. Never style down with max-width querie
 Web custom scrollbar (webkit only, graceful degradation):
 - Width: 6px
 - Track: transparent
-- Thumb: border-default (rgba 0,0,0,0.08)
-- Thumb hover: rgba(0,0,0,0.16)
+- Thumb: `var(--color-border-default)`
+- Thumb hover: `var(--color-border-strong)`
 - Radius: 3px
 
 Never hide scrollbars from elements that can overflow — users need to know content is scrollable.
@@ -147,12 +147,12 @@ Never remove cursor feedback from disabled elements — users need to know why t
 
 ```css
 ::selection {
-  background: rgba(0, 122, 255, 0.15); /* accent at 15% opacity */
+  background: var(--color-accent-subtle); /* accent at 12% opacity */
   color: inherit;
 }
 ```
 
-Never set a jarring or inaccessible selection color.
+Uses the accent-subtle token so selection color matches the warm amber palette in both color modes.
 
 ---
 
@@ -175,7 +175,7 @@ Haptic feedback on destructive confirmations (react-native's HapticFeedback or E
 
 ## Focus management — detailed rules
 
-- Focus ring: `outline: 2px solid var(--color-ring); outline-offset: 2px; border-radius: inherit`. `--color-ring` is `#1c1c1e` (near-black), never accent. Never suppress without replacement.
+- Focus ring: `outline: 2px solid var(--color-ring); outline-offset: 2px; border-radius: inherit`. `--color-ring` is warm gray (stone-500 light / stone-400 dark), never accent. Never suppress without replacement.
 - Only `:focus-visible` shows the ring (hides it for mouse users, shows for keyboard).
 - Tab order: logical DOM order. Never use `tabIndex > 0` to create artificial tab order.
 - Skip link: "Skip to main content" as the first focusable element on every page.
@@ -225,6 +225,23 @@ export default function FocusView() {
   return <div className="h-dvh bg-background" />;
 }
 ```
+
+---
+
+## Dark mode patterns
+
+### Implementation
+- Color mode is controlled by a `data-theme="light|dark"` attribute on `<html>`.
+- All color tokens resolve via CSS custom properties that change per `data-theme`.
+- Never use Tailwind `dark:` variants for colors — they create maintenance burden and miss edge cases.
+- `dark:` variants are acceptable only for non-color properties (e.g., `dark:border` for structural border that only appears in dark mode).
+
+### Visual adjustments in dark mode
+- Borders carry more structural weight than shadows. Add `border-subtle` to elevated surfaces that rely only on shadow in light mode.
+- Accent color (`#D4A574`) remains the same — it naturally reads warmer against dark backgrounds.
+- Never invert colors (e.g., white → black) — use the defined dark mode token.
+- Images: consider `brightness(0.9)` filter on user-uploaded images to reduce glare in dark mode.
+- Elevated surfaces in dark mode get progressively lighter (`#0a0a0a` → `#141414` → `#1c1c1c`), not darker.
 
 ---
 
