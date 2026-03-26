@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach, spyOn } from "bun:test";
+import { afterEach, beforeEach, describe, expect, it, spyOn } from "bun:test";
 import * as fs from "fs/promises";
-import * as path from "path";
 import * as os from "os";
+import * as path from "path";
 import { getDefaultSkillTemplates } from "../../templates/catalog.js";
 
 async function mkTmpDir(): Promise<string> {

@@ -35,7 +35,7 @@ program
 
 program
   .command("sync")
-  .description("Initialize or update kernel in the current project")
+  .description("Initialize or update kernel in global user tool directories")
   .option("--path <path>", "Project path (default: current directory)")
   .action(async (options) => {
     await executeSync({

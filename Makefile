@@ -14,7 +14,7 @@ TESTHOME_DELIVERY_SKILLS := /tmp/kernel-cli-home-delivery-skills
 TESTHOME_MULTI := /tmp/kernel-cli-home-multi
 
 .PHONY: help test-all test-init test-init-both test-init-skills test-init-multi \
-	test-update test-config test-detect test-vault clean build
+	test-update test-config test-detect test-vault clean build reset
 
 help:
 	@echo "Kernel CLI test targets"
@@ -29,6 +29,7 @@ help:
 	@echo "  make test-detect       Test 'kernel detect'"
 	@echo "  make test-vault        Test 'kernel vault compile --dry-run'"
 	@echo "  make test-all          Run all CLI integration tests"
+	@echo "  make reset             Remove local agent/skill installs and .github links"
 	@echo "  make clean             Remove test directories"
 	@echo ""
 	@echo "File count expectations (default --profile core):"
@@ -137,3 +138,6 @@ test-all: build
 clean:
 	rm -rf $(TESTDIR) $(TESTDIR_DELIVERY_BOTH) $(TESTDIR_DELIVERY_SKILLS) $(TESTDIR_MULTI)
 	rm -rf $(TESTHOME) $(TESTHOME_DELIVERY_BOTH) $(TESTHOME_DELIVERY_SKILLS) $(TESTHOME_MULTI)
+
+reset:
+	bun ./scripts/reset.ts

@@ -4,17 +4,17 @@
  * Initializes project if no config exists, otherwise updates/regenerates files.
  */
 
-import type { Config } from "../core/config/schema.js";
-import { createDefaultConfig, loadConfig } from "../core/config/loader.js";
-import { generateFiles } from "../core/generator/index.js";
-import { detectAvailableTools } from "../core/discovery/detector.js";
-import { githubCopilotAdapter } from "../core/adapters/github-copilot.js";
-import { CONFIG_VERSION } from "../core/config/defaults.js";
-import { getDefaultAgentTemplates, getDefaultSkillTemplates } from "../templates/catalog.js";
-import { ZodError } from "zod";
+import { existsSync, mkdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { existsSync, mkdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { ZodError } from "zod";
+import { githubCopilotAdapter } from "../core/adapters/github-copilot.js";
+import { CONFIG_VERSION } from "../core/config/defaults.js";
+import { createDefaultConfig, loadConfig } from "../core/config/loader.js";
+import type { Config } from "../core/config/schema.js";
+import { detectAvailableTools } from "../core/discovery/detector.js";
+import { generateFiles } from "../core/generator/index.js";
+import { getDefaultAgentTemplates, getDefaultSkillTemplates } from "../templates/catalog.js";
 
 export interface SyncOptions {
   projectPath?: string;
