@@ -1,7 +1,7 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { getAgentInstructions } from "../../.generated/templates.js";
 import { AGENT_NAMES } from "../../constants.js";
 import { REVIEW_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
-import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getReviewAgentTemplate(): AgentTemplate {
   return {
@@ -23,6 +23,8 @@ export function getReviewAgentTemplate(): AgentTemplate {
     role: "Reviewer",
     route: "review",
     defaultTools: ["read", "search"],
+    allowedTools: ["Read", "Grep", "Glob"],
+    argumentHint: "PR, branch, or code to review (e.g., 'PR #123', 'auth-module')",
     permissionMode: "plan",
     maxTurns: 50,
     memory: "project",
@@ -34,13 +36,5 @@ export function getReviewAgentTemplate(): AgentTemplate {
       "Issues are prioritized",
       "Suggestions are actionable",
     ],
-    references: getAgentReferences(
-      AGENT_NAMES.REVIEW,
-      "references/python.md",
-      "references/typescript.md",
-      "references/security.md",
-      "references/simplicity.md",
-      "references/races.md",
-    ),
   };
 }

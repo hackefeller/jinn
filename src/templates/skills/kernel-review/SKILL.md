@@ -3,7 +3,7 @@ Answer: *is this done well enough to move forward?*
 ## Steps
 
 ### 1. Read the plan
-- Use `mcp_linear_get_issue` (+ `includeRelations: true`) to retrieve the issue description and acceptance criteria.
+- Read the relevant issue file in `.kernel/issues/` and its frontmatter to retrieve the description and acceptance criteria.
 - Identify the goal and what "done" means for this work.
 
 ### 2. Examine the output
@@ -51,10 +51,10 @@ Weight each dimension by what matters most for this work:
 [Clear direction: what happens next and who owns it]
 ```
 
-### 6. Update Linear
-- If approved: use `mcp_linear_save_issue` to transition the issue to **Done** and add the review summary as a comment via `mcp_linear_save_comment`.
-- If needs rework: add a comment with the must-fix list and leave the issue In Progress.
-- If approve with changes: add the should-fix list as a comment and transition to Done only after changes are confirmed.
+### 6. Update issue file
+- If approved: update the issue file in `.kernel/issues/` to `done` and add the review summary under `## Comments`.
+- If needs rework: add a comment with the must-fix list and leave the issue file in `.kernel/issues/` as `in-progress`.
+- If approve with changes: add the should-fix list as a comment and transition to `done` only after changes are confirmed.
 
 ## Review Principles
 - **Review against the goal, not your preferences.** The question is whether the work achieves its stated intent.

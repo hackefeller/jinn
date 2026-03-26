@@ -60,7 +60,7 @@ function buildReferenceBundle(kind: TemplateKind): string {
 function buildModule(): string {
   const agentInstructionBundle = buildInstructionBundle("agents");
   const skillInstructionBundle = buildInstructionBundle("skills");
-  const agentReferenceBundle = buildReferenceBundle("agents");
+  // Agent references are now inlined into AGENT.md files
   const skillReferenceBundle = buildReferenceBundle("skills");
 
   return `import type { TemplateReference } from "../../core/templates/types.js";
@@ -99,7 +99,7 @@ ${agentInstructionBundle}
 
 ${skillInstructionBundle}
 
-${agentReferenceBundle}
+// Agent references are now inlined into AGENT.md files
 
 ${skillReferenceBundle}
 
@@ -111,9 +111,7 @@ export function getSkillInstructions(name: string): string {
   return selectTemplateInstructions(skillInstructionBundle, name);
 }
 
-export function getAgentReferences(name: string, ...relativePaths: string[]): TemplateReference[] {
-  return selectTemplateReferences(agentReferenceBundle, name, relativePaths);
-}
+// Agent references are now inlined into AGENT.md files - use getAgentInstructions instead
 
 export function getSkillReferences(name: string, ...relativePaths: string[]): TemplateReference[] {
   return selectTemplateReferences(skillReferenceBundle, name, relativePaths);

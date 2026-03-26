@@ -1,7 +1,7 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { getAgentInstructions } from "../../.generated/templates.js";
 import { AGENT_NAMES } from "../../constants.js";
 import { PLAN_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
-import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getPlanAgentTemplate(): AgentTemplate {
   return {
@@ -29,6 +29,8 @@ export function getPlanAgentTemplate(): AgentTemplate {
     role: "Orchestration",
     route: "plan",
     defaultTools: ["read", "search"],
+    allowedTools: ["Read", "Grep", "Glob"],
+    argumentHint: "goal or task to plan (e.g., 'add user authentication', 'refactor the API layer')",
     permissionMode: "plan",
     maxTurns: 30,
     memory: "project",
@@ -42,6 +44,5 @@ export function getPlanAgentTemplate(): AgentTemplate {
       "Acceptance criteria are specific enough to be tested",
       "Risks and open questions are documented",
     ],
-    references: getAgentReferences(AGENT_NAMES.PLAN, "references/plan.md"),
   };
 }

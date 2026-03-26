@@ -1,13 +1,14 @@
-import type { AgentTemplate, SkillTemplate } from "../core/templates/types.js";
 import type { Profile } from "../core/config/schema.js";
+import type { AgentTemplate, SkillTemplate } from "../core/templates/types.js";
 import { ALL_AGENTS } from "./agents/index.js";
 
 // Code skills
-import { getProjectSetupSkillTemplate } from "./skills/kernel-project-setup/template.js";
-import { getProjectInitSkillTemplate } from "./skills/kernel-project-init/template.js";
 import { getBuildSkillTemplate } from "./skills/kernel-build/template.js";
 import { getDeploySkillTemplate } from "./skills/kernel-deploy/template.js";
 import { getMapCodebaseSkillTemplate } from "./skills/kernel-map-codebase/template.js";
+import { getPdfSkillTemplate } from "./skills/kernel-pdf/template.js";
+import { getProjectInitSkillTemplate } from "./skills/kernel-project-init/template.js";
+import { getProjectSetupSkillTemplate } from "./skills/kernel-project-setup/template.js";
 
 // Git skills
 import { getGitMasterSkillTemplate } from "./skills/kernel-git-master/template.js";
@@ -15,6 +16,7 @@ import { getGitMasterSkillTemplate } from "./skills/kernel-git-master/template.j
 // Workflow skills
 import { getApplySkillTemplate } from "./skills/kernel-apply/template.js";
 import { getArchiveSkillTemplate } from "./skills/kernel-archive/template.js";
+import { getBoardSkillTemplate } from "./skills/kernel-board/template.js";
 import { getCheckSkillTemplate } from "./skills/kernel-check/template.js";
 import { getExploreSkillTemplate } from "./skills/kernel-explore/template.js";
 import { getProposeSkillTemplate } from "./skills/kernel-propose/template.js";
@@ -54,6 +56,7 @@ export function getDefaultSkillTemplates(profile: Profile = "extended"): SkillTe
     getProjectInitSkillTemplate(),
     getProjectSetupSkillTemplate(),
     getMapCodebaseSkillTemplate(),
+    getPdfSkillTemplate(),
 
     // Git
     getGitMasterSkillTemplate(),
@@ -62,6 +65,7 @@ export function getDefaultSkillTemplates(profile: Profile = "extended"): SkillTe
     getProposeSkillTemplate(),
     getExploreSkillTemplate(),
     getApplySkillTemplate(),
+    getBoardSkillTemplate(),
     getCheckSkillTemplate(),
     getReviewSkillTemplate(),
     getArchiveSkillTemplate(),

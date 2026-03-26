@@ -4,11 +4,11 @@ Answer: *where are we and what do we need to know right now?*
 
 ### 1. Gather the current state
 - Review what has been done, what is in progress, and what remains.
-- Check the active Linear project/issues with `mcp_linear_list_issues` filtered to In Progress and Todo.
+- Read the active issue files with `state: in-progress` and `state: todo`.
 
 ### 2. Surface blockers
 - Are any tasks waiting on something external?
-- Use `mcp_linear_get_issue` with `includeRelations: true` to check for `blockedBy` dependencies.
+- Read the relevant issue files and check `blocked_by` dependencies.
 
 ### 3. Assess timeline
 - Is delivery still on track given current progress?

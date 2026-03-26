@@ -1,6 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
+import { SKILL_NAMES } from "../../constants.js";
 
 export function getReviewSkillTemplate(): SkillTemplate {
   return {
@@ -39,12 +39,12 @@ export function getReviewSkillTemplate(): SkillTemplate {
     outputs: [
       "Review report with recommendation",
       "Prioritised findings list",
-      "Updated Linear issue status (Done or back to In Progress) via mcp_linear_save_issue",
+      "Updated issue file status (done or back to in-progress)",
       "Refactored code with unchanged behaviour",
       "Lint-clean, formatted code",
     ],
     dependencies: [],
-    argumentHint: "Linear issue URL, PR link, or file/directory to review (optional)",
+    argumentHint: "issue file path, PR link, or file/directory to review (optional)",
     instructions: getSkillInstructions(SKILL_NAMES.REVIEW),
   };
 }

@@ -34,15 +34,15 @@
  */
 
 import path from "path";
-import type { ToolCommandAdapter } from "./types.js";
 import type { AgentTemplate, SkillTemplate } from "../templates/types.js";
 import {
-  escapeYamlValue,
-  formatFullSkillFrontmatter,
-  closeSkillFrontmatter,
-  formatAgentBody,
-  formatManifestContent,
+    closeSkillFrontmatter,
+    escapeYamlValue,
+    formatAgentBody,
+    formatFullSkillFrontmatter,
+    formatManifestContent,
 } from "./shared.js";
+import type { ToolCommandAdapter } from "./types.js";
 
 export const githubCopilotAdapter: ToolCommandAdapter = {
   toolId: "github-copilot",
@@ -65,6 +65,21 @@ export const githubCopilotAdapter: ToolCommandAdapter = {
 
     if (template.model) {
       frontmatterLines.push(`model: ${template.model}`);
+    }
+    if (template.disableModelInvocation) {
+      frontmatterLines.push(`disable-model-invocation: true`);
+    }
+    if (template.userInvocable === false) {
+      frontmatterLines.push(`user-invocable: false`);
+    }
+    if (template.argumentHint) {
+      frontmatterLines.push(`argument-hint: ${escapeYamlValue(template.argumentHint)}`);
+    }
+    if (template.allowedTools && template.allowedTools.length > 0) {
+      frontmatterLines.push(`allowed-tools: ${template.allowedTools.join(", ")}`);
+    }
+    if (template.availableSkills && template.availableSkills.length > 0) {
+      frontmatterLines.push(`agents: ${template.availableSkills.join(", ")}`);
     }
 
     return `---\n${frontmatterLines.join("\n")}\n---\n\n${formatAgentBody(template)}`;

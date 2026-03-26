@@ -31,36 +31,12 @@ describe("executeSync", () => {
     spyOn(console, "log").mockImplementation((...args: any[]) => console.log(...args));
   });
 
-  it("reports no tools when dir is empty and no config", async () => {
+  it("installs global skills and agents with symlinks to tools", async () => {
     const { executeSync } = await import("../sync.js");
-    await executeSync({ projectPath: tmpDir, configRootPath: configRootDir, homePath: homeDir });
-    expect(logs.some((l) => l.includes("No AI tools detected"))).toBe(true);
-  });
-
-  it("initializes and generates files when tools detected", async () => {
-    await fs.mkdir(path.join(tmpDir, ".opencode"), { recursive: true });
-    const { executeSync } = await import("../sync.js");
-    await executeSync({ projectPath: tmpDir, configRootPath: configRootDir, homePath: homeDir });
-    expect(logs.some((l) => l.includes("initialized successfully"))).toBe(true);
-    expect(logs.some((l) => l.includes("Generated"))).toBe(true);
-  });
-
-  it("updates when config already exists", async () => {
-    await fs.mkdir(path.join(tmpDir, ".opencode"), { recursive: true });
-    const { executeSync } = await import("../sync.js");
-    await executeSync({ projectPath: tmpDir, configRootPath: configRootDir, homePath: homeDir });
-    logs = [];
-    await executeSync({ projectPath: tmpDir, configRootPath: configRootDir, homePath: homeDir });
-    expect(logs.some((l) => l.includes("updated successfully"))).toBe(true);
-  });
-
-  it("installs global skills and Claude symlinks", async () => {
-    await fs.mkdir(path.join(tmpDir, ".opencode"), { recursive: true });
-    const { executeSync } = await import("../sync.js");
-    await executeSync({ projectPath: tmpDir, configRootPath: configRootDir, homePath: homeDir });
+    await executeSync({ homePath: homeDir });
     expect(logs.some((l) => l.includes("~/.agents/skills/"))).toBe(true);
-    expect(logs.some((l) => l.includes("~/.claude/skills/"))).toBe(true);
-    expect(logs.some((l) => l.includes("~/.agents/agents/"))).toBe(true);
+    expect(logs.some((l) => l.includes("agents to:"))).toBe(true);
+    expect(logs.some((l) => l.includes("Linked skills to:"))).toBe(true);
 
     const skillName = getDefaultSkillTemplates("extended")[0].name;
     const agentsSkillDir = path.join(homeDir, ".agents", "skills", skillName);
@@ -69,24 +45,5 @@ describe("executeSync", () => {
 
     expect(stats.isSymbolicLink()).toBe(true);
     expect(await fs.readlink(claudeSkillLink)).toBe(agentsSkillDir);
-  });
-
-  it("links project .github dirs when present", async () => {
-    await fs.mkdir(path.join(tmpDir, ".github"), { recursive: true });
-    const { executeSync } = await import("../sync.js");
-    await executeSync({ projectPath: tmpDir, configRootPath: configRootDir, homePath: homeDir });
-
-    const githubAgentsLink = path.join(tmpDir, ".github", "agents");
-    const githubSkillsLink = path.join(tmpDir, ".github", "skills");
-    const agentsTarget = path.join(homeDir, ".agents", "agents");
-    const skillsTarget = path.join(homeDir, ".agents", "skills");
-
-    expect((await fs.lstat(githubAgentsLink)).isSymbolicLink()).toBe(true);
-    expect((await fs.lstat(githubSkillsLink)).isSymbolicLink()).toBe(true);
-    expect(await fs.readlink(githubAgentsLink)).toBe(agentsTarget);
-    expect(await fs.readlink(githubSkillsLink)).toBe(skillsTarget);
-    expect(logs.some((l) => l.includes("✓ Linked project .github directories to:"))).toBe(true);
-    expect(logs.some((l) => l.includes(".github/agents ->"))).toBe(true);
-    expect(logs.some((l) => l.includes(".github/skills ->"))).toBe(true);
   });
 });

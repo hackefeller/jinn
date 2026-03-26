@@ -1,7 +1,7 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { getAgentInstructions } from "../../.generated/templates.js";
 import { AGENT_NAMES } from "../../constants.js";
 import { ARCHITECT_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
-import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getArchitectAgentTemplate(): AgentTemplate {
   return {
@@ -28,6 +28,8 @@ export function getArchitectAgentTemplate(): AgentTemplate {
     role: "Specialist",
     route: "architect",
     defaultTools: ["read", "search"],
+    allowedTools: ["Read", "Grep", "Glob"],
+    argumentHint: "code or architecture question (e.g., 'review the database schema', 'how should we structure the API')",
     permissionMode: "plan",
     maxTurns: 30,
     memory: "project",
@@ -39,10 +41,5 @@ export function getArchitectAgentTemplate(): AgentTemplate {
       "Patterns identified",
       "Recommendations are concrete",
     ],
-    references: getAgentReferences(
-      AGENT_NAMES.ARCHITECT,
-      "references/patterns.md",
-      "references/dependencies.md",
-    ),
   };
 }

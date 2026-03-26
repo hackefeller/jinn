@@ -1,36 +1,35 @@
-Implement work from Linear using Linear MCP. Work on exactly one issue at a time. Every state change must be reflected back into the issue immediately.
+Implement work from markdown issue files. Work on exactly one issue at a time. Every state change must be reflected back into the issue file immediately.
 
 ## Single-Issue Execution Loop
 
 Repeat this loop for each issue until the selected scope is complete or blocked.
 
 ### 0. Orient (first issue only)
-- Verify Linear MCP is available (check for `linear_*` tools).
-- Identify the target scope: a project ID, parent issue ID, or single issue ID provided by the user.
-- Use `mcp_linear_list_issues` (filtered to scope + `state: "Todo"`) to confirm the full queue before starting.
-- Read the first issue with `mcp_linear_get_issue` (+ `includeRelations: true`) to confirm no unresolved `blockedBy` dependencies. If there are, surface the blocker and stop.
+- Confirm the repository has a writable `.kernel/` directory.
+- Identify the target scope: a project directory, parent issue file path, or single issue file path provided by the user.
+- Read all issue files in scope with `state: todo` to confirm the full queue before starting.
+- Read the first issue file to confirm no unresolved `blocked_by` dependencies. If there are, surface the blocker and stop.
 
 ### 1. Select the next issue
 Use this priority order:
 
 **a. Relations-first (explicit ordering)**
-- Call `mcp_linear_get_issue` with `includeRelations: true` on the most recently completed issue.
+- Read the most recently completed issue file.
 - If it has `blocks` relations, those issues are now unblocked — pick the highest-priority one.
 
 **b. Sibling sub-issues (implicit ordering)**
-- If the completed issue has a `parentId`, call `mcp_linear_list_issues` filtered by that `parentId` and `state: "Todo"`.
+- If the completed issue has a `parent_id`, read sibling issue files with the same `parent_id` and `state: todo`.
 - Pick the highest-priority unstarted sibling.
 
 **c. Project backlog fallback**
-- Call `mcp_linear_list_issues` with the target project and `state: "Todo"`, ordered by priority.
+- Read all issue files in the target project with `state: todo`, ordered by priority.
 - Pick the top unblocked issue.
 
-After identifying the candidate, call `mcp_linear_get_issue` (with `includeRelations: true`) to confirm no unresolved `blockedBy` relations before claiming it.
+After identifying the candidate, re-read the issue file to confirm no unresolved `blocked_by` relations before claiming it.
 
 ### 2. Claim the issue
-- Use `mcp_linear_get_issue_status` / `mcp_linear_list_issue_statuses` to resolve the "In Progress" status ID for this team.
-- Use `mcp_linear_save_issue` to move the issue to **In Progress** before writing a single line of code.
-- Do not start implementation until the status is confirmed updated.
+- Update the issue file `state` to `in-progress` before writing a single line of code.
+- Do not start implementation until the state update is saved.
 
 ### 3. Implement and verify
 - Implement only what the issue describes — nothing more, nothing less.
@@ -41,15 +40,15 @@ After identifying the candidate, call `mcp_linear_get_issue` (with `includeRelat
 - If a blocker surfaces mid-implementation: stop, add a comment explaining the blocker, transition the issue to **Blocked**, and do not proceed.
 
 ### 4. Update the issue on completion
-- Use `mcp_linear_save_comment` to leave a concise summary: what changed and why, files touched, any follow-up issues needed.
-- Use `mcp_linear_save_issue` to move the issue to **Done** (resolve the correct status ID first).
+- Append a concise summary under `## Comments`: what changed and why, files touched, any follow-up issues needed.
+- Update the issue file `state` to `done` only after verification passes.
 
 ### 5. Move to the next issue
-- Only after the current issue is **Done** in Linear, return to step 1.
+- Only after the current issue file is `done`, return to step 1.
 - Never hold two issues In Progress simultaneously.
 
 ## Guardrails
-- Always use Linear MCP tools to read and write Linear data — never manage state manually.
+- Always use markdown issue files to read and write task state — never manage state manually.
 - One issue In Progress at a time. Finish before starting the next.
-- Status must reflect reality: claim In Progress before coding, mark Done only after verification passes.
+- Status must reflect reality: claim `in-progress` before coding, mark `done` only after verification passes.
 

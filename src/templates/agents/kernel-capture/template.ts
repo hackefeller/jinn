@@ -1,7 +1,7 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { getAgentInstructions } from "../../.generated/templates.js";
 import { AGENT_NAMES } from "../../constants.js";
 import { CAPTURE_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
-import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getCaptureAgentTemplate(): AgentTemplate {
   return {
@@ -28,6 +28,8 @@ export function getCaptureAgentTemplate(): AgentTemplate {
     role: "Orchestration",
     route: "capture",
     defaultTools: ["read", "write"],
+    allowedTools: ["Read", "Write"],
+    argumentHint: "session, project, or incident to document (e.g., 'sprint 23', 'API outage')",
     maxTurns: 30,
     memory: "project",
     sandboxMode: "workspace-write",
@@ -39,6 +41,5 @@ export function getCaptureAgentTemplate(): AgentTemplate {
       "Key decisions include rationale, alternatives, and revisit conditions",
       "Output is stored where future contributors will find it",
     ],
-    references: getAgentReferences(AGENT_NAMES.CAPTURE, "references/capture.md"),
   };
 }

@@ -1,38 +1,38 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { SKILL_NAMES } from "../../constants.js";
 import { getSkillInstructions } from "../../.generated/templates.js";
+import { SKILL_NAMES } from "../../constants.js";
 
 export function getSyncSkillTemplate(): SkillTemplate {
   return {
     name: SKILL_NAMES.SYNC,
     profile: "core",
     description:
-      "Reconciles Linear state with what actually happened — updates stale In Progress issues, marks completed work done, and fills in missing board entries. Use when Linear has drifted from reality, work was completed without updates, or users ask to sync or clean up the board.",
+      "Reconciles project issue files with what actually happened — updates stale in-progress issues, marks completed work done, and fills in missing board entries. Use when the task board has drifted from reality, work was completed without updates, or users ask to sync or clean up the board.",
     license: "MIT",
-    compatibility: "Requires the CLI and a configured Linear MCP server.",
+    compatibility: "Requires the CLI and access to the project .kernel/ directory.",
     metadata: {
       author: "project",
       version: "1.0",
       category: "Workflow",
-      tags: ["workflow", "sync", "linear", "reconcile"],
+      tags: ["workflow", "sync", "tasks", "reconcile"],
     },
     when: [
-      'Linear issues are stuck in "In Progress" with no recent activity',
-      "work was completed without updating Linear",
+      'Issue files are stuck in "in-progress" with no recent activity',
+      "work was completed without updating issue files",
       "the board state does not match the codebase",
       "before starting a new implementation session",
     ],
     applicability: [
-      "Use when Linear state has drifted from the actual state of the codebase",
+      "Use when issue-file state has drifted from the actual state of the codebase",
       "Use to audit and reconcile stale, missing, or mis-classified issues",
     ],
     termination: [
-      "All In Progress issues classified and transitioned correctly",
-      "Undocumented work back-filled in Linear",
+      "All in-progress issues classified and transitioned correctly",
+      "Undocumented work back-filled in the issue files",
       "Sync report delivered",
     ],
     outputs: [
-      "Updated Linear issue statuses",
+      "Updated issue file statuses",
       "Back-filled issues for undocumented work",
       "Sync summary report",
     ],

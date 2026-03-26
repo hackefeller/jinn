@@ -4,7 +4,7 @@ Deploy to any environment safely. Validates production readiness first, then exe
 
 ### 1. Identify scope
 - Determine what is being deployed: a PR, branch, feature, or full release.
-- Ask for the associated Linear issue URL if not provided — the verdict will be written back to it.
+- Ask for the associated issue file path if not provided — the verdict will be written back to it.
 
 ### 2. Run the readiness checklist
 
@@ -43,13 +43,13 @@ Deploy to any environment safely. Validates production readiness first, then exe
 - [ ] On-call contact is aware if deploying during off-hours
 
 **Scope completeness**
-- [ ] Feature is complete per the Linear issue description and acceptance criteria
+- [ ] Feature is complete per the issue file description and acceptance criteria
 - [ ] No known regressions introduced
 
 ### 3. Deliver verdict and prompt
 
-- **FAIL** — one or more blocking items. List each with a short description. Write to Linear. Stop — do not proceed to deployment.
-- **PASS** — all items satisfied. Write verdict to Linear, then ask:
+- **FAIL** — one or more blocking items. List each with a short description. Write to the issue file. Stop — do not proceed to deployment.
+- **PASS** — all items satisfied. Write verdict to the issue file, then ask:
 
 > Everything looks good. **Deploy now?** (yes / no)
 

@@ -1,7 +1,7 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { getAgentInstructions } from "../../.generated/templates.js";
 import { AGENT_NAMES } from "../../constants.js";
 import { DO_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
-import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getDoAgentTemplate(): AgentTemplate {
   return {
@@ -29,6 +29,8 @@ export function getDoAgentTemplate(): AgentTemplate {
     role: "Orchestration",
     route: "do",
     defaultTools: ["edit", "read", "search", "task"],
+    allowedTools: ["Edit", "Write", "Read", "Grep", "Glob", "Bash"],
+    argumentHint: "task or plan to execute (e.g., 'implement user login', 'fix the auth bug')",
     maxTurns: 100,
     memory: "project",
     sandboxMode: "workspace-write",
@@ -39,6 +41,5 @@ export function getDoAgentTemplate(): AgentTemplate {
       "No silent assumptions made",
       "Blockers are named and visible",
     ],
-    references: getAgentReferences(AGENT_NAMES.DO, "references/do.md"),
   };
 }

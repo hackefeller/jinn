@@ -266,3 +266,91 @@ export default function Layout() {
 - Keep all native dependencies (`react-native-*`, Expo modules) in the app package, not shared packages — see `monorepo-native-deps-in-app.md`
 - Enforce single versions of all React Native dependencies across the monorepo — see `monorepo-single-dependency-versions.md`
 - Use config plugins for custom fonts rather than manual native linking — see `fonts-config-plugin.md`
+
+---
+
+## Performance Optimization
+
+This section covers performance optimization for React Native applications, based on Callstack's "Ultimate Guide to React Native Optimization".
+
+### When to Apply
+
+Reference these guidelines when:
+- Debugging slow/janky UI or animations
+- Investigating memory leaks (JS or native)
+- Optimizing app startup time (TTI)
+- Reducing bundle or app size
+- Writing native modules (Turbo Modules)
+- Profiling React Native performance
+- Reviewing React Native code for performance
+
+### Priority Order
+
+| Priority | Category | Impact |
+|----------|----------|--------|
+| 1 | List Performance | CRITICAL |
+| 2 | Bundle Size | CRITICAL |
+| 3 | FPS & Re-renders | CRITICAL |
+| 4 | TTI Optimization | HIGH |
+| 5 | Native Performance | HIGH |
+| 6 | Memory Management | MEDIUM-HIGH |
+| 7 | Animations | MEDIUM |
+
+### Quick Reference
+
+**Profile first:**
+```bash
+# Open React Native DevTools
+# Press 'j' in Metro, or shake device → "Open DevTools"
+```
+
+**Common fixes for slow/janky UI:**
+- Replace ScrollView with FlatList/FlashList for lists
+- Use React Compiler for automatic memoization
+- Use atomic state (Jotai/Zustand) to reduce re-renders
+- Use `useDeferredValue` for expensive computations
+
+**Common fixes for bundle size:**
+- Avoid barrel imports (import directly from source)
+- Remove unnecessary Intl polyfills (Hermes has native support)
+- Enable tree shaking (Expo SDK 52+ or Re.Pack)
+- Enable R8 for Android native code shrinking
+
+**Common fixes for TTI:**
+- Disable JS bundle compression on Android (enables Hermes mmap)
+- Use native navigation (react-native-screens)
+- Preload commonly-used expensive screens before navigating to them
+
+**Common fixes for native performance:**
+- Use background threads for heavy native work
+- Prefer async over sync Turbo Module methods
+- Use C++ for cross-platform performance-critical code
+
+### Performance References
+
+Full documentation with code examples in `references/`:
+
+| Category | Files |
+|----------|-------|
+| JavaScript/React | `js-lists-flatlist-flashlist.md`, `js-profile-react.md`, `js-measure-fps.md`, `js-memory-leaks.md`, `js-atomic-state.md`, `js-concurrent-react.md`, `js-react-compiler.md`, `js-animations-reanimated.md`, `js-uncontrolled-components.md` |
+| Native | `native-turbo-modules.md`, `native-sdks-over-polyfills.md`, `native-measure-tti.md`, `native-threading-model.md`, `native-profiling.md`, `native-platform-setup.md`, `native-view-flattening.md`, `native-memory-patterns.md`, `native-memory-leaks.md`, `native-android-16kb-alignment.md` |
+| Bundling | `bundle-barrel-exports.md`, `bundle-analyze-js.md`, `bundle-tree-shaking.md`, `bundle-analyze-app.md`, `bundle-r8-android.md`, `bundle-hermes-mmap.md`, `bundle-native-assets.md`, `bundle-library-size.md`, `bundle-code-splitting.md` |
+
+### Problem → Skill Mapping
+
+| Problem | Start With |
+|---------|------------|
+| App feels slow/janky | `js-measure-fps.md` → `js-profile-react.md` |
+| Too many re-renders | `js-profile-react.md` → `js-react-compiler.md` |
+| Slow startup (TTI) | `native-measure-tti.md` → `bundle-analyze-js.md` |
+| Large app size | `bundle-analyze-app.md` → `bundle-r8-android.md` |
+| Memory growing | `js-memory-leaks.md` or `native-memory-leaks.md` |
+| Animation drops frames | `js-animations-reanimated.md` |
+| List scroll jank | `js-lists-flatlist-flashlist.md` |
+| TextInput lag | `js-uncontrolled-components.md` |
+| Native module slow | `native-turbo-modules.md` → `native-threading-model.md` |
+| Native library alignment issue | `native-android-16kb-alignment.md` |
+
+---
+
+*Performance optimization content based on "The Ultimate Guide to React Native Optimization" by Callstack.*

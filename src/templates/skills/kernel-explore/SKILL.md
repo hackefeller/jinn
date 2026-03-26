@@ -1,11 +1,11 @@
-Explore context, tradeoffs, and risks inside a Linear issue or project using Linear MCP.
+Explore context, tradeoffs, and risks inside a project issue file or issue group.
 
 ## Steps
 
 ### 1. Verify and orient
-- Confirm Linear MCP is available (check for `linear_*` tools).
-- Use `mcp_linear_get_issue` (+ `includeRelations: true`) on the target issue or project to read its current description, acceptance criteria, and relations.
-- Read all sub-issues with `mcp_linear_list_issues` (filtered by `parentId`) to understand the full scope.
+- Confirm the repository has a writable `.kernel/` directory.
+- Read the target issue file and its frontmatter to understand its current description, acceptance criteria, and relations.
+- Read all sub-issues from `.kernel/issues/` filtered by `parent_id` to understand the full scope.
 
 ### 2. Map the unknowns
 Identify every open question in the issue:
@@ -17,23 +17,24 @@ Identify every open question in the issue:
 ### 3. Investigate
 For each unknown identified in step 2:
 - Search the codebase for relevant context (existing patterns, related code, prior attempts).
-- Read related Linear issues with `mcp_linear_get_issue` to understand decisions already made.
+- Read related issue files to understand decisions already made.
 - Reason about tradeoffs — name at least two options and the consequences of each.
 
-### 4. Write findings back to Linear
-- Use `mcp_linear_save_issue` to update the issue or project description with:
+### 4. Write findings back to the issue file
+- Append findings under `## Comments` with a dated entry and agent attribution.
+- Update the body or frontmatter with:
   - Resolved decisions and their rationale.
   - Outstanding decisions requiring human input (each as a named open question).
   - Any missing or incomplete acceptance criteria.
-- Use `mcp_linear_save_comment` to summarise the exploration and confirm it is complete.
+- Update the `updated` timestamp in frontmatter.
 
 ### 5. Report
 - State which questions were resolved and which remain open.
 - Give a clear recommendation: is the issue ready for implementation, or does it need a decision first?
 
 ## Guardrails
-- Always use Linear MCP tools — never manage context externally.
+- Always use markdown issue files — never manage context externally.
 - Do not start implementation during explore — this skill produces decisions, not code.
 - Never mark a question resolved without concrete rationale written into the issue.
-- Keep recommendations grounded in both codebase evidence and Linear context.
+- Keep recommendations grounded in both codebase evidence and issue-file context.
 

@@ -1,7 +1,7 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { getAgentInstructions } from "../../.generated/templates.js";
 import { AGENT_NAMES } from "../../constants.js";
 import { GIT_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
-import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getGitAgentTemplate(): AgentTemplate {
   return {
@@ -29,6 +29,8 @@ export function getGitAgentTemplate(): AgentTemplate {
     role: "Specialist",
     route: "git",
     defaultTools: ["read", "search"],
+    allowedTools: ["Read", "Grep", "Glob", "Bash"],
+    argumentHint: "git operation or question (e.g., 'resolve merge conflict', 'rebase feature branch')",
     maxTurns: 50,
     sandboxMode: "workspace-write",
     reasoningEffort: "medium",
@@ -37,10 +39,5 @@ export function getGitAgentTemplate(): AgentTemplate {
       "History is clean",
       "Branch strategy is sound",
     ],
-    references: getAgentReferences(
-      AGENT_NAMES.GIT,
-      "references/branching.md",
-      "references/commits.md",
-    ),
   };
 }

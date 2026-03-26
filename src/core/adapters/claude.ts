@@ -38,14 +38,14 @@
  */
 
 import path from "path";
-import type { ToolCommandAdapter } from "./types.js";
 import type { AgentTemplate, SkillTemplate } from "../templates/types.js";
 import {
-  escapeYamlValue,
-  formatFullSkillFrontmatter,
-  closeSkillFrontmatter,
-  formatManifestContent,
+    closeSkillFrontmatter,
+    escapeYamlValue,
+    formatFullSkillFrontmatter,
+    formatManifestContent,
 } from "./shared.js";
+import type { ToolCommandAdapter } from "./types.js";
 
 /** Maps AgentTemplate.defaultTools values to Claude Code tool names */
 function resolveClaudeTools(defaultTools: string[] = []): string {

@@ -1,13 +1,57 @@
 Safe, repeatable database schema changes with automated type generation. Every schema change flows through this process — no exceptions.
 
+The workflow has two modes:
+
+- **Applied-schema mode** for migrations that have already run anywhere
+- **Greenfield baseline mode** for a clean baseline track that has not shipped or been applied outside disposable databases
+
+Treat those modes differently.
+
 ## Core Principles
 
 - **Migrations are immutable once applied** — never edit a file that has been run against any environment
+- **A greenfield baseline may be edited until it ships** — if a clean baseline track has only been used on disposable databases, improving those files directly is allowed
 - **One concern per migration** — a single table, a single column set, a single index group
 - **Always write Down** — every migration must be reversible unless you explicitly document why it cannot be
 - **Additive by default** — add before removing (expand → backfill → contract)
 - **Types must stay in sync** — no migration is complete until generated types are regenerated and verified
 - **Report everything** — always tell the user what ran, what changed, and what the rollout risks are
+
+## Modeling Principles
+
+Design the schema from user capabilities, not from a menu of app screens.
+
+Before writing DDL, identify whether the concept is primarily:
+
+- **entity** — a durable object with identity over time
+- **event** — an immutable fact that happened at a point or over a period
+- **link** — an explicit semantic relation between entities
+- **space** — a collaborative context boundary
+- **tag** — flexible cross-domain organization
+- **source** — provenance and sync state from an external system
+
+Additional rules:
+
+- prefer one strong primitive over multiple overlapping abstractions
+- use strong relational constraints where they help, but do not fake integrity through brittle app-only rules
+- separate authored content from derived analysis and provenance
+- use `jsonb` only for bounded provider payloads or intentionally schemaless metadata
+- keep access control, organization, provenance, and behavior as distinct concerns
+- preserve user customization when it is part of product meaning, such as `color` and `icon` on user-facing objects
+
+## PostgreSQL Features
+
+Prefer modern PostgreSQL features when they materially improve correctness or performance.
+
+Good candidates:
+
+- `uuidv7()` for write-friendly ordered UUIDs
+- range and multirange types for temporal modeling
+- `WITHOUT OVERLAPS` constraints for active windows and assignments
+- expression indexes for search and derived lookup paths
+- `DEFERRABLE` constraints when cross-row correctness needs transaction-time validation
+
+Do not adopt advanced features just for novelty. Use them when they simplify the model or enforce an invariant the application would otherwise have to fake.
 
 ## File Format
 
@@ -55,14 +99,32 @@ DROP TABLE IF EXISTS users;
 
 Before writing anything, confirm:
 - Does this require a migration, or is it an app-layer change?
-- Is there a prior migration that should be amended instead? (Only if never applied)
+- Is there a prior migration that should be amended instead? (Only if it has never been applied outside disposable environments)
 - Does this change conflict with any pending migration in the set?
+- Is this an applied-schema change or a greenfield baseline refinement?
+- What user capability does this unlock or protect?
+- Is the concept best modeled as an entity, event, link, space, tag, or source object?
 
 ```bash
 make db-status
 ```
 
-### Step 2 — Scaffold
+### Step 2 — Design Before DDL
+
+Write down the intended invariant before touching SQL.
+
+At minimum, answer:
+
+1. What should the user be able to do after this change?
+2. What must be queryable?
+3. What must stay durable over time?
+4. What access-control boundary applies?
+5. What provenance or history must be preserved?
+6. What should be enforced by the database instead of application code?
+
+If the change affects a core model, prefer updating a product/schema design doc first.
+
+### Step 3 — Scaffold
 
 ```bash
 make db-new-migration NAME=add_posts_table
@@ -70,7 +132,9 @@ make db-new-migration NAME=add_posts_table
 
 Edit only the generated file. Never create migration SQL by hand.
 
-### Step 3 — Write Up and Down
+If you are working on a greenfield baseline track that has not shipped yet, you may instead refine the baseline files directly. Report clearly that you edited the baseline in place.
+
+### Step 4 — Write Up and Down
 
 Write the `Up` block first. Then write the `Down` block that exactly reverses it.
 
@@ -91,21 +155,26 @@ If the Down cannot be made safe (e.g., data was deleted), document it explicitly
 -- +goose StatementEnd
 ```
 
-### Step 4 — Validate Before Applying
+### Step 5 — Validate Before Applying
 
 1. Inspect the migration set for conflicts — is any table, index, or constraint name duplicated?
 2. Verify the Down exactly reverses the Up
 3. Check that all referenced tables/columns already exist
 4. Confirm `NOT NULL` columns without defaults won't fail on existing rows
+5. Confirm every foreign key and uniqueness rule matches the actual business invariant
+6. Look for accidental overlap between tables that should really be one primitive
+7. Confirm search, sharing, provenance, and history behavior are all represented somewhere explicit
 
-### Step 5 — Apply
+### Step 6 — Apply
 
 ```bash
 # Apply to dev + test, then regenerate types (canonical workflow)
 make db-migrate-sync
 ```
 
-### Step 6 — Regenerate and Verify Types
+If you are working on a greenfield baseline track, use the project’s fresh-database verification path in addition to normal migration commands.
+
+### Step 7 — Regenerate and Verify Types
 
 **Mandatory after any schema-changing migration.**
 
@@ -118,14 +187,29 @@ bun run typecheck
 
 Never leave a migration merged with stale generated types.
 
-### Step 7 — Report
+### Step 8 — Verify Behavior
+
+Schema verification is not complete until behavior is tested.
+
+At minimum, validate:
+
+- fresh bootstrap on an empty database
+- key integrity rules
+- RLS behavior where applicable
+- any registry, graph, or provenance side effects
+
+Prefer database-native or SQL-driven assertions for schema behavior, not only app-layer tests.
+
+### Step 9 — Report
 
 Always tell the user:
 - Which migration file was created or modified
+- Whether the work was a new migration or an in-place greenfield baseline refinement
 - Whether `db-migrate-sync` passed on dev and test
 - Whether `db-verify-types` passed
 - Whether lint and typecheck are clean
 - Any destructive, irreversible, or rollout-sensitive aspects
+- Any important modeling choices, especially around entities, events, links, spaces, tags, or sources
 
 ## References
 
@@ -136,6 +220,9 @@ Always tell the user:
 ## Guardrails
 
 - Never edit a migration file that has been applied to any environment — create a new migration instead
+- Never confuse a collaborative **space** with a tag or taxonomy bucket
+- Never collapse durable content and transient interaction history into the same model without an explicit reason
+- Never store a derived relationship as the only copy of important authored truth
 - Never apply migrations via raw `psql` or direct DB client in any environment
 - Never hand-edit generated type files
 - Never skip type verification after a schema change — stale types cause runtime type errors

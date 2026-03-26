@@ -1,7 +1,7 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { getAgentInstructions } from "../../.generated/templates.js";
 import { AGENT_NAMES } from "../../constants.js";
 import { DESIGNER_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
-import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getDesignerAgentTemplate(): AgentTemplate {
   return {
@@ -30,6 +30,8 @@ export function getDesignerAgentTemplate(): AgentTemplate {
     role: "Specialist",
     route: "design",
     defaultTools: ["edit", "read", "search"],
+    allowedTools: ["Edit", "Write", "Read", "Grep", "Glob"],
+    argumentHint: "UI component or design task (e.g., 'build a login form', 'create a settings page')",
     maxTurns: 100,
     sandboxMode: "workspace-write",
     reasoningEffort: "medium",
@@ -39,10 +41,5 @@ export function getDesignerAgentTemplate(): AgentTemplate {
       "Accessible",
       "Responsive",
     ],
-    references: getAgentReferences(
-      AGENT_NAMES.DESIGNER,
-      "references/components.md",
-      "references/accessibility.md",
-    ),
   };
 }

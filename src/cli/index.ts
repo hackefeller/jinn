@@ -35,12 +35,9 @@ program
 
 program
   .command("sync")
-  .description("Initialize or update kernel in global user tool directories")
-  .option("--path <path>", "Project path (default: current directory)")
-  .action(async (options) => {
-    await executeSync({
-      projectPath: options.path,
-    });
+  .description("Install agents and skills to user-level directories")
+  .action(async () => {
+    await executeSync({});
   });
 
 export { program };

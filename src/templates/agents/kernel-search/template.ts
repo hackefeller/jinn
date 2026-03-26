@@ -1,7 +1,7 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
+import { getAgentInstructions } from "../../.generated/templates.js";
 import { AGENT_NAMES } from "../../constants.js";
 import { SEARCH_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
-import { getAgentInstructions, getAgentReferences } from "../../.generated/templates.js";
 
 export function getSearchAgentTemplate(): AgentTemplate {
   return {
@@ -23,18 +23,13 @@ export function getSearchAgentTemplate(): AgentTemplate {
     role: "Research",
     route: "research",
     defaultTools: ["search", "read", "web"],
+    allowedTools: ["Read", "Grep", "Glob", "WebSearch", "WebFetch"],
     permissionMode: "plan",
     maxTurns: 20,
     disallowedTools: ["Edit", "Write"],
     sandboxMode: "read-only",
     reasoningEffort: "low",
+    argumentHint: "what to search for (e.g., 'auth middleware', 'user model', 'API errors')",
     acceptanceChecks: ["Search scope identified", "Relevant results returned", "Findings are actionable"],
-    references: getAgentReferences(
-      AGENT_NAMES.SEARCH,
-      "references/code.md",
-      "references/docs.md",
-      "references/history.md",
-      "references/learnings.md",
-    ),
   };
 }
