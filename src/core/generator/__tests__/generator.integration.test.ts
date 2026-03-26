@@ -167,7 +167,7 @@ describe("Generator integration — claude, delivery: both", () => {
   it("agent files contain tools: field (model omitted, defaults to inherit)", async () => {
     await generateFiles(config, tmpDir);
     const agentsDir = path.join(tmpDir, ".claude", "agents");
-    const files = await fs.readdir(agentsDir);
+    const files = (await fs.readdir(agentsDir)).filter((file) => file.endsWith(".md"));
     const content = await readFileContent(path.join(agentsDir, files[0]));
     expect(content).toContain("tools:");
     expect(content).not.toContain("model: sonnet");
