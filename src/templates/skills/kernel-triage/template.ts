@@ -33,6 +33,12 @@ export function getTriageSkillTemplate(): SkillTemplate {
     outputs: ["New or updated Linear issue with hierarchy and relations set", "Triage report"],
     dependencies: [SKILL_NAMES.EXPLORE, SKILL_NAMES.PROPOSE],
     disableModelInvocation: true,
+    allowedTools: [
+      "mcp_linear_list_projects",
+      "mcp_linear_list_issues",
+      "mcp_linear_get_issue",
+      "mcp_linear_save_issue",
+    ],
     argumentHint: "bug description, issue ID, or request summary",
     instructions: getSkillInstructions(SKILL_NAMES.TRIAGE),
   };

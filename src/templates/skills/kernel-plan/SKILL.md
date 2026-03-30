@@ -115,7 +115,7 @@ Execute creation in dependency order. Each artifact requires the ID returned by 
 
 1. `mcp_linear_list_teams` — resolve `teamId`
 2. `mcp_linear_save_project` — create the project with `name`, `description`, `summary`, `priority`, `targetDate`, `teamIds`
-3. `mcp_linear_save_issue` — create the parent issue (problem statement + acceptance criteria), `state: in_progress`, `projectId` from step 2
+3. `mcp_linear_save_issue` — create the parent issue (problem statement + acceptance criteria), `state: in-progress`, `projectId` from step 2
 4. For each phase in sequence: `mcp_linear_save_issue` with `title: "[Phase N] <name>"`, `state: todo`, `parentId` from step 3
 5. Set blocking relations: call `mcp_linear_save_issue` with `blocks: [<next-phase-id>]` on each phase that must complete before the next
 

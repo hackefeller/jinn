@@ -33,6 +33,11 @@ export function getProposeSkillTemplate(): SkillTemplate {
     outputs: ["Linear project", "Parent issue", "Phased sub-issues with blocking relations"],
     dependencies: [SKILL_NAMES.EXPLORE],
     disableModelInvocation: true,
+    allowedTools: [
+      "mcp_linear_list_teams",
+      "mcp_linear_save_project",
+      "mcp_linear_save_issue",
+    ],
     references: getSkillReferences(
       SKILL_NAMES.PROPOSE,
       "references/plan-template.md",

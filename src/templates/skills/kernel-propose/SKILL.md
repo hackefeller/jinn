@@ -115,7 +115,7 @@ Create in this exact order (each step depends on the ID returned by the previous
 
 1. **Look up the team** — use `mcp_linear_list_teams` to get `teamId`. If more than one team exists, confirm with the user.
 2. **Create the Linear project** — use `mcp_linear_save_project` with `name`, `description`, `summary`, `priority`, `targetDate`, `teamIds`.
-3. **Create the parent issue** — use `mcp_linear_save_issue` with `title`, `description` (full body from `references/parent-issue-template.md`), `priority`, `state: in_progress`, `team`, `projectId` (from step 2).
+3. **Create the parent issue** — use `mcp_linear_save_issue` with `title`, `description` (full body from `references/parent-issue-template.md`), `priority`, `state: in-progress`, `team`, `projectId` (from step 2).
 4. **Create sub-issues in phase order** — for each phase in sequence, use `mcp_linear_save_issue` with `title: "[Phase N] <name>"`, `description` (from `references/sub-issue-template.md`), `priority`, `state: todo`, `team`, `parentId` (parent issue ID from step 3).
 5. **Set blocking relations** — after all issues exist, call `mcp_linear_save_issue` with `blocks: [<next-phase-id>]` for each phase that must complete before the next begins.
 
