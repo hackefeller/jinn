@@ -4,7 +4,7 @@ import {
   generateAgentsForTool,
   generateAgentsForAllTools,
 } from "../agent-gen.js";
-import { opencodeAdapter, claudeAdapter, cursorAdapter } from "../../adapters/index.js";
+import { geminiAdapter, claudeAdapter, cursorAdapter } from "../../adapters/index.js";
 import type { AgentTemplate } from "../../templates/types.js";
 import { AGENT_NAMES } from "../../../templates/constants.js";
 
@@ -52,32 +52,32 @@ describe("generateAgentForTool — claude (has getAgentPath + formatAgent)", () 
   });
 });
 
-describe("generateAgentForTool — opencode (has getAgentPath and formatAgent)", () => {
-  it("uses getAgentPath for opencode agents", () => {
-    const result = generateAgentForTool(testAgent, opencodeAdapter, "1.0.0");
-    expect(result[0].path).toBe(opencodeAdapter.getAgentPath!(testAgent.name));
+describe("generateAgentForTool — gemini (has getAgentPath and formatAgent)", () => {
+  it("uses getAgentPath for gemini agents", () => {
+    const result = generateAgentForTool(testAgent, geminiAdapter, "1.0.0");
+    expect(result[0].path).toBe(geminiAdapter.getAgentPath!(testAgent.name));
   });
 
-  it("uses formatAgent for opencode agents", () => {
-    const result = generateAgentForTool(testAgent, opencodeAdapter, "1.0.0");
-    expect(result[0].content).toBe(opencodeAdapter.formatAgent!(testAgent, "1.0.0"));
+  it("uses formatAgent for gemini agents", () => {
+    const result = generateAgentForTool(testAgent, geminiAdapter, "1.0.0");
+    expect(result[0].content).toBe(geminiAdapter.formatAgent!(testAgent, "1.0.0"));
   });
 
-  it("opencode agent path is in .opencode/agents/", () => {
-    const result = generateAgentForTool(testAgent, opencodeAdapter, "1.0.0");
-    expect(result[0].path).toBe(".opencode/agents/kernel-plan.md");
+  it("gemini agent path is in .gemini/agents/", () => {
+    const result = generateAgentForTool(testAgent, geminiAdapter, "1.0.0");
+    expect(result[0].path).toBe(".gemini/agents/kernel-plan.md");
   });
 
-  it("opencode agent content includes description frontmatter", () => {
-    const result = generateAgentForTool(testAgent, opencodeAdapter, "1.0.0");
+  it("gemini agent content includes description frontmatter", () => {
+    const result = generateAgentForTool(testAgent, geminiAdapter, "1.0.0");
     expect(result[0].content).toContain("description:");
     expect(result[0].content).toContain("Pre-implementation planning agent");
   });
 
   it("emits reference files next to the main agent file", () => {
-    const result = generateAgentForTool(testAgent2, opencodeAdapter, "1.0.0");
+    const result = generateAgentForTool(testAgent2, geminiAdapter, "1.0.0");
     expect(result).toHaveLength(2);
-    expect(result[1].path).toBe(".opencode/agents/references/common/python.md");
+    expect(result[1].path).toBe(".gemini/agents/references/common/python.md");
     expect(result[1].content).toBe("# Python Review\n");
   });
 });
@@ -112,7 +112,7 @@ describe("generateAgentsForTool", () => {
 
 describe("generateAgentsForAllTools", () => {
   const templates = [testAgent, testAgent2];
-  const adapters = [opencodeAdapter, claudeAdapter, cursorAdapter];
+  const adapters = [geminiAdapter, claudeAdapter, cursorAdapter];
 
   it("skips tools without native agent support", () => {
     const results = generateAgentsForAllTools(templates, adapters, "1.0.0");

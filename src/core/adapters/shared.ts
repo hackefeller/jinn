@@ -57,7 +57,7 @@ export function formatBaseSkillFrontmatter(template: SkillTemplate, version: str
  * Full skill frontmatter including lifecycle fields (when, applicability,
  * termination, outputs, dependencies) and the optional Claude-specific
  * disable-model-invocation flag. Used by adapters that surface these fields
- * to the AI (Claude Code, OpenCode).
+ * to the AI (Claude Code).
  */
 export function formatFullSkillFrontmatter(template: SkillTemplate, version: string): string[] {
   const lines = formatBaseSkillFrontmatter(template, version);
@@ -104,7 +104,7 @@ export function closeSkillFrontmatter(lines: string[], instructions: string): st
 
 /**
  * Shared agent body for tools that support an `## Available skills` section
- * (OpenCode, GitHub Copilot, Gemini). Skills are NOT preloaded — the section
+ * (GitHub Copilot, Gemini). Skills are NOT preloaded — the section
  * is informational only.
  */
 export function formatAgentBody(template: AgentTemplate): string {
@@ -129,7 +129,7 @@ export function formatAgentBody(template: AgentTemplate): string {
 
 /**
  * Shared skills-index manifest body used by adapters that emit a discovery
- * manifest (Claude Code, OpenCode). The path is handled by each adapter's
+ * manifest (Claude Code). The path is handled by each adapter's
  * getManifestPath(); only the content is shared here.
  */
 export function formatManifestContent(skills: SkillTemplate[], version: string): string {

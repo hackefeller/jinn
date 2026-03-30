@@ -7,44 +7,13 @@
 
 import * as fs from "fs/promises";
 import * as path from "path";
-import * as yaml from "yaml";
 import type { VaultSkill, VaultReference } from "./types.js";
+import { parseFrontmatter } from "../templates/frontmatter.js";
+
+export { parseFrontmatter };
 
 /** Relative path inside the vault where skills live */
 const SKILLS_DIR = path.join(".codex", "skills");
-
-/** Delimiter used by SKILL.md YAML frontmatter */
-const FM_DELIMITER = "---";
-
-/**
- * Parse a SKILL.md string into frontmatter and body.
- * Returns empty frontmatter and the full string as body if no frontmatter is found.
- */
-export function parseFrontmatter(content: string): {
-  frontmatter: Record<string, unknown>;
-  body: string;
-} {
-  if (!content.startsWith(FM_DELIMITER)) {
-    return { frontmatter: {}, body: content };
-  }
-
-  const end = content.indexOf(`\n${FM_DELIMITER}`, FM_DELIMITER.length);
-  if (end === -1) {
-    return { frontmatter: {}, body: content };
-  }
-
-  const raw = content.slice(FM_DELIMITER.length, end).trim();
-  const body = content.slice(end + FM_DELIMITER.length + 1).trimStart();
-
-  let frontmatter: Record<string, unknown> = {};
-  try {
-    frontmatter = yaml.parse(raw) ?? {};
-  } catch {
-    // Malformed frontmatter — treat as empty
-  }
-
-  return { frontmatter, body };
-}
 
 /**
  * Load all reference files from a skill's references/ subdirectory.

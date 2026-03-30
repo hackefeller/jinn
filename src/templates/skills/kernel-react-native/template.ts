@@ -1,6 +1,8 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import reactNativeSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions, getSkillReferences } from "../../.generated/templates.js";
+import { getSkillReferences } from "../../.generated/templates.js";
 
 export function getReactNativeSkillTemplate(): SkillTemplate {
   return {
@@ -111,6 +113,6 @@ export function getReactNativeSkillTemplate(): SkillTemplate {
       "references/ui-scrollview-content-inset.md",
       "references/ui-styling.md",
     ),
-    instructions: getSkillInstructions(SKILL_NAMES.REACT_NATIVE),
+    instructions: parseFrontmatter(reactNativeSkillMarkdown).body,
   };
 }

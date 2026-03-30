@@ -1,7 +1,10 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { getAgentInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import captureAgentMarkdown from "./AGENT.md";
 import { AGENT_NAMES } from "../../constants.js";
 import { CAPTURE_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+
+const { body } = parseFrontmatter(captureAgentMarkdown);
 
 export function getCaptureAgentTemplate(): AgentTemplate {
   return {
@@ -17,7 +20,7 @@ export function getCaptureAgentTemplate(): AgentTemplate {
       category: "Orchestration",
       tags: ["capture", "retrospective", "learnings", "decisions"],
     },
-    instructions: getAgentInstructions(AGENT_NAMES.CAPTURE),
+    instructions: body,
     capabilities: [
       "Retrospective facilitation",
       "Learnings documentation",

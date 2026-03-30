@@ -1,6 +1,11 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import archiveSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
+
+const { frontmatter, body } = parseFrontmatter<Omit<SkillTemplate, "instructions" | "references">>(
+  archiveSkillMarkdown,
+);
 
 export function getArchiveSkillTemplate(): SkillTemplate {
   return {
@@ -36,6 +41,6 @@ export function getArchiveSkillTemplate(): SkillTemplate {
     dependencies: [SKILL_NAMES.APPLY],
     disableModelInvocation: true,
     argumentHint: "project name or issue ID",
-    instructions: getSkillInstructions(SKILL_NAMES.ARCHIVE),
+    instructions: body,
   };
 }

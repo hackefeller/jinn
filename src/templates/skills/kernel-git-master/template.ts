@@ -1,6 +1,9 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import gitMasterSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+
+const { body } = parseFrontmatter(gitMasterSkillMarkdown);
 
 export function getGitMasterSkillTemplate(): SkillTemplate {
   return {
@@ -35,6 +38,6 @@ export function getGitMasterSkillTemplate(): SkillTemplate {
       "Branch strategy or commit message recommendations",
     ],
     dependencies: [],
-    instructions: getSkillInstructions(SKILL_NAMES.GIT_MASTER),
+    instructions: body,
   };
 }

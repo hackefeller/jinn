@@ -1,7 +1,10 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { getAgentInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import gitAgentMarkdown from "./AGENT.md";
 import { AGENT_NAMES } from "../../constants.js";
 import { GIT_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+
+const { body } = parseFrontmatter(gitAgentMarkdown);
 
 export function getGitAgentTemplate(): AgentTemplate {
   return {
@@ -17,7 +20,7 @@ export function getGitAgentTemplate(): AgentTemplate {
       category: "Specialist",
       tags: ["git", "version-control", "history"],
     },
-    instructions: getAgentInstructions(AGENT_NAMES.GIT),
+    instructions: body,
     capabilities: [
       "Branch strategy",
       "Commit hygiene",

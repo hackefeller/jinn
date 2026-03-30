@@ -1,5 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import reviewSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
 
 export function getReviewSkillTemplate(): SkillTemplate {
@@ -56,6 +57,6 @@ export function getReviewSkillTemplate(): SkillTemplate {
     disableModelInvocation: true,
     allowedTools: ["mcp_linear_get_issue", "mcp_linear_save_issue", "mcp_linear_save_comment"],
     argumentHint: "issue ID, PR link, or file/directory to review (optional)",
-    instructions: getSkillInstructions(SKILL_NAMES.REVIEW),
+    instructions: parseFrontmatter(reviewSkillMarkdown).body,
   };
 }

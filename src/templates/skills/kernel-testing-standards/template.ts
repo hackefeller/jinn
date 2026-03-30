@@ -1,6 +1,7 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import testingStandardsSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getTestingStandardsSkillTemplate(): SkillTemplate {
   return {
@@ -38,6 +39,6 @@ export function getTestingStandardsSkillTemplate(): SkillTemplate {
       "Integration tests for API routes or service boundaries",
       "Test factory functions for repeatable test data",
     ],
-    instructions: getSkillInstructions(SKILL_NAMES.TESTING_STANDARDS),
+    instructions: parseFrontmatter(testingStandardsSkillMarkdown).body,
   };
 }

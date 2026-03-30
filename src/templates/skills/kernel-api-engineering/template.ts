@@ -1,6 +1,9 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import apiEngineeringSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+
+const { body } = parseFrontmatter(apiEngineeringSkillMarkdown);
 
 export function getApiEngineeringSkillTemplate(): SkillTemplate {
   return {
@@ -41,6 +44,6 @@ export function getApiEngineeringSkillTemplate(): SkillTemplate {
       "Auth-aware middleware chain",
       "Integration tests for happy path, 422, and 401/403",
     ],
-    instructions: getSkillInstructions(SKILL_NAMES.API_ENGINEERING),
+    instructions: body,
   };
 }

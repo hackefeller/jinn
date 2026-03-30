@@ -1,6 +1,9 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import applySkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
+
+const { body } = parseFrontmatter(applySkillMarkdown);
 
 export function getApplySkillTemplate(): SkillTemplate {
   return {
@@ -33,6 +36,6 @@ export function getApplySkillTemplate(): SkillTemplate {
     outputs: ["Implemented code changes", "Updated Linear issue statuses and comments"],
     dependencies: [SKILL_NAMES.EXPLORE, SKILL_NAMES.PROPOSE],
     disableModelInvocation: true,
-    instructions: getSkillInstructions(SKILL_NAMES.APPLY),
+    instructions: body,
   };
 }

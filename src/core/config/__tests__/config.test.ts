@@ -62,7 +62,7 @@ describe("hasConfig", () => {
   });
 
   it("returns true after createDefaultConfig", async () => {
-    await createDefaultConfig(tmpDir, { tools: ["opencode"] });
+    await createDefaultConfig(tmpDir, { tools: ["claude"] });
     const result = await hasConfig(tmpDir);
     expect(result).toBe(true);
   });
@@ -72,7 +72,7 @@ describe("hasConfig", () => {
     await fs.mkdir(path.dirname(legacyConfigPath), { recursive: true });
     await fs.writeFile(
       legacyConfigPath,
-      yaml.stringify({ version: "1.0.0", tools: ["opencode"] }),
+      yaml.stringify({ version: "1.0.0", tools: ["claude"] }),
       "utf-8",
     );
     const result = await hasConfig(tmpDir);
@@ -96,7 +96,7 @@ describe("createDefaultConfig", () => {
   });
 
   it("writes the config file to disk", async () => {
-    await createDefaultConfig(tmpDir, { tools: ["opencode"] });
+    await createDefaultConfig(tmpDir, { tools: ["claude"] });
     const configPath = getConfigPath(tmpDir);
     const stat = await fs.stat(configPath);
     expect(stat.isFile()).toBe(true);
@@ -109,12 +109,12 @@ describe("createDefaultConfig", () => {
   });
 
   it("written YAML roundtrips via Zod schema parse", async () => {
-    await createDefaultConfig(tmpDir, { tools: ["opencode"] });
+    await createDefaultConfig(tmpDir, { tools: ["claude"] });
     const configPath = getConfigPath(tmpDir);
     const raw = await fs.readFile(configPath, "utf-8");
     const parsed = yaml.parse(raw);
     const validated = ConfigSchema.parse(parsed);
-    expect(validated.tools).toEqual(["opencode"]);
+    expect(validated.tools).toEqual(["claude"]);
   });
 });
 
@@ -143,7 +143,7 @@ describe("loadConfig", () => {
     await fs.mkdir(path.dirname(legacyConfigPath), { recursive: true });
     await fs.writeFile(
       legacyConfigPath,
-      yaml.stringify({ version: "1.0.0", tools: ["opencode"] }),
+      yaml.stringify({ version: "1.0.0", tools: ["claude"] }),
       "utf-8",
     );
     const result = await loadConfig(tmpDir);
@@ -167,14 +167,14 @@ describe("loadConfig", () => {
   it("roundtrips with saveConfig", async () => {
     const original: Config = {
       version: "1.0.0",
-      tools: ["opencode", "claude"],
+      tools: ["claude", "claude"],
       profile: "extended",
       delivery: "both",
     };
     await saveConfig(original, tmpDir);
     const loaded = await loadConfig(tmpDir);
     expect(loaded).not.toBeNull();
-    expect(loaded!.tools).toEqual(["opencode", "claude"]);
+    expect(loaded!.tools).toEqual(["claude", "claude"]);
     expect(loaded!.profile).toBe("extended");
     expect(loaded!.delivery).toBe("both");
   });
@@ -198,7 +198,7 @@ describe("saveConfig", () => {
   it("creates parent directories automatically", async () => {
     const config: Config = {
       version: "1.0.0",
-      tools: ["opencode"],
+      tools: ["claude"],
       profile: "core",
       delivery: "both",
     };
@@ -246,15 +246,15 @@ describe("updateConfig", () => {
   });
 
   it("merges partial updates", async () => {
-    await createDefaultConfig(tmpDir, { tools: ["opencode"] });
+    await createDefaultConfig(tmpDir, { tools: ["claude"] });
     const updated = await updateConfig(tmpDir, { profile: "extended" });
     expect(updated.profile).toBe("extended");
   });
 
   it("preserves untouched fields", async () => {
-    await createDefaultConfig(tmpDir, { tools: ["opencode"], delivery: "both" });
+    await createDefaultConfig(tmpDir, { tools: ["claude"], delivery: "both" });
     const updated = await updateConfig(tmpDir, { profile: "extended" });
-    expect(updated.tools).toEqual(["opencode"]);
+    expect(updated.tools).toEqual(["claude"]);
     expect(updated.delivery).toBe("both");
   });
 });
@@ -273,36 +273,36 @@ describe("ConfigSchema", () => {
   });
 
   it("defaults version to 1.0.0", () => {
-    const result = ConfigSchema.parse({ tools: ["opencode"] });
+    const result = ConfigSchema.parse({ tools: ["claude"] });
     expect(result.version).toBe("1.0.0");
   });
 
   it("defaults profile to core", () => {
-    const result = ConfigSchema.parse({ tools: ["opencode"] });
+    const result = ConfigSchema.parse({ tools: ["claude"] });
     expect(result.profile).toBe("core");
   });
 
   it("defaults delivery to both", () => {
-    const result = ConfigSchema.parse({ tools: ["opencode"] });
+    const result = ConfigSchema.parse({ tools: ["claude"] });
     expect(result.delivery).toBe("both");
   });
 
   it("accepts all valid tool IDs", () => {
     const result = ConfigSchema.parse({
-      tools: ["opencode", "claude", "codex", "github-copilot", "gemini", "cursor"],
+      tools: ["claude", "claude", "codex", "github-copilot", "gemini", "cursor"],
     });
     expect(result.tools).toHaveLength(6);
   });
 
   it("rejects invalid profile", () => {
-    expect(() => ConfigSchema.parse({ tools: ["opencode"], profile: "invalid" })).toThrow();
+    expect(() => ConfigSchema.parse({ tools: ["claude"], profile: "invalid" })).toThrow();
   });
 
   it("rejects invalid delivery", () => {
-    expect(() => ConfigSchema.parse({ tools: ["opencode"], delivery: "invalid" })).toThrow();
+    expect(() => ConfigSchema.parse({ tools: ["claude"], delivery: "invalid" })).toThrow();
   });
 
   it("rejects deprecated commands delivery mode", () => {
-    expect(() => ConfigSchema.parse({ tools: ["opencode"], delivery: "commands" })).toThrow();
+    expect(() => ConfigSchema.parse({ tools: ["claude"], delivery: "commands" })).toThrow();
   });
 });

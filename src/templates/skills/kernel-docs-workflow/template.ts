@@ -1,6 +1,9 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import docsWorkflowSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+
+const { body } = parseFrontmatter(docsWorkflowSkillMarkdown);
 
 export function getDocsWorkflowSkillTemplate(): SkillTemplate {
   return {
@@ -38,6 +41,6 @@ export function getDocsWorkflowSkillTemplate(): SkillTemplate {
     ],
     dependencies: [],
     disableModelInvocation: true,
-    instructions: getSkillInstructions(SKILL_NAMES.DOCS_WORKFLOW),
+    instructions: body,
   };
 }

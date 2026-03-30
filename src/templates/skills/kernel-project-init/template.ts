@@ -1,6 +1,7 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import projectInitSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getProjectInitSkillTemplate(): SkillTemplate {
   return {
@@ -33,6 +34,6 @@ export function getProjectInitSkillTemplate(): SkillTemplate {
     ],
     outputs: ["Initialized project with prescribed stack, working build, test, lint, and type-check pipelines"],
     dependencies: [],
-    instructions: getSkillInstructions(SKILL_NAMES.PROJECT_INIT),
+    instructions: parseFrontmatter(projectInitSkillMarkdown).body,
   };
 }

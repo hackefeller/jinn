@@ -1,5 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import intakeSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
 
 export function getIntakeSkillTemplate(): SkillTemplate {
@@ -43,6 +44,6 @@ export function getIntakeSkillTemplate(): SkillTemplate {
       "mcp_linear_save_issue",
     ],
     argumentHint: "bug description, request summary, or unstructured idea to intake",
-    instructions: getSkillInstructions(SKILL_NAMES.INTAKE),
+    instructions: parseFrontmatter(intakeSkillMarkdown).body,
   };
 }

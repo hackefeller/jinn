@@ -1,7 +1,10 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { getAgentInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import planAgentMarkdown from "./AGENT.md";
 import { AGENT_NAMES } from "../../constants.js";
 import { PLAN_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+
+const { body } = parseFrontmatter(planAgentMarkdown);
 
 export function getPlanAgentTemplate(): AgentTemplate {
   return {
@@ -17,7 +20,7 @@ export function getPlanAgentTemplate(): AgentTemplate {
       category: "Orchestration",
       tags: ["planning", "strategy", "requirements"],
     },
-    instructions: getAgentInstructions(AGENT_NAMES.PLAN),
+    instructions: body,
     capabilities: [
       "Intent interrogation",
       "Requirement discovery",

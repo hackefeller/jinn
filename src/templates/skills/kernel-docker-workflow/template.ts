@@ -1,6 +1,9 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import dockerWorkflowSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+
+const { body } = parseFrontmatter(dockerWorkflowSkillMarkdown);
 
 export function getDockerWorkflowSkillTemplate(): SkillTemplate {
   return {
@@ -38,6 +41,6 @@ export function getDockerWorkflowSkillTemplate(): SkillTemplate {
       "Docker Compose configuration for local infrastructure",
       "Image size analysis and optimization recommendations",
     ],
-    instructions: getSkillInstructions(SKILL_NAMES.DOCKER_WORKFLOW),
+    instructions: body,
   };
 }

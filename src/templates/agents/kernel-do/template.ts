@@ -1,7 +1,10 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { getAgentInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import doAgentMarkdown from "./AGENT.md";
 import { AGENT_NAMES } from "../../constants.js";
 import { DO_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+
+const { body } = parseFrontmatter(doAgentMarkdown);
 
 export function getDoAgentTemplate(): AgentTemplate {
   return {
@@ -17,7 +20,7 @@ export function getDoAgentTemplate(): AgentTemplate {
       category: "Orchestration",
       tags: ["execution", "implementation", "coordination", "status"],
     },
-    instructions: getAgentInstructions(AGENT_NAMES.DO),
+    instructions: body,
     capabilities: [
       "Task-by-task execution",
       "Mid-execution status reporting",

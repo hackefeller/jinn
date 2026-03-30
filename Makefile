@@ -48,12 +48,12 @@ test-init: build
 	rm -rf $(TESTDIR) $(TESTHOME)
 	mkdir -p $(TESTDIR) $(TESTHOME)
 	cd $(TESTDIR) && git init --quiet
-	mkdir -p $(TESTDIR)/.opencode
-	HOME=$(TESTHOME) $(BIN) init --path $(TESTDIR) --tools opencode --delivery both --yes
+	mkdir -p $(TESTDIR)/.claude
+	HOME=$(TESTHOME) $(BIN) init --path $(TESTDIR) --tools claude --delivery both --yes
 	@echo ""
 	@echo "=== File counts ==="
-	@echo ".opencode/agents/  -> $$(ls $(TESTDIR)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
-	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".claude/agents/    -> $$(ls $(TESTDIR)/.claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".claude/skills/    -> $$(ls -d $(TESTDIR)/.claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 	@echo ""
 	@echo "=== Spot-check: global config exists ==="
 	@{ test -f $(TESTHOME)/.kernel/config.yaml && echo "PASS: ~/.kernel/config.yaml created" || echo "FAIL: ~/.kernel/config.yaml missing"; }
@@ -63,54 +63,54 @@ test-init-both: build
 	rm -rf $(TESTDIR_DELIVERY_BOTH) $(TESTHOME_DELIVERY_BOTH)
 	mkdir -p $(TESTDIR_DELIVERY_BOTH) $(TESTHOME_DELIVERY_BOTH)
 	cd $(TESTDIR_DELIVERY_BOTH) && git init --quiet
-	mkdir -p $(TESTDIR_DELIVERY_BOTH)/.opencode
-	HOME=$(TESTHOME_DELIVERY_BOTH) $(BIN) init --path $(TESTDIR_DELIVERY_BOTH) --tools opencode --delivery both --yes
+	mkdir -p $(TESTDIR_DELIVERY_BOTH)/.claude
+	HOME=$(TESTHOME_DELIVERY_BOTH) $(BIN) init --path $(TESTDIR_DELIVERY_BOTH) --tools claude --delivery both --yes
 	@echo ""
 	@echo "=== File counts ==="
-	@echo ".opencode/agents/  -> $$(ls $(TESTDIR_DELIVERY_BOTH)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
-	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_DELIVERY_BOTH)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".claude/agents/    -> $$(ls $(TESTDIR_DELIVERY_BOTH)/.claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".claude/skills/    -> $$(ls -d $(TESTDIR_DELIVERY_BOTH)/.claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 
 # --- Test init with --delivery skills (agents should NOT exist) ---
 test-init-skills: build
 	rm -rf $(TESTDIR_DELIVERY_SKILLS) $(TESTHOME_DELIVERY_SKILLS)
 	mkdir -p $(TESTDIR_DELIVERY_SKILLS) $(TESTHOME_DELIVERY_SKILLS)
 	cd $(TESTDIR_DELIVERY_SKILLS) && git init --quiet
-	mkdir -p $(TESTDIR_DELIVERY_SKILLS)/.opencode
-	HOME=$(TESTHOME_DELIVERY_SKILLS) $(BIN) init --path $(TESTDIR_DELIVERY_SKILLS) --tools opencode --delivery skills --yes
+	mkdir -p $(TESTDIR_DELIVERY_SKILLS)/.claude
+	HOME=$(TESTHOME_DELIVERY_SKILLS) $(BIN) init --path $(TESTDIR_DELIVERY_SKILLS) --tools claude --delivery skills --yes
 	@echo ""
 	@echo "=== File counts ==="
-	@echo ".opencode/agents/  -> $$(ls $(TESTDIR_DELIVERY_SKILLS)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 0)"
-	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_DELIVERY_SKILLS)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".claude/agents/    -> $$(ls $(TESTDIR_DELIVERY_SKILLS)/.claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 0)"
+	@echo ".claude/skills/    -> $$(ls -d $(TESTDIR_DELIVERY_SKILLS)/.claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 
 # --- Test init with multiple tools ---
 test-init-multi: build
 	rm -rf $(TESTDIR_MULTI) $(TESTHOME_MULTI)
 	mkdir -p $(TESTDIR_MULTI) $(TESTHOME_MULTI)
 	cd $(TESTDIR_MULTI) && git init --quiet
-	mkdir -p $(TESTDIR_MULTI)/.opencode $(TESTDIR_MULTI)/.claude
-	HOME=$(TESTHOME_MULTI) $(BIN) init --path $(TESTDIR_MULTI) --tools opencode,claude --delivery both --yes
+	mkdir -p $(TESTDIR_MULTI)/.claude $(TESTDIR_MULTI)/.gemini
+	HOME=$(TESTHOME_MULTI) $(BIN) init --path $(TESTDIR_MULTI) --tools claude,gemini --delivery both --yes
 	@echo ""
 	@echo "=== File counts ==="
-	@echo ".opencode/agents/  -> $$(ls $(TESTDIR_MULTI)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
-	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR_MULTI)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 	@echo ".claude/agents/    -> $$(ls $(TESTDIR_MULTI)/.claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 	@echo ".claude/skills/    -> $$(ls -d $(TESTDIR_MULTI)/.claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".gemini/agents/    -> $$(ls $(TESTDIR_MULTI)/.gemini/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".gemini/skills/    -> $$(ls -d $(TESTDIR_MULTI)/.gemini/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 
 # --- Test update after init ---
 test-update: test-init
 	HOME=$(TESTHOME) $(BIN) update --path $(TESTDIR) --force
 	@echo ""
 	@echo "=== After update --force: counts should be unchanged ==="
-	@echo ".opencode/agents/  -> $$(ls $(TESTDIR)/.opencode/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
-	@echo ".opencode/skills/  -> $$(ls -d $(TESTDIR)/.opencode/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".claude/agents/    -> $$(ls $(TESTDIR)/.claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
+	@echo ".claude/skills/    -> $$(ls -d $(TESTDIR)/.claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ') (expected 8)"
 
 # --- Test config commands ---
 test-config: build
 	rm -rf $(TESTDIR) $(TESTHOME)
 	mkdir -p $(TESTDIR) $(TESTHOME)
 	cd $(TESTDIR) && git init --quiet
-	mkdir -p $(TESTDIR)/.opencode
-	HOME=$(TESTHOME) $(BIN) init --path $(TESTDIR) --tools opencode --delivery both --yes
+	mkdir -p $(TESTDIR)/.claude
+	HOME=$(TESTHOME) $(BIN) init --path $(TESTDIR) --tools claude --delivery both --yes
 	HOME=$(TESTHOME) $(BIN) config show
 	HOME=$(TESTHOME) $(BIN) config add-tool claude
 	HOME=$(TESTHOME) $(BIN) config show

@@ -1,5 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import researchSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
 
 export function getResearchSkillTemplate(): SkillTemplate {
@@ -46,6 +47,6 @@ export function getResearchSkillTemplate(): SkillTemplate {
       "mcp_linear_create_document",
     ],
     argumentHint: "issue ID, project, or topic to investigate",
-    instructions: getSkillInstructions(SKILL_NAMES.RESEARCH),
+    instructions: parseFrontmatter(researchSkillMarkdown).body,
   };
 }

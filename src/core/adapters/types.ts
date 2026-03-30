@@ -14,19 +14,19 @@ import type { AgentTemplate, SkillTemplate } from "../templates/types.js";
  * and frontmatter format requirements.
  */
 export interface ToolCommandAdapter {
-  /** Tool identifier matching ToolId (e.g., 'opencode', 'cursor') */
+  /** Tool identifier matching ToolId (e.g., 'claude', 'cursor') */
   toolId: string;
 
   /** Human-readable tool name */
   toolName: string;
 
-  /** Skill directory name (e.g., '.opencode', '.cursor') */
+  /** Skill directory name (e.g., '.claude', '.cursor') */
   skillsDir: string;
 
   /**
    * Returns the skill directory path.
     * @param skillName - The skill name (e.g., 'kernel-planner')
-    * @returns Path from project root (e.g., '.opencode/skills/kernel-planner/SKILL.md')
+    * @returns Path from project root (e.g., '.claude/skills/kernel-planner/SKILL.md')
    */
   getSkillPath(skillName: string): string;
 

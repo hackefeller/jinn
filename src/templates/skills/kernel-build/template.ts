@@ -1,6 +1,9 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import buildSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+
+const { body } = parseFrontmatter(buildSkillMarkdown);
 
 export function getBuildSkillTemplate(): SkillTemplate {
   return {
@@ -34,6 +37,6 @@ export function getBuildSkillTemplate(): SkillTemplate {
     outputs: ["Passing build and test suite", "Root cause analysis if a failure was diagnosed"],
     dependencies: [],
     argumentHint: "package name or test filter (optional)",
-    instructions: getSkillInstructions(SKILL_NAMES.BUILD),
+    instructions: body,
   };
 }

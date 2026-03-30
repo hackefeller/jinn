@@ -1,7 +1,10 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { getAgentInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import architectAgentMarkdown from "./AGENT.md";
 import { AGENT_NAMES } from "../../constants.js";
 import { ARCHITECT_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+
+const { body } = parseFrontmatter(architectAgentMarkdown);
 
 export function getArchitectAgentTemplate(): AgentTemplate {
   return {
@@ -17,7 +20,7 @@ export function getArchitectAgentTemplate(): AgentTemplate {
       category: "Specialist",
       tags: ["architecture", "patterns", "design"],
     },
-    instructions: getAgentInstructions(AGENT_NAMES.ARCHITECT),
+    instructions: body,
     capabilities: [
       "Architecture review",
       "Pattern recognition",

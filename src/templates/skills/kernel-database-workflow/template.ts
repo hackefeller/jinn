@@ -1,6 +1,8 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import databaseWorkflowSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions, getSkillReferences } from "../../.generated/templates.js";
+import { getSkillReferences } from "../../.generated/templates.js";
 
 export function getDatabaseWorkflowSkillTemplate(): SkillTemplate {
   return {
@@ -54,6 +56,6 @@ export function getDatabaseWorkflowSkillTemplate(): SkillTemplate {
       "references/migration-patterns.md",
       "references/goose-workflow.md",
     ),
-    instructions: getSkillInstructions(SKILL_NAMES.DATABASE_WORKFLOW),
+    instructions: parseFrontmatter(databaseWorkflowSkillMarkdown).body,
   };
 }

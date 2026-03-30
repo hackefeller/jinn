@@ -1,6 +1,7 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import mapCodebaseSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getMapCodebaseSkillTemplate(): SkillTemplate {
   return {
@@ -36,6 +37,6 @@ export function getMapCodebaseSkillTemplate(): SkillTemplate {
     dependencies: [],
     argumentHint: "module, feature, or entry point to trace (optional)",
     allowedTools: ["Read", "Grep", "Glob"],
-    instructions: getSkillInstructions(SKILL_NAMES.MAP_CODEBASE),
+    instructions: parseFrontmatter(mapCodebaseSkillMarkdown).body,
   };
 }

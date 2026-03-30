@@ -1,6 +1,11 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import closeSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
+
+const { frontmatter, body } = parseFrontmatter<Omit<SkillTemplate, "instructions" | "references">>(
+  closeSkillMarkdown,
+);
 
 export function getCloseSkillTemplate(): SkillTemplate {
   return {
@@ -46,6 +51,6 @@ export function getCloseSkillTemplate(): SkillTemplate {
       "mcp_linear_create_document",
     ],
     argumentHint: "project name, milestone, or parent issue ID to close",
-    instructions: getSkillInstructions(SKILL_NAMES.CLOSE),
+    instructions: body,
   };
 }

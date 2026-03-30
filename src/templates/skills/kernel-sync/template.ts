@@ -1,5 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import syncSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
 
 export function getSyncSkillTemplate(): SkillTemplate {
@@ -44,6 +45,6 @@ export function getSyncSkillTemplate(): SkillTemplate {
       "mcp_linear_save_comment",
     ],
     dependencies: [],
-    instructions: getSkillInstructions(SKILL_NAMES.SYNC),
+    instructions: parseFrontmatter(syncSkillMarkdown).body,
   };
 }

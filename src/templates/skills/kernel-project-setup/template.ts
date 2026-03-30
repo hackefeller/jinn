@@ -1,6 +1,7 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import projectSetupSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getProjectSetupSkillTemplate(): SkillTemplate {
   return {
@@ -41,6 +42,6 @@ export function getProjectSetupSkillTemplate(): SkillTemplate {
       "Clean workspace or restored project state",
     ],
     dependencies: [],
-    instructions: getSkillInstructions(SKILL_NAMES.PROJECT_SETUP),
+    instructions: parseFrontmatter(projectSetupSkillMarkdown).body,
   };
 }

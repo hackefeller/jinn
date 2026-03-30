@@ -66,67 +66,6 @@ async function readFileContent(p: string): Promise<string> {
 }
 
 // ============================================================================
-// opencode — delivery: 'both'
-// ============================================================================
-
-describe("Generator integration — opencode, delivery: both", () => {
-  let tmpDir: string;
-
-  beforeEach(async () => {
-    tmpDir = await mkTmpDir();
-  });
-
-  afterEach(async () => {
-    await fs.rm(tmpDir, { recursive: true, force: true });
-  });
-
-  const config: Config = {
-    version: "1.0.0",
-    tools: ["opencode"],
-    profile: "extended",
-    delivery: "both",
-  };
-
-  it("result has no failures", async () => {
-    const result = await generateFiles(config, tmpDir);
-    expect(result.failed).toHaveLength(0);
-  });
-
-  it.skip("generates skill directories under .opencode/skills/", async () => {
-    // Project-level generation is no longer used by CLI sync command
-    await generateFiles(config, tmpDir);
-    const count = await countDirsInDir(path.join(tmpDir, ".opencode", "skills"));
-    expect(count).toBe(27);
-  });
-
-  it("generates agent files under .opencode/agents/", async () => {
-    await generateFiles(config, tmpDir);
-    const agentDir = path.join(tmpDir, ".opencode", "agents");
-    const count = await countFilesInDirBySuffix(agentDir, ".md");
-    expect(count).toBe(8);
-  });
-
-  it("generates the expected agent file names under .opencode/agents/", async () => {
-    await generateFiles(config, tmpDir);
-    const agentDir = path.join(tmpDir, ".opencode", "agents");
-    const files = (await fs.readdir(agentDir)).filter((file) => file.endsWith(".md")).sort();
-
-    expect(files).toEqual(defaultAgentFileNames);
-  });
-
-  it('skill SKILL.md files contain generatedBy: "1.0.0"', async () => {
-    await generateFiles(config, tmpDir);
-    const skillsDir = path.join(tmpDir, ".opencode", "skills");
-    const subdirs = await fs.readdir(skillsDir);
-    expect(subdirs.length).toBeGreaterThan(0);
-
-    const firstSkillFile = path.join(skillsDir, subdirs[0], "SKILL.md");
-    const content = await readFileContent(firstSkillFile);
-    expect(content).toContain('generatedBy: "1.0.0"');
-  });
-});
-
-// ============================================================================
 // claude — delivery: 'both'
 // ============================================================================
 
@@ -298,19 +237,19 @@ describe("Generator integration — delivery modes", () => {
   it("delivery: 'skills' — skill files exist, no command or agent files", async () => {
     const config: Config = {
       version: "1.0.0",
-      tools: ["opencode"],
+      tools: ["claude"],
       profile: "core",
       delivery: "skills",
     };
     await generateFiles(config, tmpDir);
 
-    const cmdDirExists = await dirExists(path.join(tmpDir, ".opencode", "commands"));
+    const cmdDirExists = await dirExists(path.join(tmpDir, ".claude", "commands"));
     expect(cmdDirExists).toBe(false);
 
-    const skillCount = await countDirsInDir(path.join(tmpDir, ".opencode", "skills"));
+    const skillCount = await countDirsInDir(path.join(tmpDir, ".claude", "skills"));
     expect(skillCount).toBeGreaterThan(0);
 
-    const agentDirExists = await dirExists(path.join(tmpDir, ".opencode", "agents"));
+    const agentDirExists = await dirExists(path.join(tmpDir, ".claude", "agents"));
     expect(agentDirExists).toBe(false);
   });
 
@@ -351,31 +290,31 @@ describe("Generator integration — multi-tool", () => {
 
   const config: Config = {
     version: "1.0.0",
-    tools: ["opencode", "claude", "cursor"],
+    tools: ["claude", "cursor", "gemini"],
     profile: "core",
     delivery: "both",
   };
 
   it("creates skills for all tools and agents only for native-agent tools", async () => {
     await generateFiles(config, tmpDir);
-    expect(await dirExists(path.join(tmpDir, ".opencode", "skills"))).toBe(true);
     expect(await dirExists(path.join(tmpDir, ".claude", "skills"))).toBe(true);
     expect(await dirExists(path.join(tmpDir, ".cursor", "skills"))).toBe(true);
-    expect(await dirExists(path.join(tmpDir, ".opencode", "agents"))).toBe(true);
     expect(await dirExists(path.join(tmpDir, ".claude", "agents"))).toBe(true);
+    expect(await dirExists(path.join(tmpDir, ".gemini", "skills"))).toBe(true);
+    expect(await dirExists(path.join(tmpDir, ".gemini", "agents"))).toBe(true);
     expect(await dirExists(path.join(tmpDir, ".cursor", "agents"))).toBe(false);
   });
 
   it("no cross-contamination between tool directories", async () => {
     await generateFiles(config, tmpDir);
-    // OpenCode skill dirs use slug names
-    const opencodeSkillsDir = path.join(tmpDir, ".opencode", "skills");
-    const opencodeSkills = await fs.readdir(opencodeSkillsDir);
-    expect(opencodeSkills.length).toBeGreaterThan(0);
-    // Each entry should be a directory (skill subdirectory)
-    for (const entry of opencodeSkills) {
-      const stat = await fs.stat(path.join(opencodeSkillsDir, entry));
-      expect(stat.isDirectory()).toBe(true);
+    for (const toolDir of [".claude", ".cursor", ".gemini"]) {
+      const skillsDir = path.join(tmpDir, toolDir, "skills");
+      const skills = await fs.readdir(skillsDir);
+      expect(skills.length).toBeGreaterThan(0);
+      for (const entry of skills) {
+        const stat = await fs.stat(path.join(skillsDir, entry));
+        expect(stat.isDirectory()).toBe(true);
+      }
     }
   });
 });
@@ -396,27 +335,20 @@ describe("Generator integration — idempotency", () => {
   });
 
   it.skip("second call overwrites cleanly with same file count", async () => {
-    // Project-level generation is no longer used by CLI sync command
     const config: Config = {
       version: "1.0.0",
-      tools: ["opencode"],
-      profile: "extended",
+      tools: ["claude"],
+      profile: "core",
       delivery: "both",
     };
 
     await generateFiles(config, tmpDir);
-    const skillCountFirst = await countDirsInDir(path.join(tmpDir, ".opencode", "skills"));
-    const agentCountFirst = await countFilesInDirBySuffix(
-      path.join(tmpDir, ".opencode", "agents"),
-      ".md",
-    );
+    const skillCountFirst = await countDirsInDir(path.join(tmpDir, ".claude", "skills"));
+    const agentCountFirst = await countFilesInDirBySuffix(path.join(tmpDir, ".claude", "agents"), ".md");
 
     await generateFiles(config, tmpDir);
-    const skillCountSecond = await countDirsInDir(path.join(tmpDir, ".opencode", "skills"));
-    const agentCountSecond = await countFilesInDirBySuffix(
-      path.join(tmpDir, ".opencode", "agents"),
-      ".md",
-    );
+    const skillCountSecond = await countDirsInDir(path.join(tmpDir, ".claude", "skills"));
+    const agentCountSecond = await countFilesInDirBySuffix(path.join(tmpDir, ".claude", "agents"), ".md");
 
     expect(skillCountFirst).toBe(skillCountSecond);
     expect(agentCountFirst).toBe(agentCountSecond);

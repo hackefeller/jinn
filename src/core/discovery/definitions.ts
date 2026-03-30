@@ -11,14 +11,6 @@ import type { ToolDefinition } from "../config/schema.js";
  */
 export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
-    id: "opencode",
-    name: "OpenCode",
-    skillsDir: ".opencode",
-    available: true,
-    successLabel: "OpenCode",
-    notes: "Primary development platform with full support",
-  },
-  {
     id: "claude",
     name: "Claude Code",
     skillsDir: ".claude",
@@ -57,6 +49,14 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     available: true,
     successLabel: "Cursor",
     notes: "VS Code-based AI editor with excellent IDE integration",
+  },
+  {
+    id: "pi",
+    name: "Pi",
+    skillsDir: ".pi",
+    available: true,
+    successLabel: "Pi",
+    notes: "Minimal terminal coding harness with Agent Skills support",
   },
 ];
 

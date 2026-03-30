@@ -1,7 +1,10 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { getAgentInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import searchAgentMarkdown from "./AGENT.md";
 import { AGENT_NAMES } from "../../constants.js";
 import { SEARCH_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+
+const { body } = parseFrontmatter(searchAgentMarkdown);
 
 export function getSearchAgentTemplate(): AgentTemplate {
   return {
@@ -17,7 +20,7 @@ export function getSearchAgentTemplate(): AgentTemplate {
       category: "Research",
       tags: ["search", "codebase", "docs", "history", "learnings"],
     },
-    instructions: getAgentInstructions(AGENT_NAMES.SEARCH),
+    instructions: body,
     capabilities: ["Code search", "Documentation research", "History analysis", "Knowledge retrieval"],
     availableSkills: SEARCH_AGENT_AVAILABLE_SKILLS,
     role: "Research",

@@ -30,12 +30,12 @@ export type Delivery = z.infer<typeof DeliverySchema>;
  * This list covers the AI coding tools currently supported by the project.
  */
 export const ToolIdSchema = z.enum([
-  "opencode",
   "claude",
   "codex",
   "github-copilot",
   "gemini",
   "cursor",
+  "pi",
 ]);
 export type ToolId = z.infer<typeof ToolIdSchema>;
 

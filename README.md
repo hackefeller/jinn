@@ -28,7 +28,7 @@ cd your-project
 kernel init --yes
 
 # Or specify tools manually
-kernel init --tools opencode,claude,cursor
+kernel init --tools claude,cursor
 ```
 
 #### 2. Use The Installed Workflows
@@ -55,12 +55,12 @@ Supported output targets currently include 6 AI coding tools:
 
 | Tool           | ID               | Directory    |
 | -------------- | ---------------- | ------------ |
-| OpenCode       | `opencode`       | `.opencode/` |
 | Claude Code    | `claude`         | `.claude/`   |
 | OpenAI Codex   | `codex`          | `.codex/`    |
 | GitHub Copilot | `github-copilot` | `.github/`   |
 | Google Gemini  | `gemini`         | `.gemini/`   |
 | Cursor         | `cursor`         | `.cursor/`   |
+| Pi             | `pi`             | `.pi/`       |
 
 ### Example Workflows
 
@@ -143,7 +143,7 @@ Initialize a project. Detect installed tools, write `~/.kernel/config.yaml`, and
 ```bash
 kernel init [options]
 
-  -t, --tools <tools>      Tool IDs to configure: opencode, claude, codex, github-copilot, gemini, cursor, "all"
+  -t, --tools <tools>      Tool IDs to configure: claude, codex, github-copilot, gemini, cursor, pi, "all"
                            (default: all detected)
   -p, --profile <profile>  Profile: core | extended  (default: core)
   -d, --delivery <mode>    What to generate: skills | both  (default: both)
@@ -232,7 +232,7 @@ The minimal valid config is:
 ```yaml
 version: "1.0.0"
 tools:
-  - opencode
+
 profile: core
 delivery: both
 ```
@@ -242,7 +242,7 @@ The full accepted schema is:
 ```yaml
 version: "1.0.0"
 tools:
-  - opencode
+
   - claude
 profile: core
 delivery: both
@@ -260,7 +260,7 @@ metadata:
 | Field | Required | Allowed values | Current behavior |
 | ----- | -------- | -------------- | ---------------- |
 | `version` | no | any string, defaults to `"1.0.0"` | Schema version marker. Parsed and preserved. |
-| `tools` | yes | `opencode`, `claude`, `codex`, `github-copilot`, `gemini`, `cursor` | Drives detection, adapter selection, generation, `update`, and `vault compile`. Must contain at least one valid tool ID. |
+| `tools` | yes | `claude`, `codex`, `github-copilot`, `gemini`, `cursor`, `pi` | Drives detection, adapter selection, generation, `update`, and `vault compile`. Must contain at least one valid tool ID. |
 | `profile` | no | `core`, `extended`, `custom`; defaults to `core` | Accepted and shown by the CLI, but generation currently uses the same built-in skill and agent catalog for every profile. |
 | `customWorkflows` | no | array of strings | Accepted by the schema and saved if present, but not currently consumed by generation. |
 | `delivery` | no | `skills`, `both`; defaults to `both` | Active. `skills` skips native agent generation. `both` generates skills plus native agents for tools that support them. |
@@ -287,7 +287,7 @@ Use these IDs in `tools`, `kernel init --tools`, `kernel update --tool`, and `ke
 
 | Tool | ID | Detected by |
 | ---- | -- | ----------- |
-| OpenCode | `opencode` | `.opencode/` |
+| Pi | `pi` | `.pi/` |
 | Claude Code | `claude` | `.claude/` |
 | OpenAI Codex | `codex` | `.codex/` |
 | GitHub Copilot | `github-copilot` | `.github/` |
@@ -309,12 +309,12 @@ Generated output is supported for 6 AI coding tools:
 
 | Tool           | ID               | Directory    | Notes                                                 |
 | -------------- | ---------------- | ------------ | ----------------------------------------------------- |
-| OpenCode       | `opencode`       | `.opencode/` | Native agent files plus skills discovery manifest     |
 | Claude Code    | `claude`         | `.claude/`   | Native agent format with `skills:` preloading         |
 | OpenAI Codex   | `codex`          | `.codex/`    | TOML agent format with `[[skills.config]]` references |
 | GitHub Copilot | `github-copilot` | `.github/`   | `.agent.md` format, skill discovery via skill tool    |
 | Google Gemini  | `gemini`         | `.gemini/`   | Native agent files, skills discovered by description  |
 | Cursor         | `cursor`         | `.cursor/`   | Skills only                                           |
+| Pi             | `pi`             | `.pi/`       | Skills only                                           |
 
 ---
 
@@ -460,7 +460,7 @@ Other accepted schema fields such as `profile`, `customWorkflows`, `featureFlags
 
 ### Discovery and Supported Tools
 
-Kernel does not inspect tool binaries or run provider-specific detection commands. It uses a cheap filesystem heuristic: known directories such as `.opencode/`, `.claude/`, `.codex/`, `.github/`, `.gemini/`, and `.cursor/` signal that a tool is present in the project. That keeps detection fast and stable across environments.
+Kernel does not inspect tool binaries or run provider-specific detection commands. It uses a cheap filesystem heuristic: known directories such as `.pi/`, `.claude/`, `.codex/`, `.github/`, `.gemini/`, and `.cursor/` signal that a tool is present in the project. That keeps detection fast and stable across environments.
 
 The same tool IDs then drive adapter lookup and output generation, so the config schema, discovery layer, and generator all speak the same identifiers.
 

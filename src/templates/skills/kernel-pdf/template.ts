@@ -1,5 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import pdfSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
 
 export function getPdfSkillTemplate(): SkillTemplate {
@@ -39,6 +40,6 @@ export function getPdfSkillTemplate(): SkillTemplate {
       "Extraction or generation commands suitable for repeat use",
     ],
     dependencies: [],
-    instructions: getSkillInstructions(SKILL_NAMES.PDF),
+    instructions: parseFrontmatter(pdfSkillMarkdown).body,
   };
 }

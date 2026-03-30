@@ -10,17 +10,17 @@ import {
     cursorAdapter,
     geminiAdapter,
     githubCopilotAdapter,
-    opencodeAdapter,
+    piAdapter,
     type ToolCommandAdapter,
 } from "../index.js";
 
 const allAdapters: ToolCommandAdapter[] = [
-  opencodeAdapter,
   claudeAdapter,
   codexAdapter,
   githubCopilotAdapter,
   geminiAdapter,
   cursorAdapter,
+  piAdapter,
 ];
 
 const testSkillTemplate = {
@@ -49,12 +49,12 @@ const testAgentTemplate: AgentTemplate = {
 };
 
 const nativeAgentSupport: Record<string, boolean> = {
-  opencode: true,
   claude: true,
   codex: true,
   "github-copilot": true,
   gemini: true,
   cursor: false,
+  pi: false,
 };
 
 describe("Adapter Registry", () => {
@@ -82,50 +82,22 @@ describe("Adapter Registry", () => {
   });
 });
 
-describe("OpenCode Adapter", () => {
-  it("uses .opencode directory", () => {
-    expect(opencodeAdapter.skillsDir).toBe(".opencode");
+describe("Pi Adapter", () => {
+  it("uses .pi directory", () => {
+    expect(piAdapter.skillsDir).toBe(".pi");
   });
 
   it("generates correct skill path", () => {
-    const path = opencodeAdapter.getSkillPath("planner");
-    expect(path).toBe(".opencode/skills/planner/SKILL.md");
+    const path = piAdapter.getSkillPath("planner");
+    expect(path).toBe(".pi/skills/planner/SKILL.md");
   });
 
   it("formats skill with frontmatter", () => {
-    const result = opencodeAdapter.formatSkill(testSkillTemplate as any, "1.0.0");
+    const result = piAdapter.formatSkill(testSkillTemplate as any, "1.0.0");
     expect(result).toContain("---");
     expect(result).toContain("name: planner");
+    expect(result).toContain("description: Planning agent");
     expect(result).toContain('generatedBy: "1.0.0"');
-  });
-
-  it("uses .opencode/agents/<name>.md path for agents", () => {
-    expect(opencodeAdapter.getAgentPath!(AGENT_NAMES.PLAN)).toBe(".opencode/agents/kernel-plan.md");
-  });
-
-  it("generates YAML frontmatter with description for agents", () => {
-    const result = opencodeAdapter.formatAgent!(testAgentTemplate, "1.0.0");
-    const frontmatter = result.split("---")[1];
-    expect(frontmatter).toContain("description:");
-    expect(frontmatter).toContain("Pre-implementation planning agent");
-  });
-
-  it("maps availableSkills to ## Available skills in body", () => {
-    const result = opencodeAdapter.formatAgent!(testAgentTemplate, "1.0.0");
-    const body = result.split("---")[2];
-    expect(body).toContain("## Available skills");
-    expect(body).toContain(`- ${SKILL_NAMES.GIT_MASTER}`);
-    expect(body).toContain(`- ${SKILL_NAMES.DESIGN}`);
-  });
-
-  it("omits ## sections when fields are empty", () => {
-    const result = opencodeAdapter.formatAgent!(
-      { ...testAgentTemplate, availableSkills: [] },
-      "1.0.0",
-    );
-    const body = result.split("---")[2];
-    expect(body).not.toContain("## Available commands");
-    expect(body).not.toContain("## Available skills");
   });
 });
 
@@ -396,11 +368,6 @@ describe("formatSkill — userInvocable field", () => {
     const result = claudeAdapter.formatSkill(testSkillTemplate as any, "1.0.0");
     expect(result).not.toContain("user-invocable");
   });
-
-  it("opencode also emits user-invocable: false", () => {
-    const result = opencodeAdapter.formatSkill({ ...testSkillTemplate, userInvocable: false } as any, "1.0.0");
-    expect(result).toContain("user-invocable: false");
-  });
 });
 
 describe("formatSkill — argumentHint field", () => {
@@ -412,11 +379,6 @@ describe("formatSkill — argumentHint field", () => {
   it("does not emit argument-hint when argumentHint is absent", () => {
     const result = claudeAdapter.formatSkill(testSkillTemplate as any, "1.0.0");
     expect(result).not.toContain("argument-hint");
-  });
-
-  it("opencode also emits argument-hint", () => {
-    const result = opencodeAdapter.formatSkill({ ...testSkillTemplate, argumentHint: "feature description" } as any, "1.0.0");
-    expect(result).toContain("argument-hint: feature description");
   });
 });
 
@@ -434,11 +396,6 @@ describe("formatSkill — allowedTools field", () => {
   it("does not emit allowed-tools when allowedTools is undefined", () => {
     const result = claudeAdapter.formatSkill(testSkillTemplate as any, "1.0.0");
     expect(result).not.toContain("allowed-tools");
-  });
-
-  it("opencode also emits allowed-tools", () => {
-    const result = opencodeAdapter.formatSkill({ ...testSkillTemplate, allowedTools: ["Read"] } as any, "1.0.0");
-    expect(result).toContain("allowed-tools: Read");
   });
 });
 

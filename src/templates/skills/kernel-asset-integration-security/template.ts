@@ -1,6 +1,9 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import assetIntegrationSecuritySkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+
+const { body } = parseFrontmatter(assetIntegrationSecuritySkillMarkdown);
 
 export function getAssetIntegrationSecuritySkillTemplate(): SkillTemplate {
   return {
@@ -39,6 +42,6 @@ export function getAssetIntegrationSecuritySkillTemplate(): SkillTemplate {
       "SRI hash for CDN-loaded resource",
       "Security checklist result for the integration",
     ],
-    instructions: getSkillInstructions(SKILL_NAMES.ASSET_INTEGRATION_SECURITY),
+    instructions: body,
   };
 }

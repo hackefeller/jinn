@@ -1,6 +1,7 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import typeArchitectureSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
 
 export function getTypeArchitectureSkillTemplate(): SkillTemplate {
   return {
@@ -39,6 +40,6 @@ export function getTypeArchitectureSkillTemplate(): SkillTemplate {
       "tsconfig.json with correct project references",
       "Package export map in package.json",
     ],
-    instructions: getSkillInstructions(SKILL_NAMES.TYPE_ARCHITECTURE),
+    instructions: parseFrontmatter(typeArchitectureSkillMarkdown).body,
   };
 }

@@ -1,6 +1,9 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import authContractSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+
+const { body } = parseFrontmatter(authContractSkillMarkdown);
 
 export function getAuthContractSkillTemplate(): SkillTemplate {
   return {
@@ -42,6 +45,6 @@ export function getAuthContractSkillTemplate(): SkillTemplate {
       "Frontend auth guard component",
       "Logout implementation that revokes server-side",
     ],
-    instructions: getSkillInstructions(SKILL_NAMES.AUTH_CONTRACT),
+    instructions: body,
   };
 }

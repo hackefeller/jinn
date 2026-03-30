@@ -1,5 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import planSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
 
 export function getPlanSkillTemplate(): SkillTemplate {
@@ -44,6 +45,6 @@ export function getPlanSkillTemplate(): SkillTemplate {
       "mcp_linear_save_milestone",
     ],
     argumentHint: "work to plan — goal, feature, initiative, or sprint description",
-    instructions: getSkillInstructions(SKILL_NAMES.PLAN),
+    instructions: parseFrontmatter(planSkillMarkdown).body,
   };
 }

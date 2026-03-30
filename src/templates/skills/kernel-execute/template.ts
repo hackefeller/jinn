@@ -1,6 +1,7 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
 import { SKILL_NAMES } from "../../constants.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import executeSkillMarkdown from "./instructions.md";
 
 export function getExecuteSkillTemplate(): SkillTemplate {
   return {
@@ -36,6 +37,6 @@ export function getExecuteSkillTemplate(): SkillTemplate {
       "mcp_linear_save_comment",
     ],
     argumentHint: "issue ID, project ID, or scope to execute",
-    instructions: getSkillInstructions(SKILL_NAMES.EXECUTE),
+    instructions: parseFrontmatter(executeSkillMarkdown).body,
   };
 }

@@ -1,5 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import unblockSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
 
 export function getUnblockSkillTemplate(): SkillTemplate {
@@ -45,6 +46,6 @@ export function getUnblockSkillTemplate(): SkillTemplate {
       "mcp_linear_save_comment",
     ],
     argumentHint: "blocked issue ID or title",
-    instructions: getSkillInstructions(SKILL_NAMES.UNBLOCK),
+    instructions: parseFrontmatter(unblockSkillMarkdown).body,
   };
 }

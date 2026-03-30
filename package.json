@@ -27,7 +27,7 @@
   ],
   "type": "module",
   "scripts": {
-    "generate:template-refs": "bun ./src/templates/.generated/generate.ts",
+    "generate:template-refs": "bun ./scripts/generate-template-refs.ts",
     "build": "bun run generate:template-refs && bun build ./src/cli/main.ts --compile --outfile ./dist/kernel && cp ./package.json ./dist/",
     "build:bin": "bun run generate:template-refs && bun build ./src/cli/main.ts --compile --outfile ./dist/kernel && cp ./package.json ./dist/",
     "build:dev": "bun run generate:template-refs && bun build ./src/cli/main.ts --compile --outfile ./dist/kernel-dev && cp ./package.json ./dist/",

@@ -1,5 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import triageSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
 
 export function getTriageSkillTemplate(): SkillTemplate {
@@ -40,6 +41,6 @@ export function getTriageSkillTemplate(): SkillTemplate {
       "mcp_linear_save_issue",
     ],
     argumentHint: "bug description, issue ID, or request summary",
-    instructions: getSkillInstructions(SKILL_NAMES.TRIAGE),
+    instructions: parseFrontmatter(triageSkillMarkdown).body,
   };
 }

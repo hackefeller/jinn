@@ -1,7 +1,10 @@
 import type { AgentTemplate } from "../../../core/templates/types.js";
-import { getAgentInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import reviewAgentMarkdown from "./AGENT.md";
 import { AGENT_NAMES } from "../../constants.js";
 import { REVIEW_AGENT_AVAILABLE_SKILLS } from "../available-skills.js";
+
+const { body } = parseFrontmatter(reviewAgentMarkdown);
 
 export function getReviewAgentTemplate(): AgentTemplate {
   return {
@@ -17,7 +20,7 @@ export function getReviewAgentTemplate(): AgentTemplate {
       category: "Reviewer",
       tags: ["review", "quality", "security"],
     },
-    instructions: getAgentInstructions(AGENT_NAMES.REVIEW),
+    instructions: body,
     capabilities: ["Code review", "Security analysis", "Performance review", "Quality assessment"],
     availableSkills: REVIEW_AGENT_AVAILABLE_SKILLS,
     role: "Reviewer",

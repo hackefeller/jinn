@@ -1,6 +1,9 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import boardSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
+
+const { body } = parseFrontmatter(boardSkillMarkdown);
 
 export function getBoardSkillTemplate(): SkillTemplate {
   return {
@@ -32,6 +35,6 @@ export function getBoardSkillTemplate(): SkillTemplate {
     ],
     outputs: ["Grouped task board markdown", "Optional Linear document summary"],
     dependencies: [],
-    instructions: getSkillInstructions(SKILL_NAMES.BOARD),
+    instructions: body,
   };
 }

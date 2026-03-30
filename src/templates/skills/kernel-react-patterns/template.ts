@@ -1,6 +1,8 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import reactPatternsSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
-import { getSkillInstructions, getSkillReferences } from "../../.generated/templates.js";
+import { getSkillReferences } from "../../.generated/templates.js";
 
 export function getReactPatternsSkillTemplate(): SkillTemplate {
   return {
@@ -49,6 +51,6 @@ export function getReactPatternsSkillTemplate(): SkillTemplate {
       "references/package-migration.md",
       "references/package-violations.md",
     ),
-    instructions: getSkillInstructions(SKILL_NAMES.REACT_PATTERNS),
+    instructions: parseFrontmatter(reactPatternsSkillMarkdown).body,
   };
 }

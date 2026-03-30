@@ -1,5 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import statusSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
 
 export function getStatusSkillTemplate(): SkillTemplate {
@@ -39,6 +40,6 @@ export function getStatusSkillTemplate(): SkillTemplate {
       "mcp_linear_create_document",
     ],
     argumentHint: "project, milestone, cycle, team, or issue ID to check",
-    instructions: getSkillInstructions(SKILL_NAMES.STATUS),
+    instructions: parseFrontmatter(statusSkillMarkdown).body,
   };
 }

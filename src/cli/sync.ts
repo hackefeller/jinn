@@ -18,7 +18,6 @@
  * Tool home directories:
  *   Claude     → ~/.claude/agents/   (*.md)
  *   Codex      → ~/.codex/agents/    (*.toml)
- *   OpenCode   → ~/.opencode/agents/ (*.md)
  *   Gemini     → ~/.gemini/agents/   (*.md)
  *   Copilot    → ~/.copilot/agents/  (*.agent.md)  ← user-level dir differs from project .github/
  */
@@ -30,7 +29,6 @@ import { claudeAdapter } from "../core/adapters/claude.js";
 import { codexAdapter } from "../core/adapters/codex.js";
 import { geminiAdapter } from "../core/adapters/gemini.js";
 import { githubCopilotAdapter } from "../core/adapters/github-copilot.js";
-import { opencodeAdapter } from "../core/adapters/opencode.js";
 import type { ToolCommandAdapter } from "../core/adapters/types.js";
 import { CONFIG_VERSION } from "../core/config/defaults.js";
 import { getDefaultAgentTemplates, getDefaultSkillTemplates } from "../templates/catalog.js";
@@ -41,7 +39,7 @@ export interface SyncOptions {
 
 // Tools that receive per-skill symlinks pointing to ~/.agents/skills/<name>
 // Cursor has no agents but does use skills.
-const SKILL_LINK_TOOLS = ["claude", "cursor", "opencode", "codex", "gemini"];
+const SKILL_LINK_TOOLS = ["claude", "cursor", "codex", "gemini"];
 
 // Per-tool agent installation config.
 // toolHomeDir: the dot-directory under homePath where agents are written.
@@ -50,7 +48,6 @@ const SKILL_LINK_TOOLS = ["claude", "cursor", "opencode", "codex", "gemini"];
 const AGENT_ADAPTERS: Array<{ adapter: ToolCommandAdapter; toolHomeDir: string }> = [
   { adapter: claudeAdapter, toolHomeDir: ".claude" },
   { adapter: codexAdapter, toolHomeDir: ".codex" },
-  { adapter: opencodeAdapter, toolHomeDir: ".opencode" },
   { adapter: geminiAdapter, toolHomeDir: ".gemini" },
   { adapter: githubCopilotAdapter, toolHomeDir: ".copilot" },
 ];

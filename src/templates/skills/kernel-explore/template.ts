@@ -1,5 +1,6 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import exploreSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
 
 export function getExploreSkillTemplate(): SkillTemplate {
@@ -33,6 +34,6 @@ export function getExploreSkillTemplate(): SkillTemplate {
     dependencies: [],
     disableModelInvocation: true,
     argumentHint: "issue ID, parent issue, or topic to investigate",
-    instructions: getSkillInstructions(SKILL_NAMES.EXPLORE),
+    instructions: parseFrontmatter(exploreSkillMarkdown).body,
   };
 }

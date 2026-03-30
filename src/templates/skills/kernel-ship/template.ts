@@ -1,6 +1,11 @@
 import type { SkillTemplate } from "../../../core/templates/types.js";
-import { getSkillInstructions } from "../../.generated/templates.js";
+import { parseFrontmatter } from "../../../core/templates/frontmatter.js";
+import shipSkillMarkdown from "./instructions.md";
 import { SKILL_NAMES } from "../../constants.js";
+
+const { frontmatter, body } = parseFrontmatter<Omit<SkillTemplate, "instructions" | "references">>(
+  shipSkillMarkdown,
+);
 
 export function getShipSkillTemplate(): SkillTemplate {
   return {
@@ -37,6 +42,6 @@ export function getShipSkillTemplate(): SkillTemplate {
     disableModelInvocation: true,
     allowedTools: ["mcp_linear_get_issue", "mcp_linear_save_comment"],
     argumentHint: "branch, PR, feature, or issue to ship",
-    instructions: getSkillInstructions(SKILL_NAMES.SHIP),
+    instructions: body,
   };
 }
