@@ -18,7 +18,7 @@ describe("Kernel skill templates", () => {
   ];
 
   it("registers all Kernel skills in the default catalog", () => {
-    const names = new Set(getDefaultSkillTemplates("extended").map((template) => template.name));
+    const names = new Set(getDefaultSkillTemplates().map((template) => template.name));
 
     expect(names.has(SKILL_NAMES.GH_PR_ERRORS)).toBe(true);
     expect(names.has(SKILL_NAMES.CHANGE_PROPOSE)).toBe(true);

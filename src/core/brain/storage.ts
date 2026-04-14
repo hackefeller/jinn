@@ -1,60 +1,49 @@
+import * as fs from "node:fs/promises";
 import * as os from "os";
 import * as path from "path";
 import * as yaml from "yaml";
 import { githubCopilotAdapter } from "../adapters/github-copilot.js";
 import { ensureDir, fileExists, listDirs, readFile, writeFile } from "../utils/file-system.js";
-import { loadVaultSkills } from "../vault/loader.js";
 import type { BrainCommandAlias, BrainPackageManifest } from "./types.js";
 import { getBuiltInCatalog } from "./catalog.js";
-import { getBrainRoot } from "./config.js";
+import { getCatalogRoot, getKernelHome } from "./config.js";
 import { serializeAgentTemplate } from "./serialize.js";
 
 function getSkillsRoot(homePath = os.homedir()): string {
-  return path.join(getBrainRoot(homePath), "skills");
+  return path.join(getCatalogRoot(homePath), "skills");
 }
 
 function getAgentsRoot(homePath = os.homedir()): string {
-  return path.join(getBrainRoot(homePath), "agents");
+  return path.join(getCatalogRoot(homePath), "agents");
 }
 
 function getPackagesRoot(homePath = os.homedir()): string {
-  return path.join(getBrainRoot(homePath), "packages");
+  return path.join(getKernelHome(homePath), "packages");
 }
 
 function getCommandsRoot(homePath = os.homedir()): string {
-  return path.join(getBrainRoot(homePath), "commands");
+  return path.join(getCatalogRoot(homePath), "commands");
 }
 
-function buildImportedSkillContent(
-  frontmatter: Record<string, unknown>,
-  body: string,
-): string {
-  const cleaned = Object.fromEntries(
-    Object.entries(frontmatter).filter(([, value]) => value !== undefined && value !== null),
-  );
-  if (Object.keys(cleaned).length === 0) {
-    return body;
-  }
-  return `---\n${yaml.stringify(cleaned).trim()}\n---\n\n${body}`;
-}
-
-export async function ensureBrainLayout(homePath = os.homedir()): Promise<void> {
+export async function ensureCatalogLayout(homePath = os.homedir()): Promise<void> {
   await ensureDir(getSkillsRoot(homePath));
   await ensureDir(getAgentsRoot(homePath));
   await ensureDir(getPackagesRoot(homePath));
   await ensureDir(getCommandsRoot(homePath));
 }
 
-export async function seedBuiltInBrain(homePath = os.homedir()): Promise<void> {
-  await ensureBrainLayout(homePath);
+export async function syncBuiltInCatalog(homePath = os.homedir()): Promise<void> {
+  await ensureCatalogLayout(homePath);
   const catalog = getBuiltInCatalog();
+
+  const catalogSkillNames = new Set(catalog.skills.map((s) => s.name));
+  const catalogAgentNames = new Set(catalog.agents.map((a) => a.name));
+  const catalogCommandNames = new Set(catalog.commands.map((c) => c.name));
 
   for (const skill of catalog.skills) {
     const skillDir = path.join(getSkillsRoot(homePath), skill.name);
     const skillPath = path.join(skillDir, "SKILL.md");
-    if (!(await fileExists(skillPath))) {
-      await writeFile(skillPath, githubCopilotAdapter.formatSkill(skill, "2.0.0"));
-    }
+    await writeFile(skillPath, githubCopilotAdapter.formatSkill(skill, "2.0.0"));
     for (const ref of skill.references ?? []) {
       await writeFile(path.join(skillDir, ref.relativePath), ref.content);
     }
@@ -63,9 +52,7 @@ export async function seedBuiltInBrain(homePath = os.homedir()): Promise<void> {
   for (const agent of catalog.agents) {
     const agentDir = path.join(getAgentsRoot(homePath), agent.name);
     const agentPath = path.join(agentDir, "AGENT.md");
-    if (!(await fileExists(agentPath))) {
-      await writeFile(agentPath, serializeAgentTemplate(agent));
-    }
+    await writeFile(agentPath, serializeAgentTemplate(agent));
     for (const ref of agent.references ?? []) {
       await writeFile(path.join(agentDir, ref.relativePath), ref.content);
     }
@@ -73,68 +60,70 @@ export async function seedBuiltInBrain(homePath = os.homedir()): Promise<void> {
 
   for (const pkg of catalog.packages) {
     const pkgPath = path.join(getPackagesRoot(homePath), `${pkg.id}.yaml`);
-    if (!(await fileExists(pkgPath))) {
-      await writeFile(pkgPath, yaml.stringify(pkg, { indent: 2, sortMapEntries: true }));
-    }
+    await writeFile(pkgPath, yaml.stringify(pkg, { indent: 2, sortMapEntries: true }));
   }
 
   for (const command of catalog.commands) {
     const commandPath = path.join(getCommandsRoot(homePath), `${command.name}.yaml`);
-    if (!(await fileExists(commandPath))) {
-      await writeFile(commandPath, yaml.stringify(command, { indent: 2, sortMapEntries: true }));
+    await writeFile(commandPath, yaml.stringify(command, { indent: 2, sortMapEntries: true }));
+  }
+
+  for (const name of await listDirs(getSkillsRoot(homePath))) {
+    if (!catalogSkillNames.has(name)) {
+      await fs.rm(path.join(getSkillsRoot(homePath), name), { recursive: true, force: true });
+    }
+  }
+
+  for (const name of await listDirs(getAgentsRoot(homePath))) {
+    if (!catalogAgentNames.has(name)) {
+      await fs.rm(path.join(getAgentsRoot(homePath), name), { recursive: true, force: true });
+    }
+  }
+
+  {
+    const entries = await fs.readdir(getCommandsRoot(homePath), { withFileTypes: true });
+    const commandFiles = entries
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".yaml"))
+      .map((entry) => entry.name.replace(/\.yaml$/, ""));
+    for (const name of commandFiles) {
+      if (!catalogCommandNames.has(name)) {
+        await fs.rm(path.join(getCommandsRoot(homePath), `${name}.yaml`), { force: true });
+      }
     }
   }
 }
 
-export async function importLegacyCodexVault(homePath = os.homedir()): Promise<string[]> {
-  const imported: string[] = [];
-  try {
-    const skills = await loadVaultSkills(homePath);
-    for (const skill of skills) {
-      const skillDir = path.join(getSkillsRoot(homePath), skill.name);
-      const skillPath = path.join(skillDir, "SKILL.md");
-      if (await fileExists(skillPath)) {
-        continue;
-      }
-      await writeFile(skillPath, buildImportedSkillContent(skill.frontmatter, skill.body));
-      for (const ref of skill.references) {
-        await writeFile(path.join(skillDir, ref.relativePath), ref.content);
-      }
-      imported.push(skill.name);
-    }
-  } catch {
-    return imported;
-  }
-  return imported;
-}
-
-export async function listBrainSkillNames(homePath = os.homedir()): Promise<string[]> {
+export async function listCatalogSkillNames(homePath = os.homedir()): Promise<string[]> {
   return (await listDirs(getSkillsRoot(homePath))).sort();
 }
 
-export async function listBrainAgentNames(homePath = os.homedir()): Promise<string[]> {
+export async function listCatalogAgentNames(homePath = os.homedir()): Promise<string[]> {
   return (await listDirs(getAgentsRoot(homePath))).sort();
 }
 
-export async function listBrainCommandNames(homePath = os.homedir()): Promise<string[]> {
-  return (await listDirs(getCommandsRoot(homePath))).sort();
+export async function listCatalogCommandNames(homePath = os.homedir()): Promise<string[]> {
+  const entries = await fs.readdir(getCommandsRoot(homePath), { withFileTypes: true }).catch(() => []);
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".yaml"))
+    .map((entry) => entry.name.replace(/\.yaml$/, ""))
+    .sort();
 }
 
-export async function loadBrainSkillContent(
+export async function loadCatalogSkillContent(
   skillName: string,
   homePath = os.homedir(),
 ): Promise<string> {
   return readFile(path.join(getSkillsRoot(homePath), skillName, "SKILL.md"));
 }
 
-export async function loadBrainAgentContent(
+export async function loadCatalogAgentContent(
   agentName: string,
   homePath = os.homedir(),
 ): Promise<string> {
   return readFile(path.join(getAgentsRoot(homePath), agentName, "AGENT.md"));
 }
 
-export async function loadBrainCommandAlias(
+export async function loadCatalogCommandAlias(
   commandName: string,
   homePath = os.homedir(),
 ): Promise<BrainCommandAlias> {
@@ -158,6 +147,14 @@ export async function listPackageManifests(homePath = os.homedir()): Promise<Bra
   return catalog.packages;
 }
 
-export function getBrainSkillDir(skillName: string, homePath = os.homedir()): string {
+export function getCatalogSkillDir(skillName: string, homePath = os.homedir()): string {
   return path.join(getSkillsRoot(homePath), skillName);
+}
+
+export function getCatalogAgentsRoot(homePath = os.homedir()): string {
+  return getAgentsRoot(homePath);
+}
+
+export function getCatalogCommandsRoot(homePath = os.homedir()): string {
+  return getCommandsRoot(homePath);
 }

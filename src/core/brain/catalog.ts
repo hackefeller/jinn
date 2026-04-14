@@ -1,56 +1,17 @@
 import type { AgentTemplate, SkillTemplate } from "../templates/types.js";
-import { getDoAgentTemplate } from "../../templates/agents/kernel-do/template.js";
-import { getGitAgentTemplate } from "../../templates/agents/kernel-git/template.js";
-import { getPlanAgentTemplate } from "../../templates/agents/kernel-plan/template.js";
-import { getReviewAgentTemplate } from "../../templates/agents/kernel-review/template.js";
-import { getSearchAgentTemplate } from "../../templates/agents/kernel-search/template.js";
-import { getApiEngineeringSkillTemplate } from "../../templates/skills/kernel-api-engineering/template.js";
-import { getAssetIntegrationSecuritySkillTemplate } from "../../templates/skills/kernel-asset-integration-security/template.js";
-import { getAuthContractSkillTemplate } from "../../templates/skills/kernel-auth-contract/template.js";
-import { getBuildSkillTemplate } from "../../templates/skills/kernel-build/template.js";
-import { getDatabaseWorkflowSkillTemplate } from "../../templates/skills/kernel-database-workflow/template.js";
-import { getGitMasterSkillTemplate } from "../../templates/skills/kernel-git-master/template.js";
-import { getMapCodebaseSkillTemplate } from "../../templates/skills/kernel-map-codebase/template.js";
-import { getProjectSetupSkillTemplate } from "../../templates/skills/kernel-project-setup/template.js";
-import { getReactNativeSkillTemplate } from "../../templates/skills/kernel-react-native/template.js";
-import { getReactPatternsSkillTemplate } from "../../templates/skills/kernel-react-patterns/template.js";
-import { getReviewSkillTemplate } from "../../templates/skills/kernel-review/template.js";
-import { getTypeArchitectureSkillTemplate } from "../../templates/skills/kernel-type-architecture/template.js";
+import { getDefaultAgentTemplates, getDefaultSkillTemplates } from "../../templates/catalog.js";
 import type { BrainCommandAlias, BrainPackageManifest, BuiltInCatalog } from "./types.js";
 
-function dedupeByName<T extends { name: string }>(items: T[]): T[] {
-  return [...new Map(items.map((item) => [item.name, item])).values()];
+function getBuiltInSkills(): SkillTemplate[] {
+  return getDefaultSkillTemplates();
+}
+
+function getBuiltInAgents(): AgentTemplate[] {
+  return getDefaultAgentTemplates();
 }
 
 function dedupePackages(packages: BrainPackageManifest[]): BrainPackageManifest[] {
   return [...new Map(packages.map((pkg) => [pkg.id, pkg])).values()];
-}
-
-function getBuiltInSkills(): SkillTemplate[] {
-  return dedupeByName([
-    getBuildSkillTemplate(),
-    getMapCodebaseSkillTemplate(),
-    getProjectSetupSkillTemplate(),
-    getGitMasterSkillTemplate(),
-    getReviewSkillTemplate(),
-    getApiEngineeringSkillTemplate(),
-    getAssetIntegrationSecuritySkillTemplate(),
-    getReactPatternsSkillTemplate(),
-    getReactNativeSkillTemplate(),
-    getDatabaseWorkflowSkillTemplate(),
-    getAuthContractSkillTemplate(),
-    getTypeArchitectureSkillTemplate(),
-  ]);
-}
-
-function getBuiltInAgents(): AgentTemplate[] {
-  return dedupeByName([
-    getPlanAgentTemplate(),
-    getDoAgentTemplate(),
-    getReviewAgentTemplate(),
-    getSearchAgentTemplate(),
-    getGitAgentTemplate(),
-  ]);
 }
 
 function getBuiltInCommands(): BrainCommandAlias[] {

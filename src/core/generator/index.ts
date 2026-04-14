@@ -38,14 +38,11 @@ export class Generator {
       return result;
     }
 
-    const skillTemplates = getDefaultSkillTemplates(this.config.profile);
-    const agentTemplates = getDefaultAgentTemplates(this.config.profile);
+    const skillTemplates = getDefaultSkillTemplates();
+    const agentTemplates = getDefaultAgentTemplates();
     const skillFiles = generateSkillsForAllTools(skillTemplates, adapters, this.version);
     const manifestFiles = generateManifestsForAllTools(skillTemplates, adapters, this.version);
-    const agentFiles =
-      this.config.delivery !== "skills"
-        ? generateAgentsForAllTools(agentTemplates, adapters, this.version)
-        : [];
+    const agentFiles = generateAgentsForAllTools(agentTemplates, adapters, this.version);
 
     const { written, failed } = await writeFilesBatch(
       [...skillFiles, ...manifestFiles, ...agentFiles],

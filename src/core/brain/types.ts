@@ -6,7 +6,6 @@ export interface BrainConfig {
   version: string;
   hosts: HostId[];
   packages: string[];
-  brainPath?: string;
 }
 
 export interface BrainCommandAlias {
@@ -65,14 +64,14 @@ export interface SyncHostResult {
 }
 
 export interface SyncResult {
-  brainPath: string;
+  catalogPath: string;
   importedLegacySkills: string[];
   hosts: SyncHostResult[];
 }
 
 export interface InitResult {
   configPath: string;
-  brainPath: string;
+  catalogPath: string;
   detectedHosts: HostId[];
   enabledHosts: HostId[];
   enabledPackages: string[];
@@ -86,7 +85,7 @@ export interface DoctorIssue {
 
 export interface DoctorResult {
   configPath: string;
-  brainPath: string;
+  catalogPath: string;
   hosts: HostId[];
   packages: string[];
   issues: DoctorIssue[];

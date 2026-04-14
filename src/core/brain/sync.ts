@@ -2,18 +2,17 @@ import * as fs from "fs/promises";
 import * as os from "os";
 import * as path from "path";
 import type { CommandTemplate, SkillTemplate } from "../templates/types.js";
-import { ensureDir, fileExists, listDirs, readFile, writeFile } from "../utils/file-system.js";
-import { loadBrainConfig, getBrainRoot, getSyncManifestPath } from "./config.js";
-import { getBuiltInCatalog } from "./catalog.js";
+import { directoryExists, ensureDir, fileExists, listDirs, readFile, writeFile } from "../utils/file-system.js";
+import { getCatalogRoot, loadBrainConfig, saveBrainConfig, getSyncManifestPath } from "./config.js";
 import { getHostAdapter, getHostDescriptor, listKnownHosts, mapProjectPathToHome } from "./hosts.js";
 import { parseAgentDocument, parseSkillDocument } from "./serialize.js";
 import {
-  ensureBrainLayout,
-  importLegacyCodexVault,
-  loadBrainAgentContent,
-  loadBrainCommandAlias,
-  loadBrainSkillContent,
-  seedBuiltInBrain,
+  getCatalogAgentsRoot,
+  getCatalogCommandsRoot,
+  loadCatalogAgentContent,
+  loadCatalogCommandAlias,
+  loadCatalogSkillContent,
+  syncBuiltInCatalog,
 } from "./storage.js";
 import type {
   BrainCommandAlias,
@@ -26,15 +25,7 @@ import type {
 } from "./types.js";
 
 function getSkillsRoot(homePath = os.homedir()): string {
-  return path.join(getBrainRoot(homePath), "skills");
-}
-
-function getAgentsRoot(homePath = os.homedir()): string {
-  return path.join(getBrainRoot(homePath), "agents");
-}
-
-function getCommandsRoot(homePath = os.homedir()): string {
-  return path.join(getBrainRoot(homePath), "commands");
+  return path.join(getCatalogRoot(homePath), "skills");
 }
 
 async function loadSyncManifest(homePath = os.homedir()): Promise<SyncManifest> {
@@ -70,36 +61,36 @@ function buildCommandTemplate(alias: BrainCommandAlias): CommandMaterialization 
   return { alias, template };
 }
 
-async function readBrainSkillTemplates(homePath: string): Promise<Array<{ name: string; template: SkillTemplate }>> {
+async function readCatalogSkillTemplates(homePath: string): Promise<Array<{ name: string; template: SkillTemplate }>> {
   const names = (await listDirs(getSkillsRoot(homePath))).sort();
   const skills: Array<{ name: string; template: SkillTemplate }> = [];
   for (const name of names) {
     skills.push({
       name,
-      template: parseSkillDocument(await loadBrainSkillContent(name, homePath)),
+      template: parseSkillDocument(await loadCatalogSkillContent(name, homePath)),
     });
   }
   return skills;
 }
 
-async function readBrainAgentTemplates(homePath: string) {
-  const names = (await listDirs(getAgentsRoot(homePath))).sort();
+async function readCatalogAgentTemplates(homePath: string) {
+  const names = (await listDirs(getCatalogAgentsRoot(homePath))).sort();
   return Promise.all(
     names.map(async (name) => ({
       name,
-      template: parseAgentDocument(await loadBrainAgentContent(name, homePath)),
+      template: parseAgentDocument(await loadCatalogAgentContent(name, homePath)),
     })),
   );
 }
 
-async function readBrainCommandTemplates(homePath: string) {
-  const entries = await fs.readdir(getCommandsRoot(homePath), { withFileTypes: true }).catch(() => []);
+async function readCatalogCommandTemplates(homePath: string) {
+  const entries = await fs.readdir(getCatalogCommandsRoot(homePath), { withFileTypes: true }).catch(() => []);
   const commandFiles = entries
     .filter((entry) => entry.isFile() && entry.name.endsWith(".yaml"))
     .map((entry) => entry.name.replace(/\.yaml$/, ""))
     .sort();
   return Promise.all(
-    commandFiles.map(async (name) => buildCommandTemplate(await loadBrainCommandAlias(name, homePath))),
+    commandFiles.map(async (name) => buildCommandTemplate(await loadCatalogCommandAlias(name, homePath))),
   );
 }
 
@@ -108,9 +99,9 @@ export async function buildDesiredHostActions(
   homePath = os.homedir(),
 ): Promise<SyncAction[]> {
   const adapter = getHostAdapter(hostId);
-  const skillTemplates = await readBrainSkillTemplates(homePath);
-  const agentTemplates = await readBrainAgentTemplates(homePath);
-  const commandTemplates = await readBrainCommandTemplates(homePath);
+  const skillTemplates = await readCatalogSkillTemplates(homePath);
+  const agentTemplates = await readCatalogAgentTemplates(homePath);
+  const commandTemplates = await readCatalogCommandTemplates(homePath);
   const actions: SyncAction[] = [];
 
   for (const skill of skillTemplates) {
@@ -187,6 +178,54 @@ async function applyAction(action: SyncAction): Promise<"created" | "updated" | 
   return stat ? "updated" : "created";
 }
 
+async function cleanupHostOrphans(hostId: HostId, homePath: string): Promise<number> {
+  const descriptor = getHostDescriptor(hostId);
+  const hostBase = path.join(homePath, descriptor.homeDir);
+  let cleaned = 0;
+
+  const desiredPaths = new Set((await buildDesiredHostActions(hostId, homePath)).map((action) => action.path));
+
+  const skillsDir = path.join(hostBase, "skills");
+  if (await directoryExists(skillsDir)) {
+    for (const entry of await fs.readdir(skillsDir, { withFileTypes: true })) {
+      if (!entry.name.startsWith("kernel-")) continue;
+      const entryPath = path.join(skillsDir, entry.name);
+      const isBrokenLink = entry.isSymbolicLink() && !(await fs.stat(entryPath).catch(() => null));
+      if (isBrokenLink || !desiredPaths.has(entryPath) || entry.name.startsWith("kernel-openspec-")) {
+        await fs.rm(entryPath, { force: true });
+        cleaned++;
+      }
+    }
+  }
+
+  const agentsDir = path.join(hostBase, "agents");
+  if (await directoryExists(agentsDir)) {
+    for (const entry of await fs.readdir(agentsDir, { withFileTypes: true })) {
+      if (!entry.name.startsWith("kernel-")) continue;
+      const entryPath = path.join(agentsDir, entry.name);
+      if (!desiredPaths.has(entryPath)) {
+        await fs.rm(entryPath, { force: true });
+        cleaned++;
+      }
+    }
+  }
+
+  for (const relativeCommandsDir of [path.join(hostBase, "commands"), path.join(hostBase, "commands", "kernel")]) {
+    if (await directoryExists(relativeCommandsDir)) {
+      for (const entry of await fs.readdir(relativeCommandsDir, { withFileTypes: true })) {
+        if (!entry.name.startsWith("kernel-")) continue;
+        const entryPath = path.join(relativeCommandsDir, entry.name);
+        if (!desiredPaths.has(entryPath)) {
+          await fs.rm(entryPath, { force: true });
+          cleaned++;
+        }
+      }
+    }
+  }
+
+  return cleaned;
+}
+
 async function syncHost(
   hostId: HostId,
   previous: string[],
@@ -216,6 +255,9 @@ async function syncHost(
     }
   }
 
+  const orphansCleaned = await cleanupHostOrphans(hostId, homePath);
+  removed += orphansCleaned;
+
   return {
     host: hostId,
     created,
@@ -227,17 +269,16 @@ async function syncHost(
 }
 
 export async function syncKernelBrain(homePath = os.homedir()): Promise<SyncResult> {
-  await ensureBrainLayout(homePath);
-  await seedBuiltInBrain(homePath);
-  const importedLegacySkills = await importLegacyCodexVault(homePath);
+  await syncBuiltInCatalog(homePath);
   const config = await loadBrainConfig(homePath);
   if (!config) {
     throw new Error("Kernel is not initialized. Run `kernel init` first.");
   }
+  const normalizedConfig = await saveBrainConfig(config, homePath);
 
   const manifest = await loadSyncManifest(homePath);
   const results: SyncHostResult[] = [];
-  for (const hostId of config.hosts) {
+  for (const hostId of normalizedConfig.hosts) {
     const previous = manifest.hosts[hostId]?.paths ?? [];
     const result = await syncHost(hostId, previous, homePath);
     manifest.hosts[hostId] = { paths: result.tracked };
@@ -245,7 +286,7 @@ export async function syncKernelBrain(homePath = os.homedir()): Promise<SyncResu
   }
 
   for (const hostId of listKnownHosts()) {
-    if (!config.hosts.includes(hostId) && manifest.hosts[hostId]?.paths) {
+    if (!normalizedConfig.hosts.includes(hostId) && manifest.hosts[hostId]?.paths) {
       for (const tracked of manifest.hosts[hostId]!.paths) {
         await removeTrackedPath(tracked);
       }
@@ -256,8 +297,8 @@ export async function syncKernelBrain(homePath = os.homedir()): Promise<SyncResu
   await saveSyncManifest(manifest, homePath);
 
   return {
-    brainPath: getBrainRoot(homePath),
-    importedLegacySkills,
+    catalogPath: getCatalogRoot(homePath),
+    importedLegacySkills: [],
     hosts: results,
   };
 }

@@ -1,4 +1,3 @@
-import type { Profile } from "../core/config/schema.js";
 import type { AgentTemplate, CommandTemplate, SkillTemplate } from "../core/templates/types.js";
 import { ALL_AGENTS } from "./agents/index.js";
 import { getDefaultCommandTemplates as getCommandTemplates } from "./commands/index.js";
@@ -52,8 +51,8 @@ import { getDesignSkillTemplate } from "./skills/kernel-design/template.js";
 // Ecosystem skills
 import { getSkillBuilderSkillTemplate } from "./skills/kernel-skill-builder/template.js";
 
-export function getDefaultSkillTemplates(profile: Profile = "extended"): SkillTemplate[] {
-  const all = [
+export function getDefaultSkillTemplates(): SkillTemplate[] {
+  return [
     // Code quality and tooling
     getBuildSkillTemplate(),
     getProjectInitSkillTemplate(),
@@ -103,19 +102,10 @@ export function getDefaultSkillTemplates(profile: Profile = "extended"): SkillTe
     // Ecosystem
     getSkillBuilderSkillTemplate(),
   ];
-
-  if (profile === "core") {
-    return all.filter((t) => t.profile === "core");
-  }
-  return all;
 }
 
-export function getDefaultAgentTemplates(profile: Profile = "extended"): AgentTemplate[] {
-  const all = ALL_AGENTS.map((getAgentTemplate) => getAgentTemplate());
-  if (profile === "core") {
-    return all.filter((t) => t.profile === "core");
-  }
-  return all;
+export function getDefaultAgentTemplates(): AgentTemplate[] {
+  return ALL_AGENTS.map((getAgentTemplate) => getAgentTemplate());
 }
 
 export function getDefaultCommandTemplates(): CommandTemplate[] {

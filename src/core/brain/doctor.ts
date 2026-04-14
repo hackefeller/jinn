@@ -1,10 +1,8 @@
 import * as fs from "fs/promises";
 import * as os from "os";
-import * as path from "path";
-import { getBrainConfigPath, getBrainRoot, loadBrainConfig } from "./config.js";
+import { getBrainConfigPath, getCatalogRoot, loadBrainConfig } from "./config.js";
 import { buildDesiredHostActions } from "./sync.js";
 import { getBuiltInPackageIds } from "./catalog.js";
-import { listKnownHosts } from "./hosts.js";
 import type { DoctorIssue, DoctorResult } from "./types.js";
 
 export async function doctorKernel(homePath = os.homedir()): Promise<DoctorResult> {
@@ -13,7 +11,7 @@ export async function doctorKernel(homePath = os.homedir()): Promise<DoctorResul
   if (!config) {
     return {
       configPath: getBrainConfigPath(homePath),
-      brainPath: getBrainRoot(homePath),
+      catalogPath: getCatalogRoot(homePath),
       hosts: [],
       packages: [],
       issues: [{ level: "error", message: "Kernel is not initialized. Run `kernel init` first." }],
@@ -58,15 +56,9 @@ export async function doctorKernel(homePath = os.homedir()): Promise<DoctorResul
     }
   }
 
-  for (const hostId of listKnownHosts()) {
-    if (!config.hosts.includes(hostId)) {
-      continue;
-    }
-  }
-
   return {
     configPath: getBrainConfigPath(homePath),
-    brainPath: getBrainRoot(homePath),
+    catalogPath: getCatalogRoot(homePath),
     hosts: config.hosts,
     packages: config.packages,
     issues,

@@ -1,7 +1,7 @@
 import * as os from "os";
 import { getBuiltInPackage } from "./catalog.js";
 import { getBrainConfigPath, loadBrainConfig, saveBrainConfig } from "./config.js";
-import { seedBuiltInBrain } from "./storage.js";
+import { syncBuiltInCatalog } from "./storage.js";
 import type { PackageMutationResult } from "./types.js";
 
 export async function listEnabledPackages(homePath = os.homedir()): Promise<PackageMutationResult> {
@@ -28,7 +28,7 @@ export async function addPackage(packageId: string, homePath = os.homedir()): Pr
     config.packages.sort();
     await saveBrainConfig(config, homePath);
   }
-  await seedBuiltInBrain(homePath);
+  await syncBuiltInCatalog(homePath);
   return {
     configPath: getBrainConfigPath(homePath),
     packages: config.packages,

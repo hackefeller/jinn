@@ -11,7 +11,6 @@ const BrainConfigSchema = z.object({
   version: z.string().default("2.0.0"),
   hosts: z.array(HostIdSchema).default([]),
   packages: z.array(z.string()).default([]),
-  brainPath: z.string().optional(),
 });
 
 const LEGACY_CONFIG_SCHEMA = z
@@ -20,7 +19,6 @@ const LEGACY_CONFIG_SCHEMA = z
     tools: z.array(HostIdSchema).optional(),
     hosts: z.array(HostIdSchema).optional(),
     packages: z.array(z.string()).optional(),
-    brainPath: z.string().optional(),
   })
   .passthrough();
 
@@ -32,6 +30,10 @@ export function getKernelHome(homePath = os.homedir()): string {
 
 export function getBrainRoot(homePath = os.homedir()): string {
   return path.join(getKernelHome(homePath), "brain");
+}
+
+export function getCatalogRoot(homePath = os.homedir()): string {
+  return path.join(homePath, ".agents");
 }
 
 export function getBrainStateRoot(homePath = os.homedir()): string {
@@ -53,7 +55,6 @@ function normalizeConfig(
     version: input.version ?? "2.0.0",
     hosts: input.hosts ?? input.tools ?? [],
     packages: input.packages ?? [...DEFAULT_PACKAGE_IDS],
-    brainPath: input.brainPath,
   });
 }
 
@@ -80,7 +81,6 @@ export async function saveBrainConfig(
         version: normalized.version,
         hosts: normalized.hosts,
         packages: normalized.packages,
-        brainPath: normalized.brainPath,
       },
       { indent: 2, sortMapEntries: true },
     ),
@@ -101,7 +101,6 @@ export async function ensureBrainConfig(
       version: "2.0.0",
       hosts: defaults.hosts ?? [],
       packages: defaults.packages ?? [...DEFAULT_PACKAGE_IDS],
-      brainPath: defaults.brainPath,
     },
     homePath,
   );

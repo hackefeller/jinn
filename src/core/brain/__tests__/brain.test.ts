@@ -27,7 +27,7 @@ describe("brain v2", () => {
     const init = await initializeKernel(homeDir);
     expect(init.enabledHosts).toContain("codex");
 
-    const skillPath = path.join(homeDir, ".kernel", "brain", "skills", "kernel-build", "SKILL.md");
+    const skillPath = path.join(homeDir, ".agents", "skills", "kernel-build", "SKILL.md");
     expect(await fs.stat(skillPath)).toBeDefined();
 
     const linkedSkillPath = path.join(homeDir, ".codex", "skills", "kernel-build");

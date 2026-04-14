@@ -5,7 +5,7 @@ import { COMMAND_NAMES, SKILL_NAMES } from "../constants.js";
 
 describe("command templates", () => {
   const commands = getDefaultCommandTemplates();
-  const skillNames = new Set(getDefaultSkillTemplates("extended").map((template) => template.name));
+  const skillNames = new Set(getDefaultSkillTemplates().map((template) => template.name));
 
   it("registers the expected kernel change and kernel spec commands", () => {
     const names = new Set(commands.map((command) => command.name));
