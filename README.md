@@ -2,7 +2,7 @@
 
 `kernel` is a local-first brain and workflow OS for coding agents.
 
-It gives you one canonical place on your machine to define skills, agents, packages, and command aliases, then syncs that brain into the dot-directories your agent hosts already use.
+It gives you one canonical place on your machine to define skills, agents, and commands, then syncs that brain into the dot-directories your agent hosts already use.
 
 It also gives each repo a lightweight local workflow system under `kernel/work/` so planning and execution stay visible, durable, and tool-agnostic.
 
@@ -24,7 +24,6 @@ It also gives each repo a lightweight local workflow system under `kernel/work/`
   brain/
     skills/<id>/SKILL.md
     agents/<id>/AGENT.md
-    packages/<id>.yaml
     commands/<id>.yaml
   state/
     sync-manifest.json
@@ -48,8 +47,6 @@ kernel/
 kernel init
 kernel sync
 kernel doctor
-kernel package list
-kernel package add <package>
 kernel host list
 kernel work new "<goal>"
 kernel work plan [id]
@@ -69,29 +66,37 @@ kernel work new "build analytics dashboard"
 kernel work next
 ```
 
-## Default Packages
+## When To Use What
 
-- `core-brain`: core orchestration agents and foundational coding skills
-- `workflow-local`: local work-management command aliases
-- `git`: git strategy and history guidance
-- `review`: review and sign-off helpers
+### System
 
-Optional built-ins currently include:
+- `kernel-init`: first-time setup for the local Kernel home and host integration
+- `kernel-sync`: push the current catalog into enabled hosts after template or configuration changes
+- `kernel-doctor`: diagnose drift, missing generated files, or host setup problems
 
-- `frontend`
-- `mobile`
-- `database`
+### Workflow
+
+- `kernel-work-new`: start a new repo-local work item from a natural-language goal
+- `kernel-work-plan`: tighten the brief, plan, tasks, risks, and acceptance criteria
+- `kernel-work-next`: pick the next unchecked task as the single execution target
+- `kernel-work-done`: mark a verified task complete
+- `kernel-work-status`: inspect current progress and the next task
+- `kernel-work-archive`: close and preserve a completed work item
+
+### Specialist
+
+- `gh-pr-errors`: inspect the latest GitHub Actions failure on the open pull request
 
 ## Design Principles
 
 - Define once locally, sync everywhere
 - Local files are the source of truth
 - Host-specific behavior stays in small adapters/materializers
-- Packages keep the default install small and composable
+- Tags categorize skills and agents for discovery
 - Local work state should be visible in the repo, not hidden in chat
 
 ## Notes
 
-- Legacy generator, vault, and workflow modules still exist in the repo during the transition, but the primary CLI surface is now `init`, `sync`, `doctor`, `package`, `host`, and `work`.
+- The canonical workflow surface is `kernel work`; older spec and change command families are no longer shipped.
 - `kernel init` seeds the built-in brain, imports existing `~/.codex/skills` content when present, and syncs enabled hosts.
 - `kernel sync` is idempotent and tracks generated output in `~/.kernel/state/sync-manifest.json`.

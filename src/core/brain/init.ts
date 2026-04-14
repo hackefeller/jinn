@@ -17,7 +17,6 @@ export async function initializeKernel(homePath = os.homedir()): Promise<InitRes
     catalogPath: getCatalogRoot(homePath),
     detectedHosts,
     enabledHosts: config.hosts,
-    enabledPackages: config.packages,
     importedLegacySkills: [],
   };
 }

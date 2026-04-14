@@ -27,13 +27,10 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "bun build ./src/cli/main.ts --compile --outfile ./dist/kernel && cp ./package.json ./dist/",
-    "build:bin": "bun build ./src/cli/main.ts --compile --outfile ./dist/kernel && cp ./package.json ./dist/",
-    "build:dev": "bun build ./src/cli/main.ts --compile --outfile ./dist/kernel-dev && cp ./package.json ./dist/",
+    "build": "rm -rf dist && bun build ./src/cli/main.ts --compile --outfile ./dist/kernel && cp ./package.json ./dist/",
     "dev:cli": "bun ./src/cli/main.ts",
     "link:dev": "ln -sf $PWD/dist/kernel-dev /usr/local/bin/kernel-dev",
     "test": "bun test",
-    "test:vault": "bun test src/core/vault/__tests__",
     "typecheck": "bun --bun tsc --noEmit",
     "lefthook": "lefthook",
     "prepare": "lefthook install"

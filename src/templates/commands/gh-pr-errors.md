@@ -1,3 +1,19 @@
+---
+name: gh-pr-errors
+kind: command
+tags:
+  - git
+  - debugging
+description: gh-pr-errors command
+group: specialist
+backedBySkill: kernel-gh-pr-errors
+allowedTools:
+  - Bash
+  - Read
+  - Grep
+  - Glob
+---
+
 Check the latest GitHub Actions errors for the open pull request on the current branch.
 
 Use the `kernel-gh-pr-errors` skill.

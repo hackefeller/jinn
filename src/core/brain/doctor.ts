@@ -1,8 +1,8 @@
 import * as fs from "fs/promises";
 import * as os from "os";
 import { getBrainConfigPath, getCatalogRoot, loadBrainConfig } from "./config.js";
-import { buildDesiredHostActions } from "./sync.js";
-import { getBuiltInPackageIds } from "./catalog.js";
+import { getBuiltInCatalog } from "./catalog.js";
+import { renderHostOutputs } from "../render/index.js";
 import type { DoctorIssue, DoctorResult } from "./types.js";
 
 export async function doctorKernel(homePath = os.homedir()): Promise<DoctorResult> {
@@ -13,19 +13,18 @@ export async function doctorKernel(homePath = os.homedir()): Promise<DoctorResul
       configPath: getBrainConfigPath(homePath),
       catalogPath: getCatalogRoot(homePath),
       hosts: [],
-      packages: [],
       issues: [{ level: "error", message: "Kernel is not initialized. Run `kernel init` first." }],
     };
   }
 
-  for (const packageId of config.packages) {
-    if (!getBuiltInPackageIds().includes(packageId)) {
-      issues.push({ level: "warning", message: `Unknown package enabled in config: ${packageId}` });
-    }
-  }
+  const catalog = getBuiltInCatalog();
 
   for (const hostId of config.hosts) {
-    const desired = await buildDesiredHostActions(hostId, homePath);
+    const desired = renderHostOutputs(catalog, hostId, homePath, "2.0.0").map((output) => ({
+      path: output.path,
+      kind: output.kind,
+      target: output.target,
+    }));
     for (const action of desired) {
       const stat = await fs.lstat(action.path).catch(() => null);
       if (!stat) {
@@ -60,7 +59,6 @@ export async function doctorKernel(homePath = os.homedir()): Promise<DoctorResul
     configPath: getBrainConfigPath(homePath),
     catalogPath: getCatalogRoot(homePath),
     hosts: config.hosts,
-    packages: config.packages,
     issues,
   };
 }

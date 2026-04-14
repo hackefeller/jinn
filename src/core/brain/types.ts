@@ -5,30 +5,12 @@ export type HostId = "claude" | "codex" | "copilot" | "opencode" | "pi";
 export interface BrainConfig {
   version: string;
   hosts: HostId[];
-  packages: string[];
-}
-
-export interface BrainCommandAlias {
-  name: string;
-  description: string;
-  target: string;
-  argumentHint?: string;
-}
-
-export interface BrainPackageManifest {
-  id: string;
-  name: string;
-  description: string;
-  skills: string[];
-  agents: string[];
-  commands: string[];
 }
 
 export interface BuiltInCatalog {
-  packages: BrainPackageManifest[];
   skills: SkillTemplate[];
   agents: AgentTemplate[];
-  commands: BrainCommandAlias[];
+  commands: CommandTemplate[];
 }
 
 export interface HostDescriptor {
@@ -38,13 +20,17 @@ export interface HostDescriptor {
   projectMarker: string;
 }
 
-export interface SyncTrackedHostState {
-  paths: string[];
+export interface SyncManifestEntry {
+  path: string;
+  kind: "file" | "symlink";
+  hash: string;
+  templateId: string;
+  adapterVersion: string;
 }
 
 export interface SyncManifest {
   version: number;
-  hosts: Partial<Record<HostId, SyncTrackedHostState>>;
+  scopes: Partial<Record<HostId | "catalog", SyncManifestEntry[]>>;
 }
 
 export interface SyncAction {
@@ -52,10 +38,14 @@ export interface SyncAction {
   kind: "file" | "symlink";
   content?: string;
   target?: string;
+  hash?: string;
+  templateId?: string;
+  scope?: HostId | "catalog";
+  adapterVersion?: string;
 }
 
 export interface SyncHostResult {
-  host: HostId;
+  host: HostId | "catalog";
   created: number;
   updated: number;
   removed: number;
@@ -74,7 +64,6 @@ export interface InitResult {
   catalogPath: string;
   detectedHosts: HostId[];
   enabledHosts: HostId[];
-  enabledPackages: string[];
   importedLegacySkills: string[];
 }
 
@@ -87,13 +76,7 @@ export interface DoctorResult {
   configPath: string;
   catalogPath: string;
   hosts: HostId[];
-  packages: string[];
   issues: DoctorIssue[];
-}
-
-export interface PackageMutationResult {
-  configPath: string;
-  packages: string[];
 }
 
 export interface HostStatus {
@@ -102,9 +85,4 @@ export interface HostStatus {
   detected: boolean;
   enabled: boolean;
   homePath: string;
-}
-
-export interface CommandMaterialization {
-  alias: BrainCommandAlias;
-  template: CommandTemplate;
 }

@@ -112,11 +112,20 @@ export function formatCommandFrontmatter(template: CommandTemplate, version: str
     `  generatedBy: "${version}"`,
   ];
 
+  if (template.tags && template.tags.length > 0) {
+    lines.push(`tags: [${template.tags.join(", ")}]`);
+  }
   if (template.backedBySkill) {
     lines.push(`backed-by-skill: ${template.backedBySkill}`);
   }
   if (template.argumentsHint) {
     lines.push(`argument-hint: ${escapeYamlValue(template.argumentsHint)}`);
+  }
+  if (template.target) {
+    lines.push(`target: ${escapeYamlValue(template.target)}`);
+  }
+  if (template.group) {
+    lines.push(`group: ${template.group}`);
   }
   if (template.allowedTools && template.allowedTools.length > 0) {
     lines.push(`allowed-tools: ${template.allowedTools.join(", ")}`);
@@ -139,8 +148,15 @@ export function formatCompatibilityCommand(
   lines.push(`tool: ${escapeYamlValue(toolName)}`);
 
   let body = template.instructions.trim();
-  if (template.backedBySkill) {
-    body += `\n\n## Kernel Routing\n\n- Preferred backing skill: ${template.backedBySkill}\n- Preserve the legacy command name and behavior when invoking this workflow.`;
+  if (template.target || template.backedBySkill) {
+    const routingLines: string[] = [];
+    if (template.target) {
+      routingLines.push(`- Preferred CLI target: \`kernel ${template.target}\``);
+    }
+    if (template.backedBySkill) {
+      routingLines.push(`- Preferred backing skill: ${template.backedBySkill}`);
+    }
+    body += `\n\n## Kernel Routing\n\n${routingLines.join("\n")}`;
   }
 
   return closeCommandFrontmatter(lines, body);

@@ -1,10 +1,13 @@
 ---
 name: kernel-designer
+kind: agent
+tags:
+  - frontend
+  - design
 profile: core
-description: >-
-  Frontend designer: builds production-grade UIs, implements components, maps
-  user flows, iterates on design quality, and verifies implementation against
-  design specs. Use for all frontend and UI work.
+description: "Frontend designer: builds production-grade UIs, implements
+  components, maps user flows, iterates on design quality, and verifies
+  implementation against design specs. Use for all frontend and UI work."
 license: MIT
 compatibility: Works with frontend projects
 metadata:
@@ -17,6 +20,7 @@ metadata:
     - ux
     - design
     - figma
+role: Specialist
 capabilities:
   - UI implementation
   - Component architecture
@@ -27,27 +31,27 @@ capabilities:
 availableSkills:
   - kernel-design
   - kernel-review
-role: Specialist
 route: design
-defaultTools:
-  - edit
-  - read
-  - search
+argumentHint: UI component or design task (e.g., 'build a login form', 'create a
+  settings page')
 allowedTools:
   - Edit
   - Write
   - Read
   - Grep
   - Glob
-argumentHint: UI component or design task (e.g., 'build a login form', 'create a settings page')
-maxTurns: 100
-sandboxMode: workspace-write
-reasoningEffort: medium
+defaultTools:
+  - edit
+  - read
+  - search
 acceptanceChecks:
   - Design is production-ready
   - Implementation matches specs
   - Accessible
   - Responsive
+sandboxMode: workspace-write
+reasoningEffort: medium
+maxTurns: 100
 ---
 
 # Design Agent

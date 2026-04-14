@@ -13,7 +13,6 @@ import { fileURLToPath } from "node:url";
 import { registerDoctorCommand } from "./commands/doctor.js";
 import { registerHostCommand } from "./commands/host.js";
 import { registerInitCommand } from "./commands/init.js";
-import { registerPackageCommand } from "./commands/package.js";
 import { registerSyncCommand } from "./commands/sync.js";
 import { registerWorkCommand } from "./commands/work.js";
 
@@ -42,7 +41,6 @@ program
 registerInitCommand(program);
 registerSyncCommand(program);
 registerDoctorCommand(program);
-registerPackageCommand(program);
 registerHostCommand(program);
 registerWorkCommand(program);
 

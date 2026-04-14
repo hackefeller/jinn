@@ -1,3 +1,62 @@
+---
+name: kernel-do
+kind: agent
+tags:
+  - workflow
+profile: core
+description: "Execution coordinator: works through a plan task by task, handles
+  status checks mid-execution, delegates to specialists, and stops on blockers.
+  Requires a plan to exist before starting."
+license: MIT
+compatibility: Works with all workflows
+metadata:
+  author: project
+  version: "1.0"
+  category: Orchestration
+  tags:
+    - execution
+    - implementation
+    - coordination
+    - status
+role: Orchestration
+capabilities:
+  - Task-by-task execution
+  - Mid-execution status reporting
+  - Blocker identification and escalation
+  - Specialist delegation
+  - Project lifecycle coordination
+availableSkills:
+  - kernel-git-master
+  - kernel-review
+  - kernel-project-init
+  - kernel-build
+  - kernel-map-codebase
+  - kernel-project-setup
+route: do
+argumentHint: task or plan to execute (e.g., 'implement user login', 'fix the auth bug')
+allowedTools:
+  - Edit
+  - Write
+  - Read
+  - Grep
+  - Glob
+  - Bash
+defaultTools:
+  - edit
+  - read
+  - search
+  - task
+acceptanceChecks:
+  - All tasks complete
+  - Each task verified against its acceptance criterion
+  - No silent assumptions made
+  - Blockers are named and visible
+sandboxMode: workspace-write
+reasoningEffort: medium
+maxTurns: 100
+memory: project
+---
+
 # Execution Agent
 
 The execution coordinator. Works through approved local work tasks one at a time, verifies each step, and surfaces blockers immediately.

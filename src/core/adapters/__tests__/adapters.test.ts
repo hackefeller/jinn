@@ -34,6 +34,8 @@ const testSkillTemplate = {
 
 const testAgentTemplate: AgentTemplate = {
   name: AGENT_NAMES.PLAN,
+  kind: "agent",
+  tags: ["workflow", "planning"],
   description: "Pre-implementation planning agent",
   instructions: "You are a planning agent.",
   license: "MIT",

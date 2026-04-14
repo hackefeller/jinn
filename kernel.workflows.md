@@ -326,3 +326,21 @@ The intended loop is:
 9. `kernel work archive`
 
 That loop is simple on purpose. The system should help us do the work, not become the work.
+
+## Command Surface
+
+Kernel now ships one repo-local workflow surface:
+
+- `kernel-work-new`
+- `kernel-work-plan`
+- `kernel-work-next`
+- `kernel-work-done`
+- `kernel-work-status`
+- `kernel-work-archive`
+
+Those synced commands mirror the CLI `kernel work ...` lifecycle directly.
+
+Use the supporting commands alongside that loop:
+
+- System: `kernel-init`, `kernel-sync`, `kernel-doctor`
+- Specialist: `gh-pr-errors`

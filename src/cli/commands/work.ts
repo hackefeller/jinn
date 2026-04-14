@@ -6,7 +6,7 @@ import {
   nextWorkTask,
   planWork,
   workStatus,
-} from "../../core/workv2/index.js";
+} from "../../core/work/index.js";
 import { printOutput } from "./output.js";
 
 export function registerWorkCommand(program: Command): void {

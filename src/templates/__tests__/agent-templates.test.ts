@@ -3,38 +3,23 @@ import { describe, expect, it } from "bun:test";
 import { getDefaultAgentTemplates } from "../catalog.js";
 import { AGENT_NAMES, SKILL_NAMES } from "../constants.js";
 
-import {
-  ALL_AGENTS,
-  getArchitectAgentTemplate,
-  getCaptureAgentTemplate,
-  getDesignerAgentTemplate,
-  getDoAgentTemplate,
-  getGitAgentTemplate,
-  getPlanAgentTemplate,
-  getReviewAgentTemplate,
-  getSearchAgentTemplate,
-} from "../agents/index.js";
-
-const templates = [
-  getPlanAgentTemplate(),
-  getDoAgentTemplate(),
-  getReviewAgentTemplate(),
-  getArchitectAgentTemplate(),
-  getDesignerAgentTemplate(),
-  getGitAgentTemplate(),
-  getSearchAgentTemplate(),
-];
-
 describe("agent templates", () => {
+  const templates = getDefaultAgentTemplates();
+  const byName = new Map(templates.map((template) => [template.name, template]));
+
   it("use kernel-prefixed agent identifiers", () => {
-    expect(getPlanAgentTemplate().name).toBe(AGENT_NAMES.PLAN);
-    expect(getDoAgentTemplate().name).toBe(AGENT_NAMES.DO);
-    expect(getCaptureAgentTemplate().name).toBe(AGENT_NAMES.CAPTURE);
-    expect(getReviewAgentTemplate().name).toBe(AGENT_NAMES.REVIEW);
-    expect(getArchitectAgentTemplate().name).toBe(AGENT_NAMES.ARCHITECT);
-    expect(getDesignerAgentTemplate().name).toBe(AGENT_NAMES.DESIGNER);
-    expect(getGitAgentTemplate().name).toBe(AGENT_NAMES.GIT);
-    expect(getSearchAgentTemplate().name).toBe(AGENT_NAMES.SEARCH);
+    expect(new Set(templates.map((template) => template.name))).toEqual(
+      new Set([
+        AGENT_NAMES.PLAN,
+        AGENT_NAMES.DO,
+        AGENT_NAMES.CAPTURE,
+        AGENT_NAMES.REVIEW,
+        AGENT_NAMES.ARCHITECT,
+        AGENT_NAMES.DESIGNER,
+        AGENT_NAMES.GIT,
+        AGENT_NAMES.SEARCH,
+      ]),
+    );
   });
 
   it("expose available skills", () => {
@@ -51,31 +36,31 @@ describe("agent templates", () => {
   });
 
   it("keeps review agent classified separately from orchestrators", () => {
-    const review = getReviewAgentTemplate();
+    const review = byName.get(AGENT_NAMES.REVIEW)!;
     expect(review.metadata?.category).toBe("Reviewer");
     expect(review.role).toBe("Reviewer");
   });
 
   it("assigns persona-aligned skills to specialist agents", () => {
-    expect(getDesignerAgentTemplate().availableSkills).toEqual([
+    expect(byName.get(AGENT_NAMES.DESIGNER)?.availableSkills).toEqual([
       SKILL_NAMES.DESIGN,
       SKILL_NAMES.REVIEW,
     ]);
 
-    expect(getArchitectAgentTemplate().availableSkills).toEqual([
+    expect(byName.get(AGENT_NAMES.ARCHITECT)?.availableSkills).toEqual([
       SKILL_NAMES.REVIEW,
       SKILL_NAMES.MAP_CODEBASE,
     ]);
 
-    expect(getGitAgentTemplate().availableSkills).toEqual([SKILL_NAMES.GIT_MASTER]);
+    expect(byName.get(AGENT_NAMES.GIT)?.availableSkills).toEqual([SKILL_NAMES.GIT_MASTER]);
 
-    expect(getSearchAgentTemplate().availableSkills).toEqual([
+    expect(byName.get(AGENT_NAMES.SEARCH)?.availableSkills).toEqual([
       SKILL_NAMES.GIT_MASTER,
       SKILL_NAMES.MAP_CODEBASE,
       SKILL_NAMES.PROJECT_SETUP,
     ]);
 
-    expect(getReviewAgentTemplate().availableSkills).toEqual([
+    expect(byName.get(AGENT_NAMES.REVIEW)?.availableSkills).toEqual([
       SKILL_NAMES.REVIEW,
       SKILL_NAMES.MAP_CODEBASE,
       SKILL_NAMES.GIT_MASTER,
@@ -83,14 +68,14 @@ describe("agent templates", () => {
   });
 
   it("assigns orchestration skills to planning and execution agents", () => {
-    expect(getPlanAgentTemplate().availableSkills).toEqual([
+    expect(byName.get(AGENT_NAMES.PLAN)?.availableSkills).toEqual([
       SKILL_NAMES.GIT_MASTER,
       SKILL_NAMES.MAP_CODEBASE,
       SKILL_NAMES.PROJECT_SETUP,
       SKILL_NAMES.REVIEW,
     ]);
 
-    expect(getDoAgentTemplate().availableSkills).toEqual([
+    expect(byName.get(AGENT_NAMES.DO)?.availableSkills).toEqual([
       SKILL_NAMES.GIT_MASTER,
       SKILL_NAMES.REVIEW,
       SKILL_NAMES.PROJECT_INIT,
@@ -99,7 +84,7 @@ describe("agent templates", () => {
       SKILL_NAMES.PROJECT_SETUP,
     ]);
 
-    expect(getCaptureAgentTemplate().availableSkills).toEqual([
+    expect(byName.get(AGENT_NAMES.CAPTURE)?.availableSkills).toEqual([
       SKILL_NAMES.GIT_MASTER,
       SKILL_NAMES.CLOSE,
     ]);
@@ -111,12 +96,8 @@ describe("agent templates", () => {
     }
   });
 
-  it("catalog ships every registered agent", () => {
-    const defaultTemplates = getDefaultAgentTemplates();
-
-    expect(defaultTemplates).toHaveLength(ALL_AGENTS.length);
-    expect(defaultTemplates.map((template) => template.name)).toEqual(
-      ALL_AGENTS.map((getAgentTemplate) => getAgentTemplate().name),
-    );
+  it("discovers every agent from source markdown", () => {
+    expect(templates).toHaveLength(8);
+    expect(templates.every((template) => template.kind === "agent")).toBe(true);
   });
 });

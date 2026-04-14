@@ -1,5 +1,5 @@
 import * as yaml from "yaml";
-import type { AgentTemplate, SkillTemplate } from "../templates/types.js";
+import type { AgentTemplate, SkillTemplate, TemplateTag } from "../templates/types.js";
 import { parseFrontmatter } from "../templates/frontmatter.js";
 
 function stringArray(value: unknown): string[] | undefined {
@@ -17,6 +17,8 @@ function readString(value: unknown): string | undefined {
 export function serializeAgentTemplate(template: AgentTemplate): string {
   const frontmatter = {
     name: template.name,
+    kind: template.kind,
+    tags: template.tags,
     description: template.description,
     license: template.license,
     compatibility: template.compatibility,
@@ -45,6 +47,8 @@ export function parseAgentDocument(content: string): AgentTemplate {
   const { frontmatter, body } = parseFrontmatter<Record<string, unknown>>(content);
   return {
     name: readString(frontmatter.name) ?? "kernel-agent",
+    kind: "agent",
+    tags: frontmatter.tags as TemplateTag[] | undefined,
     description: readString(frontmatter.description) ?? "Kernel agent",
     instructions: body,
     license: readString(frontmatter.license),
@@ -74,6 +78,8 @@ export function parseSkillDocument(content: string): SkillTemplate {
   const { frontmatter, body } = parseFrontmatter<Record<string, unknown>>(content);
   return {
     name: readString(frontmatter.name) ?? "kernel-skill",
+    kind: "skill",
+    tags: frontmatter.tags as TemplateTag[] | undefined,
     description: readString(frontmatter.description) ?? "",
     instructions: body,
     license: readString(frontmatter.license),
