@@ -24,12 +24,6 @@ export const HOST_DESCRIPTORS: HostDescriptor[] = [
     projectMarker: ".github",
   },
   {
-    id: "opencode",
-    name: "OpenCode",
-    homeDir: ".opencode",
-    projectMarker: ".opencode",
-  },
-  {
     id: "pi",
     name: "Pi",
     homeDir: ".pi",

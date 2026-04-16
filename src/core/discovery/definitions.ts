@@ -35,14 +35,6 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     notes: "OpenAI CLI tool with native TOML agent format",
   },
   {
-    id: "opencode",
-    name: "OpenCode",
-    skillsDir: ".opencode",
-    available: true,
-    successLabel: "OpenCode",
-    notes: "Open source terminal AI coding agent",
-  },
-  {
     id: "pi",
     name: "Pi",
     skillsDir: ".pi",

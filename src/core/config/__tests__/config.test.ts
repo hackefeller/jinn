@@ -55,7 +55,7 @@ describe("config loader", () => {
   it("roundtrips with saveConfig and loadConfig", async () => {
     const original: Config = {
       version: "1.0.0",
-      tools: ["claude", "codex", "opencode"],
+      tools: ["claude", "codex"],
     };
 
     await saveConfig(original, tmpDir);
@@ -109,9 +109,9 @@ describe("ConfigSchema", () => {
 
   it("accepts all supported tools", () => {
     const result = ConfigSchema.parse({
-      tools: ["claude", "codex", "copilot", "opencode", "pi"],
+      tools: ["claude", "codex", "copilot", "pi"],
     });
 
-    expect(result.tools).toHaveLength(5);
+    expect(result.tools).toHaveLength(4);
   });
 });

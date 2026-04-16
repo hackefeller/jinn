@@ -14,7 +14,7 @@ async function mkTmpDir(): Promise<string> {
 describe("Tool Definitions", () => {
   it("has tools defined", async () => {
     const { TOOL_DEFINITIONS } = await import("../definitions.js");
-    expect(TOOL_DEFINITIONS.length).toBe(5);
+    expect(TOOL_DEFINITIONS.length).toBe(4);
   });
 
   it("each tool has unique id", async () => {
@@ -55,7 +55,7 @@ describe("Adapter Registry", () => {
     const registry = createPopulatedAdapterRegistry();
     const adapters = registry.getAll();
     expect(Array.isArray(adapters)).toBe(true);
-    expect(adapters.length).toBe(5);
+    expect(adapters.length).toBe(4);
   });
 
   it("throws on unknown tool", async () => {
@@ -71,7 +71,6 @@ describe("Adapter Registry", () => {
     expect(ids).toContain("claude");
     expect(ids).toContain("codex");
     expect(ids).toContain("copilot");
-    expect(ids).toContain("opencode");
     expect(ids).toContain("pi");
   });
 });
@@ -125,12 +124,10 @@ describe("detectAvailableTools — filesystem detection", () => {
     const { detectAvailableTools } = await import("../detector.js");
     await fs.mkdir(path.join(tmpDir, ".pi"), { recursive: true });
     await fs.mkdir(path.join(tmpDir, ".github"), { recursive: true });
-    await fs.mkdir(path.join(tmpDir, ".opencode"), { recursive: true });
     await fs.mkdir(path.join(tmpDir, ".claude"), { recursive: true });
     const result = await detectAvailableTools(tmpDir);
     expect(result).toContain("pi");
     expect(result).toContain("copilot");
-    expect(result).toContain("opencode");
     expect(result).toContain("claude");
   });
 
@@ -147,7 +144,6 @@ describe("detectAvailableTools — filesystem detection", () => {
     await fs.mkdir(path.join(tmpDir, ".pi"), { recursive: true });
     const result = await detectAvailableTools(tmpDir);
     expect(result).not.toContain("copilot");
-    expect(result).not.toContain("opencode");
     expect(result).not.toContain("claude");
   });
 });

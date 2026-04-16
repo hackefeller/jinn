@@ -10,7 +10,7 @@ import { z } from "zod";
  * Supported AI tool identifiers
  * This list covers the AI coding tools currently supported by the project.
  */
-export const ToolIdSchema = z.enum(["claude", "codex", "copilot", "opencode", "pi"]);
+export const ToolIdSchema = z.enum(["claude", "codex", "copilot", "pi"]);
 export type ToolId = z.infer<typeof ToolIdSchema>;
 
 /**

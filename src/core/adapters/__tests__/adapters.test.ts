@@ -2,19 +2,17 @@ import { describe, expect, it } from "bun:test";
 import { AGENT_NAMES, COMMAND_NAMES, SKILL_NAMES } from "../../../templates/constants.js";
 import type { AgentTemplate } from "../../templates/types.js";
 import {
-    claudeAdapter,
-    codexAdapter,
-    githubCopilotAdapter,
-    opencodeAdapter,
-    piAdapter,
-    type ToolCommandAdapter,
+  claudeAdapter,
+  codexAdapter,
+  githubCopilotAdapter,
+  piAdapter,
+  type ToolCommandAdapter,
 } from "../index.js";
 
 const allAdapters: ToolCommandAdapter[] = [
   claudeAdapter,
   codexAdapter,
   githubCopilotAdapter,
-  opencodeAdapter,
   piAdapter,
 ];
 
@@ -49,19 +47,18 @@ const nativeAgentSupport: Record<string, boolean> = {
   claude: true,
   codex: true,
   copilot: true,
-  opencode: true,
   pi: false,
 };
 
 describe("Adapter Registry", () => {
-  it("has all 5 adapters", () => {
-    expect(allAdapters).toHaveLength(5);
+  it("has all 4 adapters", () => {
+    expect(allAdapters).toHaveLength(4);
   });
 
   it("each adapter has unique toolId", () => {
     const toolIds = allAdapters.map((a) => a.toolId);
     const uniqueIds = new Set(toolIds);
-    expect(uniqueIds.size).toBe(5);
+    expect(uniqueIds.size).toBe(4);
   });
 
   it("native agent support is explicit and consistent", () => {
@@ -116,53 +113,6 @@ describe("GitHub Copilot Adapter", () => {
   it("generates correct skill path", () => {
     const path = githubCopilotAdapter.getSkillPath("planner");
     expect(path).toBe(".github/skills/planner/SKILL.md");
-  });
-});
-
-describe("OpenCode Adapter", () => {
-  it("uses .opencode directory", () => {
-    expect(opencodeAdapter.skillsDir).toBe(".opencode");
-  });
-
-  it("generates correct skill path", () => {
-    expect(opencodeAdapter.getSkillPath("planner")).toBe(".opencode/skills/planner/SKILL.md");
-  });
-
-  it("generates correct agent path", () => {
-    expect(opencodeAdapter.getAgentPath!(AGENT_NAMES.PLAN)).toBe(
-      ".opencode/agents/kernel-plan.md",
-    );
-  });
-
-  it("generates correct command path", () => {
-    expect(opencodeAdapter.getCommandPath!("kernel-sync")).toBe(
-      ".opencode/commands/kernel-sync.md",
-    );
-  });
-
-  it("formats agents with description and subagent mode", () => {
-    const result = opencodeAdapter.formatAgent!(testAgentTemplate, "1.0.0");
-    expect(result).toContain("description:");
-    expect(result).toContain("mode: subagent");
-    expect(result).toContain("You are a planning agent.");
-  });
-
-  it("formats compatibility commands", () => {
-    const result = opencodeAdapter.formatCommand!(
-      {
-        name: "kernel-sync",
-        description: "Sync kernel artifacts",
-        instructions: "Run the sync workflow.",
-        target: "sync",
-        kind: "command",
-        tags: ["workflow"],
-      },
-      "1.0.0",
-    );
-
-    expect(result).toContain("native-command: false");
-    expect(result).toContain("tool: OpenCode");
-    expect(result).toContain("kernel sync");
   });
 });
 

@@ -5,7 +5,7 @@ import { z } from "zod";
 import { ensureDir, fileExists, readFile, writeFile } from "../utils/file-system.js";
 import type { BrainConfig, HostId } from "./types.js";
 
-const HostIdSchema = z.enum(["claude", "codex", "copilot", "opencode", "pi"]);
+const HostIdSchema = z.enum(["claude", "codex", "copilot", "pi"]);
 
 const BrainConfigSchema = z.object({
   version: z.string().default("2.0.0"),

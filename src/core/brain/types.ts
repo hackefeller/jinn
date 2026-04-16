@@ -1,6 +1,6 @@
 import type { AgentTemplate, CommandTemplate, SkillTemplate } from "../templates/types.js";
 
-export type HostId = "claude" | "codex" | "copilot" | "opencode" | "pi";
+export type HostId = "claude" | "codex" | "copilot" | "pi";
 
 export interface BrainConfig {
   version: string;
