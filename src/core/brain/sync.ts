@@ -1,20 +1,20 @@
 import * as fs from "node:fs/promises";
-import * as os from "os";
 import path from "node:path";
+import * as os from "os";
+import { renderHostOutputs } from "../render/index.js";
+import { applySyncPlan, planSync } from "../sync/index.js";
+import { directoryExists, fileExists, writeFile } from "../utils/file-system.js";
+import { getBuiltInCatalog } from "./catalog.js";
 import { getCatalogRoot, getSyncManifestPath, loadBrainConfig } from "./config.js";
 import { getHostDescriptor, listKnownHosts } from "./hosts.js";
 import { syncBuiltInCatalog } from "./storage.js";
 import type {
-  HostId,
-  SyncHostResult,
-  SyncManifest,
-  SyncManifestEntry,
-  SyncResult,
+    HostId,
+    SyncHostResult,
+    SyncManifest,
+    SyncManifestEntry,
+    SyncResult,
 } from "./types.js";
-import { fileExists, writeFile, directoryExists } from "../utils/file-system.js";
-import { getBuiltInCatalog } from "./catalog.js";
-import { renderHostOutputs } from "../render/index.js";
-import { applySyncPlan, planSync } from "../sync/index.js";
 
 async function loadSyncManifest(homePath = os.homedir()): Promise<SyncManifest> {
   const manifestPath = getSyncManifestPath(homePath);
@@ -81,17 +81,29 @@ async function cleanupHostOrphans(hostId: HostId, homePath: string, tracked: Set
   const hostBase = path.join(homePath, host.homeDir);
   let removed = 0;
 
-  for (const relativeDir of ["skills", "agents", "commands", path.join("commands", "kernel")]) {
-    const absoluteDir = path.join(hostBase, relativeDir);
-    if (!(await directoryExists(absoluteDir))) {
-      continue;
-    }
-    for (const entry of await fs.readdir(absoluteDir, { withFileTypes: true })) {
-      const entryPath = path.join(absoluteDir, entry.name);
+  async function walk(currentPath: string): Promise<void> {
+    const entries = await fs.readdir(currentPath, { withFileTypes: true }).catch(() => []);
+    for (const entry of entries) {
+      const entryPath = path.join(currentPath, entry.name);
+      if (entry.isDirectory()) {
+        await walk(entryPath);
+        const remaining = await fs.readdir(entryPath).catch(() => []);
+        if (remaining.length === 0 && !tracked.has(entryPath)) {
+          await fs.rmdir(entryPath).catch(() => undefined);
+        }
+        continue;
+      }
       if (!tracked.has(entryPath)) {
         await fs.rm(entryPath, { force: true, recursive: true });
         removed += 1;
       }
+    }
+  }
+
+  for (const relativeDir of ["skills", "agents", "commands"]) {
+    const absoluteDir = path.join(hostBase, relativeDir);
+    if (await directoryExists(absoluteDir)) {
+      await walk(absoluteDir);
     }
   }
 

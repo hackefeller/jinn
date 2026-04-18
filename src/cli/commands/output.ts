@@ -14,6 +14,23 @@ function isTableRenderable(value: unknown): value is string | number | boolean |
 }
 
 function toTableRow(entry: Record<string, unknown>): Record<string, unknown> {
+  const isSyncSummary =
+    "host" in entry &&
+    "created" in entry &&
+    "updated" in entry &&
+    "removed" in entry &&
+    "unchanged" in entry;
+
+  if (isSyncSummary) {
+    return {
+      host: entry.host,
+      written: entry.created,
+      replaced: entry.updated,
+      removed: entry.removed,
+      preserved: entry.unchanged,
+    };
+  }
+
   const row: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(entry)) {

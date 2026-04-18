@@ -25,17 +25,28 @@ describe("kernel sync", () => {
   });
 
   it("syncs canonical .agents catalog and enabled hosts", async () => {
-    const result = await syncKernelBrain(homeDir);
-
-    expect(result.catalogPath).toBe(path.join(homeDir, ".agents"));
-
+    const staleSkillContents = "stale";
     const skillName = getBuiltInCatalog().skills[0]!.name;
 
     const canonicalSkillPath = path.join(homeDir, ".agents", "skills", skillName, "SKILL.md");
     const canonicalCommandPath = path.join(homeDir, ".agents", "commands", "kernel-sync.yaml");
+    const unrelatedFile = path.join(homeDir, ".claude", "notes.txt");
+
+    await fs.mkdir(path.dirname(canonicalSkillPath), { recursive: true });
+    await fs.mkdir(path.dirname(unrelatedFile), { recursive: true });
+    await fs.writeFile(canonicalSkillPath, staleSkillContents, "utf-8");
+    await fs.writeFile(unrelatedFile, "keep me", "utf-8");
+
+    const result = await syncKernelBrain(homeDir);
+
+    expect(result.catalogPath).toBe(path.join(homeDir, ".agents"));
 
     expect((await fs.stat(canonicalSkillPath)).isFile()).toBe(true);
+    expect(await fs.readFile(canonicalSkillPath, "utf-8")).not.toBe(staleSkillContents);
     expect((await fs.stat(canonicalCommandPath)).isFile()).toBe(true);
+    const claudeKernelCommandPath = path.join(homeDir, ".claude", "commands", "kernel", "kernel-sync.md");
+    expect((await fs.stat(claudeKernelCommandPath)).isFile()).toBe(true);
+    expect(await fs.readFile(unrelatedFile, "utf-8")).toBe("keep me");
 
     const claudeSkillLink = path.join(homeDir, ".claude", "skills", skillName);
     const codexSkillLink = path.join(homeDir, ".codex", "skills", skillName);

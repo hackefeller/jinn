@@ -1,12 +1,12 @@
 import * as fs from "node:fs/promises";
-import * as os from "os";
 import path from "node:path";
+import * as os from "os";
+import { renderCatalogOutputs } from "../render/index.js";
+import { applySyncPlan, planSync } from "../sync/index.js";
+import { ensureDir, listDirs, readFile } from "../utils/file-system.js";
 import { getBuiltInCatalog } from "./catalog.js";
 import { getCatalogRoot, loadBrainConfig } from "./config.js";
-import { renderCatalogOutputs } from "../render/index.js";
-import { ensureDir, listDirs, readFile } from "../utils/file-system.js";
 import type { SyncManifestEntry } from "./types.js";
-import { applySyncPlan, planSync } from "../sync/index.js";
 
 function getSkillsRoot(homePath = os.homedir()): string {
   return path.join(getCatalogRoot(homePath), "skills");
@@ -26,29 +26,6 @@ export async function ensureCatalogLayout(homePath = os.homedir()): Promise<void
   await ensureDir(getCommandsRoot(homePath));
 }
 
-async function discoverCatalogPaths(homePath: string): Promise<string[]> {
-  const roots = [getSkillsRoot(homePath), getAgentsRoot(homePath), getCommandsRoot(homePath)];
-  const paths: string[] = [];
-
-  async function walk(currentPath: string): Promise<void> {
-    const entries = await fs.readdir(currentPath, { withFileTypes: true }).catch(() => []);
-    for (const entry of entries) {
-      const absolutePath = path.join(currentPath, entry.name);
-      if (entry.isDirectory()) {
-        await walk(absolutePath);
-        continue;
-      }
-      paths.push(absolutePath);
-    }
-  }
-
-  for (const root of roots) {
-    await walk(root);
-  }
-
-  return paths.sort();
-}
-
 export async function syncBuiltInCatalog(
   homePath = os.homedir(),
   previous: SyncManifestEntry[] = [],
@@ -56,14 +33,7 @@ export async function syncBuiltInCatalog(
   await ensureCatalogLayout(homePath);
   const catalog = getBuiltInCatalog();
   const outputs = renderCatalogOutputs(catalog, homePath, "2.0.0");
-  const fallback = (await discoverCatalogPaths(homePath)).map((entryPath) => ({
-    path: entryPath,
-    kind: "file" as const,
-    hash: "",
-    templateId: "",
-    adapterVersion: "2.0.0",
-  }));
-  const plan = planSync("catalog", outputs, previous.length > 0 ? previous : fallback);
+  const plan = planSync("catalog", outputs, previous);
   await applySyncPlan(plan);
   return { tracked: plan.tracked };
 }

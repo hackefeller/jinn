@@ -32,21 +32,11 @@ export function planSync(
   outputs: RenderedOutput[],
   previous: SyncManifestEntry[],
 ): SyncPlan {
-  const previousByPath = new Map(previous.map((entry) => [entry.path, entry]));
   const tracked = outputs.map(toManifestEntry);
   const actions: SyncAction[] = [];
 
   for (const output of outputs) {
     const current = toManifestEntry(output);
-    const previousEntry = previousByPath.get(output.path);
-    if (
-      previousEntry &&
-      previousEntry.kind === current.kind &&
-      previousEntry.hash === current.hash &&
-      previousEntry.adapterVersion === current.adapterVersion
-    ) {
-      continue;
-    }
     actions.push({
       scope,
       path: output.path,
@@ -71,23 +61,13 @@ export function planSync(
 async function applyAction(action: SyncAction): Promise<"created" | "updated" | "unchanged"> {
   const stat = await fs.lstat(action.path).catch(() => null);
   if (action.kind === "symlink") {
-    if (stat?.isSymbolicLink()) {
-      const currentTarget = await fs.readlink(action.path).catch(() => "");
-      if (currentTarget === action.target) {
-        return "unchanged";
-      }
-    }
     await fs.rm(action.path, { force: true, recursive: true });
     await ensureDir(path.dirname(action.path));
     await fs.symlink(action.target!, action.path, "dir");
     return stat ? "updated" : "created";
   }
 
-  const currentContent =
-    stat?.isFile() && action.content !== undefined ? await fs.readFile(action.path, "utf-8") : null;
-  if (currentContent === action.content) {
-    return "unchanged";
-  }
+  await fs.rm(action.path, { force: true, recursive: true });
   await ensureDir(path.dirname(action.path));
   await fs.writeFile(action.path, action.content ?? "", "utf-8");
   return stat ? "updated" : "created";

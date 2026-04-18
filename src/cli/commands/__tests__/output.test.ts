@@ -22,10 +22,10 @@ describe("printOutput", () => {
     expect(tableSpy?.mock.calls[0]?.[0]).toEqual([
       {
         host: "claude",
-        created: 1,
-        updated: 0,
+        written: 1,
+        replaced: 0,
         removed: 0,
-        unchanged: 8,
+        preserved: 8,
       },
     ]);
   });
@@ -55,10 +55,10 @@ describe("printOutput", () => {
     expect(tableSpy?.mock.calls[0]?.[0]).toEqual([
       {
         host: "claude",
-        created: 1,
-        updated: 0,
+        written: 1,
+        replaced: 0,
         removed: 0,
-        unchanged: 8,
+        preserved: 8,
       },
     ]);
   });
