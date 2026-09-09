@@ -1,18 +1,21 @@
 ---
 name: kernel-animate
-kind: skill
-tags:
-  - design
-  - motion
-  - animation
-  - ui
-license: MIT
 description: >
   A consolidated motion skill covering the full animation lifecycle: building
   from scratch, Emil Kowalski's design-engineering philosophy, finding places
   that don't animate but should, auditing a codebase's motion and writing fix
   plans, strict review of a diff, a ready-made recipe library, and a naming
   glossary. Load the relevant reference below rather than a standalone skill.
+license: MIT
+metadata:
+  author: project
+  version: "1.0"
+  category: Design
+  tags:
+    - design
+    - motion
+    - animation
+    - ui
 when:
   - animating a component, adding motion, or building a transition
   - naming a motion effect from a vague description

@@ -1,6 +1,6 @@
 ---
 name: hominem-database
-description: "Operate Hominem's PostgreSQL database end to end. Use for any packages/db schema change, migration, generated-type regen, or repository/DTO method — and for safely performing production Railway operations: backups, extension upgrades, collation maintenance, migrations, verification, monitoring, and recovery. Not for building the Foundation image."
+description: "Operate Hominem's PostgreSQL database end to end. Use for any packages/db schema change, migration, generated-type regen, or repository/DTO method in the Hominem repo — and for safely performing production Railway operations: backups, extension upgrades, collation maintenance, migrations, verification, monitoring, and recovery. Not for building the Foundation image. For database work in any other project, use kernel-dev-database instead."
 license: MIT
 compatibility: PostgreSQL (Railway) + Goose migrations + Kysely/kysely-codegen.
 metadata:

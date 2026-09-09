@@ -1,11 +1,5 @@
 ---
 name: kernel-image
-license: MIT
-kind: skill
-tags:
-  - creative
-  - art
-  - image-generation
 description: >
   Interrogates the user in depth about the artwork they want, then generates and
   saves an actual image via OpenRouter. Covers large-scale fine art
@@ -15,6 +9,15 @@ description: >
   (Lucy, Wyatt, Benny, Void). Use when the user wants a 3D render, says
   "make art," mentions one of the named characters, wants product photography
   for a physical object, or asks to generate any AI image.
+license: MIT
+metadata:
+  author: project
+  version: "1.0"
+  category: Creative
+  tags:
+    - creative
+    - art
+    - image-generation
 when:
   - user wants a toy-like 3D character or object render
   - user says "premium character render," "Pixar-style," or "CGI"

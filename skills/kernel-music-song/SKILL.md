@@ -1,18 +1,21 @@
 ---
 name: kernel-music-song
-license: MIT
-kind: skill
-tags:
-  - creative
-  - music
-  - songwriting
-  - production
 description: >
   Transforms poems or raw song ideas into complete song structures — lyrics,
   arrangement, and sonic cues — in the "Southern-Trap-Blues" genre fusion of
   Black Keys, Kings of Leon, Lil Durk, and Kendrick Lamar. Use when the user
   says "write a song," provides a poem to transform into lyrics, wants music
   in this specific genre fusion, or invokes /southern-trap-blues.
+license: MIT
+metadata:
+  author: project
+  version: "1.0"
+  category: Creative
+  tags:
+    - creative
+    - music
+    - songwriting
+    - production
 when:
   - user says "write a song" or "turn this into a song"
   - user provides a poem or lyric idea to develop

@@ -1,10 +1,5 @@
 ---
 name: kernel-ops-production
-kind: skill
-tags:
-  - design
-  - production
-  - docs
 description: >
   Enforces physical production, archival print, and technical dossier standards.
   Use when writing or reviewing print specs, conservation language, framing or
@@ -16,6 +11,10 @@ metadata:
   author: project
   version: "1.0"
   category: Design
+  tags:
+    - design
+    - production
+    - docs
 when:
   - writing or reviewing physical production and print specs
   - documenting an archival print edition or generating a technical dossier

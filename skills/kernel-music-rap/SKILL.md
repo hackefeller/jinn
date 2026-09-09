@@ -1,11 +1,15 @@
 ---
 name: kernel-music-rap
+description: Write dense, technically structured rap lyrics and full-length songs using multisyllabic rhyme chains, monorhyme blocks, internal mirroring, medial rhymes, dactylic/trochaic slant patterns, phonetic shifts, and bridge transitions. Use when generating or refining rap verses, choruses, technical rhyme structures, or annotated lyric drafts from a theme.
 license: MIT
-kind: skill
-tags:
-  - creative
-  - music
-  - songwriting
+metadata:
+  author: project
+  version: "1.0"
+  category: Creative
+  tags:
+    - creative
+    - music
+    - songwriting
 when:
   - writing or refining technically structured rap lyrics
   - designing rhyme chains, song sections, or annotated lyric drafts
@@ -14,7 +18,6 @@ outputs:
 termination:
   - Theme, voice, energy, length, and rhyme architecture are resolved
   - The requested lyric structure and technical constraints are present
-description: Write dense, technically structured rap lyrics and full-length songs using multisyllabic rhyme chains, monorhyme blocks, internal mirroring, medial rhymes, dactylic/trochaic slant patterns, phonetic shifts, and bridge transitions. Use when generating or refining rap verses, choruses, technical rhyme structures, or annotated lyric drafts from a theme.
 ---
 
 # Technical Rap Lyricist

@@ -1,15 +1,5 @@
 ---
 name: kernel-ui
-kind: skill
-tags:
-  - design
-  - ui
-  - brand
-  - accessibility
-  - tokens
-  - performance
-  - writing
-license: MIT
 description: >
   A consolidated UI skill covering the full interface lifecycle: accessibility
   audits (WCAG 2.2 + ARIA), studio brand governance, design-token foundations,
@@ -18,6 +8,19 @@ description: >
   interop/migration, performance against Core Web Vitals, redesign, UX
   writing, and library selection. Load the relevant reference below rather than
   a standalone skill.
+license: MIT
+metadata:
+  author: project
+  version: "1.0"
+  category: Design
+  tags:
+    - design
+    - ui
+    - brand
+    - accessibility
+    - tokens
+    - performance
+    - writing
 when:
   - auditing a UI or component for WCAG 2.2 / ARIA conformance
   - choosing or reviewing studio brand voice, naming, palette, typography, or theming

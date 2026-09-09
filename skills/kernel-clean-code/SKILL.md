@@ -1,15 +1,18 @@
 ---
 name: kernel-clean-code
-kind: skill
-tags:
-  - refactoring
-  - code-quality
-  - tech-debt
-license: MIT
 description: >
   A consolidated code-health skill covering AI-slop removal, code-smell
   detection, branch-level deslop, and full tech-debt audits. Load the relevant
   reference below rather than a standalone skill.
+license: MIT
+metadata:
+  author: project
+  version: "1.0"
+  category: Engineering
+  tags:
+    - refactoring
+    - code-quality
+    - tech-debt
 when:
   - removing AI-generated slop from working code or a branch diff
   - spotting code smells (long methods, duplication, coupling, primitive obsession)

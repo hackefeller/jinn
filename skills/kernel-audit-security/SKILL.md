@@ -51,7 +51,7 @@ Use the vendored specialist skills under `reviews/` with their procedures under 
 - `reviews/securability-engineering/SKILL.md` — generate hardened, securable code
 - `reviews/securability-engineering-review/SKILL.md` — SSEM scorecard for existing code
 
-Route adjacent domains elsewhere: AI/agentic code (prompt handling, tool use, agents) to `owasp-ai-security`; third-party frontend assets and external integrations to `kernel-audit-integration-security`.
+Route adjacent domains elsewhere: third-party frontend assets and external integrations to `kernel-audit-integration-security`.
 
 ## Mode 2: Offensive audit (exploit-evidence bar)
 

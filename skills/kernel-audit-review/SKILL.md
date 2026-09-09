@@ -32,7 +32,6 @@ outputs:
   - Review report with recommendation
   - Prioritised findings list
 disableModelInvocation: true
-userInvocable: false
 argumentHint: task, PR link, or file/directory to review (optional)
 allowedTools:
   - Read
