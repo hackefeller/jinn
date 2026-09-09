@@ -66,7 +66,7 @@ General UI/design-system guidance isn't a kernel skill — use [anthropics/skill
 
 ## Library structure
 
-See [docs/SKILL-LIBRARY.md](docs/SKILL-LIBRARY.md) for the canonical skill layout, entrypoint contract, catalog rules, and contribution workflow.
+Each skill is a directory under `skills/` with a `SKILL.md` entrypoint, listed in [skills.sh.json](skills.sh.json). See [AGENTS.md](AGENTS.md) for the catalog rules, validation contract, and deployment workflow.
 
 ```bash
 python3 scripts/validate_skills.py
