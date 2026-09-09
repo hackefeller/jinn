@@ -2,7 +2,7 @@
 
 [![skills.sh](https://skills.sh/b/ponti-studios/kernel)](https://skills.sh/ponti-studios/kernel)
 
-A collection of 26 independently installable agent skills for software development and content production. The repository structure and catalog are validated by `scripts/validate_skills.py`.
+A collection of 27 independently installable agent skills for software development and content production. The repository structure and catalog are validated by `scripts/validate_skills.py`.
 
 ## Install
 
@@ -39,6 +39,9 @@ npx skills add ponti-studios/kernel --skill kernel-dev-react-native --yes
 - `kernel-dev-typescript`
 - `kernel-git-commit`
 - `kernel-clean-code` (consolidated: AI-slop removal, code smells, branch deslop, tech-debt audit)
+
+### Hominem
+- `hominem-database`
 
 ### Brand
 - `kernel-animate` (consolidated: build, Emil's craft philosophy, vocabulary, opportunities, improve, review, recipes, standards)
